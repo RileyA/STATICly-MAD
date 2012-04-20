@@ -1,1 +1,5 @@
 *.swf
+bin/*
+*.as3proj
+lib/*
+obj/*
