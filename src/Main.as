@@ -9,7 +9,7 @@ package
 
 	public class Main extends Sprite
 	{
-		public function Pong():void
+		public function Main():void
 		{
 			//... 
 		}
