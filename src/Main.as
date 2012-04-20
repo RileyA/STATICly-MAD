@@ -1,5 +1,4 @@
-package 
-{
+package {
 	import flash.display.Sprite;
 	import libs.Box2D.Common.Math.*;
 	import libs.Box2D.Dynamics.*;
@@ -7,10 +6,8 @@ package
 
 	[SWF(backgroundColor='#111111', frameRate='30', width='800', height='600')]
 
-	public class Main extends Sprite
-	{
-		public function Main():void
-		{
+	public class Main extends Sprite{
+		public function Main():void{
 			//... 
 		}
 	}
