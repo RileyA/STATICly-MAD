@@ -20,11 +20,12 @@ package {
 		private var pixelsPerMeter:Number = 30;
 		private var genBodyTimer:Timer;		
 		private var sideWallWidth:int = 20;
-		private var bottomWallHeight:int = 25;
+		private var bottomWallHeight:int = 20;
 		private var blockManager:BlockManager;
  
 		public function Main():void{ 
 			this.initWorld();
+			blockManager = new BlockManager(world);
 			this.createWalls();
 			this.setupDebugDraw();			
  
@@ -48,28 +49,52 @@ package {
 		}
  
 		private function createWalls():void{
-			var wallShape:b2PolygonShape = new b2PolygonShape();
-			var wallBd:b2BodyDef = new b2BodyDef();
-			var wallB:b2Body;
 			
-			wallShape.SetAsBox(sideWallWidth / pixelsPerMeter / 2, this.stage.stageHeight / pixelsPerMeter / 2);
- 
-			//Left wall
-			wallBd.position.Set((sideWallWidth / 2) / pixelsPerMeter, this.stage.stageHeight / 2 / pixelsPerMeter);
-			wallB = world.CreateBody(wallBd);
-			wallB.CreateFixture2(wallShape);
+ 			
+ 			var polyShape:b2PolygonShape = new b2PolygonShape();			
 			
-			//Right wall
-			wallBd.position.Set((this.stage.stageWidth - (sideWallWidth / 2)) / pixelsPerMeter, this.stage.stageHeight / 2 / pixelsPerMeter);
-			wallB = world.CreateBody(wallBd);
-			wallB.CreateFixture2(wallShape);
+			var w:Number=this.stage.stageWidth / pixelsPerMeter / 2;
+			var h:Number=this.stage.stageHeight / pixelsPerMeter / 2;
 			
-			//Bottom wall
-			wallShape.SetAsBox(this.stage.stageWidth / pixelsPerMeter / 2, bottomWallHeight / pixelsPerMeter / 2);
-			wallBd.position.Set(this.stage.stageWidth / 2 / pixelsPerMeter, (this.stage.stageHeight - (bottomWallHeight / 2)) / pixelsPerMeter);
-			wallB = world.CreateBody(wallBd);
-			wallB.CreateFixture2(wallShape);
- 
+			var ww:Number=sideWallWidth / pixelsPerMeter / 2;
+			var wh:Number=bottomWallHeight / pixelsPerMeter / 2;
+			
+			polyShape.SetAsBox(w, wh);
+			new Block(blockManager,
+				new b2Vec2(w,wh),
+				polyShape,
+				Block.charge_none,
+				false,
+				false,
+				false
+				);
+			new Block(blockManager,
+				new b2Vec2(w,2*h-wh),
+				polyShape,
+				Block.charge_none,
+				false,
+				false,
+				false
+				);
+				
+			polyShape.SetAsBox(ww, h);
+			new Block(blockManager,
+				new b2Vec2(ww,h),
+				polyShape,
+				Block.charge_none,
+				false,
+				false,
+				false
+				);
+			new Block(blockManager,
+				new b2Vec2(2*w-ww,h),
+				polyShape,
+				Block.charge_none,
+				false,
+				false,
+				false
+				);
+ 			
 		}
  
 		private function setupDebugDraw():void{
@@ -90,7 +115,7 @@ package {
 		}
 		
 		private function genBlocks():void{
-			blockManager = new BlockManager(world);
+			
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();			
 			
@@ -125,6 +150,20 @@ package {
 				new b2Vec2(2,12),
 				polyShape,
 				Block.charge_blue,
+				true,
+				false,
+				false
+				);
+				
+			
+			polyShape = new b2PolygonShape();			
+			
+			polyShape.SetAsBox(3, .3);
+			
+			new Block(blockManager,
+				new b2Vec2(10,1),
+				polyShape,
+				Block.charge_red,
 				true,
 				false,
 				false
