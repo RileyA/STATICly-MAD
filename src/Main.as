@@ -7,8 +7,11 @@ package {
 	import flash.utils.Timer;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
- 
+ 	
+ 	[SWF(backgroundColor='#EEEEEE', frameRate='30', width='800', height='600')]
+ 	
 	/**
+	 * adapted from:
 	 * Basic tutorial on Box2DFlash for Dev.Mag www.devmag.org.za
 	 * @author Dev.Mag & Ricky Abell
 	 */
@@ -17,10 +20,15 @@ package {
 		private var timestep:Number;
 		private var velocityIterations:uint;
 		private var positionIterations:uint;
-		private var pixelsPerMeter:Number = 30;
+		
+		private var levelWidth:Number=20; // in meters
+		private var levelHeight:Number=15; // in meters
+		
+		
+		private var pixelsPerMeter:Number = 50;
 		private var genBodyTimer:Timer;		
-		private var sideWallWidth:int = 20;
-		private var bottomWallHeight:int = 20;
+		private var sideWallWidth:int = 100; // in px
+		private var bottomWallHeight:int = 100; // in px
 		private var blockManager:BlockManager;
  
 		public function Main():void{ 
@@ -47,54 +55,36 @@ package {
 			this.velocityIterations = 6;
 			this.positionIterations = 4;
 		}
- 
+ 		
+ 		private function createWall(width:Number, height:Number, x:Number, y:Number):void{
+ 			var polyShape:b2PolygonShape = new b2PolygonShape();	
+ 			polyShape.SetAsBox(width, height);
+ 			new Block(blockManager,
+				new b2Vec2(x,y),
+				polyShape,
+				Block.charge_none,
+				false,
+				false,
+				true
+				);
+ 		}
+ 		
 		private function createWalls():void{
-			
- 			
- 			var polyShape:b2PolygonShape = new b2PolygonShape();			
-			
-			var w:Number=this.stage.stageWidth / pixelsPerMeter / 2;
-			var h:Number=this.stage.stageHeight / pixelsPerMeter / 2;
+			var pwidth:Number=this.stage.stageWidth;
+			var pheight:Number=this.stage.stageHeight;
+			pixelsPerMeter=Math.min(pwidth/levelWidth,pheight/levelHeight);
 			
 			var ww:Number=sideWallWidth / pixelsPerMeter / 2;
 			var wh:Number=bottomWallHeight / pixelsPerMeter / 2;
 			
-			polyShape.SetAsBox(w, wh);
-			new Block(blockManager,
-				new b2Vec2(w,wh),
-				polyShape,
-				Block.charge_none,
-				false,
-				false,
-				false
-				);
-			new Block(blockManager,
-				new b2Vec2(w,2*h-wh),
-				polyShape,
-				Block.charge_none,
-				false,
-				false,
-				false
-				);
-				
-			polyShape.SetAsBox(ww, h);
-			new Block(blockManager,
-				new b2Vec2(ww,h),
-				polyShape,
-				Block.charge_none,
-				false,
-				false,
-				false
-				);
-			new Block(blockManager,
-				new b2Vec2(2*w-ww,h),
-				polyShape,
-				Block.charge_none,
-				false,
-				false,
-				false
-				);
- 			
+			var w:Number=levelWidth/2;
+			var h:Number=levelHeight/2;
+
+			createWall(w+ww*2, wh, w, -wh);
+			createWall(w+ww*2, wh, w,2*h+wh);
+			
+			createWall(ww, h+wh*2, -ww, h);
+			createWall(ww, h+wh*2, 2*w+ww,h);
 		}
  
 		private function setupDebugDraw():void{
@@ -102,7 +92,7 @@ package {
 			var debugSprite:Sprite = new Sprite();
 			addChild(debugSprite);
 			debugDraw.SetSprite(debugSprite);
-			debugDraw.SetDrawScale(30.0);
+			debugDraw.SetDrawScale(pixelsPerMeter);
 			debugDraw.SetFillAlpha(0.3);
 			debugDraw.SetLineThickness(1.0);
 			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
@@ -119,7 +109,7 @@ package {
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();			
 			
-			polyShape.SetAsBox(1, 1);
+			polyShape.SetAsBox(.5, .5);
 			var block:Block = new Block(blockManager,
 				new b2Vec2(10,10),
 				polyShape,
@@ -154,7 +144,7 @@ package {
 				false,
 				false
 				);
-				
+			
 			
 			polyShape = new b2PolygonShape();			
 			
@@ -168,6 +158,23 @@ package {
 				false,
 				false
 				);
+			
+			polyShape.SetAsBox(.5, .5);
+			var i:Number=0;
+			for (i=0;i<25;i++){
+				new Block(blockManager,
+				new b2Vec2(2+(i%5),4+i/5),
+				polyShape,
+				Block.charge_red,
+				true,
+				false,
+				false
+				);
+			}
+			
+			//Block.MakeRect(blockManager,new b2Vec2(0,0),new b2Vec2(20,15),Block.charge_none,true,false,true);
+			
+			
 		}
 				
 		private function update(e:Event = null):void{			

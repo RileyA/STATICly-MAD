@@ -26,16 +26,10 @@ package {
 				for (j=0;j<blocks.length;j++){
 					var forcer:Block=blocks[j];
 					if (forcer!=forced){
-						var vec:b2Vec2 = forced.body.GetWorldCenter();
-						vec=new b2Vec2(vec.x,vec.y);
-						vec.Subtract(forcer.body.GetWorldCenter());
-						var s:Number=forcer.charge*forced.charge*(1.0/vec.LengthSquared());
-						s=s*200.0;
-						vec.Multiply(s/vec.Length());
-						force.Add(vec);
+						forced.DoChargeForce(forcer);
 					}
 				}
-				forced.body.ApplyForce(force,forced.body.GetWorldCenter());
+				//forced.body.ApplyForce(force,forced.body.GetWorldCenter());
 			}
 		}
 	}
