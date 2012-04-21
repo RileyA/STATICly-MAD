@@ -109,7 +109,7 @@ package {
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();			
 			
-			polyShape.SetAsBox(.5, .5);
+			polyShape.SetAsBox(1.5, 1.5);
 			var block:Block = new Block(blockManager,
 				new b2Vec2(10,10),
 				polyShape,

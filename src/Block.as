@@ -8,8 +8,11 @@ package {
 		public static const charge_none:int = 0;
 		public static const charge_red:int = +1;
 		
-		public static const strongChargeDensity:Number = 10;
-		public static const weakChargeDensity:Number = 4;
+		private static const strongChargeDensity:Number = 2.5; // charge per square m
+		private static const weakChargeDensity:Number = 1.0; // charge per square m
+		
+		private static const strongDensity:Number = 10.0; // kg per square m
+		private static const weakDensity:Number = 10.0; // kg per square m
 		
 		public var body:b2Body;
 		private var charge:int;
@@ -17,6 +20,7 @@ package {
 		
 		private var chargeStrength:Number;
 		
+		// A handy helper for making rectangle blocks
 		public static function MakeRect(bm:BlockManager,
 				topLeft:b2Vec2,
 				bottomRight:b2Vec2,
@@ -35,21 +39,6 @@ package {
 			
 			polyShape.SetAsBox(w/2,h/2);
 			
-			var area:Number=w*h;
-			
-			return new Block(bm,position,polyShape,charge,dynamicBody,strong,insulated);
-		}
-		
-		
-		public static function MakeBlock(bm:BlockManager,
-				position:b2Vec2,
-				polyShape:b2PolygonShape,
-				charge:int,
-				dynamicBody:Boolean,
-				strong:Boolean,
-				insulated:Boolean):Block{
-			
-			
 			return new Block(bm,position,polyShape,charge,dynamicBody,strong,insulated);
 		}
 		
@@ -59,8 +48,7 @@ package {
 				charge:int,
 				dynamicBody:Boolean,
 				strong:Boolean,
-				insulated:Boolean,
-				chargeStrength:Number=1.0
+				insulated:Boolean
 				):void{
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var rectDef:b2BodyDef = new b2BodyDef();
@@ -68,10 +56,9 @@ package {
 			
 			this.strong=strong;
 			this.charge=charge;
-			this.chargeStrength=chargeStrength;
 			
 			fd.shape = polyShape;
-			fd.density = 1.0;
+			fd.density =strong?strongDensity:weakDensity;
 			fd.friction = 0.3;
 			fd.restitution = 0.1;
 			rectDef.position.Set(position.x,position.y);
@@ -82,6 +69,11 @@ package {
 			//body.SetFixedRotation(true);
 			body.SetLinearDamping(1.0);
 			body.SetAngularDamping(1.0);
+			
+			var area:Number=body.GetMass()/fd.density;
+			
+			this.chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
+			
 			
 			bm.addBlock(this);
 		}
@@ -96,7 +88,7 @@ package {
 			vec=new b2Vec2(vec.x,vec.y);
 			vec.Subtract(other.body.GetWorldCenter());
 			var s:Number=other.getCharge()*getCharge()*(1.0/vec.LengthSquared());
-			s=s*20.0;
+			s=s*200.0;
 			vec.Multiply(s/vec.Length());
 			body.ApplyForce(vec,body.GetWorldCenter());
 		}
