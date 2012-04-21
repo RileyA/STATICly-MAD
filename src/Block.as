@@ -37,6 +37,9 @@ package {
 			body = bm.world.CreateBody(rectDef);
 			body.CreateFixture(fd);
 			
+			body.SetFixedRotation(true);
+			body.SetLinearDamping(1.0);
+			
 			bm.addBlock(this);
 		}
 	}

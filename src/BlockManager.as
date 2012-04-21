@@ -26,10 +26,11 @@ package {
 				for (j=0;j<blocks.length;j++){
 					var forcer:Block=blocks[j];
 					if (forcer!=forced){
-						var vec:b2Vec2 = forced.body.GetPosition();
-						vec.Subtract(forcer.body.GetPosition());
+						var vec:b2Vec2 = forced.body.GetWorldCenter();
+						vec=new b2Vec2(vec.x,vec.y);
+						vec.Subtract(forcer.body.GetWorldCenter());
 						var s:Number=forcer.charge*forced.charge*(1.0/vec.LengthSquared());
-						s=s*1000.0;
+						s=s*200.0;
 						vec.Multiply(s/vec.Length());
 						force.Add(vec);
 					}

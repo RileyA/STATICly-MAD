@@ -104,9 +104,27 @@ package {
 				false
 				);
 			var block2:Block = new Block(blockManager,
+				new b2Vec2(3,2),
+				polyShape,
+				Block.charge_red,
+				true,
+				false,
+				false
+				);
+			
+			var block3:Block = new Block(blockManager,
 				new b2Vec2(10,2),
 				polyShape,
 				Block.charge_red,
+				true,
+				false,
+				false
+				);
+				
+			var block4:Block = new Block(blockManager,
+				new b2Vec2(2,12),
+				polyShape,
+				Block.charge_blue,
 				true,
 				false,
 				false
