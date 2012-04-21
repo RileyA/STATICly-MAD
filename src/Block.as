@@ -60,7 +60,7 @@ package {
 			fd.shape = polyShape;
 			fd.density =strong?strongDensity:weakDensity;
 			fd.friction = 0.3;
-			fd.restitution = 0.1;
+			fd.restitution = 0.0;
 			rectDef.position.Set(position.x,position.y);
 			rectDef.angle = 0.0;
 			body = bm.world.CreateBody(rectDef);

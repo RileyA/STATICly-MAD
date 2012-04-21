@@ -2,9 +2,6 @@ package {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import Box2D.Common.Math.*;
-	import flash.events.KeyboardEvent;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
  	
@@ -21,27 +18,19 @@ package {
 		private var velocityIterations:uint;
 		private var positionIterations:uint;
 		
-		private var levelWidth:Number=20; // in meters
-		private var levelHeight:Number=15; // in meters
-		
-		
 		private var pixelsPerMeter:Number = 50;
-		private var genBodyTimer:Timer;		
-		private var sideWallWidth:int = 100; // in px
-		private var bottomWallHeight:int = 100; // in px
 		private var blockManager:BlockManager;
  
 		public function Main():void{ 
 			this.initWorld();
 			blockManager = new BlockManager(world);
-			this.createWalls();
+			this.createWalls(20, 15);
+			this.genBlocks();
 			this.setupDebugDraw();			
  
-			if (stage) init();
-			else addEventListener(Event.ADDED_TO_STAGE, init); 
+			this.addEventListener(Event.ENTER_FRAME, update);
 			
 			
-			this.genBlocks();
 		}
  
 		private function initWorld():void{
@@ -56,35 +45,22 @@ package {
 			this.positionIterations = 4;
 		}
  		
- 		private function createWall(width:Number, height:Number, x:Number, y:Number):void{
- 			var polyShape:b2PolygonShape = new b2PolygonShape();	
- 			polyShape.SetAsBox(width, height);
- 			new Block(blockManager,
-				new b2Vec2(x,y),
-				polyShape,
-				Block.charge_none,
-				false,
-				false,
-				true
-				);
+ 		private function createWall(x1:Number, x2:Number, y1:Number, y2:Number):void{
+ 			Block.MakeRect(blockManager,new b2Vec2(x1,y1),new b2Vec2(x2,y2),Block.charge_none,false,false,true);
  		}
  		
-		private function createWalls():void{
+ 		// make walls around an area, sized in meters
+ 		// and sets pixelsPerMeter to view the area
+		private function createWalls(levelWidth:Number, levelHeight:Number):void{
+			var size:Number=10; // wall thickness in meters
+			createWall(-size,0,-size,levelHeight+size); // left
+			createWall(levelWidth,levelWidth+size,-size,levelHeight+size); // right
+			createWall(-size,levelWidth+size,-size,0); // top
+			createWall(-size,levelWidth+size,levelHeight,levelHeight+size); // bottom
+			
 			var pwidth:Number=this.stage.stageWidth;
 			var pheight:Number=this.stage.stageHeight;
 			pixelsPerMeter=Math.min(pwidth/levelWidth,pheight/levelHeight);
-			
-			var ww:Number=sideWallWidth / pixelsPerMeter / 2;
-			var wh:Number=bottomWallHeight / pixelsPerMeter / 2;
-			
-			var w:Number=levelWidth/2;
-			var h:Number=levelHeight/2;
-
-			createWall(w+ww*2, wh, w, -wh);
-			createWall(w+ww*2, wh, w,2*h+wh);
-			
-			createWall(ww, h+wh*2, -ww, h);
-			createWall(ww, h+wh*2, 2*w+ww,h);
 		}
  
 		private function setupDebugDraw():void{
@@ -98,12 +74,8 @@ package {
 			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 			world.SetDebugDraw(debugDraw);
 		}
- 
-		private function init(e:Event = null):void{
-			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			this.addEventListener(Event.ENTER_FRAME, update);
-		}
-		
+
+		// make some blocks to demo
 		private function genBlocks():void{
 			
 			
@@ -119,10 +91,10 @@ package {
 				false
 				);
 			var block2:Block = new Block(blockManager,
-				new b2Vec2(3,2),
+				new b2Vec2(13,10),
 				polyShape,
 				Block.charge_red,
-				true,
+				false,
 				false,
 				false
 				);
@@ -146,21 +118,13 @@ package {
 				);
 			
 			
-			polyShape = new b2PolygonShape();			
-			
-			polyShape.SetAsBox(3, .3);
-			
-			new Block(blockManager,
-				new b2Vec2(10,1),
-				polyShape,
-				Block.charge_red,
-				true,
-				false,
-				false
-				);
+			var i:Number=0;
+			for (i=0;i<5;i++){
+				Block.MakeRect(blockManager,new b2Vec2(6,i+1),new b2Vec2(9,i+1.3),Block.charge_red,true,true,true);
+			}
 			
 			polyShape.SetAsBox(.5, .5);
-			var i:Number=0;
+			
 			for (i=0;i<25;i++){
 				new Block(blockManager,
 				new b2Vec2(2+(i%5),4+i/5),
@@ -171,8 +135,6 @@ package {
 				false
 				);
 			}
-			
-			//Block.MakeRect(blockManager,new b2Vec2(0,0),new b2Vec2(20,15),Block.charge_none,true,false,true);
 			
 			
 		}
