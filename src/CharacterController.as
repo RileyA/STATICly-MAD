@@ -7,7 +7,7 @@ package {
 		private static const jumpStrength:Number=3.0;
 		private static const moveSpeed:Number=2.0;
 		
-		private var jumpImpulse:b2Vec2;
+		private var jumpImpulse:Number;
 		private var footContactListener:FootContactListener;
 
 		
@@ -22,7 +22,7 @@ package {
 			super(bm,position,polyShape,Block.charge_none,true,true,true);
 			
 			body.SetFixedRotation(true);
-			jumpImpulse=new b2Vec2(0,-jumpStrength*body.GetMass());
+			jumpImpulse=-jumpStrength*body.GetMass();
 			
 			
 			// setup contact sense for jumping
@@ -50,7 +50,12 @@ package {
 			}
 			
 			if (up && footContactListener.canJump()){
-				body.ApplyImpulse(jumpImpulse,body.GetWorldCenter());
+				body.ApplyImpulse(new b2Vec2(0,jumpImpulse),body.GetWorldCenter());
+				
+				// apply a reaction force. TODO : apply at contact location
+				var b2:b2Body=footContactListener.lastFootContact;
+				b2.ApplyImpulse(new b2Vec2(0,-jumpImpulse),b2.GetWorldCenter());
+
 			}
 			
 		}
@@ -61,6 +66,9 @@ import Box2D.Dynamics.*;
 import Box2D.Dynamics.Contacts.*;
 class FootContactListener extends b2ContactListener{
 	private var numFootContacts:int=0;
+	
+	public var lastFootContact:b2Body;
+	
 	public function canJump():Boolean{
 		return numFootContacts>0;
 	}
@@ -68,12 +76,16 @@ class FootContactListener extends b2ContactListener{
 	public override function BeginContact(contact:b2Contact):void {
 		//check if fixture A was the foot sensor
 		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor )
+		if (fixtureUserData == Block.flag_footSensor ){
 			numFootContacts++;
+			lastFootContact=contact.GetFixtureB().GetBody();
+		}
 		//check if fixture B was the foot sensor
 		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor )
+		if (fixtureUserData == Block.flag_footSensor ){
 			numFootContacts++;
+			lastFootContact=contact.GetFixtureA().GetBody();
+		}
 	}
 	
 	public override function EndContact(contact:b2Contact):void{
