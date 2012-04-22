@@ -4,7 +4,9 @@ package {
 	import Box2D.Collision.Shapes.*;
 
 	public class CharacterController extends Block{
-		private static const jumpStrength:Number=3.0;
+		private static const maxJumpCooldown:int=10;
+		private var jumpCooldown:int;
+		private static const jumpStrength:Number=8.0;
 		private static const moveSpeed:Number=2.0;
 		
 		private var jumpImpulse:Number;
@@ -22,6 +24,9 @@ package {
 			super(bm,position,polyShape,Block.charge_none,true,true,true);
 			
 			body.SetFixedRotation(true);
+			//body.SetLinearDamping(1.0);
+			jumpCooldown=0;
+			
 			jumpImpulse=-jumpStrength*body.GetMass();
 			
 			
@@ -29,7 +34,7 @@ package {
 			// http://www.iforce2d.net/b2dtut/jumpability
 			//add foot sensor fixture
 			var fd:b2FixtureDef = new b2FixtureDef();
-			polyShape.SetAsBox(0.3, 0.1);
+			polyShape.SetAsBox(0.3, 0.2);
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			var footSensorFixture:b2Fixture = body.CreateFixture(fd);
@@ -41,6 +46,7 @@ package {
 		}
 		
 		public function updateControls(left:Boolean,right:Boolean,up:Boolean):void{
+			jumpCooldown-=1;
 			var xspeed:Number=0;
 			if (left) { xspeed-=moveSpeed; }
 			if (right) { xspeed+=moveSpeed; }
@@ -49,13 +55,14 @@ package {
 				body.SetLinearVelocity(new b2Vec2(xspeed,body.GetLinearVelocity().y));
 			}
 			
-			if (up && footContactListener.canJump()){
+			if (up && footContactListener.canJump() && jumpCooldown<=0){
 				body.ApplyImpulse(new b2Vec2(0,jumpImpulse),body.GetWorldCenter());
 				
 				// apply a reaction force. TODO : apply at contact location
 				var b2:b2Body=footContactListener.lastFootContact;
 				b2.ApplyImpulse(new b2Vec2(0,-jumpImpulse),b2.GetWorldCenter());
-
+				
+				jumpCooldown=maxJumpCooldown;
 			}
 			
 		}
