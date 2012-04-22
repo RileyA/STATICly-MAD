@@ -1,14 +1,25 @@
 package {
 	import flash.display.Sprite;
-	import libs.Box2D.Common.Math.*;
-	import libs.Box2D.Dynamics.*;
-	import libs.Box2D.Collision.Shapes.*;
+	import flash.display.Shape;
+	import flash.events.Event;
 
-	[SWF(backgroundColor='#111111', frameRate='30', width='800', height='600')]
+	import Game;
+	import MenuState;
 
-	public class Main extends Sprite{
+	[SWF(backgroundColor='#ffffff', frameRate='30', width='800', height='600')]
+
+	public class Main extends Sprite {
+
+		private var m_game:Game;
+
 		public function Main():void{
-			//... 
+			m_game = new Game(this);
+			m_game.addState(new MenuState(m_game));
+			addEventListener(Event.ENTER_FRAME, update);
+		}
+
+		public function update(event:Event):void {
+			m_game.update();
 		}
 	}
 }
