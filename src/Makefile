@@ -1,4 +1,4 @@
-# This makefile, should work for Linux/OSX/unix-y things as long as 
+# This makefile should work for Linux/OSX/unix-y things as long as 
 # you've got the mxmlc compiler in your PATH.
 
 OUT = STATIClyMAD.swf

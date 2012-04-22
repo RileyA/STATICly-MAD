@@ -11,9 +11,11 @@ package {
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
 
-		/** Constructor */
-		public function Game(par:Sprite):void {
-			m_parent = par;
+		/** Constructor
+			@param parent Reference to parent sprite */
+		public function Game(parent:Sprite):void {
+			m_parent = parent;
+			m_parent.stage.stageFocusRect = false;
 			m_lastTime = getTimer();
 			m_currentState = null;
 			m_states = new Vector.<GameState>;
@@ -40,8 +42,9 @@ package {
 					return false;
 				// otherwise grab the next state
 				m_currentState = m_states.shift();
-				m_currentState.init();
 				m_parent.addChild(m_currentState);
+				m_currentState.init();
+				m_parent.stage.focus = m_currentState;
 			}
 			
 			if (!m_currentState.update(delta)) {
