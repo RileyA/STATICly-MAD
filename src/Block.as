@@ -8,6 +8,8 @@ package {
 		public static const charge_none:int = 0;
 		public static const charge_red:int = +1;
 		
+		public static const flag_footSensor:int=1;
+		
 		private static const strongChargeDensity:Number = 2.5; // charge per square m
 		private static const weakChargeDensity:Number = 1.0; // charge per square m
 		
