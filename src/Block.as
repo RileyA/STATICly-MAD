@@ -45,12 +45,12 @@ package {
 			fd.restitution = 0.0;
 			rectDef.position.Set(position.x,position.y);
 			rectDef.angle = 0.0;
-			body = bm.world.CreateBody(rectDef);
-			body.CreateFixture(fd);
+			m_physics = bm.world.CreateBody(rectDef);
+			m_physics.CreateFixture(fd);
 			
 			//body.SetFixedRotation(true);
-			body.SetLinearDamping(1.0);
-			body.SetAngularDamping(1.0);
+			m_physics.SetLinearDamping(1.0);
+			m_physics.SetAngularDamping(1.0);
 			this.movement = movement;
 			final_flag = false;
 			
