@@ -9,8 +9,8 @@ package {
 	/** This keeps a graphics sprite updated with its physics counterpart */
 	public class GfxPhysObject {
 
-		private var m_physics:b2Body;
-		private var m_graphics:Sprite;
+		protected var m_physics:b2Body;
+		protected var m_graphics:Sprite;
 		
 	/** Constructor
 				@param gfx The sprite to associate with this object 

@@ -26,8 +26,10 @@ package
 				charge:int,
 				movement:String,
 				strong:Boolean,
-				insulated:Boolean):void {
-			super(position, polyShape, movement);
+				insulated:Boolean,
+				blockInfo:BlockInfo,
+				world:b2World):void {
+			super(position, polyShape, movement, blockInfo, world);
 			
 			var area:Number=body.GetMass()/fd.density;
 			
