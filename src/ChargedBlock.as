@@ -1,5 +1,6 @@
 package 
 {
+	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	
@@ -22,22 +23,36 @@ package
 		private var chargeStrength:Number;
 		
 		public function ChargedBlock(position:b2Vec2,
-				polyShape:b2PolygonShape,
+				hx:Number,
+				hy:Number,
 				charge:int,
 				movement:String,
 				strong:Boolean,
 				insulated:Boolean,
 				blockInfo:BlockInfo,
 				world:b2World):void {
-			super(position, polyShape, movement, blockInfo, world);
-			
+			super(position, hx, hy, movement, blockInfo, world);
+			init(charge, strong, insulated);
+		}
+		
+		public function ChargedBlock(topLeft:b2Vec2,
+				bottomRight:b2Vec2,
+				charge:int,
+				movement:String,
+				strong:Boolean,
+				insulated:Boolean,
+				blockInfo:BlockInfo,
+				world:b2World):void {
+			super(topLeft, bottomRight, movement, blockInfo, world);
+			init(charge, strong, insulated);
+		}
+		
+		private function init(charge:int, strong:Boolean, insulated:Boolean):void {
 			var area:Number=body.GetMass()/fd.density;
-			
 			this.strong=strong;
 			this.charge = charge;
 			this.insulated = insulated;
 			this.chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
-			
 		}
 		
 		/**

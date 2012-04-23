@@ -19,6 +19,14 @@ package
 			this.alength = alength;
 		}
 		
+		private function getSLength():int {
+			return slength;
+		}
+		
+		private function getALength():int {
+			return alength;
+		}
+		
 		public function getSurfaces():Vector.<String> {
 			return surfaces;
 		}
