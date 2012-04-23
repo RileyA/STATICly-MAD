@@ -30,6 +30,10 @@ package Surfaces
 												world:b2World):SurfaceElement {
 			if (type == "ground")
 				return new Ground(position, w, h, world);
+			else if (type == "red_carpet")
+				return new RedCarpet(position, w, h, world);
+			else if (type == "blue_carpet")
+				return new BlueCarpet(position, w, h, world);
 			else
 				return null;
 			
