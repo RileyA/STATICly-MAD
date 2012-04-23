@@ -5,30 +5,27 @@ package {
 
 	public class CharacterController extends Block{
 		private static const maxJumpCooldown:int=10;
-		private var jumpCooldown:int;
 		private static const jumpStrength:Number=8.0;
 		private static const moveSpeed:Number=2.0;
 		
+		private var characterBody:b2Body;
 		private var jumpImpulse:Number;
+		private var jumpCooldown:int;
 		private var footContactListener:FootContactListener;
 
 		
-		public function CharacterController(bm:BlockManager,position:b2Vec2):void{
-			var polyShape:b2PolygonShape = new b2PolygonShape();
+		/**
+		* A platforming controller for the specified characterBody
+		* that will be acting in the specified levelState.
+		*/
+		public function CharacterController(levelState:LevelState,characterBody:b2Body):void{
+			this.characterBody = characterBody;
 			
-			var w:Number=.7;
-			var h:Number=-1.2;
-			var hMid:Number=-0.9;
-			polyShape.SetAsArray([new b2Vec2(0,h),new b2Vec2(w/2,hMid),new b2Vec2(w/2,0),new b2Vec2(-w/2,0),new b2Vec2(-w/2,hMid)])
-			
-			super(bm,position,polyShape,Block.charge_none,true,true,true);
-			
-			body.SetFixedRotation(true);
-			//body.SetLinearDamping(1.0);
+			//characterBody.SetFixedRotation(true);
+			//characterBody.SetLinearDamping(1.0);
 			jumpCooldown=0;
 			
-			jumpImpulse=-jumpStrength*body.GetMass();
-			
+			jumpImpulse=-jumpStrength*characterBody.GetMass();
 			
 			// setup contact sense for jumping
 			// http://www.iforce2d.net/b2dtut/jumpability
@@ -37,11 +34,11 @@ package {
 			polyShape.SetAsBox(0.3, 0.2);
 			fd.shape = polyShape;
 			fd.isSensor = true;
-			var footSensorFixture:b2Fixture = body.CreateFixture(fd);
+			var footSensorFixture:b2Fixture = characterBody.CreateFixture(fd);
 			footSensorFixture.SetUserData(flag_footSensor);
 			
 			footContactListener=new FootContactListener();
-			bm.world.SetContactListener(footContactListener);
+			levelState.world.SetContactListener(footContactListener);
 			
 		}
 		
@@ -52,11 +49,11 @@ package {
 			if (right) { xspeed+=moveSpeed; }
 			
 			if (xspeed!=0) {
-				body.SetLinearVelocity(new b2Vec2(xspeed,body.GetLinearVelocity().y));
+				characterBody.SetLinearVelocity(new b2Vec2(xspeed,characterBody.GetLinearVelocity().y));
 			}
 			
 			if (up && footContactListener.canJump() && jumpCooldown<=0){
-				body.ApplyImpulse(new b2Vec2(0,jumpImpulse),body.GetWorldCenter());
+				characterBody.ApplyImpulse(new b2Vec2(0,jumpImpulse),characterBody.GetWorldCenter());
 				
 				// apply a reaction force. TODO : apply at contact location
 				var b2:b2Body=footContactListener.lastFootContact;
