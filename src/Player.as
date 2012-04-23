@@ -18,6 +18,7 @@ package {
 		private var m_moveLeftKey:Boolean;
 		private var m_moveRightKey:Boolean;
 		private var m_jumpKey:Boolean;
+		private var m_actionKey:Boolean;
 		private var m_sprite:Sprite;
 
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
@@ -44,6 +45,7 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
+			fd.userData = "player";
 			m_physics = levelState.world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
 			m_physics.SetLinearDamping(1.0);
@@ -69,6 +71,8 @@ package {
 				m_moveRightKey = true;
 			else if (evt.keyCode == JUMP_KEY)
 				m_jumpKey = true;
+			else if (evt.keyCode == ACTION_KEY)
+				m_actionKey = true;
 		}
 
 		public function handleKeyUp(evt:KeyboardEvent):void {
@@ -78,6 +82,8 @@ package {
 				m_moveRightKey = false;
 			else if (evt.keyCode == JUMP_KEY)
 				m_jumpKey = false;
+			else if (evt.keyCode == ACTION_KEY)
+				m_actionKey = false;
 		}
 
 		public function registerKeyListeners(parent:DisplayObjectContainer):void {

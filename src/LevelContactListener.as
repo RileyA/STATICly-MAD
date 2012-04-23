@@ -59,14 +59,3 @@ package
 	}
 
 }
-
-class FootContactListener extends b2ContactListener{
-	private var numFootContacts:int=0;
-	
-	public var lastFootContact:b2Body;
-	
-	public function canJump():Boolean{
-		return numFootContacts>0;
-	}
-	
-}

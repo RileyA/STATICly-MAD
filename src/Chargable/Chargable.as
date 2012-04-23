@@ -1,5 +1,4 @@
-
-package {
+package Chargable {
 	/**
 	* Defines an object that is chargable with electricty and particpates in
 	* the electrostatics physics engine.

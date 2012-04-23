@@ -1,4 +1,4 @@
-package {
+package Chargable {
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
