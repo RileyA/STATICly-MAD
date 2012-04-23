@@ -7,7 +7,7 @@ package {
 
 		private static const maxJumpCooldown:int=10;
 		private static const jumpStrength:Number=8.0;
-		private static const moveSpeed:Number=2.0;
+		private static const moveSpeed:Number=10.0;
 		
 		private var characterBody:b2Body;
 		private var jumpImpulse:Number;

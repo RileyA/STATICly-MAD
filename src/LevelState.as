@@ -60,7 +60,7 @@ package {
 				m_debugDrawKey = true;
 				m_debugDraw = !m_debugDraw;
 				m_debugSprite.visible = m_debugDraw;
-			} else if (!isKeyPressed(Keyboard.D) && m_debugDrawKey) {
+			} else if (!isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
 				m_debugDrawKey = false;
 			}
 
@@ -92,7 +92,6 @@ package {
 			// top
 			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,-100)), 
 				shapeWidth, shapeHeight, Block.FIXED, empty, world));
-
 			// bottom
 			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,700)), 
 				shapeWidth, shapeHeight, Block.FIXED, empty, world));
@@ -103,7 +102,6 @@ package {
 			// left
 			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(-100, 0.0)), 
 				shapeWidth, shapeHeight, Block.FIXED, empty, world));
-
 			// right
 			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(900, 0.0)),
 				shapeWidth, shapeHeight, Block.FIXED, empty, world));
