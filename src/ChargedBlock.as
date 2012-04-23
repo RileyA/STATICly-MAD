@@ -22,6 +22,18 @@ package
 		
 		private var chargeStrength:Number;
 		
+		/**
+		 * For specifying by position and size
+		 * @param	position
+		 * @param	hx
+		 * @param	hy
+		 * @param	charge
+		 * @param	movement
+		 * @param	strong
+		 * @param	insulated
+		 * @param	blockInfo
+		 * @param	world
+		 */
 		public function ChargedBlock(position:b2Vec2,
 				hx:Number,
 				hy:Number,
@@ -35,6 +47,17 @@ package
 			init(charge, strong, insulated);
 		}
 		
+		/**
+		 * For specifying by the corners of the box
+		 * @param	topLeft
+		 * @param	bottomRight
+		 * @param	charge
+		 * @param	movement
+		 * @param	strong
+		 * @param	insulated
+		 * @param	blockInfo
+		 * @param	world
+		 */
 		public function ChargedBlock(topLeft:b2Vec2,
 				bottomRight:b2Vec2,
 				charge:int,
