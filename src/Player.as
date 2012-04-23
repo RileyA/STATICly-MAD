@@ -26,11 +26,6 @@ package {
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		public function Player(levelState:LevelState):void {
-			m_sprite = new Sprite();
-			m_sprite.graphics.beginFill(0xff0000);
-			m_sprite.graphics.drawRect(0,0,50,50);
-			m_sprite.graphics.endFill();
-			addChild(m_sprite);
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			var w:Number=.7;
@@ -48,14 +43,17 @@ package {
 			fd.restitution = 0.0;
 			m_physics = levelState.world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
-			rectDef.position.Set(0, 0);
-			rectDef.angle = 0.0;
-
-			//body.SetFixedRotation(true);
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
-
 			m_characterController = new CharacterController(levelState, m_physics);
+
+			// placeholder sprite to be replaced with an animated MovieClip at some point...
+			m_sprite = new Sprite();
+			m_sprite.graphics.beginFill(0xff0000);
+			m_sprite.graphics.drawRect(-PIXELS_PER_METER * w/2.0, h * PIXELS_PER_METER,
+				w * PIXELS_PER_METER, -h * PIXELS_PER_METER);
+			m_sprite.graphics.endFill();
+			addChild(m_sprite);
 		}
 
 		public function handleKeyDown(evt:KeyboardEvent):void {
