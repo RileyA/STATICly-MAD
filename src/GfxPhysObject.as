@@ -37,8 +37,8 @@ package {
 			// if either is null, no need to update...
 			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
-				this.x = pos.x * 30.0;
-				this.y = pos.y * 30.0;
+				this.x = pos.x * PIXELS_PER_METER;
+				this.y = pos.y * PIXELS_PER_METER;
 				this.rotation = getAngle();
 			} else {
 				this.x = 0;
