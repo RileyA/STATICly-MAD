@@ -10,8 +10,6 @@ package {
 		private static const MOVE_SPEED:Number=4.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		
-		private static const MIDAIR_SPEED_FACTOR:Number=0.75;
-		
 		private var characterBody:b2Body;
 		private var jumpImpulse:Number;
 		private var jumpCooldown:int;
@@ -46,7 +44,6 @@ package {
 			if (right) { xspeed += MOVE_SPEED; }
 
 			if (footContactListener.canJump()) {
-				//xspeed *= MIDAIR_SPEED_FACTOR;
 				characterBody.GetLinearVelocity().x=xspeed;
 			} else if (xspeed!=0) {
 				
