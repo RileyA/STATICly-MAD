@@ -5,37 +5,25 @@ package {
 	import Box2D.Collision.Shapes.*;
 
 	import flash.display.Sprite;
+	import flash.display.DisplayObjectContainer;
 
 	/** This keeps a graphics sprite updated with its physics counterpart */
-	public class GfxPhysObject {
+	public class GfxPhysObject extends Sprite {
 
 		protected var m_physics:b2Body;
-		protected var m_graphics:Sprite;
+		private static const PIXELS_PER_METER:Number = 30;
 		
-	/** Constructor
-				@param gfx The sprite to associate with this object 
+		/** Constructor
 				@param phys The physics object
 				@remarks Either of these may be null, and may be swapped out
 					using the getters and setters after construction */
-		public function GfxPhysObject(gfx:Sprite = null, phys:b2Body = null) {
+		public function GfxPhysObject(phys:b2Body = null) {
 			m_physics = phys;
-			m_graphics = gfx;
-		}
-
-		/** Getter for gfx object */
-		public function getGraphics():Sprite {
-			return m_graphics;
-		}
-
-		/** Setter for gfx object */
-		public function setGraphics(gfx:Sprite):void {
-			m_graphics = gfx;
-			updateTransform();
 		}
 
 		/** Getter for phys object */
-		public function getPhysics():Sprite {
-			return m_graphics;
+		public function getPhysics():b2Body {
+			return m_physics;
 		}
 
 		/** Setter for phys object */
@@ -47,11 +35,15 @@ package {
 		/** Updates gfx object's transformation to match that of the gfx object */
 		public function updateTransform():void {
 			// if either is null, no need to update...
-			if (m_graphics != null && m_physics != null) {
+			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
-				m_graphics.x = pos.x;
-				m_graphics.y = pos.y;
-				m_graphics.rotation = getAngle();
+				this.x = pos.x * 30.0;
+				this.y = pos.y * 30.0;
+				this.rotation = getAngle();
+			} else {
+				this.x = 0;
+				this.y = 0;
+				this.rotation = 0;
 			}
 		}
 

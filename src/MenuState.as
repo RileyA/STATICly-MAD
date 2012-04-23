@@ -4,7 +4,7 @@ package {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import BlockDemoState;
+	//import BlockDemoState;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
@@ -36,7 +36,7 @@ package {
 			block_text.x = 100;
 			block_text.y = 300;
 			block_text.defaultTextFormat = format;
-			block_text.text = "Or click here for physics demo!";
+			block_text.text = "Or click here for prelim level state!";
 			block_text.selectable = false;
 			block_text.addEventListener(MouseEvent.MOUSE_UP, clickedDemo);
 			addChild(block_text);
@@ -59,7 +59,7 @@ package {
 		private function clickedDemo(event:MouseEvent):void {
 			if (!m_done) {
 				m_done = true;
-				m_game.addState(new BlockDemoState(m_game));
+				m_game.addState(new LevelState(m_game));
 			}
 		}
 	}
