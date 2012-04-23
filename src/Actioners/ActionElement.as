@@ -9,7 +9,7 @@ package Actioners {
 	 */
 	public class ActionElement extends GfxPhysObject{
 		
-		public function SurfaceElement(position:b2Vec2, scale:b2Vec2, world:b2World):void {
+		public function ActionElement(position:b2Vec2, scale:b2Vec2, am:ActionMarker, world:b2World):void {
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var rectDef:b2BodyDef = new b2BodyDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
@@ -19,7 +19,7 @@ package Actioners {
 			rectDef.position = position;
 			rectDef.angle = 0.0;
 			
-			fd.userData = this;
+			fd.userData = am;
 			
 			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);

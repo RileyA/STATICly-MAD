@@ -48,7 +48,7 @@ package {
 			fd.userData = "player";
 			m_physics = levelState.world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
-			m_physics.SetLinearDamping(1.0);
+			m_physics.SetLinearDamping(.2);
 			m_physics.SetAngularDamping(1.0);
 			m_characterController = new CharacterController(levelState, m_physics);
 
