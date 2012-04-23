@@ -10,8 +10,9 @@ package {
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
+	import Chargable.Chargable;
 
-	public class Player extends GfxPhysObject {
+	public class Player extends GfxPhysObject { //implements Chargable {
 
 		private var m_characterController:CharacterController;
 		private var m_moveLeftKey:Boolean;
