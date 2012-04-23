@@ -3,6 +3,7 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Surfaces.*;
+	import Actioners.*;
 
 	public class Block extends GfxPhysObject{
 		
@@ -17,10 +18,9 @@ package {
 		public static const RCARPET:String = "rcarpet";
 		public static const GROUND:String = "ground";
 		
-		public static const flag_footSensor:int = 1;
 		private var movement:String;
-		private var hx;
-		private var hy;
+		private var hx:Number;
+		private var hy:Number;
 		private var final_flag:Boolean;
 		
 		private var surfaces:Vector.<SurfaceElement>;
@@ -75,7 +75,7 @@ package {
 		 * @param	blockInfo
 		 * @param	world
 		 */
-		public function Block(topLeft:b2Vec2,
+		/*public function Block(topLeft:b2Vec2,
 				bottomRight:b2Vec2,
 				movement:String,
 				blockInfo:BlockInfo,
@@ -91,7 +91,7 @@ package {
 			polyShape.SetAsBox(hx, hy);
 			
 			init(position, polyShape, movement, blockInfo, world);
-		}
+		}*/
 		
 		private function init(position:b2Vec2,
 				polyShape:b2PolygonShape,
@@ -103,7 +103,7 @@ package {
 			var rectDef:b2BodyDef = new b2BodyDef();
 			rectDef.type = movement != FIXED?b2Body.b2_dynamicBody:b2Body.b2_staticBody;
 			fd.shape = polyShape;
-			fd.density =strong?strongDensity:weakDensity;
+			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
 			rectDef.position.Set(position.x,position.y);
@@ -117,10 +117,12 @@ package {
 			this.movement = movement;
 			final_flag = false;
 			
-			for (var i:int = 0; i < blockInfo.getSLength(); i++) {
+			var i:int = 0;
+
+			for (i = 0; i < blockInfo.getSurfaces().length; i++) {
 				addSurface(blockInfo.getSurfaces()[i], world);
 			}
-			for (var i:int = 0; i < blockInfo.getALength(); i++) {
+			for (i = 0; i < blockInfo.getActions().length; i++) {
 				addAction(blockInfo.getActions()[i], world);
 			}
 		}
@@ -143,7 +145,6 @@ package {
 				pos.Set(pos.x + hx, pos.y);
 				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, hy * 2, world));
 			}
-			
 		}
 		
 		private function addAction(key:String, world:b2World):void {

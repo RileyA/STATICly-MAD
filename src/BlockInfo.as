@@ -9,22 +9,10 @@ package
 		
 		private var surfaces:Vector.<String>;
 		private var actions:Vector.<String>;
-		private var slength:int;
-		private var alength:int;
 		
-		public function BlockInfo(surfaces:Vector.<String>, slength:int, actions:Vector.<String>, alength:int):void {
+		public function BlockInfo(surfaces:Vector.<String>, actions:Vector.<String>):void {
 			this.surfaces = surfaces;
 			this.actions = actions;
-			this.slength = slength;
-			this.alength = alength;
-		}
-		
-		private function getSLength():int {
-			return slength;
-		}
-		
-		private function getALength():int {
-			return alength;
 		}
 		
 		public function getSurfaces():Vector.<String> {

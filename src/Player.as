@@ -35,13 +35,16 @@ package {
 				new b2Vec2(w/2,0),new b2Vec2(-w/2,0),new b2Vec2(-w/2,hMid)])
 
 			var fd:b2FixtureDef = new b2FixtureDef();
-			var rectDef:b2BodyDef = new b2BodyDef();
-			rectDef.type = b2Body.b2_dynamicBody;
+			var ccDef:b2BodyDef = new b2BodyDef();
+			ccDef.type = b2Body.b2_dynamicBody;
+			ccDef.allowSleep = false;
+			ccDef.awake = true;
+			ccDef.position = new b2Vec2(400 / 30.0, 200 / 30.0);
 			fd.shape = polyShape;
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
-			m_physics = levelState.world.CreateBody(rectDef);
+			m_physics = levelState.world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);

@@ -22,7 +22,7 @@ package Surfaces
 			rectDef.position = position;
 			rectDef.angle = 0.0;
 			
-			m_physics = world.CreateBody(rextDef);
+			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
 		}
 		

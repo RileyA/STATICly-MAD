@@ -4,6 +4,7 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
+	import flash.utils.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
@@ -27,6 +28,7 @@ package {
 		private var m_debugDrawKey:Boolean;
 		private var m_debugSprite:Sprite;
 		private var m_player:Player;
+		private var m_walls:Vector.<Block>;
 
 		public function LevelState(game:Game):void {
 			super(game);
@@ -40,7 +42,9 @@ package {
 			m_player = new Player(this);
 			addChild(m_player);
 			m_player.registerKeyListeners(stage);
+			m_walls = new Vector.<Block>;
 
+			prepareWalls();
 			prepareDebugVisualization();
 		}
 
@@ -76,6 +80,37 @@ package {
 			debugDraw.SetLineThickness(1.0);
 			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 			world.SetDebugDraw(debugDraw);
+		}
+
+		private function prepareWalls():void {
+
+			var polyShape:b2PolygonShape = new b2PolygonShape();
+			var shapeWidth:Number = 800 / 30.0;
+			var shapeHeight:Number = 100 / 30.0;
+			var empty:BlockInfo = new BlockInfo(new Vector.<String>, 
+				new Vector.<String>);
+
+			polyShape.SetAsBox(shapeWidth, shapeHeight);
+
+			// top
+			m_walls.push(new Block(new b2Vec2(0,-100 / 30.0), shapeWidth,
+				shapeHeight, Block.FIXED, empty, world));
+
+			// bottom
+			m_walls.push(new Block(new b2Vec2(0,700 / 30.0), shapeWidth,
+				shapeHeight, Block.FIXED, empty, world));
+
+			shapeWidth = 100 / 30.0;
+			shapeHeight = 600 / 30.0;
+			polyShape.SetAsBox(shapeWidth, shapeHeight);
+			
+			// left
+			m_walls.push(new Block(new b2Vec2(-100 / 30.0, 0.0), shapeWidth, 
+				shapeHeight, Block.FIXED, empty, world));
+
+			// right
+			m_walls.push(new Block(new b2Vec2(900 / 30.0, 0.0), shapeWidth, 
+				shapeHeight, Block.FIXED, empty, world));
 		}
 	}
 }

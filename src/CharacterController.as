@@ -12,7 +12,9 @@ package {
 		private var characterBody:b2Body;
 		private var jumpImpulse:Number;
 		private var jumpCooldown:int;
-		//private var footContactListener:FootContactListener;
+		private var footContactListener:FootContactListener;
+
+		public static const FOOT_SENSOR_ID:int = 1;
 		
 		/**
 		* A platforming controller for the specified characterBody
@@ -21,8 +23,7 @@ package {
 		public function CharacterController(levelState:LevelState, characterBody:b2Body):void{
 			this.characterBody = characterBody;
 			
-			//characterBody.SetFixedRotation(true);
-			//characterBody.SetLinearDamping(1.0);
+			characterBody.SetFixedRotation(true);
 			jumpCooldown=0;
 			
 			jumpImpulse=-jumpStrength*characterBody.GetMass();
@@ -36,11 +37,10 @@ package {
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			var footSensorFixture:b2Fixture = characterBody.CreateFixture(fd);
-			footSensorFixture.SetUserData(0);
+			footSensorFixture.SetUserData(FOOT_SENSOR_ID);
 			
-			//footContactListener=new FootContactListener();
-			//levelState.world.SetContactListener(footContactListener);
-			
+			footContactListener = new FootContactListener();
+			levelState.world.SetContactListener(footContactListener);
 		}
 		
 		public function updateControls(left:Boolean,right:Boolean,up:Boolean):void{
@@ -53,21 +53,20 @@ package {
 				characterBody.SetLinearVelocity(new b2Vec2(xspeed,characterBody.GetLinearVelocity().y));
 			}
 			
-			/*if (up && footContactListener.canJump() && jumpCooldown<=0){
-				characterBody.ApplyImpulse(new b2Vec2(0,jumpImpulse),characterBody.GetWorldCenter());
-				
+			if (up && footContactListener.canJump() && jumpCooldown<=0) {
+				characterBody.ApplyImpulse(new b2Vec2(0,jumpImpulse),
+					characterBody.GetWorldCenter());
 				// apply a reaction force. TODO : apply at contact location
 				var b2:b2Body=footContactListener.lastFootContact;
-				b2.ApplyImpulse(new b2Vec2(0,-jumpImpulse),b2.GetWorldCenter());
-				
+				b2.ApplyImpulse(new b2Vec2(0,-jumpImpulse),
+					b2.GetWorldCenter());
 				jumpCooldown=maxJumpCooldown;
-			}*/
-			
+			}
 		}
 	}
 }
 
-/*import Box2D.Dynamics.*;
+import Box2D.Dynamics.*;
 import Box2D.Dynamics.Contacts.*;
 class FootContactListener extends b2ContactListener{
 	private var numFootContacts:int=0;
@@ -81,13 +80,13 @@ class FootContactListener extends b2ContactListener{
 	public override function BeginContact(contact:b2Contact):void {
 		//check if fixture A was the foot sensor
 		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor ){
+		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID ){
 			numFootContacts++;
 			lastFootContact=contact.GetFixtureB().GetBody();
 		}
 		//check if fixture B was the foot sensor
 		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor ){
+		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID ){
 			numFootContacts++;
 			lastFootContact=contact.GetFixtureA().GetBody();
 		}
@@ -96,11 +95,11 @@ class FootContactListener extends b2ContactListener{
 	public override function EndContact(contact:b2Contact):void{
 		//check if fixture A was the foot sensor
 		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor )
+		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID )
 			numFootContacts--;
 		//check if fixture B was the foot sensor
 		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == Block.flag_footSensor )
+		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID )
 			numFootContacts--;
 	}
-}*/
+}
