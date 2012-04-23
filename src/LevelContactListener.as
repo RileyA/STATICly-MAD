@@ -3,44 +3,58 @@ package
 	import Box2D.Collision.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Dynamics.Contacts.*;
+	import Surfaces.*;
+	import Actioners.*;
 	
 	/**
 	 * ...
 	 * @author Matthew Hall
 	 */
-	public class LevelContactListener {
+	public class LevelContactListener extends b2ContactListener {
+		
+		private var actionCandidates:Vector.<GfxPhysObject>;
+		private var holder:GfxPhysObject;
 		
 		public function LevelContactListener() {
-			
+			actionCandidates = new Vector.<GfxPhysObject>();
+		}
+		
+		public function getBestAction():GfxPhysObject {
+			actionCandidates.sort(compare);
 		}
 		
 		public override function BeginContact(contact:b2Contact):void {
-			if (contact.IsSensor()) {
-				
+			var elementA:GfxPhysObject = contact.GetFixtureA().GetUserData();
+			var elementB:GfxPhysObject = contact.GetFixtureB().GetUserData();
+			if (elementA == Player || elementB == Player) {
+				if (elementA != Player) {
+					actionCandidates.push(elementA);
+				} else if (elementB != Player) {
+					actionCandidates.push(elementB);
+				}
 			}
-			////check if fixture A was the foot sensor
-			//var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-			//if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
-				//numFootContacts++;
-				//lastFootContact = contact.GetFixtureB().GetBody();
-			//}
-			////check if fixture B was the foot sensor
-			//fixtureUserData = contact.GetFixtureB().GetUserData();
-			//if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
-				//numFootContacts++;
-				//lastFootContact = contact.GetFixtureA().GetBody();
-			//}
 		}
 		
-		public override function EndContact(contact:b2Contact):void{
-			//check if fixture A was the foot sensor
-			//var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-			//if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
-				//numFootContacts--;
-			//check if fixture B was the foot sensor
-			//fixtureUserData = contact.GetFixtureB().GetUserData();
-			//if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
-				//numFootContacts--;
+		public override function EndContact(contact:b2Contact):void {
+			var elementA = contact.GetFixtureA().GetUserData();
+			var elementB = contact.GetFixtureB().GetUserData();
+			if (elementA == Player || elementB == Player) {
+				if (elementA != Player) {
+					holder = elementA;
+				} else if (elementB != Player) {
+					holder = elementB;
+				}
+				actionCandidates = actionCandidates.filter(removeFunc);
+			}
+			
+		}
+		
+		private function removeFunc(item:GfxPhysObject):Boolean {
+			return item != holder;
+		}
+		
+		private function compare(x:GfxPhysObject, y:GfxPhysObject):Number {
+			
 		}
 	}
 
