@@ -4,7 +4,6 @@ package {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	//import BlockDemoState;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
