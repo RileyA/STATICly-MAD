@@ -8,6 +8,8 @@ package {
 		private static const MAX_JUMP_COOLDOWN:int=10;
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=4.0;
+		private static const ACELL_TIME_CONSTANT:Number=0.5;
+		
 		private static const MIDAIR_SPEED_FACTOR:Number=0.75;
 		
 		private var characterBody:b2Body;
@@ -43,10 +45,18 @@ package {
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
 
-			if (!footContactListener.canJump()) { xspeed *= MIDAIR_SPEED_FACTOR; }
-			
-			if (xspeed!=0) {
-				characterBody.SetLinearVelocity(new b2Vec2(xspeed, characterBody.GetLinearVelocity().y));
+			if (footContactListener.canJump()) {
+				//xspeed *= MIDAIR_SPEED_FACTOR;
+				characterBody.GetLinearVelocity().x=xspeed;
+			} else if (xspeed!=0) {
+				
+				var fx:Number=characterBody.GetMass()/ACELL_TIME_CONSTANT;
+				var vx:Number=characterBody.GetLinearVelocity().x;
+				var deltaSpeed:Number=xspeed-vx;
+				fx*=deltaSpeed;
+				if ((deltaSpeed*xspeed)>0) {
+					characterBody.ApplyForce(new b2Vec2(fx, 0),characterBody.GetWorldCenter());
+				}
 			}
 			
 			if (up && footContactListener.canJump() && jumpCooldown<=0) {
