@@ -84,29 +84,29 @@ package {
 
 		private function prepareWalls():void {
 
-			var shapeWidth:Number = 800 / 30.0;
-			var shapeHeight:Number = 100 / 30.0;
+			var shapeWidth:Number = 800 / PhysicsUtils.PIXELS_PER_METER;
+			var shapeHeight:Number = 100 / PhysicsUtils.PIXELS_PER_METER;
 			var empty:BlockInfo = new BlockInfo(new Vector.<String>, 
 				new Vector.<String>);
 
 			// top
-			m_walls.push(new Block(new b2Vec2(0,-100 / 30.0), shapeWidth,
-				shapeHeight, Block.FIXED, empty, world));
+			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,-100)), 
+				shapeWidth, shapeHeight, Block.FIXED, empty, world));
 
 			// bottom
-			m_walls.push(new Block(new b2Vec2(0,700 / 30.0), shapeWidth,
-				shapeHeight, Block.FIXED, empty, world));
+			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,700)), 
+				shapeWidth, shapeHeight, Block.FIXED, empty, world));
 
-			shapeWidth = 100 / 30.0;
-			shapeHeight = 600 / 30.0;
+			shapeWidth = 100 / PhysicsUtils.PIXELS_PER_METER;
+			shapeHeight = 600 / PhysicsUtils.PIXELS_PER_METER;
 			
 			// left
-			m_walls.push(new Block(new b2Vec2(-100 / 30.0, 0.0), shapeWidth, 
-				shapeHeight, Block.FIXED, empty, world));
+			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(-100, 0.0)), 
+				shapeWidth, shapeHeight, Block.FIXED, empty, world));
 
 			// right
-			m_walls.push(new Block(new b2Vec2(900 / 30.0, 0.0), shapeWidth, 
-				shapeHeight, Block.FIXED, empty, world));
+			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(900, 0.0)),
+				shapeWidth, shapeHeight, Block.FIXED, empty, world));
 		}
 	}
 }

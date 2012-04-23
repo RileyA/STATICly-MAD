@@ -14,8 +14,6 @@ package {
 		private var jumpCooldown:int;
 		private var footContactListener:FootContactListener;
 
-		public static const FOOT_SENSOR_ID:int = 1;
-		
 		/**
 		* A platforming controller for the specified characterBody
 		* that will be acting in the specified levelState.
@@ -37,7 +35,7 @@ package {
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			var footSensorFixture:b2Fixture = characterBody.CreateFixture(fd);
-			footSensorFixture.SetUserData(FOOT_SENSOR_ID);
+			footSensorFixture.SetUserData(PhysicsUtils.FOOT_SENSOR_ID);
 			
 			footContactListener = new FootContactListener();
 			levelState.world.SetContactListener(footContactListener);
@@ -66,8 +64,10 @@ package {
 	}
 }
 
+import Box2D.Collision.*;
 import Box2D.Dynamics.*;
 import Box2D.Dynamics.Contacts.*;
+
 class FootContactListener extends b2ContactListener{
 	private var numFootContacts:int=0;
 	
@@ -80,13 +80,13 @@ class FootContactListener extends b2ContactListener{
 	public override function BeginContact(contact:b2Contact):void {
 		//check if fixture A was the foot sensor
 		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID ){
+		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
 			numFootContacts++;
 			lastFootContact=contact.GetFixtureB().GetBody();
 		}
 		//check if fixture B was the foot sensor
 		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID ){
+		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
 			numFootContacts++;
 			lastFootContact=contact.GetFixtureA().GetBody();
 		}
@@ -95,11 +95,11 @@ class FootContactListener extends b2ContactListener{
 	public override function EndContact(contact:b2Contact):void{
 		//check if fixture A was the foot sensor
 		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID )
+		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
 			numFootContacts--;
 		//check if fixture B was the foot sensor
 		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == CharacterController.FOOT_SENSOR_ID )
+		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
 			numFootContacts--;
 	}
 }

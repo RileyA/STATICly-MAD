@@ -53,8 +53,11 @@ package {
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
 			m_sprite.graphics.beginFill(0xff0000);
-			m_sprite.graphics.drawRect(-PIXELS_PER_METER * w/2.0, h * PIXELS_PER_METER,
-				w * PIXELS_PER_METER, -h * PIXELS_PER_METER);
+			m_sprite.graphics.drawRect(
+				PhysicsUtils.PIXELS_PER_METER * -w/2.0,
+				h * PhysicsUtils.PIXELS_PER_METER,
+				w * PhysicsUtils.PIXELS_PER_METER,
+				h * -PhysicsUtils.PIXELS_PER_METER);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
 		}
