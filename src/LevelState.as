@@ -84,13 +84,10 @@ package {
 
 		private function prepareWalls():void {
 
-			var polyShape:b2PolygonShape = new b2PolygonShape();
 			var shapeWidth:Number = 800 / 30.0;
 			var shapeHeight:Number = 100 / 30.0;
 			var empty:BlockInfo = new BlockInfo(new Vector.<String>, 
 				new Vector.<String>);
-
-			polyShape.SetAsBox(shapeWidth, shapeHeight);
 
 			// top
 			m_walls.push(new Block(new b2Vec2(0,-100 / 30.0), shapeWidth,
@@ -102,7 +99,6 @@ package {
 
 			shapeWidth = 100 / 30.0;
 			shapeHeight = 600 / 30.0;
-			polyShape.SetAsBox(shapeWidth, shapeHeight);
 			
 			// left
 			m_walls.push(new Block(new b2Vec2(-100 / 30.0, 0.0), shapeWidth, 
