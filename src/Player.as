@@ -13,7 +13,7 @@ package {
 	public class Player extends GfxPhysObject { //implements Chargable {
 
 		private static const MAX_JUMP_COOLDOWN:int=10;
-		private static const JUMP_STRENGTH:Number=10.0;
+		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		

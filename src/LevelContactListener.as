@@ -35,7 +35,7 @@ package
 		
 		// returns True if handled
 		private function doBeginContact(a:b2Fixture, b:b2Fixture):Boolean{
-			if (a.GetUserData() == Player) {
+			if (a.GetUserData() == Player && false) {
 				actionCandidates.push(b.GetUserData());
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
@@ -48,15 +48,15 @@ package
 		
 		// returns True if handled
 		private function doEndContact(a:b2Fixture, b:b2Fixture):Boolean{
-			if (a.GetUserData() == Player) {
+			if (a.GetUserData() == Player && false) {
 				holder=b.GetUserData();
 				actionCandidates = actionCandidates.filter(removeFunc);
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts--;
-				if (lastFootContact == b.GetBody() && numFootContacts>0){ // TODO : make this not happen
-					throw new Error("Assertion failed!: LevelContactListener");
-				}
+				//if (lastFootContact == b.GetBody() && numFootContacts>0){ // TODO : make this not happen
+				//	throw new Error("Assertion failed!: LevelContactListener");
+				//}
 				return true;
 			}
 			return false;
