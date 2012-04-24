@@ -12,12 +12,10 @@ package {
 
 	public class Player extends GfxPhysObject { //implements Chargable {
 
-		private static const MAX_JUMP_COOLDOWN:int=10;
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		
-		private var jumpCooldown:int;
 		private var m_sprite:Sprite;
 
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
@@ -61,8 +59,6 @@ package {
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
 			
-			jumpCooldown = 0;
-			
 			fd = new b2FixtureDef();
 			polyShape = new b2PolygonShape();
 			polyShape.SetAsBox(0.3, 0.2);
@@ -78,7 +74,6 @@ package {
 			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
 			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
 			
-			jumpCooldown -= 1;
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
@@ -96,19 +91,8 @@ package {
 				}
 			}
 			
-			if (up && state.contactListener.canJump() && jumpCooldown<=0) {
-				var jumpImpulse:Number = (m_physics.GetLinearVelocity().y-JUMP_STRENGTH) * m_physics.GetMass();
-				
-				
-				
-				m_physics.ApplyImpulse(new b2Vec2(0, jumpImpulse),
-					m_physics.GetWorldCenter());
-				// apply a reaction force. TODO : apply at contact location
-				var b2:b2Body = state.contactListener.lastFootContact;
-				
-				b2.ApplyImpulse(new b2Vec2(0, -jumpImpulse),
-					b2.GetWorldCenter());
-				jumpCooldown = MAX_JUMP_COOLDOWN;
+			if (up && state.contactListener.canJump()) {
+				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
 		}
 	}
