@@ -4,6 +4,7 @@ package {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import Editor.*;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
@@ -39,6 +40,17 @@ package {
 			block_text.selectable = false;
 			block_text.addEventListener(MouseEvent.MOUSE_UP, clickedDemo);
 			addChild(block_text);
+
+			var editor_text:TextField = new TextField();
+			editor_text.width = 600;
+			editor_text.height = 100;
+			editor_text.x = 100;
+			editor_text.y = 500;
+			editor_text.defaultTextFormat = format;
+			editor_text.text = "Or click here for the level editor!";
+			editor_text.selectable = false;
+			editor_text.addEventListener(MouseEvent.MOUSE_UP, clickedEditor);
+			addChild(editor_text);
 		}
 
 		override public function deinit():void {
@@ -59,6 +71,13 @@ package {
 			if (!m_done) {
 				m_done = true;
 				m_game.addState(new LevelState(m_game));
+			}
+		}
+
+		private function clickedEditor(event:MouseEvent):void {
+			if (!m_done) {
+				m_done = true;
+				m_game.addState(new Editor.EditorState(m_game));
 			}
 		}
 	}

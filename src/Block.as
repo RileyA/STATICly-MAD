@@ -125,6 +125,5 @@ package {
 		private function addAction(key:String, world:b2World):void {
 			
 		}
-		
 	}
 }
