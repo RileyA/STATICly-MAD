@@ -13,6 +13,7 @@ package {
 		private var m_game:Game;
 
 		public function Main():void{
+			Keys.init(this);
 			m_game = new Game(this);
 			m_game.addState(new MenuState(m_game));
 			addEventListener(Event.ENTER_FRAME, update);

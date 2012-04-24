@@ -15,38 +15,68 @@ package
 		private var actionCandidates:Vector.<GfxPhysObject>;
 		private var holder:GfxPhysObject;
 		
+		private var numFootContacts:int=0;
+		public var lastFootContact:b2Body;
+		
+		public static const FOOT_SENSOR_ID:int=1;
+		
 		public function LevelContactListener() {
 			actionCandidates = new Vector.<GfxPhysObject>();
 		}
 		
 		public function getBestAction():GfxPhysObject {
 			actionCandidates.sort(compare);
+			return actionCandidates[0];
 		}
 		
+		public function canJump():Boolean{
+			return numFootContacts>0;
+		}
+		
+		// returns True if handled
+		private function doBeginContact(a:b2Fixture, b:b2Fixture):Boolean{
+			if (a.GetUserData() == Player) {
+				actionCandidates.push(b.GetUserData());
+				return true;
+			} else if (a.GetUserData() == FOOT_SENSOR_ID){
+				numFootContacts++;
+				lastFootContact = b.GetBody();
+				return true;
+			}
+			return false;
+		}
+		
+		// returns True if handled
+		private function doEndContact(a:b2Fixture, b:b2Fixture):Boolean{
+			if (a.GetUserData() == Player) {
+				holder=b.GetUserData();
+				actionCandidates = actionCandidates.filter(removeFunc);
+				return true;
+			} else if (a.GetUserData() == FOOT_SENSOR_ID){
+				numFootContacts--;
+				if (lastFootContact == b.GetBody() && numFootContacts>0){ // TODO : make this not happen
+					throw new Error("Assertion failed!: LevelContactListener");
+				}
+				return true;
+			}
+			return false;
+		}
+		
+		
 		public override function BeginContact(contact:b2Contact):void {
-			var elementA:GfxPhysObject = contact.GetFixtureA().GetUserData();
-			var elementB:GfxPhysObject = contact.GetFixtureB().GetUserData();
-			if (elementA == Player || elementB == Player) {
-				if (elementA != Player) {
-					actionCandidates.push(elementA);
-				} else if (elementB != Player) {
-					actionCandidates.push(elementB);
+			if (!doBeginContact(contact.GetFixtureA(),contact.GetFixtureB())) {
+				if (!doBeginContact(contact.GetFixtureB(),contact.GetFixtureA())) {
+					// other handlers
 				}
 			}
 		}
 		
 		public override function EndContact(contact:b2Contact):void {
-			var elementA = contact.GetFixtureA().GetUserData();
-			var elementB = contact.GetFixtureB().GetUserData();
-			if (elementA == Player || elementB == Player) {
-				if (elementA != Player) {
-					holder = elementA;
-				} else if (elementB != Player) {
-					holder = elementB;
+			if (!doEndContact(contact.GetFixtureA(),contact.GetFixtureB())) {
+				if (!doEndContact(contact.GetFixtureB(),contact.GetFixtureA())) {
+					// other handlers
 				}
-				actionCandidates = actionCandidates.filter(removeFunc);
 			}
-			
 		}
 		
 		private function removeFunc(item:GfxPhysObject):Boolean {
@@ -54,7 +84,7 @@ package
 		}
 		
 		private function compare(x:GfxPhysObject, y:GfxPhysObject):Number {
-			
+			return 7; // TODO make not stupid
 		}
 	}
 

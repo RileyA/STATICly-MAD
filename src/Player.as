@@ -4,8 +4,6 @@ package {
 	import flash.display.Sprite;
 	import flash.display.Shape;
 	import flash.display.DisplayObjectContainer;
-	import flash.events.KeyboardEvent;
-	import flash.events.Event;
 	import flash.ui.Keyboard;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
@@ -14,11 +12,12 @@ package {
 
 	public class Player extends GfxPhysObject { //implements Chargable {
 
-		private var m_characterController:CharacterController;
-		private var m_moveLeftKey:Boolean;
-		private var m_moveRightKey:Boolean;
-		private var m_jumpKey:Boolean;
-		private var m_actionKey:Boolean;
+		private static const MAX_JUMP_COOLDOWN:int=10;
+		private static const JUMP_STRENGTH:Number=10.0;
+		private static const MOVE_SPEED:Number=6.0;
+		private static const ACELL_TIME_CONSTANT:Number=0.5;
+		
+		private var jumpCooldown:int;
 		private var m_sprite:Sprite;
 
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
@@ -27,7 +26,7 @@ package {
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		public function Player(levelState:LevelState, position:b2Vec2):void {
-			
+
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			var w:Number=.7;
 			var h:Number=-1.2;
@@ -48,10 +47,8 @@ package {
 			fd.userData = "player";
 			m_physics = levelState.world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
-			m_physics.SetLinearDamping(1.0);
-			m_physics.SetAngularDamping(1.0);
 			m_physics.SetFixedRotation(true);
-			m_characterController = new CharacterController(levelState, m_physics);
+			m_physics.SetLinearDamping(.2);
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
@@ -63,39 +60,56 @@ package {
 				h * -PhysicsUtils.PIXELS_PER_METER);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
+			
+			jumpCooldown = 0;
+			
+			fd = new b2FixtureDef();
+			polyShape = new b2PolygonShape();
+			polyShape.SetAsBox(0.3, 0.2);
+			fd.shape = polyShape;
+			fd.isSensor = true;
+			var footSensorFixture:b2Fixture = m_physics.CreateFixture(fd);
+			footSensorFixture.SetUserData(LevelContactListener.FOOT_SENSOR_ID);
 		}
 
-		public function handleKeyDown(evt:KeyboardEvent):void {
-			if (evt.keyCode == LEFT_KEY)
-				m_moveLeftKey = true;
-			else if (evt.keyCode == RIGHT_KEY)
-				m_moveRightKey = true;
-			else if (evt.keyCode == JUMP_KEY)
-				m_jumpKey = true;
-			else if (evt.keyCode == ACTION_KEY)
-				m_actionKey = true;
-		}
+		public function update(state:LevelState):void {
+			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
+			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
+			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
+			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
+			
+			jumpCooldown -= 1;
+			var xspeed:Number = 0;
+			if (left) { xspeed -= MOVE_SPEED; }
+			if (right) { xspeed += MOVE_SPEED; }
 
-		public function handleKeyUp(evt:KeyboardEvent):void {
-			if (evt.keyCode == LEFT_KEY)
-				m_moveLeftKey = false;
-			else if (evt.keyCode == RIGHT_KEY)
-				m_moveRightKey = false;
-			else if (evt.keyCode == JUMP_KEY)
-				m_jumpKey = false;
-			else if (evt.keyCode == ACTION_KEY)
-				m_actionKey = false;
-		}
-
-		public function registerKeyListeners(parent:DisplayObjectContainer):void {
-			parent.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-			parent.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
-		}
-
-		public function update():void {
+			if (state.contactListener.canJump()) {
+				m_physics.GetLinearVelocity().x=xspeed;
+			} else if (xspeed!=0) {
+				
+				var fx:Number=m_physics.GetMass()/ACELL_TIME_CONSTANT;
+				var vx:Number=m_physics.GetLinearVelocity().x;
+				var deltaSpeed:Number=xspeed-vx;
+				fx*=deltaSpeed;
+				if ((deltaSpeed*xspeed)>0) {
+					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
+				}
+			}
+			
+			if (up && state.contactListener.canJump() && jumpCooldown<=0) {
+				var jumpImpulse:Number = -JUMP_STRENGTH * m_physics.GetMass();
+				m_physics.ApplyImpulse(new b2Vec2(0, jumpImpulse),
+					m_physics.GetWorldCenter());
+				// apply a reaction force. TODO : apply at contact location
+				var b2:b2Body = state.contactListener.lastFootContact;
+				
+				b2.ApplyImpulse(new b2Vec2(0, -jumpImpulse),
+					b2.GetWorldCenter());
+				jumpCooldown = MAX_JUMP_COOLDOWN;
+			}
+			
 			updateTransform();
-			m_characterController.updateControls(m_moveLeftKey, 
-				m_moveRightKey, m_jumpKey);
 		}
+		
 	}
 }

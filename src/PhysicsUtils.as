@@ -8,7 +8,6 @@ package {
 	public class PhysicsUtils {
 		
 		public static const PIXELS_PER_METER:Number = 30;
-		public static const FOOT_SENSOR_ID:uint = 1;
 
 		/** Meters -> Pixels
 			@param v Vector to convert */

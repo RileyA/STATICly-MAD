@@ -66,8 +66,11 @@ package
 				strong:Boolean,
 				insulated:Boolean,
 				blockInfo:BlockInfo,
+				am:ActionMarker,
 				world:b2World):void {
 			super(topLeft, bottomRight, movement, blockInfo, world);
+			var fd:b2FixtureDef = new b2FixtureDef();
+			fd.userData = am;
 			init(charge, strong, insulated);
 		}
 		

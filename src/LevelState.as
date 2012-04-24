@@ -14,6 +14,7 @@ package {
 	public class LevelState extends GameState {
 
 		public var world:b2World;
+		public var contactListener:LevelContactListener;
 
 		private static const TIMESTEP:Number = 0.033333;
 		private static const POSITION_ITERATIONS:uint = 4;
@@ -59,7 +60,9 @@ package {
 			m_player = new Player(this, PhysicsUtils.fromPixels(
 				new b2Vec2(m_info.player_x, m_info.player_y)));
 			addChild(m_player);
-			m_player.registerKeyListeners(stage);
+			
+			contactListener = new LevelContactListener();
+			world.SetContactListener(contactListener);
 
 			prepareDebugVisualization();
 
@@ -79,7 +82,7 @@ package {
 		override public function update(delta:Number):Boolean {
 			world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 			world.ClearForces();
-			m_player.update();
+			m_player.update(this);
 
 			for (var i:uint = 0; i < m_blocks.length; ++i)
 				m_blocks[i].updateTransform();
