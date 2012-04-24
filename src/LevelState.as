@@ -31,17 +31,21 @@ package {
 		private var m_debugDrawKey:Boolean;
 		private var m_debugSprite:Sprite;
 		private var m_player:Player;
-		private var m_blocks:Vector.<Block>;
+		private var m_gfxPhysObject:Vector.<GfxPhysObject>;
 		private var m_info:LevelInfo;
 
 		public function LevelState(game:Game):void {
 			super(game);
 			m_debugDraw = false;
 		}
-
+		
+		private function pixelsPerMeter():Number{
+			return 30; // TODO Fix this riley
+		}
+		
 		override public function init():void {
 
-			m_blocks = new Vector.<Block>;
+			m_gfxPhysObject = new Vector.<GfxPhysObject>;
 
 			// load level JSON
 			m_info = new LevelInfo();
@@ -54,12 +58,13 @@ package {
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
 				var loadedBlock:Block = new Block(m_info.blocks[i], world);
 				addChild(loadedBlock);
-				m_blocks.push(loadedBlock);
+				m_gfxPhysObject.push(loadedBlock);
 			}
 
 			m_player = new Player(this, PhysicsUtils.fromPixels(
 				new b2Vec2(m_info.player_x, m_info.player_y)));
 			addChild(m_player);
+			m_gfxPhysObject.push(m_player);
 			
 			contactListener = new LevelContactListener();
 			world.SetContactListener(contactListener);
@@ -84,8 +89,8 @@ package {
 			world.ClearForces();
 			m_player.update(this);
 
-			for (var i:uint = 0; i < m_blocks.length; ++i)
-				m_blocks[i].updateTransform();
+			for (var i:uint = 0; i < m_gfxPhysObject.length; ++i)
+				m_gfxPhysObject[i].updateTransform(pixelsPerMeter());
 
 			if (isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 				m_debugDrawKey = true;
@@ -106,7 +111,7 @@ package {
 			addChild(m_debugSprite);
 			var debugDraw:b2DebugDraw = new b2DebugDraw();
 			debugDraw.SetSprite(m_debugSprite);
-			debugDraw.SetDrawScale(GfxPhysObject.PIXELS_PER_METER);
+			debugDraw.SetDrawScale(pixelsPerMeter());
 			debugDraw.SetFillAlpha(0.3);
 			debugDraw.SetLineThickness(1.0);
 			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);

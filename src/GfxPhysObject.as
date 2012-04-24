@@ -12,7 +12,6 @@ package {
 	public class GfxPhysObject extends Sprite {
 
 		protected var m_physics:b2Body;
-		public static const PIXELS_PER_METER:Number = 30;
 		
 		/** Constructor
 				@param physics The physics object */
@@ -28,12 +27,12 @@ package {
 		/** Setter for physics object */
 		public function setPhysics(phys:b2Body):void {
 			m_physics = phys;
-			updateTransform();
+			//updateTransform();
 		}
 
 		/** Updates gfx object's transformation to match that of 
 			the physics object, should be callled every frame */
-		public function updateTransform():void {
+		public function updateTransform(PIXELS_PER_METER:Number):void {
 			// if physics object is null, just reset to origin...
 			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
