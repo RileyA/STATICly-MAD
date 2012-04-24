@@ -16,7 +16,6 @@ package
 		private var holder:GfxPhysObject;
 		
 		private var numFootContacts:int=0;
-		public var lastFootContact:b2Body;
 		
 		public static const FOOT_SENSOR_ID:int=1;
 		
@@ -40,7 +39,6 @@ package
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts++;
-				lastFootContact = b.GetBody();
 				return true;
 			}
 			return false;
@@ -54,9 +52,6 @@ package
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts--;
-				//if (lastFootContact == b.GetBody() && numFootContacts>0){ // TODO : make this not happen
-				//	throw new Error("Assertion failed!: LevelContactListener");
-				//}
 				return true;
 			}
 			return false;
