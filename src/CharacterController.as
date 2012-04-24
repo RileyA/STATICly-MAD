@@ -13,7 +13,6 @@ package {
 		private var characterBody:b2Body;
 		private var jumpImpulse:Number;
 		private var jumpCooldown:int;
-		private var footContactListener:FootContactListener;
 
 		/**
 		* A platforming controller for the specified characterBody
@@ -31,19 +30,16 @@ package {
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			var footSensorFixture:b2Fixture = characterBody.CreateFixture(fd);
-			footSensorFixture.SetUserData(PhysicsUtils.FOOT_SENSOR_ID);
-			
-			footContactListener = new FootContactListener();
-			levelState.world.SetContactListener(footContactListener);
+			footSensorFixture.SetUserData(LevelContactListener.FOOT_SENSOR_ID);
 		}
 		
-		public function updateControls(left:Boolean,right:Boolean,up:Boolean):void{
+		public function updateControls(state:LevelState,left:Boolean,right:Boolean,up:Boolean):void{
 			jumpCooldown -= 1;
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
 
-			if (footContactListener.canJump()) {
+			if (state.contactListener.canJump()) {
 				characterBody.GetLinearVelocity().x=xspeed;
 			} else if (xspeed!=0) {
 				
@@ -56,55 +52,15 @@ package {
 				}
 			}
 			
-			if (up && footContactListener.canJump() && jumpCooldown<=0) {
+			if (up && state.contactListener.canJump() && jumpCooldown<=0) {
 				characterBody.ApplyImpulse(new b2Vec2(0, jumpImpulse),
 					characterBody.GetWorldCenter());
 				// apply a reaction force. TODO : apply at contact location
-				var b2:b2Body = footContactListener.lastFootContact;
+				var b2:b2Body = state.contactListener.lastFootContact;
 				b2.ApplyImpulse(new b2Vec2(0, -jumpImpulse),
 					b2.GetWorldCenter());
 				jumpCooldown = MAX_JUMP_COOLDOWN;
 			}
 		}
-	}
-}
-
-import Box2D.Collision.*;
-import Box2D.Dynamics.*;
-import Box2D.Dynamics.Contacts.*;
-
-class FootContactListener extends b2ContactListener{
-	private var numFootContacts:int=0;
-	
-	public var lastFootContact:b2Body;
-	
-	public function canJump():Boolean{
-		return numFootContacts>0;
-	}
-	
-	public override function BeginContact(contact:b2Contact):void {
-		//check if fixture A was the foot sensor
-		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
-			numFootContacts++;
-			lastFootContact = contact.GetFixtureB().GetBody();
-		}
-		//check if fixture B was the foot sensor
-		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID ){
-			numFootContacts++;
-			lastFootContact = contact.GetFixtureA().GetBody();
-		}
-	}
-	
-	public override function EndContact(contact:b2Contact):void{
-		//check if fixture A was the foot sensor
-		var fixtureUserData:int = contact.GetFixtureA().GetUserData();
-		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
-			numFootContacts--;
-		//check if fixture B was the foot sensor
-		fixtureUserData = contact.GetFixtureB().GetUserData();
-		if (fixtureUserData == PhysicsUtils.FOOT_SENSOR_ID )
-			numFootContacts--;
 	}
 }
