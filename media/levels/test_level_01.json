@@ -1,0 +1,89 @@
+{
+	"title" : "LOOK! PLATFORMS!",
+	"player_x" : 100,
+	"player_y" : 580,
+	"gravity"  : 9.8,
+	"blocks" :
+	[
+		{
+			"pixels" : true,
+			"width" : 800,
+			"height": 100,
+			"x" : 0,
+			"y" : 600,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 800,
+			"height": 100,
+			"x" : 0,
+			"y" : -100,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 100,
+			"height": 600,
+			"x" : -100,
+			"y" : 0,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 100,
+			"height": 600,
+			"x" : 800,
+			"y" : 0,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 400,
+			"height": 10,
+			"x" : 300,
+			"y" : 530,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 300,
+			"height": 10,
+			"x" : 500,
+			"y" : 460,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 550,
+			"height": 10,
+			"x" : 0,
+			"y" : 390,
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"pixels" : true,
+			"width" : 40,
+			"height": 40,
+			"x" : 30,
+			"y" : 30,
+			"movement" : "free",
+			"actions" : [],
+			"surfaces" : []
+		}
+	]
+}

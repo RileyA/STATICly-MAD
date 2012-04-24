@@ -1,4 +1,5 @@
 package {
+	import flash.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
@@ -19,112 +20,86 @@ package {
 		public static const GROUND:String = "ground";
 		
 		private var movement:String;
-		private var hx:Number;
-		private var hy:Number;
-		private var final_flag:Boolean;
-		
+		private var bodyWidth:Number;
+		private var bodyHeight:Number;
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actions:Vector.<ActionElement>;
-		
-		// A handy helper for making rectangle blocks
-		/*public static function MakeRect(topLeft:b2Vec2,
-				bottomRight:b2Vec2,
-				movement:String):Block{
-			var polyShape:b2PolygonShape = new b2PolygonShape();
-			
-			var position:b2Vec2 = topLeft.Copy();
-			position.Add(bottomRight);
-			position.Multiply(0.5);
-			
-			var w:Number=bottomRight.x-topLeft.x;
-			var h:Number=bottomRight.y-topLeft.y;
-			
-			polyShape.SetAsBox(w/2,h/2);
-			
-			return new Block(position,polyShape,movement);
-		}*/
+		private var sprite:Sprite;
 		
 		/**
 		 * For specifying by position and size
-		 * @param	position
-		 * @param	hx
-		 * @param	hy
-		 * @param	movement
 		 * @param	blockInfo
 		 * @param	world
 		 */
-		public function Block(position:b2Vec2,
-				hx:Number,
-				hy:Number,
-				movement:String,
-				blockInfo:BlockInfo,
-				world:b2World
-				):void {
-			this.hx = hx;
-			this.hy = hy;
-			var polyShape:b2PolygonShape = new b2PolygonShape();
-			polyShape.SetAsBox(hx, hy);
-			init(position, polyShape, movement, blockInfo, world);
+		public function Block(blockInfo:BlockInfo, world:b2World):void {
+			init(blockInfo, world);
 		}
 		
-		/**
-		 * For specifying by the corners of the box
-		 * @param	topLeft
-		 * @param	bottomRight
-		 * @param	movement
-		 * @param	blockInfo
-		 * @param	world
-		 */
-		/*public function Block(topLeft:b2Vec2,
-				bottomRight:b2Vec2,
-				movement:String,
-				blockInfo:BlockInfo,
-				world:b2World
-				):void {		
-			
+		private function init(blockInfo:BlockInfo, world:b2World): void {
+			var pos:b2Vec2 = blockInfo.pixels ? new b2Vec2(
+				blockInfo.x / PIXELS_PER_METER, 
+				blockInfo.y / PIXELS_PER_METER)
+				: new b2Vec2(blockInfo.x, blockInfo.y);
+
+			bodyWidth = blockInfo.pixels ? blockInfo.width
+				/ PhysicsUtils.PIXELS_PER_METER : blockInfo.width;
+			bodyHeight = blockInfo.pixels ? blockInfo.height
+				/ PhysicsUtils.PIXELS_PER_METER : blockInfo.height;
+
+			// if in pixels offset for upper-left origin
+			if(blockInfo.pixels) {
+				pos.x += bodyWidth / 2;
+				pos.y += bodyHeight / 2;
+			}
+
+			movement = blockInfo.movement;
+
 			var polyShape:b2PolygonShape = new b2PolygonShape();
-			var position:b2Vec2 = topLeft.Copy();
-			position.Add(bottomRight);
-			position.Multiply(0.5);
-			hx = (bottomRight.x - topLeft.x) / 2;
-			hy = (bottomRight.y - topLeft.y) / 2;			
-			polyShape.SetAsBox(hx, hy);
-			
-			init(position, polyShape, movement, blockInfo, world);
-		}*/
-		
-		private function init(position:b2Vec2,
-				polyShape:b2PolygonShape,
-				movement:String,
-				blockInfo:BlockInfo,
-				world:b2World): void {
-			
-			var fd:b2FixtureDef = new b2FixtureDef();
+			polyShape.SetAsBox(bodyWidth / 2, bodyHeight / 2);
+
 			var rectDef:b2BodyDef = new b2BodyDef();
-			rectDef.type = movement != FIXED?b2Body.b2_dynamicBody:b2Body.b2_staticBody;
+			rectDef.type = movement != FIXED 
+				? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
+			rectDef.position.Set(pos.x, pos.y);
+			rectDef.angle = 0.0;
+			m_physics = world.CreateBody(rectDef);
+
+			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.shape = polyShape;
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
-			rectDef.position.Set(position.x,position.y);
-			rectDef.angle = 0.0;
-			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
 			
 			//body.SetFixedRotation(true);
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
-			this.movement = movement;
-			final_flag = false;
-			
+
 			var i:int = 0;
 
-			for (i = 0; i < blockInfo.getSurfaces().length; i++) {
-				addSurface(blockInfo.getSurfaces()[i], world);
+			for (i = 0; i < blockInfo.surfaces.length; i++) {
+				addSurface(blockInfo.surfaces[i], world);
 			}
-			for (i = 0; i < blockInfo.getActions().length; i++) {
-				addAction(blockInfo.getActions()[i], world);
+			for (i = 0; i < blockInfo.actions.length; i++) {
+				addAction(blockInfo.actions[i], world);
 			}
+
+			sprite = new Sprite();
+			sprite.graphics.beginFill(movement == FIXED ? 0x999999 : 
+				0x333333);
+			if(blockInfo.pixels)
+				sprite.graphics.drawRect(-blockInfo.width/2, -blockInfo.height/2, 
+					blockInfo.width, blockInfo.height);
+			else
+				sprite.graphics.drawRect(
+					0,
+					0,
+					blockInfo.width * PhysicsUtils.PIXELS_PER_METER,	
+					blockInfo.height * PhysicsUtils.PIXELS_PER_METER
+				);
+			sprite.graphics.endFill();
+			addChild(sprite);
+			updateTransform();
 		}
 		
 		private function addSurface(key:String, world:b2World):void {
@@ -133,22 +108,21 @@ package {
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
 			if (dir == UP) {
-				pos.Set(pos.x, pos.y - hy);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, hx * 2, 4, world));
+				pos.Set(pos.x, pos.y - bodyHeight);
+				surfaces.push(SurfaceElement.getRelatedType(type, pos, bodyWidth * 2, 4, world));
 			}else if (dir == DOWN) {
-				pos.Set(pos.x, pos.y + hy);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, hx * 2, 4, world));
+				pos.Set(pos.x, pos.y + bodyHeight);
+				surfaces.push(SurfaceElement.getRelatedType(type, pos, bodyWidth * 2, 4, world));
 			}else if (dir == LEFT) {
-				pos.Set(pos.x - hx, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, hy * 2, world));
+				pos.Set(pos.x - bodyWidth, pos.y);
+				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, bodyHeight * 2, world));
 			}else if (dir == RIGHT) {
-				pos.Set(pos.x + hx, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, hy * 2, world));
+				pos.Set(pos.x + bodyWidth, pos.y);
+				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, bodyHeight * 2, world));
 			}
 		}
 		
 		private function addAction(key:String, world:b2World):void {
-			
 			
 		}
 		

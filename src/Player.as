@@ -26,7 +26,7 @@ package {
 		private static const JUMP_KEY:Number = Keyboard.UP;
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
-		public function Player(levelState:LevelState):void {
+		public function Player(levelState:LevelState, position:b2Vec2):void {
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			var w:Number=.7;
@@ -40,7 +40,7 @@ package {
 			ccDef.type = b2Body.b2_dynamicBody;
 			ccDef.allowSleep = false;
 			ccDef.awake = true;
-			ccDef.position = new b2Vec2(400 / 30.0, 200 / 30.0);
+			ccDef.position = position;
 			fd.shape = polyShape;
 			fd.density = 10.0;
 			fd.friction = 0.3;
@@ -50,6 +50,7 @@ package {
 			m_physics.CreateFixture(fd);
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
+			m_physics.SetFixedRotation(true);
 			m_characterController = new CharacterController(levelState, m_physics);
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...

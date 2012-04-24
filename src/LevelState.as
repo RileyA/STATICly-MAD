@@ -19,7 +19,9 @@ package {
 		private static const POSITION_ITERATIONS:uint = 4;
 		private static const VELOCITY_ITERATIONS:uint = 6;
 		private static const DO_SLEEP:Boolean = true;
-		private static const GRAVITY:b2Vec2 = new b2Vec2(0.0,9.8);
+
+		[Embed(source="../media/levels/test_level_01.json",  mimeType=
+			"application/octet-stream")] private const test_level_01:Class;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -28,7 +30,8 @@ package {
 		private var m_debugDrawKey:Boolean;
 		private var m_debugSprite:Sprite;
 		private var m_player:Player;
-		private var m_walls:Vector.<Block>;
+		private var m_blocks:Vector.<Block>;
+		private var m_info:LevelInfo;
 
 		public function LevelState(game:Game):void {
 			super(game);
@@ -36,16 +39,38 @@ package {
 		}
 
 		override public function init():void {
-			world = new b2World(GRAVITY, DO_SLEEP);
+
+			m_blocks = new Vector.<Block>;
+
+			// load level JSON
+			m_info = new LevelInfo();
+			MiscUtils.loadJSON(new test_level_01() as ByteArray, m_info);
+
+			world = new b2World(new b2Vec2(0.0, m_info.gravity), DO_SLEEP);
 			world.SetWarmStarting(true);
 
-			m_player = new Player(this);
+			// add in all the blocks
+			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
+				var loadedBlock:Block = new Block(m_info.blocks[i], world);
+				addChild(loadedBlock);
+				m_blocks.push(loadedBlock);
+			}
+
+			m_player = new Player(this, PhysicsUtils.fromPixels(
+				new b2Vec2(m_info.player_x, m_info.player_y)));
 			addChild(m_player);
 			m_player.registerKeyListeners(stage);
-			m_walls = new Vector.<Block>;
 
-			prepareWalls();
 			prepareDebugVisualization();
+
+			var block_text:TextField = new TextField();
+			block_text.width = 600;
+			block_text.height = 500;
+			block_text.x = 5;
+			block_text.y = 5;
+			block_text.text = "Testing Level: " + m_info.title;
+			block_text.selectable = false;
+			addChild(block_text);
 		}
 
 		override public function deinit():void {
@@ -55,6 +80,9 @@ package {
 			world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 			world.ClearForces();
 			m_player.update();
+
+			for (var i:uint = 0; i < m_blocks.length; ++i)
+				m_blocks[i].updateTransform();
 
 			if (isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 				m_debugDrawKey = true;
@@ -80,31 +108,6 @@ package {
 			debugDraw.SetLineThickness(1.0);
 			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 			world.SetDebugDraw(debugDraw);
-		}
-
-		private function prepareWalls():void {
-
-			var shapeWidth:Number = 800 / PhysicsUtils.PIXELS_PER_METER;
-			var shapeHeight:Number = 100 / PhysicsUtils.PIXELS_PER_METER;
-			var empty:BlockInfo = new BlockInfo(new Vector.<String>, 
-				new Vector.<String>);
-
-			// top
-			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,-100)), 
-				shapeWidth, shapeHeight, Block.FIXED, empty, world));
-			// bottom
-			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(0,700)), 
-				shapeWidth, shapeHeight, Block.FIXED, empty, world));
-
-			shapeWidth = 100 / PhysicsUtils.PIXELS_PER_METER;
-			shapeHeight = 600 / PhysicsUtils.PIXELS_PER_METER;
-			
-			// left
-			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(-100, 0.0)), 
-				shapeWidth, shapeHeight, Block.FIXED, empty, world));
-			// right
-			m_walls.push(new Block(PhysicsUtils.fromPixels(new b2Vec2(900, 0.0)),
-				shapeWidth, shapeHeight, Block.FIXED, empty, world));
 		}
 	}
 }

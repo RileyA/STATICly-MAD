@@ -6,22 +6,27 @@ package
 	 * @author Matthew Hall
 	 */
 	public class BlockInfo {
-		
-		private var surfaces:Vector.<String>;
-		private var actions:Vector.<String>;
-		
-		public function BlockInfo(surfaces:Vector.<String>, actions:Vector.<String>):void {
-			this.surfaces = surfaces;
-			this.actions = actions;
+
+		/** Constructor, just sets defaults */
+		public function BlockInfo():void {
+			width = 10;
+			height = 10;
+			x = 0;
+			y = 0;
+			movement = "fixed";
+			pixels = false;
 		}
-		
-		public function getSurfaces():Vector.<String> {
-			return surfaces;
-		}
-		
-		public function getActions():Vector.<String> {
-			return actions;
-		}
+
+		// TODO: define a way of setting shapes other than rectangles in 
+		// a nice clean JSON-able manner
+		public var width:Number;
+		public var height:Number;
+		public var x:Number;
+		public var y:Number;
+		public var movement:String = "";
+		public var pixels:Boolean;
+		public var surfaces:Vector.<String> = new Vector.<String>();
+		public var actions:Vector.<String> = new Vector.<String>();
 	}
 	
 }
