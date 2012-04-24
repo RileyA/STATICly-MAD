@@ -45,7 +45,6 @@ package {
 			
 			m_player = new Player(this);
 			addChild(m_player);
-			m_player.registerKeyListeners(stage);
 			m_walls = new Vector.<Block>;
 
 			prepareWalls();

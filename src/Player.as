@@ -4,8 +4,6 @@ package {
 	import flash.display.Sprite;
 	import flash.display.Shape;
 	import flash.display.DisplayObjectContainer;
-	import flash.events.KeyboardEvent;
-	import flash.events.Event;
 	import flash.ui.Keyboard;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
@@ -20,18 +18,7 @@ package {
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		
 		private var jumpCooldown:int;
-		
-		
-		private var m_moveLeftKey:Boolean;
-		private var m_moveRightKey:Boolean;
-		private var m_jumpKey:Boolean;
-		private var m_actionKey:Boolean;
 		private var m_sprite:Sprite;
-
-		private static const LEFT_KEY:Number = Keyboard.LEFT;
-		private static const RIGHT_KEY:Number = Keyboard.RIGHT;
-		private static const JUMP_KEY:Number = Keyboard.UP;
-		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		public function Player(levelState:LevelState):void {
 			
@@ -79,44 +66,14 @@ package {
 			fd.isSensor = true;
 			var footSensorFixture:b2Fixture = m_physics.CreateFixture(fd);
 			footSensorFixture.SetUserData(LevelContactListener.FOOT_SENSOR_ID);
-			
-			
-		}
-
-		public function handleKeyDown(evt:KeyboardEvent):void {
-			if (evt.keyCode == LEFT_KEY)
-				m_moveLeftKey = true;
-			else if (evt.keyCode == RIGHT_KEY)
-				m_moveRightKey = true;
-			else if (evt.keyCode == JUMP_KEY)
-				m_jumpKey = true;
-			else if (evt.keyCode == ACTION_KEY)
-				m_actionKey = true;
-		}
-
-		public function handleKeyUp(evt:KeyboardEvent):void {
-			if (evt.keyCode == LEFT_KEY)
-				m_moveLeftKey = false;
-			else if (evt.keyCode == RIGHT_KEY)
-				m_moveRightKey = false;
-			else if (evt.keyCode == JUMP_KEY)
-				m_jumpKey = false;
-			else if (evt.keyCode == ACTION_KEY)
-				m_actionKey = false;
-		}
-
-		public function registerKeyListeners(parent:DisplayObjectContainer):void {
-			parent.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-			parent.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
 		}
 
 		public function update(state:LevelState):void {
-			updateTransform();
-			updateControls(state,m_moveLeftKey, 
-				m_moveRightKey, m_jumpKey);
-		}
-		
-		private function updateControls(state:LevelState,left:Boolean,right:Boolean,up:Boolean):void{
+			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
+			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
+			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
+			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
+			
 			jumpCooldown -= 1;
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
@@ -146,6 +103,8 @@ package {
 					b2.GetWorldCenter());
 				jumpCooldown = MAX_JUMP_COOLDOWN;
 			}
+			
+			updateTransform();
 		}
 		
 	}
