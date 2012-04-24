@@ -97,7 +97,10 @@ package {
 			}
 			
 			if (up && state.contactListener.canJump() && jumpCooldown<=0) {
-				var jumpImpulse:Number = -JUMP_STRENGTH * m_physics.GetMass();
+				var jumpImpulse:Number = (m_physics.GetLinearVelocity().y-JUMP_STRENGTH) * m_physics.GetMass();
+				
+				
+				
 				m_physics.ApplyImpulse(new b2Vec2(0, jumpImpulse),
 					m_physics.GetWorldCenter());
 				// apply a reaction force. TODO : apply at contact location
@@ -107,9 +110,6 @@ package {
 					b2.GetWorldCenter());
 				jumpCooldown = MAX_JUMP_COOLDOWN;
 			}
-			
-			updateTransform();
 		}
-		
 	}
 }
