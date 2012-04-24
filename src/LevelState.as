@@ -14,6 +14,7 @@ package {
 	public class LevelState extends GameState {
 
 		public var world:b2World;
+		public var contactListener:LevelContactListener;
 
 		private static const TIMESTEP:Number = 0.033333;
 		private static const POSITION_ITERATIONS:uint = 4;
@@ -38,7 +39,10 @@ package {
 		override public function init():void {
 			world = new b2World(GRAVITY, DO_SLEEP);
 			world.SetWarmStarting(true);
-
+			
+			contactListener = new LevelContactListener();
+			world.SetContactListener(contactListener);
+			
 			m_player = new Player(this);
 			addChild(m_player);
 			m_player.registerKeyListeners(stage);
@@ -54,7 +58,7 @@ package {
 		override public function update(delta:Number):Boolean {
 			world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 			world.ClearForces();
-			m_player.update();
+			m_player.update(this);
 
 			if (isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 				m_debugDrawKey = true;

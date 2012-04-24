@@ -91,9 +91,9 @@ package {
 			parent.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
 		}
 
-		public function update():void {
+		public function update(state:LevelState):void {
 			updateTransform();
-			m_characterController.updateControls(m_moveLeftKey, 
+			m_characterController.updateControls(state,m_moveLeftKey, 
 				m_moveRightKey, m_jumpKey);
 		}
 	}
