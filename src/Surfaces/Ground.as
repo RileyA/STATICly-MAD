@@ -11,8 +11,8 @@ package Surfaces
 	 */
 	public class Ground extends SurfaceElement {
 		
-		public function Ground(rectDef:b2BodyDef, w:Number, h:Number, world:b2World):void {
-			super(rectDef, w, h, new ActionMarker(actionFunc, canAction), world);
+		public function Ground(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, world:b2World):void {
+			super(rectDef, offset, w, h, new ActionMarker(actionFunc, canAction), world);
 		}
 		
 		public function actionFunc():void {

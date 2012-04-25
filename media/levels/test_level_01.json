@@ -17,21 +17,21 @@
 			"position" : {"x" : 21.666, "y" : 15.5},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : ["up,ground"]
 		},
 		{
 			"scale" : {"x" : 18.3, "y": 0.333},
 			"position" : {"x" : 9, "y" : 13},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : ["up,ground"]
+			"surfaces" : []
 		},
 		{
 			"scale" : {"x" : 1.333, "y": 1.333},
-			"position" : {"x" : 1, "y" : 1},
+			"position" : {"x" : 2, "y" : 2},
 			"movement" : "free",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : ["up,ground", "left,ground"]
 		}
 	]
 }
