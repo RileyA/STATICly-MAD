@@ -73,7 +73,7 @@
 			"y" : 390,
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : ["UP,ground"]
 		},
 		{
 			"pixels" : true,
@@ -83,7 +83,7 @@
 			"y" : 30,
 			"movement" : "free",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : ["UP,ground"]
 		}
 	]
 }
