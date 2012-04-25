@@ -32,12 +32,14 @@ package {
 
 		/** Updates gfx object's transformation to match that of 
 			the physics object, should be callled every frame */
-		public function updateTransform(PIXELS_PER_METER:Number):void {
+		public function updateTransform(pixelsPerMeter:Number):void {
+			this.scaleX = pixelsPerMeter;
+			this.scaleY = pixelsPerMeter;
 			// if physics object is null, just reset to origin...
 			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
-				this.x = pos.x * PIXELS_PER_METER;
-				this.y = pos.y * PIXELS_PER_METER;
+				this.x = pos.x * pixelsPerMeter;
+				this.y = pos.y * pixelsPerMeter;
 				this.rotation = getAngle();
 			} else {
 				this.x = 0;

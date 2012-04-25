@@ -13,13 +13,13 @@ package Editor {
 			addChild(tmp);
 		}
 
-		public function handleClick(evt:MouseEvent):void {
+		/*public function handleClick(evt:MouseEvent):void {
 
 		}
 
 		public function handleUnclick(evt:MouseEvent):void {
 
-		}
+		}*/
 	}
 }
 

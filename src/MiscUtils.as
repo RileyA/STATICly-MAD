@@ -14,7 +14,7 @@ package {
 				raw.readUTFBytes(raw.length)), out);
 		}
 		
-		/** A hideous abonmination that puts the data from generic object thing
+		/** A hideous abomination that puts the data from generic object thing
 			returned by JSON.decode into an actual object */
 		private static function parseObject(obj:Object, out:Object):void {
 			for(var key:String in obj) {

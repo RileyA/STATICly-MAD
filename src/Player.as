@@ -23,7 +23,7 @@ package {
 		private static const JUMP_KEY:Number = Keyboard.UP;
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
-		public function Player(levelState:LevelState, position:b2Vec2):void {
+		public function Player(levelState:LevelState, position:UVec2):void {
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			var w:Number=.7;
@@ -37,7 +37,7 @@ package {
 			ccDef.type = b2Body.b2_dynamicBody;
 			ccDef.allowSleep = false;
 			ccDef.awake = true;
-			ccDef.position = position;
+			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
 			fd.density = 10.0;
 			fd.friction = 0.3;
@@ -51,11 +51,7 @@ package {
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
 			m_sprite.graphics.beginFill(0xff0000);
-			m_sprite.graphics.drawRect(
-				PhysicsUtils.PIXELS_PER_METER * -w/2.0,
-				h * PhysicsUtils.PIXELS_PER_METER,
-				w * PhysicsUtils.PIXELS_PER_METER,
-				h * -PhysicsUtils.PIXELS_PER_METER);
+			m_sprite.graphics.drawRect(-w/2.0, h, w, -h);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
 			
