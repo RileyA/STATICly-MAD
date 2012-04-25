@@ -4,6 +4,8 @@ package Surfaces
 	import Box2D.Collision.b2WorldManifold;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
+	import Box2D.Dynamics.Joints.b2WeldJoint;
+	import Box2D.Dynamics.Joints.b2WeldJointDef;
 	import Surfaces.Ground;
 	
 	/**

@@ -1,8 +1,9 @@
 package {
+	import Box2D.Dynamics.Joints.b2WeldJointDef;
 	import flash.display.Sprite;
-	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Common.*;
 	import Box2D.Dynamics.*;
-	import Box2D.Collision.Shapes.*;
+	import Box2D.Collision.*;
 	import Surfaces.*;
 	import Actioners.*;
 
@@ -103,22 +104,27 @@ package {
 		}
 		
 		private function addSurface(key:String, world:b2World):void {
-			var pos:b2Vec2 = m_physics.GetPosition();
+			var pos:b2Vec2 = m_physics.GetWorldPoint();
 			var split:int = key.search(",");
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
 			if (dir == UP) {
-				pos.Set(pos.x, pos.y - bodyHeight);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, bodyWidth * 2, 4, world));
+				pos.Set(pos.x, pos.y - bodyHeight / 2);
+				var se:SurfaceElement = SurfaceElement.getRelatedType(type, pos, bodyWidth, 4, world);				
 			}else if (dir == DOWN) {
-				pos.Set(pos.x, pos.y + bodyHeight);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, bodyWidth * 2, 4, world));
+				pos.Set(pos.x, pos.y + bodyHeight / 2);
+				var se:SurfaceElement = SurfaceElement.getRelatedType(type, pos, bodyWidth, 4, world);
 			}else if (dir == LEFT) {
-				pos.Set(pos.x - bodyWidth, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, bodyHeight * 2, world));
+				pos.Set(pos.x - bodyWidth / 2, pos.y);
+				var se:SurfaceElement = SurfaceElement.getRelatedType(type, pos, 4, bodyHeight, world);
 			}else if (dir == RIGHT) {
-				pos.Set(pos.x + bodyWidth, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, bodyHeight * 2, world));
+				pos.Set(pos.x + bodyWidth / 2, pos.y);
+				var se:SurfaceElement = SurfaceElement.getRelatedType(type, pos, 4, bodyHeight, world);
+			}
+			if(se != null) {
+				var joint:b2WeldJointDef = new b2WeldJointDef();
+				joint.Initialize(m_physics, se.getPhysics(), pos);
+				world.CreateJoint(joint);
 			}
 		}
 		
