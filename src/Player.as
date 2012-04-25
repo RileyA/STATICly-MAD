@@ -28,7 +28,6 @@ package {
 
 		private var m_sprite:Sprite;
 		private var chargePolarity:int;
-		private var isCharged:Boolean;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
 		
@@ -118,9 +117,7 @@ package {
 			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
 			
 			if (isGrounded) {
-				chargePolarity = ChargableUtils.CHARGE_NONE;
-				shuffleStrength = 0.0;
-				isCharged = false;
+				groundPlayer();
 			}
 			
 			function jumpFilter(a:*,b:*):Boolean{
@@ -167,7 +164,7 @@ package {
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
-			shuffleCarpet(carpetPolarity, left || right);
+			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && (left || right));
 
 			if (canJump) {
 				m_physics.GetLinearVelocity().x=xspeed;
@@ -188,6 +185,7 @@ package {
 		}
 
 		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
+			var isCharged:Boolean = chargePolarity != ChargableUtils.CHARGE_NONE;
 			if (!isShuffling) {
 				if (!isCharged && shuffleStrength != 0.0) {
 					// If not shuffling, not charged, and shuffle strength is not zero
@@ -202,17 +200,20 @@ package {
 					// increment shuffle strength in direction of current polarity until it reaches full
 					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
-			} else {  // is shuffling
-				if (Math.abs(shuffleStrength) >= FULL_CHARGE_STRENGTH) {
-					// We have reached full shuffle strength. We are charged!
-					isCharged == true;
+			} else if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
+				if (shuffleStrength == FULL_CHARGE_STRENGTH * carpetPolarity) {
+					// We have reached full shuffle strength matching the current carpet. We are charged!
 					chargePolarity = carpetPolarity;
-				}
-				if (!isCharged) {
-					// increment shuffle strength in direction of carpet polarity
+				} else {
+					// increment shuffle strength in direction of current carpet polarity
 					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
 				}
 			}
+		}
+
+		private function groundPlayer():void {
+			chargePolarity = ChargableUtils.CHARGE_NONE;
+			shuffleStrength = 0.0;
 		}
 
 		/**
