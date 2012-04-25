@@ -25,7 +25,7 @@ package {
 		private var movement:String;
 		private var scale:UVec2;
 		private var surfaces:Vector.<SurfaceElement>;
-		private var actions:Vector.<ActionElement>;
+		private var actions:Vector.<ActionerElement>;
 		private var sprite:Sprite;
 		
 		/**

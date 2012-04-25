@@ -1,9 +1,12 @@
 package Actioners
 {
+	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Dynamics.*;
+	import Box2D.Collision.Shapes.*;
 	
 	/**
-	 * ...
-	 * @author Matthew Hall
+	 * Represents an element that the character can interact with via
+	 * the Acition button.
 	 */
 	public class ActionerElement extends GfxPhysObject{
 		private var actionString:String;
@@ -29,6 +32,10 @@ package Actioners
 			parentBody.CreateFixture(fd);
 		}
 		
+		/**
+		* Returns the action that this element will activate as
+		* a String identifier.
+		*/
 		public function getActionString():String {
 			return actionString;
 		}
