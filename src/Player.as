@@ -1,5 +1,6 @@
 package {
 
+	import Actioners.*;
 	import GfxPhysObject;
 	import flash.display.Sprite;
 	import flash.display.Shape;
@@ -9,20 +10,26 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Chargable.Chargable;
-	import Actioners.*;
+	import Chargable.ChargableUtils;
 
-	public class Player extends GfxPhysObject { //implements Chargable {
+	public class Player extends GfxPhysObject implements Chargable {
 
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
+		private static const FULL_CHARGE_STRENGTH:Number=5.0;
+		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.01;
 		
-		private var m_sprite:Sprite;
-
+		// Keyboard controls
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
 		private static const RIGHT_KEY:Number = Keyboard.RIGHT;
 		private static const JUMP_KEY:Number = Keyboard.UP;
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
+
+		private var m_sprite:Sprite;
+		private var chargePolarity:int;
+		private var isCharged:Boolean;
+		private var shuffleStrength:Number;
 
 		public function Player(levelState:LevelState, position:UVec2):void {
 
@@ -78,7 +85,9 @@ package {
 			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
 			
 			if (isGrounded) {
-				// TODO : zero charge
+				chargePolarity = ChargableUtils.CHARGE_NONE;
+				shuffleStrength = 0.0;
+				isCharged = false;
 			}
 			
 			function jumpFilter(a:*,b:*):Boolean{
@@ -90,11 +99,28 @@ package {
 			function actionFilter(a:*,b:*):Boolean{
 				return (a is ActionMarker && b==LevelContactListener.PLAYER_ACTION_ID);
 			}
-			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,groundFilter);
+			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
 			
 			// TODO : do something with the action markers
-			
-			
+
+
+
+			// Shuffling over carpet
+			function carpetRedFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetRed:Boolean=PhysicsUtils.getCollosions(m_physics,carpetRedFilter).length>0;
+
+			function carpetBlueFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_BLUE_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetBlue:Boolean=PhysicsUtils.getCollosions(m_physics,carpetBlueFilter).length>0;
+
+			var carpetPolarity:int = ChargableUtils.CHARGE_NONE;
+			if (onCarpetRed)
+				carpetPolarity = ChargableUtils.CHARGE_RED;
+			if (onCarpetBlue)
+				carpetPolarity = ChargableUtils.CHARGE_BLUE;
 			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
@@ -104,6 +130,7 @@ package {
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
+			shuffleCarpet(carpetPolarity, left || right);
 
 			if (canJump) {
 				m_physics.GetLinearVelocity().x=xspeed;
@@ -121,6 +148,48 @@ package {
 			if (up && canJump) {
 				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
+		}
+
+		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
+			if (!isShuffling) {
+				if (!isCharged && shuffleStrength != 0.0) {
+					// If not shuffling, not charged, and shuffle strength is not zero
+					// Decrement shuffle strength until it reaches zero
+					if (shuffleStrength < 0)
+						shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR;
+					else
+						shuffleStrength -= FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR;
+				} else if (isCharged && shuffleStrength < FULL_CHARGE_STRENGTH) {
+					// If we are charged, but shuffleStrength is not full
+					// (e.g. half-assed shuffle on opposite carpet)
+					// increment shuffle strength in direction of current polarity until it reaches full
+					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * chargePolarity;
+				}
+			} else {  // is shuffling
+				if (Math.abs(shuffleStrength) >= FULL_CHARGE_STRENGTH) {
+					// We have reached full shuffle strength. We are charged!
+					isCharged == true;
+					chargePolarity = carpetPolarity;
+				}
+				if (!isCharged) {
+					// increment shuffle strength in direction of carpet polarity
+					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
+				}
+			}
+		}
+
+		/**
+		* Returns the charge of this Chargable for electrostatics computations.
+		*/
+		public function getCharge():Number{
+			return chargePolarity*FULL_CHARGE_STRENGTH;
+		}
+
+		/**
+		* Returns the b2Body of this Chargable for physics operations.
+		*/
+		public function getBody():b2Body{
+			return m_physics;
 		}
 	}
 }

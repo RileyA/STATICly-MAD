@@ -1,4 +1,6 @@
 package Chargable {
+	import Box2D.Dynamics.*;
+
 	/**
 	* Defines an object that is chargable with electricty and particpates in
 	* the electrostatics physics engine.
