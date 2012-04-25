@@ -128,17 +128,17 @@ package {
 			var se:SurfaceElement;
 
 			if (dir == UP) {
-				rectDef.position.Set(rectDef.position.x, rectDef.position.y - scale.y / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, scale.x, SurfaceElement.DEPTH, world);				
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), 
+													scale.x, SurfaceElement.DEPTH, world);			
 			}else if (dir == DOWN) {
-				rectDef.position.Set(rectDef.position.x, rectDef.position.y + scale.y / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, scale.x, SurfaceElement.DEPTH, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), 
+													scale.x, SurfaceElement.DEPTH, world);
 			}else if (dir == LEFT) {
-				rectDef.position.Set(rectDef.position.x - scale.x / 2, rectDef.position.y);
-				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, scale.y, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, -scale.y / 2), 
+													SurfaceElement.DEPTH, scale.y, world);
 			}else if (dir == RIGHT) {
-				rectDef.position.Set(rectDef.position.x  + scale.x / 2, rectDef.position.y - scale.y / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, scale.y, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, -scale.y / 2), 
+													SurfaceElement.DEPTH, scale.y, world);
 			}
 			if(se != null) {
 				var joint:b2WeldJointDef = new b2WeldJointDef();
