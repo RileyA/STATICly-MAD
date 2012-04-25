@@ -8,8 +8,9 @@ package {
 	import Box2D.Collision.*;
 	import Surfaces.*;
 	import Actioners.*;
+	import Chargable.Chargable;
 
-	public class Block extends GfxPhysObject{
+	public class Block extends GfxPhysObject implements Chargable {
 		
 		public static const FREE:String = "free";
 		public static const TRACKED:String = "tracked";
@@ -120,6 +121,9 @@ package {
 			return chargePolarity*chargeStrength;
 		}
 		
+		public function getBody():b2Body{
+			return m_physics;
+		}
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {
 			var split:int = key.search(",");
