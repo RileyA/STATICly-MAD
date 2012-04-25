@@ -9,11 +9,6 @@ package Chargable {
 	*/
 	public class ChargableManager{
 
-		// Defines the numeric charge value for blue, red, or no charge.
-		public static const charge_blue:int = -1;
-		public static const charge_none:int = 0;
-		public static const charge_red:int = +1;
-
 		private var bodies:Vector.<Chargable>;
 
 		/**
@@ -36,13 +31,17 @@ package Chargable {
 		*/
 		public function applyChargeForces():void{
 			for (var i:int = 0; i < bodies.length; i++){
-				var from:Chargable = bodies[i];
+				var body1:Chargable = bodies[i];
 				// Start at index i+1.  Guaranteed no repeat calculations.
 				for (var j:int = i + 1; j<bodies.length; j++){
-					var onto:Chargable = bodies[j];
-					// Apply force only if the recieving body is not fixed.
-					if (onto.getBody().GetType() == b2Body.b2_dynamicBody) {
-						applyChargeForce(from, onto);
+					var body2:Chargable = bodies[j];
+					// Apply force only if the recieving body2 is not fixed.
+					if (body2.getBody().GetType() == b2Body.b2_dynamicBody) {
+						applyChargeForce(body1, body2);
+					}
+					// Repeat for opposite direction of body2 acting on body1
+					if (body1.getBody().GetType() == b2Body.b2_dynamicBody) {
+						applyChargeForce(body2, body1);
 					}
 				}
 			}

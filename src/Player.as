@@ -9,6 +9,7 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Chargable.Chargable;
+	import Actioners.*;
 
 	public class Player extends GfxPhysObject { //implements Chargable {
 
@@ -42,10 +43,9 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
-			fd.userData = "player";
+			fd.userData = LevelContactListener.PLAYER_BODY_ID;
 			m_physics = levelState.world.CreateBody(ccDef);
-			var playerBodyFixture:b2Fixture=m_physics.CreateFixture(fd);
-			playerBodyFixture.SetUserData(LevelContactListener.PLAYER_BODY_ID);
+			m_physics.CreateFixture(fd);
 			m_physics.SetFixedRotation(true);
 			m_physics.SetLinearDamping(.2);
 
@@ -61,14 +61,39 @@ package {
 			polyShape.SetAsBox(0.3, 0.2);
 			fd.shape = polyShape;
 			fd.isSensor = true;
-			var footSensorFixture:b2Fixture = m_physics.CreateFixture(fd);
-			footSensorFixture.SetUserData(LevelContactListener.FOOT_SENSOR_ID);
+			fd.userData = LevelContactListener.FOOT_SENSOR_ID;
+			m_physics.CreateFixture(fd);
 		}
+		
+		
 
+		
+		
 		public function update(state:LevelState):void {
-			if (state.contactListener.isGrounded()) {
+			function groundFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.GROUND_SENSOR_ID &&
+					(b==LevelContactListener.FOOT_SENSOR_ID ||
+					 b==LevelContactListener.PLAYER_BODY_ID );
+			}
+			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
+			
+			if (isGrounded) {
 				// TODO : zero charge
 			}
+			
+			function jumpFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
+			
+			
+			function actionFilter(a:*,b:*):Boolean{
+				return (a is ActionMarker && b==LevelContactListener.PLAYER_ACTION_ID);
+			}
+			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,groundFilter);
+			
+			// TODO : do something with the action markers
+			
 			
 			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
@@ -80,7 +105,7 @@ package {
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
 
-			if (state.contactListener.canJump()) {
+			if (canJump) {
 				m_physics.GetLinearVelocity().x=xspeed;
 			} else if (xspeed!=0) {
 				
@@ -93,7 +118,7 @@ package {
 				}
 			}
 			
-			if (up && state.contactListener.canJump()) {
+			if (up && canJump) {
 				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
 		}

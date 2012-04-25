@@ -53,6 +53,7 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
+			fd.userData = LevelContactListener.JUMPABLE_ID;
 			m_physics.CreateFixture(fd);
 			
 			//body.SetFixedRotation(true);
@@ -75,11 +76,16 @@ package {
 				addAction(blockInfo.actions[i], world);
 			}
 			
-			//rectDef.position.Set(rectDef.position.x, rectDef.position.y - bodyHeight / 2);
-			//var se:SurfaceElement = new Ground(rectDef, bodyWidth, 4, world);
-			//var joint:b2WeldJointDef = new b2WeldJointDef();
-			//joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
-			//world.CreateJoint(joint);
+			//trace(rectDef.position.x, rectDef.position.y, m_physics.GetPosition().x, m_physics.GetPosition().y);
+			//rectDef.position.Set(position.x - scale.x, position.y - scale.y);
+			
+			//`rectDef.position.Set(rectDef.position.x - scale.x, rectDef.position.y - scale.y);
+			//var se:SurfaceElement = new Ground(rectDef, scale.x, SurfaceElement.DEPTH, world);
+			//trace(rectDef.position.x, rectDef.position.y, se.getPhysics().GetPosition().x, se.getPhysics().GetPosition().y);
+			/*var joint:b2WeldJointDef = new b2WeldJointDef();
+			joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
+			world.CreateJoint(joint);
+			addChild(se);*/
 		}
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {

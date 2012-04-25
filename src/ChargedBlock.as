@@ -13,11 +13,11 @@ package
 		
 		private static const strongChargeDensity:Number = 2.5; // charge per square m
 		private static const weakChargeDensity:Number = 1.0; // charge per square m
-		
+
 		private static const strongDensity:Number = 10.0; // kg per square m
 		private static const weakDensity:Number = 10.0; // kg per square m
 		
-		private var charge:int;
+		private var chargePolarity:int;
 		private var strong:Boolean;
 		private var insulated:Boolean;
 		
@@ -28,7 +28,7 @@ package
 		 * @param	position
 		 * @param	hx
 		 * @param	hy
-		 * @param	charge
+		 * @param	chargePolarity
 		 * @param	movement
 		 * @param	strong
 		 * @param	insulated
@@ -38,21 +38,21 @@ package
 		public function ChargedBlock(position:b2Vec2,
 				hx:Number,
 				hy:Number,
-				charge:int,
+				chargePolarity:int,
 				movement:String,
 				strong:Boolean,
 				insulated:Boolean,
 				blockInfo:BlockInfo,
 				world:b2World):void {
 			super(position, hx, hy, movement, blockInfo, world);
-			init(charge, strong, insulated);
+			init(chargePolarity, strong, insulated);
 		}
 		
 		/**
 		 * For specifying by the corners of the box
 		 * @param	topLeft
 		 * @param	bottomRight
-		 * @param	charge
+		 * @param	chargePolarity
 		 * @param	movement
 		 * @param	strong
 		 * @param	insulated
@@ -61,7 +61,7 @@ package
 		 */
 		public function ChargedBlock(topLeft:b2Vec2,
 				bottomRight:b2Vec2,
-				charge:int,
+				chargePolarity:int,
 				movement:String,
 				strong:Boolean,
 				insulated:Boolean,
@@ -71,13 +71,13 @@ package
 			super(topLeft, bottomRight, movement, blockInfo, world);
 			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.userData = am;
-			init(charge, strong, insulated);
+			init(chargePolarity, strong, insulated);
 		}
 		
-		private function init(charge:int, strong:Boolean, insulated:Boolean):void {
+		private function init(chargePolarity:int, strong:Boolean, insulated:Boolean):void {
 			var area:Number=body.GetMass()/fd.density;
 			this.strong=strong;
-			this.charge = charge;
+			this.chargePolarity = chargePolarity;
 			this.insulated = insulated;
 			this.chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
 		}
@@ -86,7 +86,7 @@ package
 		* Returns the charge of this Chargable for electrostatics computations.
 		*/
 		public function getCharge():Number{
-			return charge*chargeStrength;
+			return chargePolarity*chargeStrength;
 		}
 
 		/**

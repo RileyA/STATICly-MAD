@@ -27,7 +27,6 @@ package {
 		/** Setter for physics object */
 		public function setPhysics(phys:b2Body):void {
 			m_physics = phys;
-			//updateTransform();
 		}
 
 		/** Updates gfx object's transformation to match that of 
@@ -54,5 +53,11 @@ package {
 		public function getAngle():Number {
 			return m_physics == null ? 0.0 : m_physics.GetAngle() * 180.0/Math.PI;
 		}
+		
+		/*override public function addChild(child:DisplayObject):flash.display.DisplayObject {
+			var display:flash.display.DisplayObject = super.addChild(child);
+			updateTransform();
+			return display;
+		}*/
 	}
 }
