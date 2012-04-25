@@ -15,6 +15,8 @@ package Surfaces
 	 */
 	public class SurfaceElement extends GfxPhysObject {
 		
+		public static const DEPTH:Number = 1;
+		
 		private var sprite:Sprite;
 		
 		public function SurfaceElement(rectDef:b2BodyDef, w:Number, h:Number, world:b2World):void {
@@ -26,6 +28,7 @@ package Surfaces
 			fd.userData = this;
 			
 			m_physics = world.CreateBody(rectDef);
+			//m_physics.SetFixedRotation(false);
 			m_physics.CreateFixture(fd);
 			
 			sprite = new Sprite();

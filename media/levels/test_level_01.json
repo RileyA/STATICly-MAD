@@ -83,7 +83,7 @@
 			"y" : 30,
 			"movement" : "free",
 			"actions" : [],
-			"surfaces" : ["UP,ground"]
+			"surfaces" : []
 		}
 	]
 }

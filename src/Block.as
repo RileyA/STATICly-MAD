@@ -97,7 +97,7 @@ package {
 			addChild(sprite);
 			updateTransform();
 			
-			//trace(blockInfo.surfaces.length);
+			trace(blockInfo.surfaces.length);
 			for (i = 0; i < blockInfo.surfaces.length; i++) {
 				addSurface(blockInfo.surfaces[i], rectDef, world);
 				rectDef.position.Set(pos.x, pos.y);
@@ -105,11 +105,17 @@ package {
 			for (i = 0; i < blockInfo.actions.length; i++) {
 				addAction(blockInfo.actions[i], world);
 			}
+			
+			//rectDef.position.Set(rectDef.position.x, rectDef.position.y - bodyHeight / 2);
+			//var se:SurfaceElement = new Ground(rectDef, bodyWidth, 4, world);
+			//var joint:b2WeldJointDef = new b2WeldJointDef();
+			//joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
+			//world.CreateJoint(joint);
 		}
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {
 			var split:int = key.search(",");
-			trace(key);
+			//trace(key);
 			//trace(split);
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
@@ -118,16 +124,16 @@ package {
 			//trace(type);
 			if (dir == UP) {
 				rectDef.position.Set(rectDef.position.x, rectDef.position.y - bodyHeight / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, bodyWidth, 40, world);				
+				se = SurfaceElement.getRelatedType(type, rectDef, bodyWidth, SurfaceElement.DEPTH, world);				
 			}else if (dir == DOWN) {
 				rectDef.position.Set(rectDef.position.x, rectDef.position.y + bodyHeight / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, bodyWidth, 40, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, bodyWidth, SurfaceElement.DEPTH, world);
 			}else if (dir == LEFT) {
 				rectDef.position.Set(rectDef.position.x - bodyWidth / 2, rectDef.position.y);
-				se = SurfaceElement.getRelatedType(type, rectDef, 40, bodyHeight, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, bodyHeight, world);
 			}else if (dir == RIGHT) {
 				rectDef.position.Set(rectDef.position.x  + bodyWidth / 2, rectDef.position.y - bodyHeight / 2);
-				se = SurfaceElement.getRelatedType(type, rectDef, 40, bodyHeight, world);
+				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, bodyHeight, world);
 			}
 			if(se != null) {
 				var joint:b2WeldJointDef = new b2WeldJointDef();
