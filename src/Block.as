@@ -1,8 +1,11 @@
 package {
+	import Box2D.Dynamics.Joints.b2WeldJointDef;
 	import flash.display.Sprite;
-	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Common.Math.*;
+	import Box2D.Common.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
+	import Box2D.Collision.*;
 	import Surfaces.*;
 	import Actioners.*;
 
@@ -56,39 +59,57 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
-			var i:int = 0;
-
-			for (i = 0; i < blockInfo.surfaces.length; i++) {
-				addSurface(blockInfo.surfaces[i], world);
-			}
-			for (i = 0; i < blockInfo.actions.length; i++) {
-				addAction(blockInfo.actions[i], world);
-			}
-
 			sprite = new Sprite();
 			sprite.graphics.beginFill(movement == FIXED ? 0x999999 : 0x333333);
 			sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
 			sprite.graphics.endFill();
 			addChild(sprite);
+
+			var i:int = 0;
+
+			for (i = 0; i < blockInfo.surfaces.length; i++) {
+				rectDef.position.Set(position.x, position.y);
+				addSurface(blockInfo.surfaces[i], rectDef, world);
+			}
+			for (i = 0; i < blockInfo.actions.length; i++) {
+				addAction(blockInfo.actions[i], world);
+			}
+			
+			//rectDef.position.Set(rectDef.position.x, rectDef.position.y - bodyHeight / 2);
+			//var se:SurfaceElement = new Ground(rectDef, bodyWidth, 4, world);
+			//var joint:b2WeldJointDef = new b2WeldJointDef();
+			//joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
+			//world.CreateJoint(joint);
 		}
 		
-		private function addSurface(key:String, world:b2World):void {
-			var pos:b2Vec2 = m_physics.GetPosition();
+		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {
 			var split:int = key.search(",");
+			//trace(key);
+			//trace(split);
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
+			var se:SurfaceElement;
+
+			//trace(dir);
+			//trace(type);
 			if (dir == UP) {
-				pos.Set(pos.x, pos.y - scale.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, scale.x * 2, 4, world));
+				rectDef.position.Set(rectDef.position.x, rectDef.position.y - scale.y / 2);
+				se = SurfaceElement.getRelatedType(type, rectDef, scale.x, SurfaceElement.DEPTH, world);				
 			}else if (dir == DOWN) {
-				pos.Set(pos.x, pos.y + scale.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, scale.x * 2, 4, world));
+				rectDef.position.Set(rectDef.position.x, rectDef.position.y + scale.y / 2);
+				se = SurfaceElement.getRelatedType(type, rectDef, scale.x, SurfaceElement.DEPTH, world);
 			}else if (dir == LEFT) {
-				pos.Set(pos.x - scale.x, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, scale.y * 2, world));
+				rectDef.position.Set(rectDef.position.x - scale.x / 2, rectDef.position.y);
+				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, scale.y, world);
 			}else if (dir == RIGHT) {
-				pos.Set(pos.x + scale.x, pos.y);
-				surfaces.push(SurfaceElement.getRelatedType(type, pos, 4, scale.y * 2, world));
+				rectDef.position.Set(rectDef.position.x  + scale.x / 2, rectDef.position.y - scale.y / 2);
+				se = SurfaceElement.getRelatedType(type, rectDef, SurfaceElement.DEPTH, scale.y, world);
+			}
+			if(se != null) {
+				var joint:b2WeldJointDef = new b2WeldJointDef();
+				joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
+				world.CreateJoint(joint);
+				addChild(se);
 			}
 		}
 		

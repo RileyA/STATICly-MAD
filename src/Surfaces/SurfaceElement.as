@@ -1,9 +1,12 @@
 package Surfaces
 {
+	import flash.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.b2WorldManifold;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
+	import Box2D.Dynamics.Joints.b2WeldJoint;
+	import Box2D.Dynamics.Joints.b2WeldJointDef;
 	import Surfaces.Ground;
 	
 	/**
@@ -12,32 +15,40 @@ package Surfaces
 	 */
 	public class SurfaceElement extends GfxPhysObject {
 		
+		public static const DEPTH:Number = 0.2;
 		
+		private var sprite:Sprite;
 		
-		public function SurfaceElement(position:b2Vec2, w:Number, h:Number, world:b2World):void {
+		public function SurfaceElement(rectDef:b2BodyDef, w:Number, h:Number, world:b2World):void {
 			var fd:b2FixtureDef = new b2FixtureDef();
-			var rectDef:b2BodyDef = new b2BodyDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
 			ps.SetAsBox(w / 2, h / 2);
 			fd.shape = ps;
-			fd.isSensor = true;
-			rectDef.position = position;
-			rectDef.angle = 0.0;
-			
+			fd.isSensor = true;		
 			fd.userData = this;
 			
 			m_physics = world.CreateBody(rectDef);
+			//m_physics.SetFixedRotation(false);
 			m_physics.CreateFixture(fd);
+
+			sprite = new Sprite();
+			sprite.graphics.beginFill(0x777777);
+			// I think this needs more info about the parent
+			// block to be drawn in the right place?
+			sprite.graphics.drawRect(-w/2,h/2,w,h);
+			sprite.graphics.endFill();
+			addChild(sprite);
 		}
 		
-		public static function getRelatedType(type:String, position:b2Vec2, w:Number, h:Number, 
+		public static function getRelatedType(type:String, rectDef:b2BodyDef, w:Number, h:Number, 
 												world:b2World):SurfaceElement {
+			
 			if (type == "ground")
-				return new Ground(position, w, h, world);
+				return new Ground(rectDef, w, h, world);
 			else if (type == "red_carpet")
-				return new RedCarpet(position, w, h, world);
+				return new RedCarpet(rectDef, w, h, world);
 			else if (type == "blue_carpet")
-				return new BlueCarpet(position, w, h, world);
+				return new BlueCarpet(rectDef, w, h, world);
 			else
 				return null;
 			

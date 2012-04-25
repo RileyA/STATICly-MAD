@@ -44,7 +44,8 @@ package {
 			fd.restitution = 0.0;
 			fd.userData = "player";
 			m_physics = levelState.world.CreateBody(ccDef);
-			m_physics.CreateFixture(fd);
+			var playerBodyFixture:b2Fixture=m_physics.CreateFixture(fd);
+			playerBodyFixture.SetUserData(LevelContactListener.PLAYER_BODY_ID);
 			m_physics.SetFixedRotation(true);
 			m_physics.SetLinearDamping(.2);
 
@@ -65,6 +66,11 @@ package {
 		}
 
 		public function update(state:LevelState):void {
+			if (state.contactListener.isGrounded()) {
+				// TODO : zero charge
+			}
+			
+			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
 			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);

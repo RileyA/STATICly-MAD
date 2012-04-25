@@ -24,7 +24,11 @@ package {
 							out[key]).split("<")[1].split(">")[0]) as Class;
 						for (var i:uint = 0; i < obj[key].length; ++i) {
 							out[key].push(new type());
-							parseObject(obj[key][i], out[key][i]);
+							if (obj[key][i] is Number || obj[key][i] is Boolean 
+								|| obj[key][i] is String)
+								out[key][i] = obj[key][i];
+							else
+								parseObject(obj[key][i], out[key][i]);
 						}
 					} else if ((obj[key] is Number && out[key] is Number) 
 						|| (obj[key] is Boolean && out[key] is Boolean)

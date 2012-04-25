@@ -24,7 +24,7 @@
 			"position" : {"x" : 9, "y" : 13},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : ["up,ground"]
 		},
 		{
 			"scale" : {"x" : 1.333, "y": 1.333},
