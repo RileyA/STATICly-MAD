@@ -34,9 +34,9 @@ package {
 		public function Player(levelState:LevelState, position:UVec2):void {
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
-			var w:Number=.7;
-			var h:Number=-1.2;
-			var hMid:Number=-0.9;
+			const w:Number=.7;
+			const h:Number=-1.2;
+			const hMid:Number=-0.9;
 			polyShape.SetAsArray([new b2Vec2(0,h),new b2Vec2(w/2,hMid),
 				new b2Vec2(w/2,0),new b2Vec2(-w/2,0),new b2Vec2(-w/2,hMid)])
 
@@ -63,12 +63,24 @@ package {
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
 			
+			// make foot/jump sensor
 			fd = new b2FixtureDef();
 			polyShape = new b2PolygonShape();
 			polyShape.SetAsBox(0.3, 0.2);
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.FOOT_SENSOR_ID;
+			m_physics.CreateFixture(fd);
+			
+			// make action sensor
+			const m:Number=.3;//action region margin
+			fd = new b2FixtureDef();
+			polyShape = new b2PolygonShape();
+			polyShape.SetAsArray([new b2Vec2(0,h-m),new b2Vec2(w/2+m,hMid-m),
+				new b2Vec2(w/2+m,m),new b2Vec2(-w/2-m,m),new b2Vec2(-w/2-m,hMid-m)])
+			fd.shape = polyShape;
+			fd.isSensor = true;
+			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
 		}
 		
