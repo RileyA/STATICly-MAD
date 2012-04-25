@@ -1,6 +1,6 @@
 package {
 	import Box2D.Dynamics.Joints.b2WeldJointDef;
-	import flash.display.Sprite;
+	import flash.display.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Common.*;
 	import Box2D.Dynamics.*;
@@ -28,6 +28,19 @@ package {
 		private var actions:Vector.<ActionerElement>;
 		private var sprite:Sprite;
 		
+		// for charge
+		private static const strongChargeDensity:Number = 2.5; // charge per square m
+		private static const weakChargeDensity:Number = 1.0; // charge per square m
+
+		private static const strongDensity:Number = 10.0; // kg per square m
+		private static const weakDensity:Number = 10.0; // kg per square m
+		
+		private var chargePolarity:int;
+		private var strong:Boolean;
+		private var insulated:Boolean;
+		
+		private var chargeStrength:Number;
+		
 		/**
 		 * @param	blockInfo
 		 * @param	world
@@ -37,7 +50,14 @@ package {
 			var position:UVec2 = blockInfo.position.getCopy();
 			scale = blockInfo.scale.getCopy();
 			movement = blockInfo.movement;
-
+			insulated=blockInfo.insulated;
+			strong=blockInfo.strong;
+			chargePolarity=blockInfo.chargePolarity;
+			
+			
+			
+			
+			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsBox(scale.x / 2, scale.y / 2);
 
@@ -56,13 +76,31 @@ package {
 			fd.userData = LevelContactListener.JUMPABLE_ID;
 			m_physics.CreateFixture(fd);
 			
+			var area:Number=m_physics.GetMass()/fd.density;
+			chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
+			
+			// make block actionable
+			if (!insulated){
+				function act():void{}
+				function ck(player:Player):Boolean{ return true;}
+				fd.userData = new ActionMarker(act,ck);
+				m_physics.CreateFixture(fd);
+			}
+			
 			//body.SetFixedRotation(true);
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
 			sprite = new Sprite();
-			sprite.graphics.beginFill(movement == FIXED ? 0x999999 : 0x333333);
-			sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
+			if (insulated){
+				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
+			}
+			sprite.graphics.beginFill(strong ? 0x999999 : 0x333333);
+			if (movement == FIXED) {
+				sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
+			} else {
+				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, scale.x/2);
+			}
 			sprite.graphics.endFill();
 			addChild(sprite);
 
@@ -76,28 +114,19 @@ package {
 				addAction(blockInfo.actions[i], world);
 			}
 			
-			//trace(rectDef.position.x, rectDef.position.y, m_physics.GetPosition().x, m_physics.GetPosition().y);
-			//rectDef.position.Set(position.x - scale.x, position.y - scale.y);
-			
-			//`rectDef.position.Set(rectDef.position.x - scale.x, rectDef.position.y - scale.y);
-			//var se:SurfaceElement = new Ground(rectDef, scale.x, SurfaceElement.DEPTH, world);
-			//trace(rectDef.position.x, rectDef.position.y, se.getPhysics().GetPosition().x, se.getPhysics().GetPosition().y);
-			/*var joint:b2WeldJointDef = new b2WeldJointDef();
-			joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
-			world.CreateJoint(joint);
-			addChild(se);*/
 		}
+		
+		public function getCharge():Number{
+			return chargePolarity*chargeStrength;
+		}
+		
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {
 			var split:int = key.search(",");
-			//trace(key);
-			//trace(split);
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
 			var se:SurfaceElement;
 
-			//trace(dir);
-			//trace(type);
 			if (dir == UP) {
 				rectDef.position.Set(rectDef.position.x, rectDef.position.y - scale.y / 2);
 				se = SurfaceElement.getRelatedType(type, rectDef, scale.x, SurfaceElement.DEPTH, world);				

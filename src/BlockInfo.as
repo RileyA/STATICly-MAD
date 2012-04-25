@@ -13,6 +13,10 @@ package
 		public var actions:Vector.<String> = new Vector.<String>();
 		public var position:UVec2 = new UVec2;
 		public var scale:UVec2 = new UVec2;
+		
+		public var insulated:Boolean = true;
+		public var chargePolarity:int;
+		public var strong:Boolean;
 	}
 	
 }

@@ -157,6 +157,7 @@ package {
 				if (marker!=null) {
 					marker.callAction();
 					didAction=true;
+					m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 				}
 			} else if (!action) {
 				didAction=false;
