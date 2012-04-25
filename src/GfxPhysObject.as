@@ -32,12 +32,13 @@ package {
 
 		/** Updates gfx object's transformation to match that of 
 			the physics object, should be callled every frame */
-		public function updateTransform(PIXELS_PER_METER:Number):void {
+		public function updateTransform():void {
 			// if physics object is null, just reset to origin...
 			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
-				this.x = pos.x * PIXELS_PER_METER;
-				this.y = pos.y * PIXELS_PER_METER;
+				//trace(pos.x, pos.y);
+				this.x = pos.x * PhysicsUtils.PIXELS_PER_METER;
+				this.y = pos.y * PhysicsUtils.PIXELS_PER_METER;
 				this.rotation = getAngle();
 			} else {
 				this.x = 0;
@@ -51,6 +52,12 @@ package {
 					physics object is null */
 		public function getAngle():Number {
 			return m_physics == null ? 0.0 : m_physics.GetAngle() * 180.0/Math.PI;
+		}
+		
+		override public function addChild(child:DisplayObject):flash.display.DisplayObject {
+			var display:flash.display.DisplayObject = super.addChild(child);
+			updateTransform();
+			return display;
 		}
 	}
 }

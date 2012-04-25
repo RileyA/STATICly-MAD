@@ -15,7 +15,7 @@ package Surfaces
 	 */
 	public class SurfaceElement extends GfxPhysObject {
 		
-		public static const DEPTH:Number = .25;
+		public static const DEPTH:Number = .1;
 		
 		private var sprite:Sprite;
 		
@@ -28,11 +28,12 @@ package Surfaces
 			fd.userData = this;
 			
 			m_physics = world.CreateBody(rectDef);
-			//m_physics.SetFixedRotation(false);
+			//trace(m_physics.GetPosition().x, m_physics.GetPosition().y);
+			m_physics.SetFixedRotation(false);
 			m_physics.CreateFixture(fd);
 			
 			sprite = new Sprite();
-			sprite.graphics.beginFill(0x777777);
+			sprite.graphics.beginFill(0x666666);
 			sprite.graphics.drawRect(
 				0,
 				0,

@@ -90,7 +90,7 @@ package {
 			m_player.update(this);
 
 			for (var i:uint = 0; i < m_gfxPhysObject.length; ++i)
-				m_gfxPhysObject[i].updateTransform(pixelsPerMeter());
+				m_gfxPhysObject[i].updateTransform();
 
 			if (isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 				m_debugDrawKey = true;
