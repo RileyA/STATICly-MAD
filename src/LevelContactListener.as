@@ -22,6 +22,7 @@ package
 		public static const FOOT_SENSOR_ID:int=1;
 		public static const GROUND_SENSOR_ID:int=2;
 		public static const PLAYER_BODY_ID:int=3;
+		public static const JUMPABLE_ID:int=4;
 		
 		public function LevelContactListener() {
 			actionCandidates = new Vector.<GfxPhysObject>();
@@ -50,8 +51,7 @@ package
 					actionCandidates.push(b.GetUserData());
 					return true;
 				}
-			} else if (a.GetUserData() == FOOT_SENSOR_ID) {
-				//trace("foot!");
+			} else if (a.GetUserData() == FOOT_SENSOR_ID && b.GetUserData() == JUMPABLE_ID) {
 				numFootContacts++;
 				return true;
 			} else if (a.GetUserData() == GROUND_SENSOR_ID){

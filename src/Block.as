@@ -68,6 +68,7 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
+			fd.userData = LevelContactListener.JUMPABLE_ID;
 			m_physics.CreateFixture(fd);
 			
 			//body.SetFixedRotation(true);

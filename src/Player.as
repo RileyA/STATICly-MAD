@@ -42,10 +42,9 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
-			fd.userData = this;
+			fd.userData = LevelContactListener.PLAYER_BODY_ID;
 			m_physics = levelState.world.CreateBody(ccDef);
-			var playerBodyFixture:b2Fixture=m_physics.CreateFixture(fd);
-			playerBodyFixture.SetUserData(LevelContactListener.PLAYER_BODY_ID);
+			m_physics.CreateFixture(fd);
 			m_physics.SetFixedRotation(true);
 			m_physics.SetLinearDamping(.2);
 
@@ -65,8 +64,8 @@ package {
 			polyShape.SetAsBox(0.3, 0.2);
 			fd.shape = polyShape;
 			fd.isSensor = true;
-			var footSensorFixture:b2Fixture = m_physics.CreateFixture(fd);
-			footSensorFixture.SetUserData(LevelContactListener.FOOT_SENSOR_ID);
+			fd.userData = LevelContactListener.FOOT_SENSOR_ID;
+			m_physics.CreateFixture(fd);
 		}
 
 		public function update(state:LevelState):void {
