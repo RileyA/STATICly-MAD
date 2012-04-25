@@ -15,7 +15,7 @@ package Surfaces
 	 */
 	public class SurfaceElement extends GfxPhysObject {
 		
-		public static const DEPTH:Number = 1;
+		public static const DEPTH:Number = .25;
 		
 		private var sprite:Sprite;
 		

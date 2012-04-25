@@ -24,8 +24,10 @@ package
 			actionCandidates = new Vector.<GfxPhysObject>();
 		}
 		
-		public function getBestAction():GfxPhysObject {
+		public function getBestAction(player:Player):GfxPhysObject {
+			holder = player;
 			actionCandidates.sort(compare);
+			holder = null;
 			return actionCandidates[0];
 		}
 		
@@ -51,6 +53,7 @@ package
 			if (a.GetUserData() == Player && false) {
 				holder=b.GetUserData();
 				actionCandidates = actionCandidates.filter(removeFunc);
+				holder = null;
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts--;
@@ -72,6 +75,7 @@ package
 		}
 		
 		public override function EndContact(contact:b2Contact):void {
+			
 			if (!doEndContact(contact.GetFixtureA(),contact.GetFixtureB())) {
 				if (!doEndContact(contact.GetFixtureB(),contact.GetFixtureA())) {
 					// other handlers
