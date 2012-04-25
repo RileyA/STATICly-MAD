@@ -29,6 +29,10 @@ package {
 		private var m_sprite:Sprite;
 		private var chargePolarity:int;
 		private var shuffleStrength:Number;
+		private var didAction:Boolean; // true when already did action for this action button press
+		
+		
+		
 
 		public function Player(levelState:LevelState, position:UVec2):void {
 
@@ -90,11 +94,17 @@ package {
 			}
 			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
 			
-			// TODO : do something with the action markers
+			// TODO : Sort by priority/location
+			// markers.sort(compare);
 			
+			var i:int;
+			for (i=0;i<markers.length;i++){
+				if (markers[i].canAction(this)){
+					return markers[i];
+				}
+			}
 			
-			// actionCandidates.sort(compare);
-			return markers[0];
+			return null;
 		}
 		
 		
@@ -138,6 +148,18 @@ package {
 			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
 			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
 			
+			// do actions
+			if ((!didAction) && action) {
+				var marker:ActionMarker=getBestAction();
+				if (marker!=null) {
+					marker.callAction();
+					didAction=true;
+				}
+			} else if (!action) {
+				didAction=false;
+			}
+			
+			// do movement
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
