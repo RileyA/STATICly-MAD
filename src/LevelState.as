@@ -69,10 +69,6 @@ package {
 			m_player = new Player(this, m_info.playerPosition);
 			addChild(m_player);
 			m_gfxPhysObjects.push(m_player);
-			
-			// add contact listener
-			contactListener = new LevelContactListener();
-			world.SetContactListener(contactListener);
 
 			// prep debug stuff
 			prepareDebugVisualization();

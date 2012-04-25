@@ -73,7 +73,18 @@ package {
 		}
 		
 		
-
+		public function getBestAction():ActionMarker {
+			function actionFilter(a:*,b:*):Boolean{
+				return (a is ActionMarker && b==LevelContactListener.PLAYER_ACTION_ID);
+			}
+			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
+			
+			// TODO : do something with the action markers
+			
+			
+			// actionCandidates.sort(compare);
+			return markers[0];
+		}
 		
 		
 		public function update(state:LevelState):void {
@@ -96,15 +107,6 @@ package {
 			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
 			
 			
-			function actionFilter(a:*,b:*):Boolean{
-				return (a is ActionMarker && b==LevelContactListener.PLAYER_ACTION_ID);
-			}
-			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
-			
-			// TODO : do something with the action markers
-
-
-
 			// Shuffling over carpet
 			function carpetRedFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;

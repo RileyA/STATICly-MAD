@@ -7,10 +7,6 @@ package {
 
 	/** A set of constants and helpers for box2d stuffs */
 	public class PhysicsUtils {
-		
-		public static const PIXELS_PER_METER:Number = 30;
-		
-		
 		public static function getCollosions(body:b2Body,filterFunc:Function):Vector.<*> {
 			var v:Vector.<*>= new Vector.<*>;
 			var con:b2ContactEdge=body.GetContactList();
@@ -28,31 +24,6 @@ package {
 				con=con.next;
 			}
 			return v;
-		}
-		
-		
-		/** Meters -> Pixels
-			@param v Vector to convert */
-		public static function fromPixels(v:b2Vec2):b2Vec2 {
-			return new b2Vec2(v.x / PIXELS_PER_METER, v.y / PIXELS_PER_METER);
-		}
-
-		/** Meters -> Pixels
-			@param v Vector to convert */
-		public static function toMeters(v:b2Vec2):b2Vec2 {
-			return fromPixels(v);
-		}
-
-		/** Pixels -> Meters
-			@param v Vector to convert */
-		public static function toPixels(v:b2Vec2):b2Vec2 {
-			return new b2Vec2(v.x * PIXELS_PER_METER, v.y * PIXELS_PER_METER);
-		}
-
-		/** Pixels -> Meters
-			@param v Vector to convert */
-		public static function fromMeters(v:b2Vec2):b2Vec2 {
-			return toPixels(v);
 		}
 	}
 }
