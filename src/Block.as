@@ -35,13 +35,9 @@ package {
 		 * @param	world
 		 */
 		public function Block(blockInfo:BlockInfo, world:b2World):void {
-			init(blockInfo, world);
-		}
-		
-		private function init(blockInfo:BlockInfo, world:b2World): void {
 			var pos:b2Vec2 = blockInfo.pixels ? new b2Vec2(
-				blockInfo.x / PIXELS_PER_METER, 
-				blockInfo.y / PIXELS_PER_METER)
+				blockInfo.x / PhysicsUtils.PIXELS_PER_METER, 
+				blockInfo.y / PhysicsUtils.PIXELS_PER_METER)
 				: new b2Vec2(blockInfo.x, blockInfo.y);
 
 			bodyWidth = blockInfo.pixels ? blockInfo.width
@@ -95,9 +91,7 @@ package {
 				);
 			sprite.graphics.endFill();
 			addChild(sprite);
-			updateTransform();
-			
-			//trace(blockInfo.surfaces.length);
+
 			for (i = 0; i < blockInfo.surfaces.length; i++) {
 				addSurface(blockInfo.surfaces[i], rectDef, world);
 				rectDef.position.Set(pos.x, pos.y);
