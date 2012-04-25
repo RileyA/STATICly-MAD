@@ -97,7 +97,7 @@ package {
 			addChild(sprite);
 			updateTransform();
 			
-			trace(blockInfo.surfaces.length);
+			//trace(blockInfo.surfaces.length);
 			for (i = 0; i < blockInfo.surfaces.length; i++) {
 				addSurface(blockInfo.surfaces[i], rectDef, world);
 				rectDef.position.Set(pos.x, pos.y);
