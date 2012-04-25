@@ -41,7 +41,6 @@ package Surfaces
 			);
 			sprite.graphics.endFill();
 			addChild(sprite);
-			updateTransform();
 		}
 		
 		public static function getRelatedType(type:String, rectDef:b2BodyDef, w:Number, h:Number, 
