@@ -101,15 +101,15 @@ package {
 			}
 			
 			//trace(rectDef.position.x, rectDef.position.y, m_physics.GetPosition().x, m_physics.GetPosition().y);
-			//rectDef.position.Set(pos.x - bodyWidth, pos.y - bodyHeight);
-			//
-			//rectDef.position.Set(rectDef.position.x - bodyWidth, rectDef.position.y - bodyHeight);
-			//var se:SurfaceElement = new Ground(rectDef, bodyWidth, SurfaceElement.DEPTH, world);
+			rectDef.position.Set(pos.x - bodyWidth, pos.y - bodyHeight);
+			
+			rectDef.position.Set(rectDef.position.x - bodyWidth, rectDef.position.y - bodyHeight);
+			var se:SurfaceElement = new Ground(rectDef, bodyWidth, SurfaceElement.DEPTH, world);
 			//trace(rectDef.position.x, rectDef.position.y, se.getPhysics().GetPosition().x, se.getPhysics().GetPosition().y);
-			//var joint:b2WeldJointDef = new b2WeldJointDef();
-			//joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
-			//world.CreateJoint(joint);
-			//addChild(se);
+			var joint:b2WeldJointDef = new b2WeldJointDef();
+			joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
+			world.CreateJoint(joint);
+			addChild(se);
 		}
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {

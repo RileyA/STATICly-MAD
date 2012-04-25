@@ -43,11 +43,15 @@ package
 		}
 		
 		// returns True if handled
-		private function doBeginContact(a:b2Fixture, b:b2Fixture):Boolean{
-			if (a.GetUserData() == Player && false) {
-				actionCandidates.push(b.GetUserData());
-				return true;
-			} else if (a.GetUserData() == FOOT_SENSOR_ID){
+		private function doBeginContact(a:b2Fixture, b:b2Fixture):Boolean {
+			if (a.GetUserData() is Player && b.GetUserData() is ActionMarker) {
+				trace("woo!");
+				if((ActionMarker)(b.GetUserData()).canAction((Player)(a.GetUserData()))){
+					actionCandidates.push(b.GetUserData());
+					return true;
+				}
+			} else if (a.GetUserData() == FOOT_SENSOR_ID) {
+				//trace("foot!");
 				numFootContacts++;
 				return true;
 			} else if (a.GetUserData() == GROUND_SENSOR_ID){
@@ -61,7 +65,7 @@ package
 		
 		// returns True if handled
 		private function doEndContact(a:b2Fixture, b:b2Fixture):Boolean{
-			if (a.GetUserData() == Player && false) {
+			if (a.GetUserData() is Player && b.GetUserData() is ActionMarker) {
 				holder=b.GetUserData();
 				actionCandidates = actionCandidates.filter(removeFunc);
 				holder = null;

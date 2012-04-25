@@ -42,7 +42,7 @@ package {
 			fd.density = 10.0;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
-			fd.userData = "player";
+			fd.userData = this;
 			m_physics = levelState.world.CreateBody(ccDef);
 			var playerBodyFixture:b2Fixture=m_physics.CreateFixture(fd);
 			playerBodyFixture.SetUserData(LevelContactListener.PLAYER_BODY_ID);
