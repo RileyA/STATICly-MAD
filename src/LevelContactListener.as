@@ -16,9 +16,12 @@ package
 		private var holder:GfxPhysObject;
 		
 		private var numFootContacts:int=0;
-		public var lastFootContact:b2Body;
+		private var numGroundContacts:int=0;
+		
 		
 		public static const FOOT_SENSOR_ID:int=1;
+		public static const GROUND_SENSOR_ID:int=2;
+		public static const PLAYER_BODY_ID:int=3;
 		
 		public function LevelContactListener() {
 			actionCandidates = new Vector.<GfxPhysObject>();
@@ -35,6 +38,10 @@ package
 			return numFootContacts>0;
 		}
 		
+		public function isGrounded():Boolean{
+			return numGroundContacts>0;
+		}
+		
 		// returns True if handled
 		private function doBeginContact(a:b2Fixture, b:b2Fixture):Boolean{
 			if (a.GetUserData() == Player && false) {
@@ -42,8 +49,12 @@ package
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts++;
-				lastFootContact = b.GetBody();
 				return true;
+			} else if (a.GetUserData() == GROUND_SENSOR_ID){
+				if (b.GetUserData() == FOOT_SENSOR_ID || b.GetUserData() == PLAYER_BODY_ID){
+					numGroundContacts++;
+					return true;
+				}
 			}
 			return false;
 		}
@@ -57,10 +68,12 @@ package
 				return true;
 			} else if (a.GetUserData() == FOOT_SENSOR_ID){
 				numFootContacts--;
-				//if (lastFootContact == b.GetBody() && numFootContacts>0){ // TODO : make this not happen
-				//	throw new Error("Assertion failed!: LevelContactListener");
-				//}
 				return true;
+			} else if (a.GetUserData() == GROUND_SENSOR_ID){
+				if (b.GetUserData() == FOOT_SENSOR_ID || b.GetUserData() == PLAYER_BODY_ID){
+					numGroundContacts--;
+					return true;
+				}
 			}
 			return false;
 		}
