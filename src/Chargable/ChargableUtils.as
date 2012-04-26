@@ -8,13 +8,12 @@ package Chargable {
 		public static const CHARGE_NONE:int = 0;
 		public static const CHARGE_RED:int = -1;
 
-		private static const COLOR_TRANS_BLUE:ColorTransform = new ColorTransform();
+		private static const COLOR_TRANS_BLUE:ColorTransform = new ColorTransform(.2,.2,1.1);
 		private static const COLOR_TRANS_NONE:ColorTransform = new ColorTransform();
-		private static const COLOR_TRANS_RED:ColorTransform = new ColorTransform();
+		private static const COLOR_TRANS_RED:ColorTransform = new ColorTransform(1.1,.2,.2);
 		{
-			COLOR_TRANS_BLUE.color = 0x0033ff;
-			COLOR_TRANS_NONE.color = 0xffff66;
-			COLOR_TRANS_RED.color = 0xff3300;
+			COLOR_TRANS_RED.redOffset=50;
+			COLOR_TRANS_BLUE.blueOffset=50;
 		}
 
 		public static function matchColorToPolarity(sprite:Sprite, polarity:int):void {

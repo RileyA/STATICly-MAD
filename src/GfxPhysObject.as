@@ -31,7 +31,7 @@ package {
 
 		/** Updates gfx object's transformation to match that of 
 			the physics object, should be callled every frame */
-		public function updateTransform(pixelsPerMeter:Number):void {
+		public virtual function updateTransform(pixelsPerMeter:Number):void {
 			this.scaleX = pixelsPerMeter;
 			this.scaleY = pixelsPerMeter;
 			// if physics object is null, just reset to origin...

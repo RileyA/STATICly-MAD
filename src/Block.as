@@ -9,6 +9,7 @@ package {
 	import Surfaces.*;
 	import Actioners.*;
 	import Chargable.Chargable;
+	import Chargable.ChargableUtils;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -37,6 +38,8 @@ package {
 		private static const weakDensity:Number = 10.0; // kg per square m
 		
 		private var chargePolarity:int;
+		private var drawnChargePolarity:int;
+		
 		private var strong:Boolean;
 		private var insulated:Boolean;
 		
@@ -54,10 +57,6 @@ package {
 			insulated=blockInfo.insulated;
 			strong=blockInfo.strong;
 			chargePolarity=blockInfo.chargePolarity;
-			
-			
-			
-			
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsBox(scale.x / 2, scale.y / 2);
@@ -82,8 +81,22 @@ package {
 			
 			// make block actionable
 			if (!insulated){
-				function act():void{}
-				function ck(player:Player):Boolean{ return true;}
+				function act(state:LevelState):void{
+					var player:Player= state.getPlayer();
+					if (strong) {
+						if (chargePolarity==-player.chargePolarity) {
+							chargePolarity=ChargableUtils.CHARGE_NONE;
+							player.chargePolarity=ChargableUtils.CHARGE_NONE;
+						} else {
+							var tmp:int=player.chargePolarity;
+							player.chargePolarity=chargePolarity;
+							chargePolarity=tmp;
+						}
+					} else {
+						chargePolarity=player.chargePolarity;
+					}
+				}
+				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
 				fd.userData = new ActionMarker(act,ck);
 				m_physics.CreateFixture(fd);
 			}
@@ -96,13 +109,14 @@ package {
 			if (insulated){
 				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
 			}
-			sprite.graphics.beginFill(strong ? 0x999999 : 0x333333);
+			sprite.graphics.beginFill(strong ? 0x333333 : 0x999999);
 			if (movement == FIXED) {
 				sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
 			} else {
 				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, scale.x/2);
 			}
 			sprite.graphics.endFill();
+			redraw();
 			addChild(sprite);
 
 			var i:int = 0;
@@ -115,6 +129,18 @@ package {
 				addAction(blockInfo.actions[i], world);
 			}
 			
+		}
+		
+		public override function updateTransform(pixelsPerMeter:Number):void {
+			super.updateTransform(pixelsPerMeter);
+			if (drawnChargePolarity!=chargePolarity) {
+				redraw();
+			}
+		}
+		
+		private function redraw():void{
+			ChargableUtils.matchColorToPolarity(sprite, chargePolarity);
+			drawnChargePolarity=chargePolarity;
 		}
 		
 		public function getCharge():Number{

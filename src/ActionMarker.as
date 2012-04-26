@@ -14,8 +14,8 @@ package
 			this.chargeChecker = chargeChecker;
 		}
 		
-		public function callAction():void {
-			action();
+		public function callAction(state:LevelState):void {
+			action(state);
 		}
 		
 		public function canAction(player:Player):Boolean {

@@ -83,7 +83,11 @@ package {
 			levelNameText.selectable = false;
 			addChild(levelNameText);
 		}
-
+		
+		public function getPlayer():Player{
+			return m_player;
+		}
+		
 		override public function deinit():void {
 		}
 

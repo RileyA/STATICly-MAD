@@ -27,7 +27,7 @@ package {
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		private var m_sprite:Sprite;
-		private var chargePolarity:int;
+		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
 		
@@ -111,6 +111,8 @@ package {
 		
 		
 		public function update(state:LevelState):void {
+			ChargableUtils.matchColorToPolarity(this, chargePolarity);
+			
 			function groundFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.GROUND_SENSOR_ID &&
 					(b==LevelContactListener.FOOT_SENSOR_ID ||
@@ -154,9 +156,8 @@ package {
 			if ((!didAction) && action) {
 				var marker:ActionMarker=getBestAction();
 				if (marker!=null) {
-					marker.callAction();
+					marker.callAction(state);
 					didAction=true;
-					m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 				}
 			} else if (!action) {
 				didAction=false;
