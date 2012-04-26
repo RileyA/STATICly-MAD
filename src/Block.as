@@ -132,7 +132,7 @@ package {
 			if (movement == TRACKED) {
 				var hold:Vector.<Number> = new Vector.<Number>();
 				hold.push(0, 18, 26.66, 18);
-				makeTracked(hold, world);
+				makeTracked(blockInfo.bounds, world);
 			}
 			
 		}
@@ -192,9 +192,9 @@ package {
 			
 		}
 		
-		private function makeTracked(ends:Vector.<Number>, world:b2World):void {
-			var l:b2Vec2 = new b2Vec2(ends[0], ends[1]);
-			var r:b2Vec2 = new b2Vec2(ends[2], ends[3]);
+		private function makeTracked(ends:Vector.<UVec2>, world:b2World):void {
+			var l:b2Vec2 = ends[0].toB2Vec2();
+			var r:b2Vec2 = ends[1].toB2Vec2();
 			var axis:b2Vec2 = r.Copy();
 			axis.Subtract(l);
 			axis.Normalize();

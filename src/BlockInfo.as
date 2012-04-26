@@ -11,7 +11,7 @@ package
 		public var movement:String = "fixed";
 		public var surfaces:Vector.<String> = new Vector.<String>();
 		public var actions:Vector.<String> = new Vector.<String>();
-		public var bounds:Vector.<Number> = new Vector.<Number>();
+		public var bounds:Vector.<UVec2> = new Vector.<UVec2>();
 		public var position:UVec2 = new UVec2;
 		public var scale:UVec2 = new UVec2;
 		

@@ -8,7 +8,7 @@
 		{
 			"scale" : {"x" : 13.333, "y": 0.333},
 			"position" : {"x" : 10, "y" : 18},
-			"bounds" : [],
+			"bounds" : [{"x" : 0, "y" : 18}, {"x" : 26.666, "y" : 18}],
 			"movement" : "tracked",
 			"actions" : [],
 			"surfaces" : ["up,rcarpet"]
