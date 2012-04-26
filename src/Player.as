@@ -61,7 +61,7 @@ package {
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
-			m_sprite.graphics.beginFill(0xff0000);
+			m_sprite.graphics.beginFill(0xBBBBBB);
 			m_sprite.graphics.drawRect(-w/2.0, h, w, -h);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);

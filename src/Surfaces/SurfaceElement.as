@@ -19,13 +19,13 @@ package Surfaces
 		
 		private var sprite:Sprite;
 		
-		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, action:ActionMarker, world:b2World):void {
+		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, userData:*, world:b2World):void {
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
 			ps.SetAsBox(w / 2, h / 2);
 			fd.shape = ps;
 			fd.isSensor = true;		
-			fd.userData = this;
+			fd.userData = userData;
 			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
