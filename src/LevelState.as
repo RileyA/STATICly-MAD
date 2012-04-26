@@ -9,6 +9,7 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Player;
+	import Chargable.*;
 
 	/** A basic level */
 	public class LevelState extends GameState {
@@ -22,6 +23,7 @@ package {
 		private var m_player:Player;
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_info:LevelInfo;
+		private var m_chargableManager:ChargableManager;
 
 		// TODO don't hardcode/embed these...
 		private static const WIDTH_PIXELS:Number  = 800;
@@ -44,7 +46,7 @@ package {
 		}
 
 		override public function init():void {
-
+			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
 
 			// load level JSON
@@ -63,10 +65,14 @@ package {
 				var loadedBlock:Block = new Block(m_info.blocks[i], world);
 				addChild(loadedBlock);
 				m_gfxPhysObjects.push(loadedBlock);
+				if (loadedBlock is Chargable) {
+					m_chargableManager.addChargable(loadedBlock);
+				}
 			}
 
 			// make the player
 			m_player = new Player(this, m_info.playerPosition);
+			m_chargableManager.addChargable(m_player);
 			addChild(m_player);
 			m_gfxPhysObjects.push(m_player);
 
@@ -94,6 +100,7 @@ package {
 		override public function update(delta:Number):Boolean {
 			world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 			world.ClearForces();
+			m_chargableManager.applyChargeForces();
 			m_player.update(this);
 
 			for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)

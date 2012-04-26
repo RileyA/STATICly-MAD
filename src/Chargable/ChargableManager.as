@@ -14,7 +14,7 @@ package Chargable {
 		/**
 		* Constructs a manager empty of objects.
 		*/
-		public function BlockManager():void{
+		public function ChargableManager():void{
 			this.bodies=new Vector.<Chargable>();
 		}
 

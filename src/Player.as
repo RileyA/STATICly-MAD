@@ -17,8 +17,8 @@ package {
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
-		private static const FULL_CHARGE_STRENGTH:Number=5.0;
-		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.2;
+		private static const FULL_CHARGE_STRENGTH:Number=2.0;
+		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
 
 		// Keyboard controls
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
@@ -194,23 +194,23 @@ package {
 					// If not shuffling, not charged, and shuffle strength is not zero
 					// Decrement shuffle strength until it reaches zero
 					if (shuffleStrength < 0)
-						shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR;
+						shuffleStrength += SHUFFLE_INCREMENT_FACTOR;
 					else
-						shuffleStrength -= FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR;
-				} else if (isCharged && shuffleStrength < FULL_CHARGE_STRENGTH) {
+						shuffleStrength -= SHUFFLE_INCREMENT_FACTOR;
+				} else if (isCharged && shuffleStrength < 1.0) {
 					// If we are charged, but shuffleStrength is not full
 					// (e.g. half-assed shuffle on opposite carpet)
 					// increment shuffle strength in direction of current polarity until it reaches full
-					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * chargePolarity;
+					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
 			} else if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-				if ((int)(shuffleStrength * carpetPolarity) == (int)(FULL_CHARGE_STRENGTH)) {
+				if ((int)(shuffleStrength * carpetPolarity) == 1) {
 					// We have reached full shuffle strength matching the current carpet. We are charged!
 					chargePolarity = carpetPolarity;
 					ChargableUtils.matchColorToPolarity(this, chargePolarity);
 				} else {
 					// increment shuffle strength in direction of current carpet polarity
-					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
+					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
 				}
 			}
 		}
