@@ -50,7 +50,7 @@ package {
 			ccDef.awake = true;
 			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
-			fd.density = Block.strongDensity;
+			fd.density = Block.strongDensity*2;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
