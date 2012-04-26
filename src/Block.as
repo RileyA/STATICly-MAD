@@ -92,7 +92,7 @@ package {
 							player.chargePolarity=chargePolarity;
 							chargePolarity=tmp;
 						}
-					} else if (player.chargePolarity) { // make weak block copy players state, even if no charge
+					} else { // make weak block copy players state, even if no charge
 						chargePolarity=player.chargePolarity;
 					}
 				}
