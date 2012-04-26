@@ -31,7 +31,7 @@ package {
 		private var sprite:Sprite;
 		
 		// for charge
-		public static const strongChargeDensity:Number = 2.5; // charge per square m
+		public static const strongChargeDensity:Number = 2.0; // charge per square m
 		public static const weakChargeDensity:Number = 1.0; // charge per square m
 
 		public static const strongDensity:Number = 10.0; // kg per square m
