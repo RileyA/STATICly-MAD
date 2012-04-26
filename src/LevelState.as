@@ -55,7 +55,7 @@ package {
 
 			// load level JSON
 			m_info = new LevelInfo();
-			MiscUtils.loadJSON(new proto02_stack() as ByteArray, m_info);
+			MiscUtils.loadJSON(new test_level_01() as ByteArray, m_info);
 
 			// make world
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);

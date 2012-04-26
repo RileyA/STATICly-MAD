@@ -129,6 +129,12 @@ package {
 				addAction(blockInfo.actions[i], world);
 			}
 			
+			if (movement == TRACKED) {
+				var hold:Vector.<Number> = new Vector.<Number>();
+				hold.push(0, 18, 26.66, 18);
+				makeTracked(hold, world);
+			}
+			
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -184,6 +190,38 @@ package {
 		
 		private function addAction(key:String, world:b2World):void {
 			
+		}
+		
+		private function makeTracked(ends:Vector.<Number>, world:b2World):void {
+			var l:b2Vec2 = new b2Vec2(ends[0], ends[1]);
+			var r:b2Vec2 = new b2Vec2(ends[2], ends[3]);
+			var axis:b2Vec2 = r.Copy();
+			axis.Subtract(l);
+			axis.Normalize();
+			//trace(axis.x, axis.y);
+			var center:b2Vec2 = m_physics.GetPosition().Copy();
+			
+			var anchorDef:b2BodyDef = new b2BodyDef();
+			anchorDef.position = center;
+			anchorDef.type = b2Body.b2_staticBody;
+			var anchor:b2Body = world.CreateBody(anchorDef);
+			
+			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
+			l.Subtract(center);
+			r.Subtract(center);
+			trackDef.lowerTranslation = -l.Length();
+			trackDef.upperTranslation = r.Length();
+			//trackDef.localAnchorA = new b2Vec2(0, 0);
+			//trackDef.localAnchorB = new b2Vec2(0, 0);
+			//trackDef.collideConnected = false;
+			//trackDef.referenceAngle = anchor.GetAngle() - m_physics.GetAngle();
+			//trace(trackDef.lowerTranslation, trackDef.upperTranslation);
+			//trackDef.maxMotorForce = 1;
+			//trackDef.motorSpeed = 0;
+			//trackDef.enableMotor = true;
+			trackDef.enableLimit = true;
+			trackDef.Initialize(anchor, m_physics, new b2Vec2(0, 0), axis);
+			world.CreateJoint(trackDef);
 		}
 	}
 }
