@@ -17,7 +17,7 @@
 			"position" : {"x" : 21.666, "y" : 15.5},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : ["up,ground"]
+			"surfaces" : ["up,bcarpet"]
 		},
 		{
 			"scale" : {"x" : 18.3, "y": 0.333},
@@ -31,7 +31,40 @@
 			"position" : {"x" : 2, "y" : 2},
 			"movement" : "free",
 			"actions" : [],
-			"surfaces" : ["up,ground", "left,ground"]
+			"surfaces" : ["up,ground", "left,ground"],
+			"insulated" : false,
+			"chargePolarity" : -1
+		},
+		{
+			"scale" : {"x" : 1.333, "y": 1.333},
+			"position" : {"x" : 2, "y" : 4},
+			"movement" : "free",
+			"actions" : [],
+			"surfaces" : [],
+			"insulated" : false,
+			"chargePolarity" : -1
+		},
+		
+		{
+			"scale" : {"x" : 1.333, "y": 1.333},
+			"position" : {"x" : 6, "y" : 4},
+			"movement" : "free",
+			"actions" : [],
+			"surfaces" : [],
+			"insulated" : false,
+			"chargePolarity" : 1
+		},
+		
+		{
+			"scale" : {"x" : 1.333, "y": 1.333},
+			"position" : {"x" : 8, "y" : 4},
+			"movement" : "free",
+			"actions" : [],
+			"surfaces" : [],
+			"insulated" : false,
+			"chargePolarity" : -1,
+			"strong" : true
 		}
+		
 	]
 }
