@@ -76,7 +76,7 @@ package {
 			fd.userData = LevelContactListener.JUMPABLE_ID;
 			m_physics.CreateFixture(fd);
 			
-			var area:Number=m_physics.GetMass()/fd.density;
+			var area:Number=scale.x*scale.y;//m_physics.GetMass()/fd.density;
 			chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
 			
 			// make block actionable
