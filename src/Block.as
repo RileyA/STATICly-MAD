@@ -1,5 +1,5 @@
 package {
-	import Box2D.Dynamics.Joints.b2WeldJointDef;
+	import Box2D.Dynamics.Joints.b2RevoluteJointDef;
 	import flash.display.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Common.*;
@@ -145,7 +145,7 @@ package {
 													SurfaceElement.DEPTH, scale.y, world);
 			}
 			if(se != null) {
-				var joint:b2WeldJointDef = new b2WeldJointDef();
+				var joint:b2RevoluteJointDef = new b2RevoluteJointDef();
 				joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
 				world.CreateJoint(joint);
 				addChild(se);
