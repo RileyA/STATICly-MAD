@@ -19,7 +19,7 @@ package {
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		private static const FULL_CHARGE_STRENGTH:Number=5.0;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.01;
-		
+
 		// Keyboard controls
 		private static const LEFT_KEY:Number = Keyboard.LEFT;
 		private static const RIGHT_KEY:Number = Keyboard.RIGHT;
@@ -65,6 +65,8 @@ package {
 			m_sprite.graphics.drawRect(-w/2.0, h, w, -h);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
+			
+			groundPlayer();
 			
 			// make foot/jump sensor
 			fd = new b2FixtureDef();
@@ -201,9 +203,10 @@ package {
 					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
 			} else if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-				if (shuffleStrength == FULL_CHARGE_STRENGTH * carpetPolarity) {
+				if ((int)(shuffleStrength * carpetPolarity) == (int)(FULL_CHARGE_STRENGTH)) {
 					// We have reached full shuffle strength matching the current carpet. We are charged!
 					chargePolarity = carpetPolarity;
+					ChargableUtils.matchColorToPolarity(this, chargePolarity);
 				} else {
 					// increment shuffle strength in direction of current carpet polarity
 					shuffleStrength += FULL_CHARGE_STRENGTH * SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
@@ -214,6 +217,7 @@ package {
 		private function groundPlayer():void {
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
+			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 		}
 
 		/**
