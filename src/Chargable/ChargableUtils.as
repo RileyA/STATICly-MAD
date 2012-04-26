@@ -13,7 +13,7 @@ package Chargable {
 		private static const COLOR_TRANS_RED:ColorTransform = new ColorTransform();
 		{
 			COLOR_TRANS_BLUE.color = 0x0033ff;
-			COLOR_TRANS_NONE.color = 0xffff66;
+			COLOR_TRANS_NONE.color = 0x333333;
 			COLOR_TRANS_RED.color = 0xff3300;
 		}
 

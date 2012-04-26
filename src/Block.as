@@ -9,6 +9,7 @@ package {
 	import Surfaces.*;
 	import Actioners.*;
 	import Chargable.Chargable;
+	import Chargable.ChargableUtils;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -104,6 +105,8 @@ package {
 			}
 			sprite.graphics.endFill();
 			addChild(sprite);
+			if (isChargableBlock())
+	//			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 
 			var i:int = 0;
 
@@ -124,6 +127,10 @@ package {
 		public function getBody():b2Body{
 			return m_physics;
 		}
+
+		public function isChargableBlock():Boolean {
+			return !(chargePolarity == ChargableUtils.CHARGE_NONE && insulated)
+		}
 		
 		private function addSurface(key:String, rectDef:b2BodyDef, world:b2World):void {
 			var split:int = key.search(",");
@@ -138,10 +145,10 @@ package {
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), 
 													scale.x, SurfaceElement.DEPTH, world);
 			}else if (dir == LEFT) {
-				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, -scale.y / 2), 
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
 			}else if (dir == RIGHT) {
-				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, -scale.y / 2), 
+				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
 			}
 			if(se != null) {

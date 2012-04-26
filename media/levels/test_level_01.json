@@ -17,7 +17,7 @@
 			"position" : {"x" : 21.666, "y" : 15.5},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : ["up,ground"]
+			"surfaces" : ["up,rcarpet"]
 		},
 		{
 			"scale" : {"x" : 18.3, "y": 0.333},
@@ -32,6 +32,14 @@
 			"movement" : "free",
 			"actions" : [],
 			"surfaces" : ["up,ground", "left,ground"]
+		},
+		{
+			"scale" : {"x" : 1.333, "y": 1.333},
+			"position" : {"x" : 20, "y" : 2},
+			"movement" : "free",
+			"chargePolarity" : 1,
+			"actions" : ["up,rcarpet"],
+			"surfaces" : []
 		}
 	]
 }

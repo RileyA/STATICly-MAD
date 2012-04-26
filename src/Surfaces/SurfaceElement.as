@@ -7,7 +7,7 @@ package Surfaces
 	import Box2D.Collision.Shapes.*;
 	import Box2D.Dynamics.Joints.b2WeldJoint;
 	import Box2D.Dynamics.Joints.b2WeldJointDef;
-	import Surfaces.Ground;
+	import Block;
 	
 	/**
 	 * ...
@@ -32,24 +32,27 @@ package Surfaces
 			m_physics.SetFixedRotation(false);
 			m_physics.CreateFixture(fd);
 
+			addChild(drawSprite);
+		}
+
+		private function drawSprite():Sprite {
 			sprite = new Sprite();
 
 			sprite.graphics.beginFill(0x7CFC00);
 			// I think this needs more info about the parent
 			// block to be drawn in the right place?
-			sprite.graphics.drawRect(-w/2 + offset.x, offset.y, w, h);
+			sprite.graphics.drawRect(-w/2 + offset.x, -h/2 + offset.y, w, h);
 			sprite.graphics.endFill();
-			addChild(sprite);
 		}
 		
 		public static function getRelatedType(type:String,rectDef:b2BodyDef,  offset:b2Vec2, w:Number, h:Number, 
 												world:b2World):SurfaceElement {
 			
-			if (type == "ground")
+			if (type == Block.GROUND)
 				return new Ground(rectDef, offset, w, h, world);
-			else if (type == "red_carpet")
+			else if (type == Block.RCARPET)
 				return new RedCarpet(rectDef, offset, w, h, world);
-			else if (type == "blue_carpet")
+			else if (type == Block.BCARPET)
 				return new BlueCarpet(rectDef, offset, w, h, world);
 			else
 				return null;
