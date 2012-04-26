@@ -28,8 +28,6 @@ package Surfaces
 			fd.userData = this;
 			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
-			//trace(m_physics.GetPosition().x, m_physics.GetPosition().y);
-			m_physics.SetFixedRotation(false);
 			m_physics.CreateFixture(fd);
 
 			addChild(drawSprite);
@@ -39,8 +37,6 @@ package Surfaces
 			sprite = new Sprite();
 
 			sprite.graphics.beginFill(0x7CFC00);
-			// I think this needs more info about the parent
-			// block to be drawn in the right place?
 			sprite.graphics.drawRect(-w/2 + offset.x, -h/2 + offset.y, w, h);
 			sprite.graphics.endFill();
 		}
