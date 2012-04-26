@@ -15,8 +15,8 @@ package
 		public var scale:UVec2 = new UVec2;
 		
 		public var insulated:Boolean = true;
-		public var chargePolarity:int;
-		public var strong:Boolean;
+		public var chargePolarity:int = 0;
+		public var strong:Boolean = true;
 	}
 	
 }

@@ -33,7 +33,8 @@
 			"actions" : [],
 			"surfaces" : ["up,ground", "left,ground"],
 			"insulated" : false,
-			"chargePolarity" : -1
+			"chargePolarity" : -1,
+			"strong" : false
 		},
 		{
 			"scale" : {"x" : 1.333, "y": 1.333},
@@ -42,7 +43,8 @@
 			"actions" : [],
 			"surfaces" : [],
 			"insulated" : false,
-			"chargePolarity" : -1
+			"chargePolarity" : -1,
+			"strong" : false
 		},
 		
 		{
@@ -62,8 +64,7 @@
 			"actions" : [],
 			"surfaces" : [],
 			"insulated" : false,
-			"chargePolarity" : -1,
-			"strong" : true
+			"chargePolarity" : -1
 		}
 		
 	]
