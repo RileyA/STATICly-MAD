@@ -86,13 +86,13 @@ package {
 					if (strong) {
 						if (chargePolarity==-player.chargePolarity) {
 							chargePolarity=ChargableUtils.CHARGE_NONE;
-							player.chargePolarity=ChargableUtils.CHARGE_NONE;
+							player.groundPlayer();
 						} else {
 							var tmp:int=player.chargePolarity;
 							player.chargePolarity=chargePolarity;
 							chargePolarity=tmp;
 						}
-					} else {
+					} else if (player.chargePolarity != ChargableUtils.CHARGE_NONE) {
 						chargePolarity=player.chargePolarity;
 					}
 				}

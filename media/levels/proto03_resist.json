@@ -1,0 +1,15 @@
+{
+	"title" : "Resist",
+	"playerPosition" : {"x" : 3.0, "y" : 5},
+	"levelSize" : {"x" : 20, "y" : 20},
+	"gravity"  : {"x" : 0, "y" : 9.8},
+	"blocks" :
+	[
+		{
+			"scale" : {"x" : 14.0, "y": 0.5},
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		}
+	]
+}

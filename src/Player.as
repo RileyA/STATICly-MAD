@@ -218,7 +218,7 @@ package {
 			}
 		}
 
-		private function groundPlayer():void {
+		public function groundPlayer():void {
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);

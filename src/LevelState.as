@@ -30,6 +30,10 @@ package {
 		private static const HEIGHT_PIXELS:Number = 600;
 		[Embed(source="../media/levels/test_level_01.json",  mimeType=
 			"application/octet-stream")] private const test_level_01:Class;
+		[Embed(source="../media/levels/proto01_knothole.json",  mimeType=
+			"application/octet-stream")] private const proto01_knothole:Class;
+		[Embed(source="../media/levels/proto02_stack.json",  mimeType=
+			"application/octet-stream")] private const proto02_stack:Class;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -51,7 +55,7 @@ package {
 
 			// load level JSON
 			m_info = new LevelInfo();
-			MiscUtils.loadJSON(new test_level_01() as ByteArray, m_info);
+			MiscUtils.loadJSON(new proto02_stack() as ByteArray, m_info);
 
 			// make world
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
@@ -65,7 +69,7 @@ package {
 				var loadedBlock:Block = new Block(m_info.blocks[i], world);
 				addChild(loadedBlock);
 				m_gfxPhysObjects.push(loadedBlock);
-				if (loadedBlock is Chargable) {
+				if (loadedBlock.isChargableBlock()) {
 					m_chargableManager.addChargable(loadedBlock);
 				}
 			}

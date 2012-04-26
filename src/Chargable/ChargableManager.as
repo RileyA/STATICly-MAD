@@ -36,13 +36,13 @@ package Chargable {
 				for (var j:int = i + 1; j<bodies.length; j++){
 					var body2:Chargable = bodies[j];
 					// Apply force only if the recieving body2 is not fixed.
-					if (body2.getBody().GetType() == b2Body.b2_dynamicBody) {
+//					if (body2.getBody().GetType() == b2Body.b2_dynamicBody) {
 						applyChargeForce(body1, body2);
-					}
+//					}
 					// Repeat for opposite direction of body2 acting on body1
-					if (body1.getBody().GetType() == b2Body.b2_dynamicBody) {
+//					if (body1.getBody().GetType() == b2Body.b2_dynamicBody) {
 						applyChargeForce(body2, body1);
-					}
+//					}
 				}
 			}
 		}
