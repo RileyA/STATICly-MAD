@@ -9,40 +9,45 @@ package Chargable {
 	*/
 	public class ChargableManager{
 
-		private var bodies:Vector.<Chargable>;
+		private var chargables:Vector.<Chargable>;
 
 		/**
 		* Constructs a manager empty of objects.
 		*/
 		public function ChargableManager():void{
-			this.bodies=new Vector.<Chargable>();
+			this.chargables=new Vector.<Chargable>();
 		}
 
 		/**
 		* Adds a Chargable object to the elecrostatics simulation.
 		*/
 		public function addChargable(c:Chargable):void{
-			bodies.push(c);
+			chargables.push(c);
 		}
 
 		/**
 		* Applies electrostatic force from all Chargable objects onto all
 		*  Chargable objects that are dynamic (non static).
+		*  Applying forces to static things does nothing, hence skipping them
 		*/
 		public function applyChargeForces():void{
-			for (var i:int = 0; i < bodies.length; i++){
-				var body1:Chargable = bodies[i];
-				// Start at index i+1.  Guaranteed no repeat calculations.
-				for (var j:int = i + 1; j<bodies.length; j++){
-					var body2:Chargable = bodies[j];
-					// Apply force only if the recieving body2 is not fixed.
-//					if (body2.getBody().GetType() == b2Body.b2_dynamicBody) {
-						applyChargeForce(body1, body2);
-//					}
-					// Repeat for opposite direction of body2 acting on body1
-//					if (body1.getBody().GetType() == b2Body.b2_dynamicBody) {
-						applyChargeForce(body2, body1);
-//					}
+			// filter out the currently charged objects
+			function hasCharge(c:Chargable,index:int= 0, blah:* = null):Boolean {
+				return c.getCharge()!=0;
+			}
+			var vec:Vector.<Chargable>=chargables.filter(hasCharge);
+			
+			// apply forces to them
+			for (var i:int = 0; i < vec.length; i++){
+				var onto:Chargable = vec[i];
+				// if can move, apply forces to it:
+				if (onto.getBody().GetType() == b2Body.b2_dynamicBody){
+					// apply a force from all other Chargables 
+					for (var j:int = 0; j<vec.length; j++){
+						if (i!=j){
+							applyChargeForce(vec[j], onto);
+						}
+					}
 				}
 			}
 		}
