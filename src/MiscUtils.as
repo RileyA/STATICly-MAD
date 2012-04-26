@@ -19,13 +19,15 @@ package {
 		private static function parseObject(obj:Object, out:Object):void {
 			for(var key:String in obj) {
 				if (key in out) {
-					if (obj[key] is Array && out[key] is Vector.<*>) {
+					if (obj[key] is Array && (out[key] is Vector.<*> 
+						|| getQualifiedClassName(out[key]) == "__AS3__.vec::Vector.<Number>")) {
 						var type:Class = getDefinitionByName(getQualifiedClassName(
 							out[key]).split("<")[1].split(">")[0]) as Class;
 						for (var i:uint = 0; i < obj[key].length; ++i) {
 							out[key].push(new type());
-							if (obj[key][i] is Number || obj[key][i] is Boolean 
-								|| obj[key][i] is String)
+							if (out[key][i] is Number 
+								|| out[key][i] is Boolean 
+								|| out[key][i] is String)
 								out[key][i] = obj[key][i];
 							else
 								parseObject(obj[key][i], out[key][i]);
