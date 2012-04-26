@@ -17,7 +17,7 @@ package {
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
-		private static const FULL_CHARGE_STRENGTH:Number=2.0;
+		private var chargeStrength:Number;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
 
 		// Keyboard controls
@@ -50,7 +50,7 @@ package {
 			ccDef.awake = true;
 			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
-			fd.density = 10.0;
+			fd.density = Block.strongDensity;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
@@ -58,6 +58,9 @@ package {
 			m_physics.CreateFixture(fd);
 			m_physics.SetFixedRotation(true);
 			m_physics.SetLinearDamping(.2);
+			
+			var area:Number=m_physics.GetMass()/fd.density;
+			chargeStrength=area*Block.strongChargeDensity;
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
@@ -225,7 +228,7 @@ package {
 		* Returns the charge of this Chargable for electrostatics computations.
 		*/
 		public function getCharge():Number{
-			return chargePolarity*FULL_CHARGE_STRENGTH;
+			return chargePolarity*chargeStrength;
 		}
 
 		/**
