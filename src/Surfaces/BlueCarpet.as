@@ -14,7 +14,7 @@ package Surfaces
 	{
 		
 		public function BlueCarpet(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, world:b2World):void {
-			super(rectDef, offset, w, h, LevelContactListener.CARPET_BLUE_SENSOR_ID, world);
+			super(rectDef, offset, w, h, LevelContactListener.CARPET_BLUE_SENSOR_ID, world, 0x8888FF);
 		}
 		
 		public function actionFunc():void {

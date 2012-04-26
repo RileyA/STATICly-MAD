@@ -19,7 +19,7 @@ package Surfaces
 		
 		private var sprite:Sprite;
 		
-		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, userData:*, world:b2World):void {
+		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, userData:*, world:b2World, color:uint):void {
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
 			ps.SetAsBox(w / 2, h / 2);
@@ -31,7 +31,7 @@ package Surfaces
 			m_physics.CreateFixture(fd);
 			
 			sprite = new Sprite();
-			sprite.graphics.beginFill(0x7CFC00);
+			sprite.graphics.beginFill(color);
 			sprite.graphics.drawRect(-w/2 + offset.x, -h/2 + offset.y, w, h);
 			sprite.graphics.endFill();
 			addChild(sprite);

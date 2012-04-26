@@ -18,7 +18,7 @@ package {
 		private static const MOVE_SPEED:Number=6.0;
 		private static const ACELL_TIME_CONSTANT:Number=0.5;
 		private static const FULL_CHARGE_STRENGTH:Number=5.0;
-		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.01;
+		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.2;
 
 		// Keyboard controls
 		private static const LEFT_KEY:Number = Keyboard.LEFT;

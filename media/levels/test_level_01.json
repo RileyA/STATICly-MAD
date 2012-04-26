@@ -10,7 +10,8 @@
 			"position" : {"x" : 6.666, "y" : 18},
 			"movement" : "fixed",
 			"actions" : [],
-			"surfaces" : []
+			"surfaces" : [],
+			"surfaces" : ["up,rcarpet"]
 		},
 		{
 			"scale" : {"x" : 10, "y": 0.333},

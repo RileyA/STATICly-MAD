@@ -12,7 +12,7 @@ package Surfaces
 	public class Ground extends SurfaceElement {
 		
 		public function Ground(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, world:b2World):void {
-			super(rectDef, offset, w, h, LevelContactListener.GROUND_SENSOR_ID, world);
+			super(rectDef, offset, w, h, LevelContactListener.GROUND_SENSOR_ID, world, 0x7CFC00);
 		}
 		
 		public function actionFunc():void {
