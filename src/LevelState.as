@@ -30,7 +30,7 @@ package {
 
 		override public function update(delta:Number):Boolean {
 			m_level.update(delta);
-			return true;
+			return !Keys.isKeyPressed(Keyboard.ESCAPE);
 		}
 	}
 }

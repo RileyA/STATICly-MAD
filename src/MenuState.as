@@ -62,21 +62,18 @@ package {
 
 		private function clickedPlay(event:MouseEvent):void {
 			if (!m_done) {
-				m_done = true;
 				m_game.addState(new HelloState(m_game));
 			}
 		}
 
 		private function clickedDemo(event:MouseEvent):void {
 			if (!m_done) {
-				m_done = true;
 				m_game.addState(new LevelState(m_game));
 			}
 		}
 
 		private function clickedEditor(event:MouseEvent):void {
 			if (!m_done) {
-				m_done = true;
 				m_game.addState(new Editor.EditorState(m_game));
 			}
 		}

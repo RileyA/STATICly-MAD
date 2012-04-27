@@ -38,7 +38,7 @@ package Editor {
 		}
 
 		override public function update(delta:Number):Boolean {
-			return true;
+			return !Keys.isKeyPressed(Keyboard.ESCAPE);
 		}
 	}
 }

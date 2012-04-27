@@ -11,6 +11,7 @@ package {
 		/** Reference to parent Game object */
 		protected var m_game:Game;
 		private var m_keys:Array;
+		public var initialized:Boolean = false;
 
 		/** Constructor
 			@param game reference to parent game */
@@ -40,6 +41,15 @@ package {
 				@param key The desired keycode */
  		public function isKeyPressed(key:int):Boolean {
 			return m_keys.indexOf(key) > -1;
+		}
+
+		/** Called when a state is being "paused" and a new state is 
+			being pushed onto the stack */
+		public function suspend():void {
+		}
+
+		/** Called when the state above this is popped and this one is resumed */
+		public function resume():void {
 		}
 
 		/** Key down callback */

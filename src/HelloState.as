@@ -38,7 +38,6 @@ package {
 			if (m_timer > 0.0) {
 				return true;
 			} else {
-				m_game.addState(new MenuState(m_game));
 				return false;
 			}
 		}
