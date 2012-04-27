@@ -32,9 +32,7 @@ package {
 		private var didAction:Boolean; // true when already did action for this action button press
 		
 		
-		
-
-		public function Player(levelState:LevelState, position:UVec2):void {
+		public function Player(world:b2World, position:UVec2):void {
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			const w:Number=.7;
@@ -54,7 +52,7 @@ package {
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
-			m_physics = levelState.world.CreateBody(ccDef);
+			m_physics = world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
 			m_physics.SetFixedRotation(true);
 			m_physics.SetLinearDamping(.2);
@@ -113,7 +111,7 @@ package {
 		}
 		
 		
-		public function update(state:LevelState):void {
+		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 			
 			function groundFilter(a:*,b:*):Boolean{
@@ -159,7 +157,7 @@ package {
 			if ((!didAction) && action) {
 				var marker:ActionMarker=getBestAction();
 				if (marker!=null) {
-					marker.callAction(state);
+					marker.callAction(level);
 					didAction=true;
 				}
 			} else if (!action) {

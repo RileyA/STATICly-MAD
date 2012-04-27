@@ -81,8 +81,8 @@ package {
 			
 			// make block actionable
 			if (!insulated){
-				function act(state:LevelState):void{
-					var player:Player= state.getPlayer();
+				function act(level:Level):void{
+					var player:Player= level.getPlayer();
 					if (strong) {
 						if (chargePolarity==-player.chargePolarity) {
 							chargePolarity=ChargableUtils.CHARGE_NONE;
