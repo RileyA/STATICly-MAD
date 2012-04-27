@@ -12,7 +12,7 @@ package Editor {
 		private var m_dragging:Boolean = false;
 		private var m_scale_x:Number;
 		private var m_scale_y:Number;
-		private var m_children:Vector.<Sprite>;
+		protected var m_children:Vector.<Sprite>;
 
 		private static const WIDGET_DIMENSIONS:Number = 5;
 		
@@ -95,30 +95,8 @@ package Editor {
 		}
 
 		override public function drag(e:MouseEvent):void {
-			if (!isTarget(e.target as Sprite)) {
-				var first:Boolean = false;
-				for (var i:uint = 0; i < m_corners.length; ++i) {
-					if (i == m_anchor || i == m_drag)
-						continue;
-
-					if (!first) {
-						m_corners[i].x = m_corners[m_anchor].x;
-						m_corners[i].y = m_corners[m_drag].y;
-					} else {
-						m_corners[i].x = m_corners[m_drag].x;
-						m_corners[i].y = m_corners[m_anchor].y;
-					}
-
-					first = true;
-				}
-				for (i = 0; i < m_children.length; ++i) {
-					m_children[i].x = Math.min(m_corners[m_anchor].x, m_corners[m_drag].x);
-					m_children[i].y = Math.min(m_corners[m_anchor].y, m_corners[m_drag].y);
-					m_children[i].scaleX = (Math.max(m_corners[m_anchor].x, m_corners[m_drag].x) 
-						- m_children[i].x + WIDGET_DIMENSIONS) / m_scale_x;
-					m_children[i].scaleY = (Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
-						- m_children[i].y + WIDGET_DIMENSIONS) / m_scale_y;
-				}
+			if (!isTarget(e.target as Sprite) && m_dragging) {
+				reposition();
 			} else {
 				e.updateAfterEvent();
 			}
@@ -133,6 +111,7 @@ package Editor {
 				}
 			} else {
 				super.drop(e);
+				reposition();
 			}
 		}
 
@@ -141,6 +120,42 @@ package Editor {
 			var isT:Boolean = false;
 			for (var i:uint=0;i<m_children.length;++i) isT = isT || t == m_children[i];
 			return isT;
+		}
+
+		public function reposition():void {
+			var first:Boolean = false;
+			if (m_dragging) {
+				for (var i:uint = 0; i < m_corners.length; ++i) {
+					if (i == m_anchor || i == m_drag)
+						continue;
+
+					if (!first) {
+						m_corners[i].x = m_corners[m_anchor].x;
+						m_corners[i].y = m_corners[m_drag].y;
+					} else {
+						m_corners[i].x = m_corners[m_drag].x;
+						m_corners[i].y = m_corners[m_anchor].y;
+					}
+
+					first = true;
+				}
+			} else {
+				m_anchor = 0;
+				for (i = 0; i < m_corners.length; ++i) {
+					if (i == m_anchor || m_corners[i].x == m_corners[m_anchor].x 
+						|| m_corners[i].y == m_corners[m_anchor].y)
+						continue;
+					m_drag = i;
+				}
+			}
+			for (i = 0; i < m_children.length; ++i) {
+				m_children[i].x = Math.min(m_corners[m_anchor].x, m_corners[m_drag].x);
+				m_children[i].y = Math.min(m_corners[m_anchor].y, m_corners[m_drag].y);
+				m_children[i].scaleX = (Math.max(m_corners[m_anchor].x, m_corners[m_drag].x) 
+					- m_children[i].x + WIDGET_DIMENSIONS) / m_scale_x;
+				m_children[i].scaleY = (Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
+					- m_children[i].y + WIDGET_DIMENSIONS) / m_scale_y;
+			}
 		}
 	}
 }

@@ -143,6 +143,16 @@ package {
 				redraw();
 			}
 		}
+
+		public function setPosition(pos:UVec2):void {
+			m_physics.SetPosition(pos.toB2Vec2());
+			x = pos.x;
+			y = pos.y;
+		}
+
+		public function getScale():UVec2 {
+			return scale.getCopy();
+		}
 		
 		private function redraw():void{
 			ChargableUtils.matchColorToPolarity(sprite, chargePolarity);

@@ -23,6 +23,7 @@ package {
 		private var m_debugSprite:Sprite;
 		private var m_player:Player;
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
+		private var m_blocks:Vector.<Block>;
 		private var m_info:LevelInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
@@ -53,6 +54,7 @@ package {
 
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
+			m_blocks = new Vector.<Block>;
 
 			// load level JSON
 			m_info = new LevelInfo();
@@ -68,6 +70,7 @@ package {
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
 				var loadedBlock:Block = new Block(m_info.blocks[i], world);
+				m_blocks.push(loadedBlock);
 				m_parent_sprite.addChild(loadedBlock);
 				m_gfxPhysObjects.push(loadedBlock);
 				if (loadedBlock.isChargableBlock()) {
@@ -85,18 +88,22 @@ package {
 			prepareDebugVisualization();
 
 			// some debug text
-			var levelNameText:TextField = new TextField();
+			/*var levelNameText:TextField = new TextField();
 			levelNameText.width = 600;
 			levelNameText.height = 500;
 			levelNameText.x = 5;
 			levelNameText.y = 5;
 			levelNameText.text = "Testing Level: " + m_info.title;
 			levelNameText.selectable = false;
-			m_parent_sprite.addChild(levelNameText);
+			m_parent_sprite.addChild(levelNameText);*/
 		}
 
 		public function setUpdatePhysics(updatePhys:Boolean):void {
 			m_updatePhysics = updatePhys;
+		}
+
+		public function getBlocks():Vector.<Block> {
+			return m_blocks;
 		}
 
 		public function update(delta:Number):void {
@@ -106,10 +113,10 @@ package {
 				world.ClearForces();
 				m_chargableManager.applyChargeForces();
 				m_player.update(this);
-
-				for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)
-					m_gfxPhysObjects[i].updateTransform(pixelsPerMeter);
 			}
+
+			for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)
+				m_gfxPhysObjects[i].updateTransform(pixelsPerMeter);
 
 			if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 				m_debugDrawKey = true;
