@@ -69,7 +69,7 @@ package {
 
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
-				var loadedBlock:Block = new Block(m_info.blocks[i], world);
+				var loadedBlock:Block = new Block(m_info.blocks[i], this);
 				m_blocks.push(loadedBlock);
 				m_parent_sprite.addChild(loadedBlock);
 				m_gfxPhysObjects.push(loadedBlock);
@@ -170,22 +170,22 @@ package {
 			desc.position.y = -desc.scale.y / 2;
 			desc.movement = "fixed";
 			
-			m_gfxPhysObjects.push(new Block(desc, world));
+			m_gfxPhysObjects.push(new Block(desc, this));
 
 			desc.position.y = m_info.levelSize.y + desc.scale.y / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, world));
+			m_gfxPhysObjects.push(new Block(desc, this));
 
 			desc.scale.x = BORDER_THICKNESS;
 			desc.scale.y = m_info.levelSize.y;
 			desc.position.x = -desc.scale.x / 2;
 			desc.position.y = desc.scale.y / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, world));
+			m_gfxPhysObjects.push(new Block(desc, this));
 
 			desc.position.x = m_info.levelSize.x + desc.scale.x / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, world));
+			m_gfxPhysObjects.push(new Block(desc, this));
 		}
 	}
 }

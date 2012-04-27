@@ -45,11 +45,8 @@ package {
 		
 		private var chargeStrength:Number;
 		
-		/**
-		 * @param	blockInfo
-		 * @param	world
-		 */
-		public function Block(blockInfo:BlockInfo, world:b2World):void {
+		
+		public function Block(blockInfo:BlockInfo, level:Level):void {
 
 			var position:UVec2 = blockInfo.position.getCopy();
 			scale = blockInfo.scale.getCopy();
@@ -66,7 +63,7 @@ package {
 				? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
 			rectDef.position.Set(position.x, position.y);
 			rectDef.angle = 0.0;
-			m_physics = world.CreateBody(rectDef);
+			m_physics = level.world.CreateBody(rectDef);
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.shape = polyShape;
@@ -123,16 +120,16 @@ package {
 
 			for (i = 0; i < blockInfo.surfaces.length; i++) {
 				rectDef.position.Set(position.x, position.y);
-				addSurface(blockInfo.surfaces[i], rectDef, world);
+				addSurface(blockInfo.surfaces[i], rectDef, level.world);
 			}
 			for (i = 0; i < blockInfo.actions.length; i++) {
-				addAction(blockInfo.actions[i], world);
+				addAction(blockInfo.actions[i], level.world);
 			}
 			
 			if (movement == TRACKED) {
 				var hold:Vector.<Number> = new Vector.<Number>();
 				hold.push(0, 18, 26.66, 18);
-				makeTracked(blockInfo.bounds, world);
+				makeTracked(blockInfo.bounds, level);
 			}
 			
 		}
@@ -206,8 +203,8 @@ package {
 		private function addAction(key:String, world:b2World):void {
 			
 		}
-
-		private function makeTracked(ends:Vector.<UVec2>, world:b2World):void {
+		
+		private function makeTracked(ends:Vector.<UVec2>, level:Level):void {
 			var l:b2Vec2 = ends[0].toB2Vec2();
 			var r:b2Vec2 = ends[1].toB2Vec2();
 			var axis:b2Vec2 = r.Copy();
@@ -219,7 +216,7 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center;
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchor:b2Body = world.CreateBody(anchorDef);
+			var anchor:b2Body = level.world.CreateBody(anchorDef);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			l.Subtract(center);
@@ -228,7 +225,7 @@ package {
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
 			trackDef.Initialize(anchor, m_physics, center, axis);
-			world.CreateJoint(trackDef);
+			level.world.CreateJoint(trackDef);
 		}
 
 		public function getBodyType():uint {
