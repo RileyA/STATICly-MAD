@@ -6,8 +6,50 @@
 	"blocks" :
 	[
 		{
-			"scale" : {"x" : 14.0, "y": 0.5},
+			"scale" : {"x" : 0.5, "y": 8.0},
+			"position" : {"x" : 16.5, "y" : 16},
 			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"scale" : {"x" : 4.0, "y": 0.5},
+			"position" : {"x" : 12.0, "y" : 16},
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"scale" : {"x" : 6.0, "y": 0.5},
+			"position" : {"x" : 19.5, "y" : 12},
+			"movement" : "fixed",
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"scale" : {"x" : 2, "y": 2},
+			"position" : {"x" : 15, "y" : 18},
+			"movement" : "free",
+			"chargePolarity" : -1,
+			"insulated" : false,
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"scale" : {"x" : 2, "y": 2},
+			"position" : {"x" : 15, "y" : 14},
+			"movement" : "free",
+			"chargePolarity" : -1,
+			"insulated" : false,
+			"actions" : [],
+			"surfaces" : []
+		},
+		{
+			"scale" : {"x" : 2, "y": 2},
+			"position" : {"x" : 15, "y" : 10},
+			"movement" : "free",
+			"chargePolarity" : -1,
+			"insulated" : false,
 			"actions" : [],
 			"surfaces" : []
 		}
