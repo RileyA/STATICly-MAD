@@ -221,16 +221,8 @@ package {
 			r.Subtract(center);
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
-			//trackDef.localAnchorA = new b2Vec2(0, 0);
-			//trackDef.localAnchorB = new b2Vec2(0, 0);
-			//trackDef.collideConnected = false;
-			//trackDef.referenceAngle = anchor.GetAngle() - m_physics.GetAngle();
-			//trace(trackDef.lowerTranslation, trackDef.upperTranslation);
-			//trackDef.maxMotorForce = 1;
-			//trackDef.motorSpeed = 0;
-			//trackDef.enableMotor = true;
 			trackDef.enableLimit = true;
-			trackDef.Initialize(anchor, m_physics, new b2Vec2(0, 0), axis);
+			trackDef.Initialize(anchor, m_physics, center, axis);
 			world.CreateJoint(trackDef);
 		}
 	}
