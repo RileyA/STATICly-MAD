@@ -14,6 +14,9 @@ package {
 
 	public class Level {
 
+		public static const BACKG:int = 0;
+		public static const MIDG:int = 1;
+		
 		public var pixelsPerMeter:Number;
 		public var world:b2World;
 		public var contactListener:LevelContactListener;
@@ -108,6 +111,10 @@ package {
 
 		public function getBlocks():Vector.<Block> {
 			return m_blocks;
+		}
+		
+		public function getParent():Sprite {
+			return m_parent_sprite;
 		}
 
 		public function update(delta:Number):void {

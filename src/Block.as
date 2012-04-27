@@ -29,6 +29,7 @@ package {
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actions:Vector.<ActionerElement>;
 		private var sprite:Sprite;
+		private var anchor:GfxPhysObject;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -126,6 +127,7 @@ package {
 				addAction(blockInfo.actions[i], level.world);
 			}
 			
+			anchor = null;
 			if (movement == TRACKED) {
 				var hold:Vector.<Number> = new Vector.<Number>();
 				hold.push(0, 18, 26.66, 18);
@@ -139,6 +141,8 @@ package {
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
 			}
+			if (anchor != null)
+				anchor.updateTransform(pixelsPerMeter);
 		}
 
 		public function setPosition(pos:UVec2):void {
@@ -216,7 +220,8 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center;
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchor:b2Body = level.world.CreateBody(anchorDef);
+			var anchorBody:b2Body = level.world.CreateBody(anchorDef);
+			anchor = new GfxPhysObject(anchorBody);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			l.Subtract(center);
@@ -224,10 +229,22 @@ package {
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
-			trackDef.Initialize(anchor, m_physics, center, axis);
+			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			level.world.CreateJoint(trackDef);
+			
+			var sprite:Sprite = new Sprite();
+			sprite.graphics.beginFill(0xB0B0B0);
+			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE); 
+			sprite.graphics.moveTo(l.x + scale.x / 2, l.y);
+			sprite.graphics.lineTo(r.x + scale.x / 2, r.y);
+			sprite.graphics.endFill();
+			
+			redraw();
+			anchor.addChild(sprite);
+			level.getParent().addChild(anchor);
+			
 		}
-
+		
 		public function getBodyType():uint {
 			return movement == FIXED ? b2Body.b2_staticBody 
 				: b2Body.b2_dynamicBody;
