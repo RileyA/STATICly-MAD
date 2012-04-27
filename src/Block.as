@@ -109,11 +109,11 @@ package {
 			if (insulated){
 				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
 			}
-			sprite.graphics.beginFill(strong ? 0x333333 : 0x999999);
+			sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
 			if (movement == FIXED) {
 				sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
 			} else {
-				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, scale.x/2);
+				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, .8);
 			}
 			sprite.graphics.endFill();
 			redraw();
