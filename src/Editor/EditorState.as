@@ -31,7 +31,7 @@ package Editor {
 			block_text.text = "Testing Level Editor";
 			block_text.selectable = false;
 			addChild(block_text);
-			addChild(new Draggable());
+			addChild(new Scalable(50,50,50,50));
 		}
 
 		override public function deinit():void {
