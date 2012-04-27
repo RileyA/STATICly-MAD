@@ -102,6 +102,10 @@ package {
 			m_updatePhysics = updatePhys;
 		}
 
+		public function isPhysicsUpdated():Boolean {
+			return m_updatePhysics;
+		}
+
 		public function getBlocks():Vector.<Block> {
 			return m_blocks;
 		}

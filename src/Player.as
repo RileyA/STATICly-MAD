@@ -26,6 +26,10 @@ package {
 		private static const JUMP_KEY:Number = Keyboard.UP;
 		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
+		public static const WIDTH:Number = 0.7;
+		public static const HEIGHT:Number = -1.2;
+		public static const HEIGHT_MID:Number = -0.9;
+
 		private var m_sprite:Sprite;
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
@@ -35,11 +39,9 @@ package {
 		public function Player(world:b2World, position:UVec2):void {
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
-			const w:Number=.7;
-			const h:Number=-1.2;
-			const hMid:Number=-0.9;
-			polyShape.SetAsArray([new b2Vec2(0,h),new b2Vec2(w/2,hMid),
-				new b2Vec2(w/2,0),new b2Vec2(-w/2,0),new b2Vec2(-w/2,hMid)])
+			polyShape.SetAsArray([new b2Vec2(0,HEIGHT),new b2Vec2(WIDTH/2,
+				HEIGHT_MID), new b2Vec2(WIDTH/2,0),new b2Vec2(-WIDTH/2,0),
+					new b2Vec2(-WIDTH/2,HEIGHT_MID)]);
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var ccDef:b2BodyDef = new b2BodyDef();
@@ -63,7 +65,7 @@ package {
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
 			m_sprite.graphics.beginFill(0xBBBBBB);
-			m_sprite.graphics.drawRect(-w/2.0, h, w, -h);
+			m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
 			
@@ -82,8 +84,10 @@ package {
 			const m:Number=.3;//action region margin
 			fd = new b2FixtureDef();
 			polyShape = new b2PolygonShape();
-			polyShape.SetAsArray([new b2Vec2(0,h-m),new b2Vec2(w/2+m,hMid-m),
-				new b2Vec2(w/2+m,m),new b2Vec2(-w/2-m,m),new b2Vec2(-w/2-m,hMid-m)])
+			polyShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
+				new b2Vec2(WIDTH/2+m,HEIGHT_MID-m),
+				new b2Vec2(WIDTH/2+m,m),new b2Vec2(-WIDTH/2-m,m),
+				new b2Vec2(-WIDTH/2-m,HEIGHT_MID-m)]);
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
@@ -234,6 +238,10 @@ package {
 		*/
 		public function getBody():b2Body{
 			return m_physics;
+		}
+
+		public function setPosition(pos:UVec2):void {
+			m_physics.SetPosition(pos.toB2Vec2());
 		}
 	}
 }

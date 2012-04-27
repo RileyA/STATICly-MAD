@@ -1,4 +1,10 @@
 package Editor {
+	import Box2D.Common.Math.*;
+	import Box2D.Common.*;
+	import Box2D.Dynamics.*;
+	import Box2D.Collision.Shapes.*;
+	import Box2D.Collision.*;
+
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
 	public class BlockProxy extends Scalable {
@@ -25,6 +31,15 @@ package Editor {
 			pos.x += sc.x/2;
 			pos.y += sc.y/2;
 			m_child.setPosition(pos);
+			m_child.clearVelocity();
+		}
+
+		override public function beginDrag():void {
+			m_child.getPhysics().SetType(b2Body.b2_staticBody);
+		}
+
+		override public function endDrag():void {
+			m_child.getPhysics().SetType(m_child.getBodyType());
 		}
 	}
 }

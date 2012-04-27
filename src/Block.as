@@ -146,8 +146,13 @@ package {
 
 		public function setPosition(pos:UVec2):void {
 			m_physics.SetPosition(pos.toB2Vec2());
-			x = pos.x;
-			y = pos.y;
+			m_physics.SetAwake(true);
+		}
+
+		public function clearVelocity():void {
+			m_physics.SetLinearVelocity(new b2Vec2(0,0));
+			m_physics.SetAngularVelocity(0.0);
+			m_physics.SetAngle(0);
 		}
 
 		public function getScale():UVec2 {
@@ -201,7 +206,7 @@ package {
 		private function addAction(key:String, world:b2World):void {
 			
 		}
-		
+
 		private function makeTracked(ends:Vector.<UVec2>, world:b2World):void {
 			var l:b2Vec2 = ends[0].toB2Vec2();
 			var r:b2Vec2 = ends[1].toB2Vec2();
@@ -225,5 +230,11 @@ package {
 			trackDef.Initialize(anchor, m_physics, center, axis);
 			world.CreateJoint(trackDef);
 		}
+
+		public function getBodyType():uint {
+			return movement == FIXED ? b2Body.b2_staticBody 
+				: b2Body.b2_dynamicBody;
+		}
+		
 	}
 }
