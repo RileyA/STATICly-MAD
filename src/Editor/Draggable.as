@@ -29,6 +29,7 @@ package Editor {
 
 		public function grab(e:MouseEvent):void{
 			if (e.target != this && e.target.parent != this) return;
+			beginDrag();
 			if (e.target.parent == this)
 				e.target.removeEventListener(MouseEvent.MOUSE_DOWN, grab);
 			else
@@ -39,6 +40,7 @@ package Editor {
 		}
 
 		public function drop(e:MouseEvent):void {
+			endDrag();
 			stage.removeEventListener(MouseEvent.MOUSE_UP, drop);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, drag);
 			stopDrag();
@@ -50,6 +52,19 @@ package Editor {
 
 		public function drag(e:MouseEvent):void {
 			e.updateAfterEvent();
+			reposition();
+		}
+
+		public function reposition():void {
+			
+		}
+
+		public function beginDrag():void {
+
+		}
+
+		public function endDrag():void {
+
 		}
 	}
 }

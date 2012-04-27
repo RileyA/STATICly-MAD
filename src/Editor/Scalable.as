@@ -59,6 +59,7 @@ package Editor {
 			if (!isTarget(e.target as Sprite)) {
 
 				var index:uint = m_corners.length;
+				beginDrag();
 
 				// decide which corner we're at..
 				for (var i:uint = 0; i < m_corners.length; ++i) {
@@ -98,7 +99,7 @@ package Editor {
 			if (!isTarget(e.target as Sprite) && m_dragging) {
 				reposition();
 			} else {
-				e.updateAfterEvent();
+				super.drag(e);
 			}
 		}
 
@@ -106,6 +107,7 @@ package Editor {
 			if (!isTarget(e.target as Sprite)) {
 				stage.removeEventListener(MouseEvent.MOUSE_UP, drop);
 				stage.removeEventListener(MouseEvent.MOUSE_MOVE, drag);
+				endDrag();
 				if (m_dragging) {
 					m_dragging = false;
 				}
@@ -122,7 +124,7 @@ package Editor {
 			return isT;
 		}
 
-		public function reposition():void {
+		override public function reposition():void {
 			var first:Boolean = false;
 			if (m_dragging) {
 				for (var i:uint = 0; i < m_corners.length; ++i) {
