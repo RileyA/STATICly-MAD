@@ -20,9 +20,6 @@ package {
 		public static const RIGHT:String = "right";
 		public static const UP:String = "up";
 		public static const DOWN:String = "down";
-		public static const BCARPET:String = "bcarpet";
-		public static const RCARPET:String = "rcarpet";
-		public static const GROUND:String = "ground";
 		
 		private var movement:String;
 		private var scale:UVec2;

@@ -9,27 +9,30 @@ package Actioners
 	 * the Acition button.
 	 */
 	public class ActionerElement extends GfxPhysObject{
+		public static const EXIT:String = "exit";
+		public static const SWITCH:String = "switch";
+		public static const FIXED:String = "fixed";
+
 		private var actionString:String;
 
 		/**
 		* Accepts a parentBody to attach this fixture to, and
 		*/
-		public function ActionerElement(position:b2Vec2, scale:b2Vec2, am:ActionMarker, parentBody:b2Body, actionString:String):void {
-			super(parentBody);
+		public function ActionerElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, am:ActionMarker, world:b2World):void {
 			this.actionString = actionString;
 
 			var fd:b2FixtureDef = new b2FixtureDef();
-			var rectDef:b2BodyDef = new b2BodyDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
-			ps.SetAsBox(scale.x / 2, scale.y / 2);
+			ps.SetAsBox(w / 2, h / 2); // load a sprite?
 			fd.shape = ps;
 			fd.isSensor = true;
-			rectDef.position = position;
+			rectDef.position.Add(offset);
 			rectDef.angle = 0.0;
 			
 			fd.userData = am;
 			
-			parentBody.CreateFixture(fd);
+			m_physics = world.CreateBody(rectDef);
+			m_physics.CreateFixture(fd);
 		}
 		
 		/**
@@ -38,6 +41,14 @@ package Actioners
 		*/
 		public function getActionString():String {
 			return actionString;
+		}
+
+		public static function getRelatedType(type:String,rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, am:ActionMarker, world:b2World):ActionerElement {
+			
+			if (type == EXIT)
+				return new LevelExitActioner(rectDef, offset, w, h, am, world);
+			else
+				return null;
 		}
 	}
 }

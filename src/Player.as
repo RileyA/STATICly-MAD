@@ -103,6 +103,8 @@ package {
 			
 			// TODO : Sort by priority/location
 			// markers.sort(compare);
+			// don't have fixture data
+			// might need to reimplement getCollosions logic
 			
 			var i:int;
 			for (i=0;i<markers.length;i++){
@@ -117,40 +119,6 @@ package {
 		
 		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
-			
-			function groundFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.GROUND_SENSOR_ID &&
-					(b==LevelContactListener.FOOT_SENSOR_ID ||
-					 b==LevelContactListener.PLAYER_BODY_ID );
-			}
-			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
-			
-			if (isGrounded) {
-				groundPlayer();
-			}
-			
-			function jumpFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
-			
-			
-			// Shuffling over carpet
-			function carpetRedFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var onCarpetRed:Boolean=PhysicsUtils.getCollosions(m_physics,carpetRedFilter).length>0;
-
-			function carpetBlueFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.CARPET_BLUE_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var onCarpetBlue:Boolean=PhysicsUtils.getCollosions(m_physics,carpetBlueFilter).length>0;
-
-			var carpetPolarity:int = ChargableUtils.CHARGE_NONE;
-			if (onCarpetRed)
-				carpetPolarity = ChargableUtils.CHARGE_RED;
-			if (onCarpetBlue)
-				carpetPolarity = ChargableUtils.CHARGE_BLUE;
 			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
@@ -172,7 +140,16 @@ package {
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
-			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && (left || right));
+
+			groundCollision();
+
+			carpetCollision(left || right);
+
+			// Jumping
+			function jumpFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
 
 			if (canJump) {
 				m_physics.GetLinearVelocity().x=xspeed;
@@ -191,6 +168,44 @@ package {
 				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
 		}
+
+
+		private function groundCollision():void {
+			function groundFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.GROUND_SENSOR_ID &&
+					(b==LevelContactListener.FOOT_SENSOR_ID ||
+					 b==LevelContactListener.PLAYER_BODY_ID );
+			}
+			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
+			
+			if (isGrounded) {
+				groundPlayer();
+			}
+		}
+
+		private function carpetCollision(isMoving:Boolean):void {
+			// Shuffling over carpet
+			function carpetRedFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetRed:Boolean=PhysicsUtils.getCollosions(m_physics,carpetRedFilter).length>0;
+
+			function carpetBlueFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_BLUE_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetBlue:Boolean=PhysicsUtils.getCollosions(m_physics,carpetBlueFilter).length>0;
+
+			var carpetPolarity:int = ChargableUtils.CHARGE_NONE;
+			if (onCarpetRed)
+				carpetPolarity = ChargableUtils.CHARGE_RED;
+			if (onCarpetBlue)
+				carpetPolarity = ChargableUtils.CHARGE_BLUE;
+
+
+			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && isMoving);
+		}
+
+
 
 		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
 			var isCharged:Boolean = chargePolarity != ChargableUtils.CHARGE_NONE;
