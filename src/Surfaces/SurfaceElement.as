@@ -24,7 +24,7 @@ package Surfaces
 			var ps:b2PolygonShape = new b2PolygonShape();
 			ps.SetAsBox(w / 2, h / 2);
 			fd.shape = ps;
-			fd.isSensor = true;		
+			fd.isSensor = true;	
 			fd.userData = userData;
 			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
@@ -35,6 +35,13 @@ package Surfaces
 			sprite.graphics.drawRect(-w/2 + offset.x, -h/2 + offset.y, w, h);
 			sprite.graphics.endFill();
 			addChild(sprite);
+		}
+
+		public function cleanup():void {
+			m_physics.GetWorld().DestroyBody(m_physics);
+			m_physics = null;
+			while (numChildren > 0)
+				removeChildAt(0);
 		}
 		
 		public static function getRelatedType(type:String,rectDef:b2BodyDef,  offset:b2Vec2, w:Number, h:Number, 

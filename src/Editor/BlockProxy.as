@@ -39,7 +39,19 @@ package Editor {
 		}
 
 		override public function endDrag():void {
+			var world:b2World = m_child.getPhysics().GetWorld();
+			var sc:UVec2 = m_child.getScale();
+			var pos:UVec2 = new UVec2(x + m_children[0].x,
+				y + m_children[0].y);
+			pos.x /= m_child.scaleX;
+			pos.y /= m_child.scaleY;
 			m_child.getPhysics().SetType(m_child.getBodyType());
+			m_child.deinit();
+			m_child.getInfo().scale.x = m_scalepx_x / m_child.scaleX;
+			m_child.getInfo().scale.y = m_scalepx_y / m_child.scaleY;
+			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
+			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
+			m_child.reinit(world);
 		}
 	}
 }

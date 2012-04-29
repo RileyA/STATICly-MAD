@@ -29,6 +29,8 @@ package {
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actions:Vector.<ActionerElement>;
 		private var sprite:Sprite;
+		private var joints:Vector.<b2Joint>;
+		private var info:BlockInfo;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -50,7 +52,14 @@ package {
 		 * @param	world
 		 */
 		public function Block(blockInfo:BlockInfo, world:b2World):void {
+			init(blockInfo, world);
+		}
 
+		public function init(blockInfo:BlockInfo, world:b2World):void {
+			joints = new Vector.<b2Joint>();
+			surfaces = new Vector.<SurfaceElement>();
+
+			info = blockInfo;
 			var position:UVec2 = blockInfo.position.getCopy();
 			scale = blockInfo.scale.getCopy();
 			movement = blockInfo.movement;
@@ -134,7 +143,29 @@ package {
 				hold.push(0, 18, 26.66, 18);
 				makeTracked(blockInfo.bounds, world);
 			}
-			
+		}
+
+		public function deinit():void {
+			for (var i:uint = 0; i < surfaces.length; ++i)
+				surfaces[i].cleanup();
+			var world:b2World = m_physics.GetWorld();
+			world.DestroyBody(m_physics);
+			for (i = 0; i < joints.length; ++i)
+				world.DestroyJoint(joints[i]);
+			while (numChildren > 0)
+				removeChildAt(0);
+			joints = new Vector.<b2Joint>();
+			surfaces = new Vector.<SurfaceElement>();
+		}
+
+		/** deinit and reinit to reflect any changes in blockinfo */
+		public function reinit(world:b2World):void {
+			deinit();
+			init(getInfo(), world);
+		}
+
+		public function getInfo():BlockInfo {
+			return info;
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -198,13 +229,18 @@ package {
 			if(se != null) {
 				var joint:b2WeldJointDef = new b2WeldJointDef();
 				joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
-				world.CreateJoint(joint);
+				joints.push(world.CreateJoint(joint));
+				surfaces.push(se);
 				addChild(se);
 			}
 		}
-		
+
 		private function addAction(key:String, world:b2World):void {
-			
+			// ...
+		}
+
+		private function removeActions():void {
+			// TODO
 		}
 
 		private function makeTracked(ends:Vector.<UVec2>, world:b2World):void {
@@ -228,13 +264,12 @@ package {
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
 			trackDef.Initialize(anchor, m_physics, center, axis);
-			world.CreateJoint(trackDef);
+			joints.push(world.CreateJoint(trackDef));
 		}
 
 		public function getBodyType():uint {
 			return movement == FIXED ? b2Body.b2_staticBody 
 				: b2Body.b2_dynamicBody;
 		}
-		
 	}
 }
