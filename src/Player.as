@@ -9,8 +9,7 @@ package {
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
-	import Chargable.Chargable;
-	import Chargable.ChargableUtils;
+	import Chargable.*;
 	import Box2D.Dynamics.Contacts.*;
 	import Box2D.Collision.*;
 
@@ -22,24 +21,18 @@ package {
 		private static const MOVE_SPEED:Number=6.0;
 		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
 		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
-		private var chargeStrength:Number;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
-
-		// Keyboard controls
-		private static const LEFT_KEY:Number = Keyboard.LEFT;
-		private static const RIGHT_KEY:Number = Keyboard.RIGHT;
-		private static const JUMP_KEY:Number = Keyboard.UP;
-		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		public static const WIDTH:Number = 0.7;
 		public static const HEIGHT:Number = -1.2;
 		public static const HEIGHT_MID:Number = -0.9;
+		public static const HEIGHT_CHARGE:Number = -0.5;
 
 		private var m_sprite:Sprite;
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
-		
+		private var charges:Vector.<Charge>;
 		
 		public function Player(world:b2World, position:UVec2):void {
 
@@ -65,7 +58,12 @@ package {
 			m_physics.SetLinearDamping(.2);
 			
 			var area:Number=m_physics.GetMass()/fd.density;
-			chargeStrength=area*Block.strongChargeDensity;
+			var chargeStrength:Number=area*Block.strongChargeDensity;
+			this.charges=new Vector.<Charge>();
+			this.charges.push(new Charge(chargeStrength,new b2Vec2(
+								0,
+								HEIGHT_CHARGE
+							)));
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
@@ -270,8 +268,13 @@ package {
 		/**
 		* Returns the charge of this Chargable for electrostatics computations.
 		*/
+		
 		public function getCharge():Number{
-			return chargePolarity*chargeStrength;
+			return chargePolarity;
+		}
+		
+		public function getCharges():Vector.<Charge>{
+			return charges;
 		}
 
 		/**

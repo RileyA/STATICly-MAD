@@ -8,8 +8,7 @@ package {
 	import Box2D.Collision.*;
 	import Surfaces.*;
 	import Actioners.*;
-	import Chargable.Chargable;
-	import Chargable.ChargableUtils;
+	import Chargable.*;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -41,7 +40,7 @@ package {
 		private var strong:Boolean;
 		private var insulated:Boolean;
 		
-		private var chargeStrength:Number;
+		private var charges:Vector.<Charge>;
 
 		// somewhat hacky... but it prevents having to pass the level in
 		// when reinit-ing blocks in the editor, and presumably a block
@@ -90,7 +89,11 @@ package {
 			m_physics.CreateFixture(fd);
 			
 			var area:Number=scale.x*scale.y;//m_physics.GetMass()/fd.density;
-			chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
+			var chargeStrength:Number=area*(strong?strongChargeDensity:weakChargeDensity);
+			this.charges=ChargableUtils.makeCharges(chargeStrength, -scale.x / 2, -scale.y / 2, scale.x / 2, scale.y / 2);
+			//this.charges=new Vector.<Charge>();
+			//this.charges.push(new Charge(chargeStrength,new b2Vec2(0,0)));
+			
 			
 			// make block actionable
 			if (!insulated){
@@ -201,7 +204,11 @@ package {
 		}
 		
 		public function getCharge():Number{
-			return chargePolarity*chargeStrength;
+			return chargePolarity;
+		}
+		
+		public function getCharges():Vector.<Charge>{
+			return charges;
 		}
 		
 		public function getBody():b2Body{
