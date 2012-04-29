@@ -30,7 +30,6 @@ package {
 		private var actions:Vector.<ActionerElement>;
 		private var sprite:Sprite;
 		private var joints:Vector.<b2Joint>;
-		private var info:BlockInfo;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -46,26 +45,34 @@ package {
 		private var insulated:Boolean;
 		
 		private var chargeStrength:Number;
+
+		// somewhat hacky... but it prevents having to pass the level in
+		// when reinit-ing blocks in the editor, and presumably a block
+		// will only ever belong to a single level at once...
+		private var m_level:Level = null;
+		private var m_info:BlockInfo;
 		
 		/**
-		 * @param	blockInfo
-		 * @param	world
+		 * @param	blockInfo Info struct containing various block properties
+		 * @param	level The level this block lives in
 		 */
-		public function Block(blockInfo:BlockInfo, world:b2World):void {
-			init(blockInfo, world);
+		public function Block(blockInfo:BlockInfo, level:Level):void {
+			m_level= level;
+			m_info = blockInfo;
+			init();
 		}
 
-		public function init(blockInfo:BlockInfo, world:b2World):void {
+		public function init():void {
+
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
 
-			info = blockInfo;
-			var position:UVec2 = blockInfo.position.getCopy();
-			scale = blockInfo.scale.getCopy();
-			movement = blockInfo.movement;
-			insulated=blockInfo.insulated;
-			strong=blockInfo.strong;
-			chargePolarity=blockInfo.chargePolarity;
+			var position:UVec2 = m_info.position.getCopy();
+			scale = m_info.scale.getCopy();
+			movement = m_info.movement;
+			insulated=m_info.insulated;
+			strong=m_info.strong;
+			chargePolarity=m_info.chargePolarity;
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsBox(scale.x / 2, scale.y / 2);
@@ -75,7 +82,7 @@ package {
 				? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
 			rectDef.position.Set(position.x, position.y);
 			rectDef.angle = 0.0;
-			m_physics = world.CreateBody(rectDef);
+			m_physics = m_level.world.CreateBody(rectDef);
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.shape = polyShape;
@@ -90,8 +97,8 @@ package {
 			
 			// make block actionable
 			if (!insulated){
-				function act(level:Level):void{
-					var player:Player= level.getPlayer();
+				function act(m_level:Level):void{
+					var player:Player= m_level.getPlayer();
 					if (strong) {
 						if (chargePolarity==-player.chargePolarity) {
 							chargePolarity=ChargableUtils.CHARGE_NONE;
@@ -118,11 +125,11 @@ package {
 			if (insulated){
 				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
 			}
-			sprite.graphics.beginFill(strong ? 0x333333 : 0x999999);
+			sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
 			if (movement == FIXED) {
 				sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
 			} else {
-				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, scale.x/2);
+				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, .8);
 			}
 			sprite.graphics.endFill();
 			redraw();
@@ -130,22 +137,23 @@ package {
 
 			var i:int = 0;
 
-			for (i = 0; i < blockInfo.surfaces.length; i++) {
+			for (i = 0; i < m_info.surfaces.length; i++) {
 				rectDef.position.Set(position.x, position.y);
-				addSurface(blockInfo.surfaces[i], rectDef, world);
+				addSurface(m_info.surfaces[i], rectDef, m_level.world);
 			}
-			for (i = 0; i < blockInfo.actions.length; i++) {
-				addAction(blockInfo.actions[i], world);
+			for (i = 0; i < m_info.actions.length; i++) {
+				addAction(m_info.actions[i], m_level.world);
 			}
 			
 			if (movement == TRACKED) {
 				var hold:Vector.<Number> = new Vector.<Number>();
 				hold.push(0, 18, 26.66, 18);
-				makeTracked(blockInfo.bounds, world);
+				makeTracked(m_info.bounds);
 			}
 		}
 
-		public function deinit():void {
+		// helper that cleans up a block
+		private function deinit():void {
 			for (var i:uint = 0; i < surfaces.length; ++i)
 				surfaces[i].cleanup();
 			var world:b2World = m_physics.GetWorld();
@@ -159,13 +167,13 @@ package {
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
-		public function reinit(world:b2World):void {
+		public function reinit():void {
 			deinit();
-			init(getInfo(), world);
+			init();
 		}
 
 		public function getInfo():BlockInfo {
-			return info;
+			return m_info;
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -242,8 +250,8 @@ package {
 		private function removeActions():void {
 			// TODO
 		}
-
-		private function makeTracked(ends:Vector.<UVec2>, world:b2World):void {
+		
+		private function makeTracked(ends:Vector.<UVec2>):void {
 			var l:b2Vec2 = ends[0].toB2Vec2();
 			var r:b2Vec2 = ends[1].toB2Vec2();
 			var axis:b2Vec2 = r.Copy();
@@ -255,7 +263,7 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center;
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchor:b2Body = world.CreateBody(anchorDef);
+			var anchor:b2Body = m_level.world.CreateBody(anchorDef);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			l.Subtract(center);
@@ -264,7 +272,7 @@ package {
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
 			trackDef.Initialize(anchor, m_physics, center, axis);
-			joints.push(world.CreateJoint(trackDef));
+			joints.push(m_level.world.CreateJoint(trackDef));
 		}
 
 		public function getBodyType():uint {

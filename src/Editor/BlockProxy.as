@@ -46,12 +46,11 @@ package Editor {
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
 			m_child.getPhysics().SetType(m_child.getBodyType());
-			m_child.deinit();
 			m_child.getInfo().scale.x = m_scalepx_x / m_child.scaleX;
 			m_child.getInfo().scale.y = m_scalepx_y / m_child.scaleY;
 			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
 			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
-			m_child.reinit(world);
+			m_child.reinit();
 		}
 	}
 }
