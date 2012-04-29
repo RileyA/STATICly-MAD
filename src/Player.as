@@ -11,12 +11,17 @@ package {
 	import Box2D.Collision.Shapes.*;
 	import Chargable.Chargable;
 	import Chargable.ChargableUtils;
+	import Box2D.Dynamics.Contacts.*;
+	import Box2D.Collision.*;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
+		private static const DO_REACTION_FORCES:Boolean=true;
+
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
-		private static const ACELL_TIME_CONSTANT:Number=0.5;
+		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
+		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
 		private var chargeStrength:Number;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
 
@@ -103,6 +108,8 @@ package {
 			
 			// TODO : Sort by priority/location
 			// markers.sort(compare);
+			// don't have fixture data
+			// might need to reimplement getCollosions logic
 			
 			var i:int;
 			for (i=0;i<markers.length;i++){
@@ -117,40 +124,6 @@ package {
 		
 		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
-			
-			function groundFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.GROUND_SENSOR_ID &&
-					(b==LevelContactListener.FOOT_SENSOR_ID ||
-					 b==LevelContactListener.PLAYER_BODY_ID );
-			}
-			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
-			
-			if (isGrounded) {
-				groundPlayer();
-			}
-			
-			function jumpFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
-			
-			
-			// Shuffling over carpet
-			function carpetRedFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var onCarpetRed:Boolean=PhysicsUtils.getCollosions(m_physics,carpetRedFilter).length>0;
-
-			function carpetBlueFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.CARPET_BLUE_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var onCarpetBlue:Boolean=PhysicsUtils.getCollosions(m_physics,carpetBlueFilter).length>0;
-
-			var carpetPolarity:int = ChargableUtils.CHARGE_NONE;
-			if (onCarpetRed)
-				carpetPolarity = ChargableUtils.CHARGE_RED;
-			if (onCarpetBlue)
-				carpetPolarity = ChargableUtils.CHARGE_BLUE;
 			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
@@ -168,29 +141,97 @@ package {
 				didAction=false;
 			}
 			
-			// do movement
+			groundCollision(); // for grounding
+			carpetCollision(left || right); // for chargeing
+			
+			// do movement //
+			// get contacts with feet
+			function jumpFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			
+			var footContacts:Vector.<*>=PhysicsUtils.getCollosions(m_physics,jumpFilter,PhysicsUtils.OUT_EDGE);
+			var canJump:Boolean=footContacts.length>0;
+			
+			// setup for reaction forces
+			var reactBody:b2Body;
+			var reactLoc:b2Vec2
+			if (canJump && DO_REACTION_FORCES){
+				var con0:b2ContactEdge=footContacts[0];
+				var man:b2WorldManifold=new b2WorldManifold();
+				con0.contact.GetWorldManifold(man);
+				reactLoc=man.m_points[0]; // seems to be messed up
+				reactBody=con0.other;
+			}
+			
+			// x movement //
 			var xspeed:Number = 0;
 			if (left) { xspeed -= MOVE_SPEED; }
 			if (right) { xspeed += MOVE_SPEED; }
-			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && (left || right));
-
-			if (canJump) {
-				m_physics.GetLinearVelocity().x=xspeed;
-			} else if (xspeed!=0) {
-				
-				var fx:Number=m_physics.GetMass()/ACELL_TIME_CONSTANT;
+			
+			if (canJump || xspeed!=0) {
+				var fx:Number=m_physics.GetMass()/(canJump?GROUND_ACELL_TIME_CONSTANT:AIR_ACELL_TIME_CONSTANT);
 				var vx:Number=m_physics.GetLinearVelocity().x;
 				var deltaSpeed:Number=xspeed-vx;
 				fx*=deltaSpeed;
-				if ((deltaSpeed*xspeed)>0) {
+				if (canJump || (deltaSpeed*xspeed)>0) {
 					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
+					if (canJump && DO_REACTION_FORCES){
+						reactBody.ApplyForce(new b2Vec2(-fx, 0),reactBody.GetWorldCenter());
+					}
 				}
 			}
 			
+			// jumping
 			if (up && canJump) {
-				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
+				var fy:Number=m_physics.GetMass()*(m_physics.GetLinearVelocity().y+JUMP_STRENGTH);
+				if (DO_REACTION_FORCES){
+					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactBody.GetWorldCenter());
+				}
+				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
+				
+				// That should be the same as this:
+				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
 		}
+
+
+		private function groundCollision():void {
+			function groundFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.GROUND_SENSOR_ID &&
+					(b==LevelContactListener.FOOT_SENSOR_ID ||
+					 b==LevelContactListener.PLAYER_BODY_ID );
+			}
+			var isGrounded:Boolean=PhysicsUtils.getCollosions(m_physics,groundFilter).length>0;
+			
+			if (isGrounded) {
+				groundPlayer();
+			}
+		}
+
+		private function carpetCollision(isMoving:Boolean):void {
+			// Shuffling over carpet
+			function carpetRedFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetRed:Boolean=PhysicsUtils.getCollosions(m_physics,carpetRedFilter).length>0;
+
+			function carpetBlueFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.CARPET_BLUE_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			var onCarpetBlue:Boolean=PhysicsUtils.getCollosions(m_physics,carpetBlueFilter).length>0;
+
+			var carpetPolarity:int = ChargableUtils.CHARGE_NONE;
+			if (onCarpetRed)
+				carpetPolarity = ChargableUtils.CHARGE_RED;
+			if (onCarpetBlue)
+				carpetPolarity = ChargableUtils.CHARGE_BLUE;
+
+
+			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && isMoving);
+		}
+
+
 
 		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
 			var isCharged:Boolean = chargePolarity != ChargableUtils.CHARGE_NONE;

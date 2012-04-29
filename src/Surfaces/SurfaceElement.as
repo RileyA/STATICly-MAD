@@ -14,6 +14,9 @@ package Surfaces
 	 * @author Matthew Hall
 	 */
 	public class SurfaceElement extends GfxPhysObject {
+		public static const BCARPET:String = "bcarpet";
+		public static const RCARPET:String = "rcarpet";
+		public static const GROUND:String = "ground";
 		
 		public static const DEPTH:Number = 0.1;
 		
@@ -47,11 +50,11 @@ package Surfaces
 		public static function getRelatedType(type:String,rectDef:b2BodyDef,  offset:b2Vec2, w:Number, h:Number, 
 												world:b2World):SurfaceElement {
 			
-			if (type == Block.GROUND)
+			if (type == GROUND)
 				return new Ground(rectDef, offset, w, h, world);
-			else if (type == Block.RCARPET)
+			else if (type == RCARPET)
 				return new RedCarpet(rectDef, offset, w, h, world);
-			else if (type == Block.BCARPET)
+			else if (type == BCARPET)
 				return new BlueCarpet(rectDef, offset, w, h, world);
 			else
 				return null;
