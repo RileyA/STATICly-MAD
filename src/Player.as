@@ -11,12 +11,17 @@ package {
 	import Box2D.Collision.Shapes.*;
 	import Chargable.Chargable;
 	import Chargable.ChargableUtils;
+	import Box2D.Dynamics.Contacts.*;
+	import Box2D.Collision.*;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
+		private static const DO_REACTION_FORCES:Boolean=true;
+
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
-		private static const ACELL_TIME_CONSTANT:Number=0.5;
+		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
+		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
 		private var chargeStrength:Number;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
 
@@ -136,36 +141,57 @@ package {
 				didAction=false;
 			}
 			
-			// do movement
-			var xspeed:Number = 0;
-			if (left) { xspeed -= MOVE_SPEED; }
-			if (right) { xspeed += MOVE_SPEED; }
-
-			groundCollision();
-
-			carpetCollision(left || right);
-
-			// Jumping
+			groundCollision(); // for grounding
+			carpetCollision(left || right); // for chargeing
+			
+			// do movement //
+			// get contacts with feet
 			function jumpFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
 			}
-			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
-
-			if (canJump) {
-				m_physics.GetLinearVelocity().x=xspeed;
-			} else if (xspeed!=0) {
-				
-				var fx:Number=m_physics.GetMass()/ACELL_TIME_CONSTANT;
+			
+			var footContacts:Vector.<*>=PhysicsUtils.getCollosions(m_physics,jumpFilter,PhysicsUtils.OUT_EDGE);
+			var canJump:Boolean=footContacts.length>0;
+			
+			// setup for reaction forces
+			var reactBody:b2Body;
+			var reactLoc:b2Vec2
+			if (canJump && DO_REACTION_FORCES){
+				var con0:b2ContactEdge=footContacts[0];
+				var man:b2WorldManifold=new b2WorldManifold();
+				con0.contact.GetWorldManifold(man);
+				reactLoc=man.m_points[0]; // seems to be messed up
+				reactBody=con0.other;
+			}
+			
+			// x movement //
+			var xspeed:Number = 0;
+			if (left) { xspeed -= MOVE_SPEED; }
+			if (right) { xspeed += MOVE_SPEED; }
+			
+			if (canJump || xspeed!=0) {
+				var fx:Number=m_physics.GetMass()/(canJump?GROUND_ACELL_TIME_CONSTANT:AIR_ACELL_TIME_CONSTANT);
 				var vx:Number=m_physics.GetLinearVelocity().x;
 				var deltaSpeed:Number=xspeed-vx;
 				fx*=deltaSpeed;
-				if ((deltaSpeed*xspeed)>0) {
+				if (canJump || (deltaSpeed*xspeed)>0) {
 					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
+					if (canJump && DO_REACTION_FORCES){
+						reactBody.ApplyForce(new b2Vec2(-fx, 0),reactBody.GetWorldCenter());
+					}
 				}
 			}
 			
+			// jumping
 			if (up && canJump) {
-				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
+				var fy:Number=m_physics.GetMass()*(m_physics.GetLinearVelocity().y+JUMP_STRENGTH);
+				if (DO_REACTION_FORCES){
+					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactBody.GetWorldCenter());
+				}
+				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
+				
+				// That should be the same as this:
+				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
 		}
 
