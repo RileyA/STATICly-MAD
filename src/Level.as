@@ -46,7 +46,7 @@ package {
 		private static const DO_SLEEP:Boolean = true;
 		private static const BORDER_THICKNESS:Number = 10;
 
-		public function Level(parent:Sprite):void {
+		public function Level(parent:Sprite, info:LevelInfo=null):void {
 
 			m_parent_sprite = parent;
 			m_debugDraw = false;
@@ -57,8 +57,12 @@ package {
 			m_blocks = new Vector.<Block>;
 
 			// load level JSON
+			if (!info) {
 			m_info = new LevelInfo();
 			MiscUtils.loadJSON(new proto02_stack() as ByteArray, m_info);
+			} else {
+				m_info = info;
+			}
 
 			// make world
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
