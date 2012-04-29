@@ -49,5 +49,13 @@ package Editor {
 		override public function endDrag():void {
 			m_child.getPhysics().SetType(b2Body.b2_dynamicBody);
 		}
+
+		public function getPos():UVec2 {
+			var pos:UVec2 = new UVec2(x, y);
+			pos.x /= m_child.scaleX;
+			pos.y /= m_child.scaleY;
+			pos.x += Player.WIDTH/2;
+			return pos;
+		}
 	}
 }

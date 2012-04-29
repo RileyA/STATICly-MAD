@@ -28,15 +28,18 @@ package Editor {
 
 		private var m_pauseKey:Boolean;
 		private var m_resetKey:Boolean;
+		private var m_saveKey:Boolean;
 		private var m_paused:Boolean;
 
+		private var m_levelInfo:LevelInfo;
 		private var m_levelLoaded:Boolean;
 		private var m_loadRef:FileReference;
 
 		public function EditorState(game:Game):void {
 			super(game);
-			m_pauseKey = false;
-			m_resetKey = false;
+			m_pauseKey = true;
+			m_resetKey = true;
+			m_saveKey = true;
 			m_paused = true;
 		}
 
@@ -49,7 +52,6 @@ package Editor {
 			var fileFilter:FileFilter 
 				= new FileFilter("Levels: (*.json)", "*.json");
 			m_loadRef.browse([fileFilter]);
-			
 		}
 
 		public function loadLevel(info:LevelInfo):void {
@@ -84,9 +86,9 @@ package Editor {
 
 		private function loadComplete(e:Event):void {
 			m_loadRef.removeEventListener(Event.COMPLETE, loadComplete);
-			var info :LevelInfo = new LevelInfo();
-			MiscUtils.loadJSON(m_loadRef.data as ByteArray, info);
-			loadLevel(info);
+			m_levelInfo = new LevelInfo();
+			MiscUtils.loadJSON(m_loadRef.data as ByteArray, m_levelInfo);
+			loadLevel(m_levelInfo);
 			m_levelLoaded = true;
 		}
 
@@ -105,7 +107,6 @@ package Editor {
 							blocks[i].getPhysics().SetAwake(true);
 						}
 					}
-
 					m_pauseKey = true;
 				} else if(!Keys.isKeyPressed(PAUSE_KEY)) {
 					m_pauseKey = false;
@@ -119,6 +120,21 @@ package Editor {
 					m_player.reposition();
 				} else if (!Keys.isKeyPressed(RESET_KEY)) {
 					m_resetKey = false;
+				}
+
+				// quick hack to test saving
+				if (!m_saveKey && Keys.isKeyPressed(SAVE_KEY)) {
+					m_levelInfo.blocks = new Vector.<BlockInfo>;
+					blocks = m_level.getBlocks();
+					for (i = 0; i < blocks.length; ++i)
+						m_levelInfo.blocks.push(blocks[i].getInfo());
+					m_levelInfo.playerPosition = m_player.getPos();
+					var saver:FileReference = new FileReference();
+					saver.save(MiscUtils.outputJSON(m_levelInfo),
+						"out.json");
+					m_saveKey = true;
+				} else if (!Keys.isKeyPressed(SAVE_KEY)) {
+					m_saveKey = false;
 				}
 
 				m_level.update(delta);
