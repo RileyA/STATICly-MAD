@@ -16,8 +16,8 @@ package Actioners
 		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.0;
 
-		private var sprite:Sprite;
-		private var actionString:String;
+		protected var sprite:Sprite;
+		protected var actionString:String;
 
 		/**
 		* Accepts a parentBody to attach this fixture to, and
@@ -38,7 +38,7 @@ package Actioners
 
 		protected function getPolyShape():b2PolygonShape {
 			var ps:b2PolygonShape = new b2PolygonShape();
-			ps.SetAsBox(WIDTH, HEIGHT); // load a sprite?
+			ps.SetAsBox(WIDTH, HEIGHT);
 			return ps;
 		}
 
@@ -69,7 +69,7 @@ package Actioners
 			
 			switch (type) {
 			case EXIT:
-				return new LevelExitActioner(rectDef, offset, am, world);
+				return new LevelExitActioner(rectDef, offset, world);
 			default:
 				return null;
 			}

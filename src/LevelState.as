@@ -30,10 +30,17 @@ package {
 
 		override public function update(delta:Number):Boolean {
 			var isDone:Boolean = false;
-			isDone ||= !m_level.update(delta);
+			var levelFinish:Boolean = !m_level.update(delta);
+			if (levelFinish) {
+				finishLevel();
+				isDone ||= levelFinish;
+			}
 			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
 			return !isDone;
 		}
 
+		private function finishLevel():void {
+			//m_game.addState(new ScoreState(m_game));
+		}
 	}
 }

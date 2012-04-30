@@ -264,10 +264,7 @@ package {
 			var dir:String = key.substr(0, split);
 			var type:String = key.substr(split + 1, key.length);
 			var ae:ActionerElement;
-
-			function cb(level:Level):void { m_level.markAsDone(); }
-			function tr(player:Player):Boolean { return true; }
-			var am:ActionMarker = new ActionMarker(cb, tr);
+			var am:ActionMarker;
 
 			switch (dir) {
 			case UP:
