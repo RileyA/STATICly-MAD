@@ -6,20 +6,20 @@ package
 	 */
 	public class ActionMarker {
 		
-		private var action:Function;
-		private var chargeChecker:Function;
+		private var callback:Function;
+		private var canTrigger:Function;
 		
-		public function ActionMarker(action:Function, chargeChecker:Function):void {
-			this.action = action;
-			this.chargeChecker = chargeChecker;
+		public function ActionMarker(callback:Function, canTrigger:Function):void {
+			this.callback = callback;
+			this.canTrigger = canTrigger;
 		}
 		
 		public function callAction(level:Level):void {
-			action(level);
+			callback(level);
 		}
 		
 		public function canAction(player:Player):Boolean {
-			return chargeChecker(player);
+			return canTrigger(player);
 		}
 	}
 

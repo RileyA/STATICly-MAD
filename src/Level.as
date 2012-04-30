@@ -17,6 +17,7 @@ package {
 		public var pixelsPerMeter:Number;
 		public var world:b2World;
 		public var contactListener:LevelContactListener;
+		private var m_levelDone:Boolean;
 		private var m_updatePhysics:Boolean;
 		private var m_debugDraw:Boolean;
 		private var m_debugDrawKey:Boolean;
@@ -51,6 +52,7 @@ package {
 			m_parent_sprite = parent;
 			m_debugDraw = false;
 			m_updatePhysics = true;
+			m_levelDone = false;
 
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
@@ -108,7 +110,7 @@ package {
 			return m_blocks;
 		}
 
-		public function update(delta:Number):void {
+		public function update(delta:Number):Boolean {
 
 			if (m_updatePhysics) {
 				world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
@@ -130,6 +132,8 @@ package {
 
 			if (m_debugDraw)
 				world.DrawDebugData();
+
+			return !m_levelDone;
 		}
 
 		public function getPlayer():Player{
@@ -197,5 +201,9 @@ package {
 		public function getInfo():LevelInfo {
 			return m_info;
 		}	
+
+		public function markAsDone():void {
+			m_levelDone = true;
+		}
 	}
 }

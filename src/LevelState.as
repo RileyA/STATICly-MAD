@@ -29,8 +29,11 @@ package {
 		}
 
 		override public function update(delta:Number):Boolean {
-			m_level.update(delta);
-			return !Keys.isKeyPressed(Keyboard.ESCAPE);
+			var isDone:Boolean = false;
+			isDone ||= !m_level.update(delta);
+			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
+			return !isDone;
 		}
+
 	}
 }

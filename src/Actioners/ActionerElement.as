@@ -1,5 +1,6 @@
 package Actioners
 {
+	import flash.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
@@ -11,28 +12,42 @@ package Actioners
 	public class ActionerElement extends GfxPhysObject{
 		public static const EXIT:String = "exit";
 		public static const SWITCH:String = "switch";
-		public static const FIXED:String = "fixed";
 
+		public static const WIDTH:Number = 1.0;
+		public static const HEIGHT:Number = -1.0;
+
+		private var sprite:Sprite;
 		private var actionString:String;
 
 		/**
 		* Accepts a parentBody to attach this fixture to, and
 		*/
-		public function ActionerElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, am:ActionMarker, world:b2World):void {
+		public function ActionerElement(rectDef:b2BodyDef, offset:b2Vec2, am:ActionMarker, world:b2World):void {
 			this.actionString = actionString;
 
 			var fd:b2FixtureDef = new b2FixtureDef();
-			var ps:b2PolygonShape = new b2PolygonShape();
-			ps.SetAsBox(w / 2, h / 2); // load a sprite?
-			fd.shape = ps;
+			fd.shape = getPolyShape();
 			fd.isSensor = true;
-			rectDef.position.Add(offset);
-			rectDef.angle = 0.0;
-			
 			fd.userData = am;
-			
+			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
+
+			addChild(getSprite(offset.x, offset.y));
+		}
+
+		protected function getPolyShape():b2PolygonShape {
+			var ps:b2PolygonShape = new b2PolygonShape();
+			ps.SetAsBox(WIDTH, HEIGHT); // load a sprite?
+			return ps;
+		}
+
+		protected function getSprite(x:Number, y:Number):Sprite {
+			sprite = new Sprite();
+			sprite.graphics.beginFill(0x990099);
+			sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
+			sprite.graphics.endFill();
+			return sprite;
 		}
 		
 		/**
@@ -43,12 +58,21 @@ package Actioners
 			return actionString;
 		}
 
-		public static function getRelatedType(type:String,rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, am:ActionMarker, world:b2World):ActionerElement {
+		public function cleanup():void {
+			m_physics.GetWorld().DestroyBody(m_physics);
+			m_physics = null;
+			while (numChildren > 0)
+				removeChildAt(0);
+		}
+
+		public static function getRelatedType(type:String, rectDef:b2BodyDef, offset:b2Vec2, am:ActionMarker, world:b2World):ActionerElement {
 			
-			if (type == EXIT)
-				return new LevelExitActioner(rectDef, offset, w, h, am, world);
-			else
+			switch (type) {
+			case EXIT:
+				return new LevelExitActioner(rectDef, offset, am, world);
+			default:
 				return null;
+			}
 		}
 	}
 }

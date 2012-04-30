@@ -23,7 +23,7 @@ package {
 		private var movement:String;
 		private var scale:UVec2;
 		private var surfaces:Vector.<SurfaceElement>;
-		private var actions:Vector.<ActionerElement>;
+		private var actioners:Vector.<ActionerElement>;
 		private var sprite:Sprite;
 		private var joints:Vector.<b2Joint>;
 		
@@ -62,6 +62,7 @@ package {
 
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
+			actioners = new Vector.<ActionerElement>();
 
 			var position:UVec2 = m_info.position.getCopy();
 			scale = m_info.scale.getCopy();
@@ -142,7 +143,8 @@ package {
 				addSurface(m_info.surfaces[i], rectDef, m_level.world);
 			}
 			for (i = 0; i < m_info.actions.length; i++) {
-				addAction(m_info.actions[i], m_level.world);
+				rectDef.position.Set(position.x, position.y);
+				addActioner(m_info.actions[i], rectDef, m_level.world);
 			}
 			
 			if (movement == TRACKED) {
@@ -156,6 +158,8 @@ package {
 		private function deinit():void {
 			for (var i:uint = 0; i < surfaces.length; ++i)
 				surfaces[i].cleanup();
+			for (i = 0; i < actioners.length; ++i)
+				actioners[i].cleanup();
 			var world:b2World = m_physics.GetWorld();
 			world.DestroyBody(m_physics);
 			for (i = 0; i < joints.length; ++i)
@@ -164,6 +168,7 @@ package {
 				removeChildAt(0);
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
+			actioners = new Vector.<ActionerElement>();
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
@@ -225,18 +230,25 @@ package {
 			var type:String = key.substr(split + 1, key.length);
 			var se:SurfaceElement;
 
-			if (dir == UP) {
+			switch (dir) {
+			case UP:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), 
 													scale.x, SurfaceElement.DEPTH, world);			
-			}else if (dir == DOWN) {
+				break;
+			case DOWN:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), 
 													scale.x, SurfaceElement.DEPTH, world);
-			}else if (dir == LEFT) {
+				break;
+			case LEFT:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
-			}else if (dir == RIGHT) {
+				break;
+			case RIGHT:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
+				break;
+			default:
+				se == null;
 			}
 			if(se != null) {
 				var joint:b2WeldJointDef = new b2WeldJointDef();
@@ -247,8 +259,39 @@ package {
 			}
 		}
 
-		private function addAction(key:String, world:b2World):void {
-			// ...
+		private function addActioner(key:String, rectDef:b2BodyDef, world:b2World):void {
+			var split:int = key.search(",");
+			var dir:String = key.substr(0, split);
+			var type:String = key.substr(split + 1, key.length);
+			var ae:ActionerElement;
+
+			function cb(level:Level):void { m_level.markAsDone(); }
+			function tr(player:Player):Boolean { return true; }
+			var am:ActionMarker = new ActionMarker(cb, tr);
+
+			switch (dir) {
+			case UP:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), am, world);
+				break;
+			case DOWN:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), am, world);
+				break;
+			case LEFT:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), am, world);
+				break;
+			case RIGHT:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), am, world);
+				break;
+			default:
+				ae == null;
+			}
+			if(ae != null) {
+				var joint:b2WeldJointDef = new b2WeldJointDef();
+				joint.Initialize(m_physics, ae.getPhysics(), rectDef.position);
+				joints.push(world.CreateJoint(joint));
+				actioners.push(ae);
+				addChild(ae);
+			}
 		}
 
 		private function removeActions():void {

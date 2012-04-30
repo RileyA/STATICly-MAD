@@ -9,7 +9,7 @@ package {
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
 
-		private var m_done:Boolean;
+		protected var m_done:Boolean;
 
 		public function MenuState(game:Game):void {
 			super(game);

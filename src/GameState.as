@@ -30,7 +30,7 @@ package {
 			@param delta Time elapsed since last frame
 			@return whether or not to continue the state or to move onto the next one */
 		public function update(delta:Number):Boolean {
-			return true;
+			return true; // Generic GameState has no reason to exist
 		}
 
 		/** Called when a state is being "paused" and a new state is 
@@ -41,5 +41,6 @@ package {
 		/** Called when the state above this is popped and this one is resumed */
 		public function resume():void {
 		}
+
 	}
 }
