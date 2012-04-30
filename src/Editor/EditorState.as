@@ -29,7 +29,6 @@ package Editor {
 
 		private var m_pauseKey:Boolean;
 		private var m_resetKey:Boolean;
-		private var m_saveKey:Boolean;
 		private var m_paused:Boolean;
 
 		private var m_levelInfo:LevelInfo;
@@ -37,13 +36,14 @@ package Editor {
 		private var m_loadRef:FileReference;
 		private var m_menu:EditorMenu;
 
+		private var m_focused:EditorProxy;
+
 		private var m_levelSprite:Sprite;
 
 		public function EditorState(game:Game):void {
 			super(game);
 			m_pauseKey = true;
 			m_resetKey = true;
-			m_saveKey = true;
 			m_paused = true;
 		}
 
@@ -51,10 +51,19 @@ package Editor {
 			/** create editor UI stuffs */
 			m_levelLoaded = false;
 			m_levelSprite = new Sprite();
+			// add something clickable
+			var s:Shape = new Shape();
+			s.alpha = 0.0;
+			s.graphics.beginFill(0x000000);
+			s.graphics.drawRect(-800,-600,2400,1800);
+			s.graphics.endFill();
+			m_levelSprite.addChild(s);
 			addChild(m_levelSprite);
 
 			m_menu = new EditorMenu("N/A");
 			addChild(m_menu);
+			addEventListener(MouseEvent.CLICK, addBlock);
+			addEventListener(MouseEvent.MOUSE_DOWN, handleFocus);
 			m_menu.saveButton.addEventListener(MouseEvent.CLICK, save);
 			m_menu.loadButton.addEventListener(MouseEvent.CLICK, load);
 			m_menu.newButton.addEventListener(MouseEvent.CLICK, newLevel);
@@ -63,12 +72,19 @@ package Editor {
 		}
 
 		private function unloadLevel():void {
+			m_focused = null;
 			m_levelSprite.x = 0;
 			m_levelSprite.y = 0;
 			m_level = null;
 			while (m_levelSprite.numChildren > 0)
 				m_levelSprite.removeChildAt(0);
 			m_levelLoaded = false;
+			var s:Shape = new Shape();
+			s.alpha = 0.0;
+			s.graphics.beginFill(0x000000);
+			s.graphics.drawRect(-800,-600,2400,1800);
+			s.graphics.endFill();
+			m_levelSprite.addChild(s);
 		}
 
 		public function loadLevel(info:LevelInfo):void {
@@ -132,31 +148,62 @@ package Editor {
 					m_resetKey = false;
 				}
 
-				/*if (!m_saveKey && Keys.isKeyPressed(SAVE_KEY)) {
-					// make a new block
-					var info:BlockInfo = new BlockInfo();
-					info.scale.x = 1;
-					info.scale.y = 1;
-					info.position.x = mouseX / m_level.pixelsPerMeter;
-					info.position.y = mouseY / m_level.pixelsPerMeter;
-					info.movement = "free";
-
-					var newBlock:Block = new Block(info, m_level);
-					m_level.addBlock(newBlock);
-					newBlock.updateTransform(m_level.pixelsPerMeter);
-					var proxy:BlockProxy = new BlockProxy(newBlock);
-					m_blocks.push(proxy);
-					m_levelSprite.addChild(proxy);
-					m_saveKey = true;
-				} else if (!Keys.isKeyPressed(SAVE_KEY)) {
-					m_saveKey = false;
-				}*/
-
 				m_level.update(delta);
 	
 			}
 
 			return !Keys.isKeyPressed(Keyboard.ESCAPE);
+		}
+
+		public function addBlock(e:MouseEvent):void { 
+			if (!m_levelLoaded) return;
+			if (e.target == m_levelSprite 
+				&& Keys.isKeyPressed(Keyboard.CONTROL)) {
+
+				// make a new block, default 1x1 meter, fixed
+				var info:BlockInfo = new BlockInfo();
+				info.scale.x = 1;
+				info.scale.y = 1;
+				info.position.x = mouseX / m_level.pixelsPerMeter;
+				info.position.y = mouseY / m_level.pixelsPerMeter;
+				info.movement = "fixed";
+				info.insulated = false;
+				info.strong = false;
+
+				var newBlock:Block = new Block(info, m_level);
+				m_level.addBlock(newBlock);
+				newBlock.updateTransform(m_level.pixelsPerMeter);
+				var proxy:BlockProxy = new BlockProxy(newBlock);
+				m_blocks.push(proxy);
+				m_levelSprite.addChild(proxy);
+
+				if (m_focused) {
+					m_focused.loseFocus();
+				}
+				m_focused = proxy;
+				m_focused.gainFocus();
+			} else {
+				handleFocus(e);
+			}
+		}
+
+		public function handleFocus(e:MouseEvent):void { 
+			if (!m_levelLoaded) return;
+			if (e.target.parent is EditorProxy
+				|| e.target is EditorProxy) {
+				var tmp:EditorProxy = e.target.parent is EditorProxy ? 
+					e.target.parent as EditorProxy : e.target as EditorProxy;
+				if (m_focused) {
+					m_focused.loseFocus();
+				}
+				m_focused = tmp;
+				m_focused.gainFocus();
+			} else if(e.target == m_levelSprite) {
+				if (m_focused) {
+					m_focused.loseFocus();
+				}
+				m_focused = null;
+			}
 		}
 
 		public function save(e:MouseEvent):void {

@@ -8,7 +8,7 @@ package Editor {
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
-	public class PlayerProxy extends Draggable {
+	public class PlayerProxy extends Draggable implements EditorProxy {
 		
 		private var m_child:Player;
 
@@ -20,10 +20,7 @@ package Editor {
 
 		override public function reposition():void {
 			super.reposition();
-
-			// x,y + m_children[0].x,y are coords
 			var pos:UVec2 = new UVec2(x, y);
-			
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
 			pos.x += Player.WIDTH/2;
@@ -35,8 +32,8 @@ package Editor {
 			scale_x:Number, scale_y:Number):void {
 			var tmp:Shape = new Shape();
 			alpha = 0.4;
-			tmp.graphics.lineStyle(3.0,0x66cc66,1.0,false,LineScaleMode.NONE);
-			tmp.graphics.beginFill(0x88ff88);
+			tmp.graphics.lineStyle(3.0,0xcc9999,1.0,false,LineScaleMode.NONE);
+			tmp.graphics.beginFill(0xffaaaa);
 			tmp.graphics.drawRect(0, 0, scale_x, scale_y);
 			tmp.graphics.endFill();
 			addChild(tmp);
@@ -56,6 +53,28 @@ package Editor {
 			pos.y /= m_child.scaleY;
 			pos.x += Player.WIDTH/2;
 			return pos;
+		}
+
+		public function gainFocus():void {
+			alpha = 0.7;
+			var tmp:Shape = getChildAt(0) as Shape;
+			tmp.graphics.clear();
+			tmp.graphics.lineStyle(3.0,0x99cc99,1.0,false,LineScaleMode.NONE);
+			tmp.graphics.beginFill(0xaaffaa);
+			tmp.graphics.drawRect(0, 0, Player.WIDTH * m_child.scaleX,
+				Player.HEIGHT * m_child.scaleY);
+			tmp.graphics.endFill();
+		}
+
+		public function loseFocus():void {
+			alpha = 0.2;
+			var tmp:Shape = getChildAt(0) as Shape;
+			tmp.graphics.clear();
+			tmp.graphics.lineStyle(3.0,0xcc9999,1.0,false,LineScaleMode.NONE);
+			tmp.graphics.beginFill(0xffaaaa);
+			tmp.graphics.drawRect(0, 0, Player.WIDTH * m_child.scaleX,
+				Player.HEIGHT * m_child.scaleY);
+			tmp.graphics.endFill();
 		}
 	}
 }

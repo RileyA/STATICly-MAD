@@ -10,8 +10,8 @@ package Editor {
 		private var m_drag:Number = 0;
 		private var m_anchor:Number = 0;
 		private var m_dragging:Boolean = false;
-		private var m_scale_x:Number;
-		private var m_scale_y:Number;
+		protected var m_scale_x:Number;
+		protected var m_scale_y:Number;
 		protected var m_children:Vector.<Sprite>;
 		public var m_scalepx_x:Number;
 		public var m_scalepx_y:Number;
