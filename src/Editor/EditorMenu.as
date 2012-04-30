@@ -15,6 +15,7 @@ package Editor {
 
 		public var body:Sprite;
 		public var levelName:TextField;
+		public var focusedCaption:TextField;
 		public var levelW:TextField;
 		public var levelH:TextField;
 		public var textFormat:TextFormat;
@@ -22,12 +23,19 @@ package Editor {
 		public var newButton:SimpleButton;
 		public var saveButton:SimpleButton;
 		public var loadButton:SimpleButton;
+		public var focusedRect:Sprite;
 		
 		public function EditorMenu(name:String):void {
 			super(0,0,150,15);
 			body = new Sprite();
-			addChild(body);
 			body.y = 15;
+			addChild(body);
+
+			focusedRect = new Sprite();
+			addChild(focusedRect);
+			focusedRect.x = 0; 
+			focusedRect.y = 95; 
+
 			var s:Shape = new Shape();
 			s.graphics.beginFill(0xcccccc);
 			s.graphics.lineStyle(2.0,0x777777,1.0,false,LineScaleMode.NONE);
@@ -50,6 +58,16 @@ package Editor {
 			levelNameCaption.height = 12;
 			levelNameCaption.selectable = false;
 			body.addChild(levelNameCaption);
+
+			focusedCaption = new TextField();
+			focusedCaption.defaultTextFormat = textFormat;
+			focusedCaption.text = "Selected: Nothing";
+			focusedCaption.x = 4;
+			focusedCaption.y = 66;
+			focusedCaption.width = 140;
+			focusedCaption.height = 12;
+			focusedCaption.selectable = false;
+			body.addChild(focusedCaption);
 
 			levelName = new TextField();
 			levelName.defaultTextFormat = textFormat;
@@ -180,11 +198,11 @@ package Editor {
 			addChild(tmp);
 		}
 
-		public function onClick(e:MouseEvent):void {
+		public static function onClick(e:MouseEvent):void {
 			e.stopPropagation();
 		}
 
-		public function onKey(e:KeyboardEvent):void {
+		public static function onKey(e:KeyboardEvent):void {
 			e.stopPropagation();
 		}
 	}

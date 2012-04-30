@@ -93,6 +93,7 @@ package Editor {
 			m_blocks = new Vector.<BlockProxy>;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
+
 			var blocks:Vector.<Block> = m_level.getBlocks();
 			for (var i:uint=0;i<blocks.length;++i) {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
@@ -123,6 +124,7 @@ package Editor {
 
 		override public function update(delta:Number):Boolean {
 			if (m_levelLoaded) {
+				if (m_focused) m_focused.updateForm();
 				if (!m_pauseKey && Keys.isKeyPressed(PAUSE_KEY)) {
 					m_paused = !m_paused;
 					m_level.setUpdatePhysics(!m_paused);
@@ -176,12 +178,7 @@ package Editor {
 				var proxy:BlockProxy = new BlockProxy(newBlock);
 				m_blocks.push(proxy);
 				m_levelSprite.addChild(proxy);
-
-				if (m_focused) {
-					m_focused.loseFocus();
-				}
-				m_focused = proxy;
-				m_focused.gainFocus();
+				refocus(proxy);
 			} else {
 				handleFocus(e);
 			}
@@ -193,16 +190,9 @@ package Editor {
 				|| e.target is EditorProxy) {
 				var tmp:EditorProxy = e.target.parent is EditorProxy ? 
 					e.target.parent as EditorProxy : e.target as EditorProxy;
-				if (m_focused) {
-					m_focused.loseFocus();
-				}
-				m_focused = tmp;
-				m_focused.gainFocus();
+				refocus(tmp);
 			} else if(e.target == m_levelSprite) {
-				if (m_focused) {
-					m_focused.loseFocus();
-				}
-				m_focused = null;
+				refocus(null);
 			}
 		}
 
@@ -247,6 +237,21 @@ package Editor {
 			m_levelSprite.addChild(m_player);
 			m_blocks = new Vector.<BlockProxy>;
 			m_levelLoaded = true;
+		}
+
+		public function refocus(focused:EditorProxy):void {
+			if (m_focused) m_focused.loseFocus();
+			m_focused = focused;
+			while (m_menu.focusedRect.numChildren > 0)
+				m_menu.focusedRect.removeChildAt(0);
+			if (m_focused) {
+				m_focused.gainFocus();
+				m_menu.focusedCaption.text = "Selected: " 
+					+ m_focused.getCaption();
+				m_focused.populateForm(m_menu.focusedRect);
+			} else {
+				m_menu.focusedCaption.text = "Selected: None";
+			}
 		}
 	}
 }

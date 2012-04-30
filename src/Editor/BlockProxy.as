@@ -6,6 +6,7 @@ package Editor {
 	import Box2D.Collision.*;
 	import flash.display.Shape;
 	import flash.display.LineScaleMode;
+	import flash.display.Sprite;
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
@@ -73,6 +74,18 @@ package Editor {
 			tmp.graphics.beginFill(0xffaaaa);
 			tmp.graphics.drawRect(0, 0, m_scale_x, m_scale_y);
 			tmp.graphics.endFill();
+		}
+
+		public function populateForm(form:Sprite):void {
+
+		}
+
+		public function updateForm():void {
+			// ...
+		}
+
+		public function getCaption():String {
+			return "Block";
 		}
 	}
 }
