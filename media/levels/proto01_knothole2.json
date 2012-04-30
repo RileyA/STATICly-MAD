@@ -1,0 +1,200 @@
+{
+	"gravity" : 
+	{
+		"y_rel" : 0,
+		"y" : 9.8,
+		"x_px" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x" : 0
+	},
+	"levelSize" : 
+	{
+		"y_rel" : 0,
+		"y" : 15,
+		"x_px" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x" : 26.666
+	},
+	"blocks" : 
+	[
+		{
+			"position" : 
+			{
+				"y_rel" : 0,
+				"y" : 10,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 4
+			},
+			"surfaces" : 
+			[
+			"up,bcarpet"
+			],
+			"chargePolarity" : 0,
+			"actions" : 
+			[
+			],
+			"insulated" : true,
+			"bounds" : 
+			[
+			],
+			"movement" : "fixed",
+			"strong" : true,
+			"scale" : 
+			{
+				"y_rel" : 0,
+				"y" : 0.5,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 8
+			}
+		},
+		{
+			"position" : 
+			{
+				"y_rel" : 0,
+				"y" : 10.164745875,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 11.664708374999998
+			},
+			"surfaces" : 
+			[
+			],
+			"chargePolarity" : 1,
+			"actions" : 
+			[
+			],
+			"insulated" : false,
+			"bounds" : 
+			[
+			],
+			"movement" : "fixed",
+			"strong" : true,
+			"scale" : 
+			{
+				"y_rel" : 0,
+				"y" : 0.8333125,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 7.266484999999999
+			}
+		},
+		{
+			"position" : 
+			{
+				"y_rel" : 0,
+				"y" : 10.164745875,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 19.164520875
+			},
+			"surfaces" : 
+			[
+			],
+			"chargePolarity" : 1,
+			"actions" : 
+			[
+			],
+			"insulated" : false,
+			"bounds" : 
+			[
+			],
+			"movement" : "fixed",
+			"strong" : true,
+			"scale" : 
+			{
+				"y_rel" : 0,
+				"y" : 0.7666474999999999,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 5.799855
+			}
+		},
+		{
+			"position" : 
+			{
+				"y_rel" : 0,
+				"y" : 10,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 25
+			},
+			"surfaces" : 
+			[
+			"up,ground"
+			],
+			"chargePolarity" : 0,
+			"actions" : 
+			[
+			],
+			"insulated" : true,
+			"bounds" : 
+			[
+			],
+			"movement" : "fixed",
+			"strong" : true,
+			"scale" : 
+			{
+				"y_rel" : 0,
+				"y" : 0.5,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 6
+			}
+		},
+		{
+			"position" : 
+			{
+				"y_rel" : 0,
+				"y" : 8.081464624999999,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 3.3815821249999996
+			},
+			"surfaces" : 
+			[
+			],
+			"chargePolarity" : 0,
+			"actions" : 
+			[
+			],
+			"insulated" : true,
+			"bounds" : 
+			[
+			],
+			"movement" : "fixed",
+			"strong" : true,
+			"scale" : 
+			{
+				"y_rel" : 0,
+				"y" : 0.466655,
+				"x_px" : 0,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"x" : 6.699832499999999
+			}
+		}
+	],
+	"playerPosition" : 
+	{
+		"y_rel" : 0,
+		"y" : 9.6330925,
+		"x_px" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x" : 0.49666299999999997
+	},
+	"title" : "Son of a gun, I CAN FLY!"
+}
