@@ -4,10 +4,13 @@ package Editor {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Box2D.Collision.*;
+	import flash.display.Shape;
+	import flash.display.LineScaleMode;
+	import flash.display.Sprite;
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
-	public class BlockProxy extends Scalable {
+	public class BlockProxy extends Scalable implements EditorProxy {
 		
 		private var m_child:Block;
 
@@ -51,6 +54,38 @@ package Editor {
 			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
 			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
 			m_child.reinit();
+		}
+
+		public function gainFocus():void {
+			m_children[0].alpha = 0.7;
+			var tmp:Shape = m_children[0].getChildAt(0) as Shape;
+			tmp.graphics.clear();
+			tmp.graphics.lineStyle(3.0,0x99cc99,1.0,false,LineScaleMode.NONE);
+			tmp.graphics.beginFill(0xaaffaa);
+			tmp.graphics.drawRect(0, 0, m_scale_x, m_scale_y);
+			tmp.graphics.endFill();
+		}
+
+		public function loseFocus():void {
+			m_children[0].alpha = 0.2;
+			var tmp:Shape = m_children[0].getChildAt(0) as Shape;
+			tmp.graphics.clear();
+			tmp.graphics.lineStyle(3.0,0xcc9999,1.0,false,LineScaleMode.NONE);
+			tmp.graphics.beginFill(0xffaaaa);
+			tmp.graphics.drawRect(0, 0, m_scale_x, m_scale_y);
+			tmp.graphics.endFill();
+		}
+
+		public function populateForm(form:Sprite):void {
+
+		}
+
+		public function updateForm():void {
+			// ...
+		}
+
+		public function getCaption():String {
+			return "Block";
 		}
 	}
 }

@@ -74,12 +74,7 @@ package {
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
 				var loadedBlock:Block = new Block(m_info.blocks[i], this);
-				m_blocks.push(loadedBlock);
-				m_parent_sprite.addChild(loadedBlock);
-				m_gfxPhysObjects.push(loadedBlock);
-				if (loadedBlock.isChargableBlock()) {
-					m_chargableManager.addChargable(loadedBlock);
-				}
+				addBlock(loadedBlock);
 			}
 
 			// make the player
@@ -90,16 +85,15 @@ package {
 
 			// prep debug stuff
 			prepareDebugVisualization();
+		}
 
-			// some debug text
-			/*var levelNameText:TextField = new TextField();
-			levelNameText.width = 600;
-			levelNameText.height = 500;
-			levelNameText.x = 5;
-			levelNameText.y = 5;
-			levelNameText.text = "Testing Level: " + m_info.title;
-			levelNameText.selectable = false;
-			m_parent_sprite.addChild(levelNameText);*/
+		public function addBlock(b:Block):void {
+			m_blocks.push(b);
+			m_parent_sprite.addChild(b);
+			m_gfxPhysObjects.push(b);
+			if (b.isChargableBlock()) {
+				m_chargableManager.addChargable(b);
+			}
 		}
 
 		public function setUpdatePhysics(updatePhys:Boolean):void {
@@ -199,5 +193,9 @@ package {
 			m_gfxPhysObjects.push(wall);
 			m_parent_sprite.addChild(wall);
 		}
+
+		public function getInfo():LevelInfo {
+			return m_info;
+		}	
 	}
 }
