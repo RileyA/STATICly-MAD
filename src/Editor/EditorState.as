@@ -9,6 +9,7 @@ package Editor {
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
@@ -34,6 +35,9 @@ package Editor {
 		private var m_levelInfo:LevelInfo;
 		private var m_levelLoaded:Boolean;
 		private var m_loadRef:FileReference;
+		private var m_menu:EditorMenu;
+
+		private var m_levelSprite:Sprite;
 
 		public function EditorState(game:Game):void {
 			super(game);
@@ -46,25 +50,30 @@ package Editor {
 		override public function init():void {
 			/** create editor UI stuffs */
 			m_levelLoaded = false;
+			m_levelSprite = new Sprite();
+			addChild(m_levelSprite);
 
-			m_loadRef = new FileReference();
-			m_loadRef.addEventListener(Event.SELECT, selectionComplete);
-			var fileFilter:FileFilter 
-				= new FileFilter("Levels: (*.json)", "*.json");
-			m_loadRef.browse([fileFilter]);
+			m_menu = new EditorMenu("N/A");
+			addChild(m_menu);
+			m_menu.saveButton.addEventListener(MouseEvent.CLICK, save);
+			m_menu.loadButton.addEventListener(MouseEvent.CLICK, load);
+			m_menu.newButton.addEventListener(MouseEvent.CLICK, newLevel);
+			m_menu.x = 325;
+			m_menu.y = 125;
+		}
+
+		private function unloadLevel():void {
+			m_levelSprite.x = 0;
+			m_levelSprite.y = 0;
+			m_level = null;
+			while (m_levelSprite.numChildren > 0)
+				m_levelSprite.removeChildAt(0);
+			m_levelLoaded = false;
 		}
 
 		public function loadLevel(info:LevelInfo):void {
-			var block_text:TextField = new TextField();
-			block_text.width = 600;
-			block_text.height = 500;
-			block_text.x = 5;
-			block_text.y = 5;
-			block_text.text = "Editing: " + info.title;
-			block_text.selectable = false;
-			addChild(block_text);
-
-			m_level = new Level(this, info);
+			m_menu.levelName.text = info.title;
+			m_level = new Level(m_levelSprite, info);
 			m_blocks = new Vector.<BlockProxy>;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
@@ -72,13 +81,14 @@ package Editor {
 			for (var i:uint=0;i<blocks.length;++i) {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
 				m_blocks.push(proxy);
-				addChild(proxy);
+				m_levelSprite.addChild(proxy);
 			}
 			m_player = new PlayerProxy(m_level.getPlayer());
-			addChild(m_player);
+			m_levelSprite.addChild(m_player);
 		}
 
 		private function selectionComplete(e:Event):void {
+			unloadLevel();
 			m_loadRef.removeEventListener(Event.SELECT, selectionComplete);
 			m_loadRef.addEventListener(Event.COMPLETE, loadComplete);
 			m_loadRef.load();
@@ -122,25 +132,74 @@ package Editor {
 					m_resetKey = false;
 				}
 
-				// quick hack to test saving
-				if (!m_saveKey && Keys.isKeyPressed(SAVE_KEY)) {
-					m_levelInfo.blocks = new Vector.<BlockInfo>;
-					blocks = m_level.getBlocks();
-					for (i = 0; i < blocks.length; ++i)
-						m_levelInfo.blocks.push(blocks[i].getInfo());
-					m_levelInfo.playerPosition = m_player.getPos();
-					var saver:FileReference = new FileReference();
-					saver.save(MiscUtils.outputJSON(m_levelInfo),
-						"out.json");
+				/*if (!m_saveKey && Keys.isKeyPressed(SAVE_KEY)) {
+					// make a new block
+					var info:BlockInfo = new BlockInfo();
+					info.scale.x = 1;
+					info.scale.y = 1;
+					info.position.x = mouseX / m_level.pixelsPerMeter;
+					info.position.y = mouseY / m_level.pixelsPerMeter;
+					info.movement = "free";
+
+					var newBlock:Block = new Block(info, m_level);
+					m_level.addBlock(newBlock);
+					newBlock.updateTransform(m_level.pixelsPerMeter);
+					var proxy:BlockProxy = new BlockProxy(newBlock);
+					m_blocks.push(proxy);
+					m_levelSprite.addChild(proxy);
 					m_saveKey = true;
 				} else if (!Keys.isKeyPressed(SAVE_KEY)) {
 					m_saveKey = false;
-				}
+				}*/
 
 				m_level.update(delta);
+	
 			}
 
 			return !Keys.isKeyPressed(Keyboard.ESCAPE);
+		}
+
+		public function save(e:MouseEvent):void {
+			e.stopPropagation();
+			if (m_levelLoaded) {
+				m_levelInfo.blocks = new Vector.<BlockInfo>;
+				m_levelInfo.title = m_menu.levelName.text;
+				var blocks:Vector.<Block> = m_level.getBlocks();
+				for (var i:uint = 0; i < blocks.length; ++i)
+					m_levelInfo.blocks.push(blocks[i].getInfo());
+				m_levelInfo.playerPosition = m_player.getPos();
+				var saver:FileReference = new FileReference();
+				saver.save(MiscUtils.outputJSON(m_levelInfo),
+					m_levelInfo.title + ".json");
+			}
+		}
+
+		public function load(e:MouseEvent):void {
+			e.stopPropagation();
+			m_loadRef = new FileReference();
+			m_loadRef.addEventListener(Event.SELECT, selectionComplete);
+			var fileFilter:FileFilter 
+				= new FileFilter("Levels: (*.json)", "*.json");
+			m_loadRef.browse([fileFilter]);
+		}
+
+		public function newLevel(e:MouseEvent):void {
+			e.stopPropagation();
+			unloadLevel();
+			var info:LevelInfo = new LevelInfo();
+			m_levelInfo = info;
+			info.title = m_menu.levelName.text;
+			info.levelSize.x = parseFloat(m_menu.levelW.text);
+			info.levelSize.y = parseFloat(m_menu.levelH.text);
+			info.playerPosition.x = parseFloat(m_menu.levelW.text)/2;
+			info.playerPosition.y = parseFloat(m_menu.levelH.text)/2;
+			m_level = new Level(m_levelSprite, info);
+			m_level.setUpdatePhysics(!m_paused);
+			m_level.update(0);
+			m_player = new PlayerProxy(m_level.getPlayer());
+			m_levelSprite.addChild(m_player);
+			m_blocks = new Vector.<BlockProxy>;
+			m_levelLoaded = true;
 		}
 	}
 }
