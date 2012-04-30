@@ -7,12 +7,25 @@ package Editor {
 	import flash.display.Shape;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
+	import flash.text.TextField;
+	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.TextEvent;
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
 	public class BlockProxy extends Scalable implements EditorProxy {
 		
 		private var m_child:Block;
+
+		private var posLabel:TextField = new TextField();
+		private var scaleLabel:TextField = new TextField();
+		private var xpos:TextField = new TextField();
+		private var ypos:TextField = new TextField();
+		private var xscale:TextField = new TextField();
+		private var yscale:TextField = new TextField();
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
@@ -77,7 +90,86 @@ package Editor {
 		}
 
 		public function populateForm(form:Sprite):void {
+			var textFormat:TextFormat = new TextFormat("Sans", 8, 0x000000);
+			xpos.defaultTextFormat = textFormat;
+			xpos.text = Number(x / m_child.scaleX).toFixed(4);
+			xpos.x = 53;
+			xpos.y = 4;
+			xpos.width = 45;
+			xpos.height = 12;
+			xpos.type = TextFieldType.INPUT;
+			xpos.border = true;
+			xpos.alpha = 1;
+			xpos.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			xpos.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			xpos.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(xpos);
 
+			ypos = new TextField();
+			ypos.defaultTextFormat = textFormat;
+			ypos.text = Number(y / m_child.scaleY).toFixed(4);
+			ypos.x = 100;
+			ypos.y = 4;
+			ypos.width = 45;
+			ypos.height = 12;
+			ypos.type = TextFieldType.INPUT;
+			ypos.border = true;
+			ypos.alpha = 1;
+			ypos.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			ypos.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			ypos.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(ypos);
+
+			xscale.defaultTextFormat = textFormat;
+			xscale.text = Number(m_child.getScale().x).toFixed(4);
+			xscale.x = 53;
+			xscale.y = 19;
+			xscale.width = 45;
+			xscale.height = 12;
+			xscale.type = TextFieldType.INPUT;
+			xscale.border = true;
+			xscale.alpha = 1;
+			xscale.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			xscale.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			xscale.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(xscale);
+
+			yscale = new TextField();
+			yscale.defaultTextFormat = textFormat;
+			yscale.text = Number(m_child.getScale().y).toFixed(4);
+			yscale.x = 100;
+			yscale.y = 19;
+			yscale.width = 45;
+			yscale.height = 12;
+			yscale.type = TextFieldType.INPUT;
+			yscale.border = true;
+			yscale.alpha = 1;
+			yscale.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			yscale.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			yscale.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(yscale);
+
+			posLabel = new TextField();
+			posLabel.defaultTextFormat = textFormat;
+			posLabel.text = "Start Pos: ";
+			posLabel.x = 4;
+			posLabel.y = 4;
+			posLabel.width = 70;
+			posLabel.height = 12;
+			posLabel.border = false;
+			posLabel.alpha = 1;
+			form.addChild(posLabel);
+
+			scaleLabel = new TextField();
+			scaleLabel.defaultTextFormat = textFormat;
+			scaleLabel.text = "Scale: ";
+			scaleLabel.x = 4;
+			scaleLabel.y = 19;
+			scaleLabel.width = 70;
+			scaleLabel.height = 12;
+			scaleLabel.border = false;
+			scaleLabel.alpha = 1;
+			form.addChild(scaleLabel);
 		}
 
 		public function updateForm():void {
@@ -86,6 +178,26 @@ package Editor {
 
 		public function getCaption():String {
 			return "Block";
+		}
+
+		public function handlePropChange(e:Event):void {
+			// if scale, we can just reuse
+			if (e.target == xpos || e.target == ypos) {
+				x = parseFloat(xpos.text) * m_child.scaleX;
+				y = parseFloat(ypos.text) * m_child.scaleY;
+				reposition();
+			// otherwise we need to reinit the whole thang
+			} else {
+				m_child.getInfo().scale.x = parseFloat(xscale.text);
+				m_child.getInfo().scale.y = parseFloat(yscale.text);
+				forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
+					m_child.getInfo().scale.y * m_child.scaleY);
+				m_child.getInfo().position.x = parseFloat(xpos.text) 
+					+ m_child.getInfo().scale.x/2;
+				m_child.getInfo().position.y = parseFloat(ypos.text)
+					+ m_child.getInfo().scale.y/2;
+				m_child.reinit();
+			}
 		}
 	}
 }

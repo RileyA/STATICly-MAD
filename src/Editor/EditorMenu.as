@@ -42,7 +42,7 @@ package Editor {
 			s.graphics.drawRect(1,0,148,335);
 			s.graphics.endFill();
 			body.addChild(s);
-			body.alpha = 0.75;
+			body.alpha = 0.9;
 			body.addEventListener(MouseEvent.MOUSE_DOWN, onClick);
 
 			textFormat = new TextFormat("Sans", 8, 0x000000);
