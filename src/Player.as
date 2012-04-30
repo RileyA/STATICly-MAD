@@ -49,7 +49,7 @@ package {
 			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
 			fd.density = Block.strongDensity*2;
-			fd.friction = 0.3;
+			fd.friction = 0.0;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
 			m_physics = world.CreateBody(ccDef);
@@ -156,10 +156,8 @@ package {
 			var reactLoc:b2Vec2
 			if (canJump && DO_REACTION_FORCES){
 				var con0:b2ContactEdge=footContacts[0];
-				var man:b2WorldManifold=new b2WorldManifold();
-				con0.contact.GetWorldManifold(man);
-				reactLoc=man.m_points[0]; // seems to be messed up
 				reactBody=con0.other;
+				reactLoc=m_physics.GetWorldPoint(new b2Vec2(0,0));
 			}
 			
 			// x movement //
@@ -175,7 +173,7 @@ package {
 				if (canJump || (deltaSpeed*xspeed)>0) {
 					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
 					if (canJump && DO_REACTION_FORCES){
-						reactBody.ApplyForce(new b2Vec2(-fx, 0),reactBody.GetWorldCenter());
+						reactBody.ApplyForce(new b2Vec2(-fx, 0),reactLoc);
 					}
 				}
 			}
@@ -184,10 +182,9 @@ package {
 			if (up && canJump) {
 				var fy:Number=m_physics.GetMass()*(m_physics.GetLinearVelocity().y+JUMP_STRENGTH);
 				if (DO_REACTION_FORCES){
-					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactBody.GetWorldCenter());
+					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactLoc);
 				}
 				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
-				
 				// That should be the same as this:
 				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
