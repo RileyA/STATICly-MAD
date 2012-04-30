@@ -7,6 +7,7 @@ package Editor {
 	import flash.display.Shape;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
+	import flash.display.SimpleButton;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
@@ -20,12 +21,14 @@ package Editor {
 		
 		private var m_child:Block;
 
-		private var posLabel:TextField = new TextField();
-		private var scaleLabel:TextField = new TextField();
-		private var xpos:TextField = new TextField();
-		private var ypos:TextField = new TextField();
-		private var xscale:TextField = new TextField();
-		private var yscale:TextField = new TextField();
+		private var insulatedBox:EditorOption;
+		private var strongBox:EditorOption;
+		private var movementBox:EditorOption;
+		private var polarityBox:EditorOption;
+		private var posVec:EditorVectorOption;
+		private var scaleVec:EditorVectorOption;
+		private var trackPos1:EditorVectorOption;
+		private var trackPos2:EditorVectorOption;
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
@@ -90,90 +93,84 @@ package Editor {
 		}
 
 		public function populateForm(form:Sprite):void {
-			var textFormat:TextFormat = new TextFormat("Sans", 8, 0x000000);
-			xpos.defaultTextFormat = textFormat;
-			xpos.text = Number(x / m_child.scaleX).toFixed(4);
-			xpos.x = 53;
-			xpos.y = 4;
-			xpos.width = 45;
-			xpos.height = 12;
-			xpos.type = TextFieldType.INPUT;
-			xpos.border = true;
-			xpos.alpha = 1;
-			xpos.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
-			xpos.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
-			xpos.addEventListener(Event.CHANGE, handlePropChange);
-			form.addChild(xpos);
 
-			ypos = new TextField();
-			ypos.defaultTextFormat = textFormat;
-			ypos.text = Number(y / m_child.scaleY).toFixed(4);
-			ypos.x = 100;
-			ypos.y = 4;
-			ypos.width = 45;
-			ypos.height = 12;
-			ypos.type = TextFieldType.INPUT;
-			ypos.border = true;
-			ypos.alpha = 1;
-			ypos.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
-			ypos.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
-			ypos.addEventListener(Event.CHANGE, handlePropChange);
-			form.addChild(ypos);
+			posVec = new EditorVectorOption(
+				"Pos: ", x / m_child.scaleX, y / m_child.scaleY);
+			posVec.x = 4;
+			posVec.y = 3;
+			form.addChild(posVec);
 
-			xscale.defaultTextFormat = textFormat;
-			xscale.text = Number(m_child.getScale().x).toFixed(4);
-			xscale.x = 53;
-			xscale.y = 19;
-			xscale.width = 45;
-			xscale.height = 12;
-			xscale.type = TextFieldType.INPUT;
-			xscale.border = true;
-			xscale.alpha = 1;
-			xscale.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
-			xscale.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
-			xscale.addEventListener(Event.CHANGE, handlePropChange);
-			form.addChild(xscale);
+			scaleVec = new EditorVectorOption(
+				"Scale", m_child.getScale().x, m_child.getScale().y);
+			scaleVec.x = 4;
+			scaleVec.y = 19;
+			form.addChild(scaleVec);
 
-			yscale = new TextField();
-			yscale.defaultTextFormat = textFormat;
-			yscale.text = Number(m_child.getScale().y).toFixed(4);
-			yscale.x = 100;
-			yscale.y = 19;
-			yscale.width = 45;
-			yscale.height = 12;
-			yscale.type = TextFieldType.INPUT;
-			yscale.border = true;
-			yscale.alpha = 1;
-			yscale.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
-			yscale.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
-			yscale.addEventListener(Event.CHANGE, handlePropChange);
-			form.addChild(yscale);
+			var opts:Vector.<String> = new Vector.<String>();
+			opts.push("Yes", "No");
+			insulatedBox = new EditorOption(opts, "Insulated", 
+				m_child.getInfo().insulated ? 0 : 1);
+			insulatedBox.x = 4;
+			insulatedBox.y = 35;
+			form.addChild(insulatedBox);
 
-			posLabel = new TextField();
-			posLabel.defaultTextFormat = textFormat;
-			posLabel.text = "Start Pos: ";
-			posLabel.x = 4;
-			posLabel.y = 4;
-			posLabel.width = 70;
-			posLabel.height = 12;
-			posLabel.border = false;
-			posLabel.alpha = 1;
-			form.addChild(posLabel);
+			strongBox = new EditorOption(opts, "Strong: ", 
+				m_child.getInfo().strong ? 0 : 1);
+			strongBox.x = 4;
+			strongBox.y = 51;
+			form.addChild(strongBox);
 
-			scaleLabel = new TextField();
-			scaleLabel.defaultTextFormat = textFormat;
-			scaleLabel.text = "Scale: ";
-			scaleLabel.x = 4;
-			scaleLabel.y = 19;
-			scaleLabel.width = 70;
-			scaleLabel.height = 12;
-			scaleLabel.border = false;
-			scaleLabel.alpha = 1;
-			form.addChild(scaleLabel);
+			var opts2:Vector.<String> = new Vector.<String>();
+			opts2.push("-1", "0", "+1");
+			polarityBox = new EditorOption(opts2, "Polarity: ", 
+				m_child.getInfo().chargePolarity + 1);
+			polarityBox.x = 4;
+			polarityBox.y = 66;
+			form.addChild(polarityBox);
+
+			var opts3:Vector.<String> = new Vector.<String>();
+			opts3.push("fixed", "free", "tracked");
+			var m:String = m_child.getInfo().movement;
+			var s:uint = 0;
+			if (m == "free") s = 1;
+			else if (m == "tracked") s = 2;
+			movementBox = new EditorOption(opts3, null, s);
+			movementBox.x = 4;
+			movementBox.y = 82;
+			form.addChild(movementBox);
+
+			var xtrack:Number = (m_child.getInfo().bounds.length > 0) ?
+				m_child.getInfo().bounds[0].x : -1;
+			var ytrack:Number = (m_child.getInfo().bounds.length > 0) ?
+				m_child.getInfo().bounds[0].y : 0;
+			trackPos1 = new EditorVectorOption(
+				"Track Pt. A", xtrack, ytrack);
+			trackPos1.x = 4;
+			trackPos1.y = 98;
+			form.addChild(trackPos1);
+
+			xtrack = (m_child.getInfo().bounds.length > 1) ?
+				m_child.getInfo().bounds[1].x : 1;
+			ytrack = (m_child.getInfo().bounds.length > 1) ?
+				m_child.getInfo().bounds[1].y : 0;
+			trackPos2 = new EditorVectorOption(
+				"Track Pt. B", xtrack, ytrack);
+			trackPos2.x = 4;
+			trackPos2.y = 114;
+			form.addChild(trackPos2);
+
+			insulatedBox.addEventListener(Event.CHANGE, handlePropChange);
+			strongBox.addEventListener(Event.CHANGE, handlePropChange);
+			polarityBox.addEventListener(Event.CHANGE, handlePropChange);
+			movementBox.addEventListener(Event.CHANGE, handlePropChange);
+			posVec.addEventListener(Event.CHANGE, handlePropChange);
+			scaleVec.addEventListener(Event.CHANGE, handlePropChange);
+			trackPos1.addEventListener(Event.CHANGE, handlePropChange);
+			trackPos2.addEventListener(Event.CHANGE, handlePropChange);
 		}
 
 		public function updateForm():void {
-			// ...
+			// TODO
 		}
 
 		public function getCaption():String {
@@ -181,23 +178,29 @@ package Editor {
 		}
 
 		public function handlePropChange(e:Event):void {
-			// if scale, we can just reuse
-			if (e.target == xpos || e.target == ypos) {
-				x = parseFloat(xpos.text) * m_child.scaleX;
-				y = parseFloat(ypos.text) * m_child.scaleY;
-				reposition();
-			// otherwise we need to reinit the whole thang
-			} else {
-				m_child.getInfo().scale.x = parseFloat(xscale.text);
-				m_child.getInfo().scale.y = parseFloat(yscale.text);
-				forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
-					m_child.getInfo().scale.y * m_child.scaleY);
-				m_child.getInfo().position.x = parseFloat(xpos.text) 
-					+ m_child.getInfo().scale.x/2;
-				m_child.getInfo().position.y = parseFloat(ypos.text)
-					+ m_child.getInfo().scale.y/2;
-				m_child.reinit();
-			}
+			x = posVec.getValue().x * m_child.scaleX;
+			y = posVec.getValue().y * m_child.scaleY;
+			reposition();
+			m_child.getInfo().scale.x = scaleVec.getValue().x;
+			m_child.getInfo().scale.y = scaleVec.getValue().y;
+			forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
+				m_child.getInfo().scale.y * m_child.scaleY);
+			m_child.getInfo().position.x = posVec.getValue().x 
+				+ m_child.getInfo().scale.x/2;
+			m_child.getInfo().position.y = posVec.getValue().y
+				+ m_child.getInfo().scale.y/2;
+			m_child.getInfo().movement = movementBox.getSelection();
+			m_child.getInfo().chargePolarity = parseInt(
+				polarityBox.getSelection());
+			m_child.getInfo().insulated = insulatedBox.getSelection() 
+				== "Yes";
+			m_child.getInfo().strong = strongBox.getSelection() 
+				== "Yes";
+			m_child.getInfo().bounds = new Vector.<UVec2>();
+			var pA:UVec2 = trackPos1.getValue().getCopy();
+			var pB:UVec2 = trackPos2.getValue().getCopy();
+			m_child.getInfo().bounds.push(pA, pB);
+			m_child.reinit();
 		}
 	}
 }

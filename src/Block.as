@@ -143,8 +143,6 @@ package {
 			}
 			
 			if (movement == TRACKED) {
-				var hold:Vector.<Number> = new Vector.<Number>();
-				hold.push(0, 18, 26.66, 18);
 				makeTracked(m_info.bounds);
 			}
 		}
@@ -263,8 +261,8 @@ package {
 			var anchor:b2Body = m_level.world.CreateBody(anchorDef);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			l.Subtract(center);
-			r.Subtract(center);
+			//l.Subtract(center);
+			//r.Subtract(center);
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;

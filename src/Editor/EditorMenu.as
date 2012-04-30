@@ -83,14 +83,14 @@ package Editor {
 			body.addChild(levelName);
 
 			saveButton = new SimpleButton();
-			makeButtonStates(saveButton, "Save", 70, 12);
+			makeButtonStates(saveButton, "Save", 70, 12, textButtonFormat);
 			saveButton.x = 4;
 			saveButton.y = 3;
 			saveButton.height = 12;
 			body.addChild(saveButton);
 
 			loadButton = new SimpleButton();
-			makeButtonStates(loadButton, "Load", 70, 12);
+			makeButtonStates(loadButton, "Load", 70, 12, textButtonFormat);
 			loadButton.x = 78;
 			loadButton.y = 4;
 			loadButton.height = 12;
@@ -123,15 +123,15 @@ package Editor {
 			body.addChild(levelH);
 
 			newButton = new SimpleButton();
-			makeButtonStates(newButton, "New Level", 45, 12);
+			makeButtonStates(newButton, "New Level", 45, 12, textButtonFormat);
 			newButton.x = 100;
 			newButton.y = 35;
 			newButton.height = 12;
 			body.addChild(newButton);
 		}
 
-		private function makeButtonStates(btn:SimpleButton, cap:String,
-			w:Number, h:Number):void {
+		public static function makeButtonStates(btn:SimpleButton, cap:String,
+			w:Number, h:Number, format:TextFormat):void {
 			var sprite:Sprite = new Sprite();
 			var shape:Shape = new Shape();
 			shape.graphics.beginFill(0x999999);
@@ -139,7 +139,7 @@ package Editor {
 			shape.graphics.endFill();
 			sprite.addChild(shape);
 			var btnCaption:TextField = new TextField();
-			btnCaption.defaultTextFormat = textButtonFormat;
+			btnCaption.defaultTextFormat = format;
 			btnCaption.text = cap;
 			btnCaption.width = w;
 			btnCaption.height = h;
@@ -155,7 +155,7 @@ package Editor {
 			shape.graphics.endFill();
 			sprite.addChild(shape);
 			btnCaption = new TextField();
-			btnCaption.defaultTextFormat = textButtonFormat;
+			btnCaption.defaultTextFormat = format;
 			btnCaption.text = cap;
 			btnCaption.x = 0;
 			btnCaption.y = 0;
@@ -172,7 +172,7 @@ package Editor {
 			shape.graphics.endFill();
 			sprite.addChild(shape);
 			btnCaption = new TextField();
-			btnCaption.defaultTextFormat = textButtonFormat;
+			btnCaption.defaultTextFormat = format;
 			btnCaption.text = cap;
 			btnCaption.x = 0;
 			btnCaption.y = 0;
@@ -180,6 +180,27 @@ package Editor {
 			btnCaption.height = h;
 			btnCaption.selectable = false;
 			sprite.addChild(btnCaption);
+			btn.overState = sprite;
+		}
+
+		public static function makeActiveButtonStates(btn:SimpleButton, 
+			cap:String, w:Number, h:Number, format:TextFormat):void {
+			var sprite:Sprite = new Sprite();
+			var shape:Shape = new Shape();
+			shape.graphics.beginFill(0xff0000);
+			shape.graphics.drawRect(0,0,w,h);
+			shape.graphics.endFill();
+			sprite.addChild(shape);
+			var btnCaption:TextField = new TextField();
+			btnCaption.defaultTextFormat = format;
+			btnCaption.text = cap;
+			btnCaption.width = w;
+			btnCaption.height = h;
+			btnCaption.selectable = false;
+			sprite.addChild(btnCaption);
+			btn.upState = sprite;
+			btn.hitTestState = sprite;
+			btn.downState = sprite;
 			btn.overState = sprite;
 		}
 
