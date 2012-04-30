@@ -34,21 +34,23 @@ package Chargable {
 		public static function makeCharges(strength:Number, x1:Number, y1:Number, x2:Number, y2:Number):Vector.<Charge>{
 			var w:Number = (x2-x1);
 			var h:Number = (y2-y1);
-			const gridSize:Number=.3;
+			const gridSize:Number=.5;
 			var xCount:int=Math.max(1,Math.floor(w/gridSize));
 			var yCount:int=Math.max(1,Math.floor(h/gridSize));
+			xCount=Math.min(xCount,4);
+			yCount=Math.min(yCount,4);
 			var count:int=xCount*yCount;
 			var cStren:Number=strength/count;
 			var x:int;
 			var y:int;
+			var xSpacing:Number=w/(xCount+1.0);
+			var ySpacing:Number=h/(yCount+1.0);
 			var v:Vector.<Charge> = new Vector.<Charge>();
-			var xStart:Number=((x1+x2)/2.0)-((xCount-1)/2.0*gridSize);
-			var yStart:Number=((y1+y2)/2.0)-((yCount-1)/2.0*gridSize);
 			for (x=0;x<xCount;x++){
 				for (y=0;y<yCount;y++){
 					v.push(new Charge(cStren,new b2Vec2(
-								xStart+x*gridSize,
-								yStart+y*gridSize
+								x1+(x+1)*xSpacing,
+								y1+(y+1)*ySpacing
 							)));
 				}
 			}
