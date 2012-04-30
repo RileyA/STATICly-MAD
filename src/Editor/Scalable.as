@@ -168,5 +168,19 @@ package Editor {
 					- m_children[i].y + WIDGET_DIMENSIONS) / m_scale_y;
 			}
 		}
+
+		public function forceScale(sx:Number, sy:Number):void {
+			m_corners[0].x = 0;
+			m_corners[0].y = 0;
+			m_corners[1].x = sx - WIDGET_DIMENSIONS;
+			m_corners[1].y = sy - WIDGET_DIMENSIONS;
+			m_corners[2].x = 0;
+			m_corners[2].y = sy - WIDGET_DIMENSIONS;
+			m_corners[3].x = sx - WIDGET_DIMENSIONS;
+			m_corners[3].y = 0;
+			//m_scale_x = sx;
+			//m_scale_y = sy;
+			reposition();
+		}
 	}
 }
