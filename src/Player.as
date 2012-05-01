@@ -308,5 +308,9 @@ package {
 		public function setPosition(pos:UVec2):void {
 			m_physics.SetPosition(pos.toB2Vec2());
 		}
+
+		public function resetCharge():void {
+			chargePolarity = 0;
+		}
 	}
 }

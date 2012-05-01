@@ -180,6 +180,10 @@ package {
 			init();
 		}
 
+		public function resetCharge():void {
+			chargePolarity = m_info.chargePolarity;
+		}
+
 		public function getInfo():BlockInfo {
 			return m_info;
 		}

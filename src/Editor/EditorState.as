@@ -15,6 +15,7 @@ package Editor {
 	import Box2D.Collision.Shapes.*;
 	import GameState;
 
+	// abandone all hope ye who enter here...
 	public class EditorState extends GameState {
 
 		private static const PAUSE_KEY:Number = Keyboard.P;
@@ -358,8 +359,10 @@ package Editor {
 			if (m_levelLoaded) {
 				for (var i:uint=0;i<m_blocks.length;++i) {
 					m_blocks[i].reposition();
+					m_blocks[i].getBlock().resetCharge();
 				}
 				m_player.reposition();
+				m_player.getPlayer().resetCharge();
 			}
 		}
 
