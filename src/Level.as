@@ -37,7 +37,7 @@ package {
 			"application/octet-stream")] private const test_level_01:Class;
 		[Embed(source="../media/levels/proto01_knothole.json",  mimeType=
 			"application/octet-stream")] private const proto01_knothole:Class;
-		[Embed(source="../media/levels/proto01_knothole2.json",  mimeType=
+		[Embed(source="../media/levels/Hole.json",  mimeType=
 			"application/octet-stream")] private const proto01_knothole2:Class;
 		[Embed(source="../media/levels/proto02_stack.json",  mimeType=
 			"application/octet-stream")] private const proto02_stack:Class;
