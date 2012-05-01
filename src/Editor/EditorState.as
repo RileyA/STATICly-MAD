@@ -21,6 +21,7 @@ package Editor {
 		private static const RESET_KEY:Number = Keyboard.R;
 		private static const BLOCK_KEY:Number = Keyboard.SHIFT;
 		private static const WIDGET_KEY:Number = Keyboard.W;
+		private static const DELETE_KEY:Number = Keyboard.BACKSPACE;
 
 		private var m_blocks:Vector.<BlockProxy>;
 		private var m_player:PlayerProxy;
@@ -155,6 +156,24 @@ package Editor {
 					m_widgetKey = false;
 				}
 
+				if (Keys.isKeyPressed(DELETE_KEY)) {
+					if (m_focused && m_focused is BlockProxy) {
+						var bp:BlockProxy = m_focused as BlockProxy;
+						m_level.removeBlock(bp.getBlock());
+						for (var i:uint=0; i < m_blocks.length; ++i) {
+							if (m_blocks[i] == m_focused) {
+								m_blocks[i] = m_blocks[m_blocks.length - 1];
+								m_blocks.pop();
+								break;
+							}
+						}
+						m_levelSprite.removeChild(bp);
+						m_focused = null;
+						refocus(null);
+						bp = null;
+					}
+				}
+
 				if (!m_level.update(delta)) {
 					if (!m_paused) togglePause();
 					doReset();
@@ -174,8 +193,8 @@ package Editor {
 				var info:BlockInfo = new BlockInfo();
 				info.scale.x = 1;
 				info.scale.y = 1;
-				info.position.x = mouseX / m_level.pixelsPerMeter;
-				info.position.y = mouseY / m_level.pixelsPerMeter;
+				info.position.x = m_levelSprite.mouseX / m_level.pixelsPerMeter;
+				info.position.y = m_levelSprite.mouseY / m_level.pixelsPerMeter;
 				info.movement = "fixed";
 				info.insulated = false;
 				info.strong = false;

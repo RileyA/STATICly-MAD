@@ -98,6 +98,27 @@ package {
 			}
 		}
 
+		public function removeBlock(b:Block):void {
+			b.deinit();
+			for (var i:uint = 0; i < m_blocks.length; ++i) { 
+				if (m_blocks[i] == b) {
+					m_blocks[i] = m_blocks[m_blocks.length-1];
+					m_blocks.pop();
+					break;
+				}
+			}
+			for (i = 0; i < m_blocks.length; ++i) { 
+				if (m_gfxPhysObjects[i] == b) {
+					m_gfxPhysObjects[i] = m_gfxPhysObjects[
+						m_gfxPhysObjects.length-1];
+					m_gfxPhysObjects.pop();
+					break;
+				}
+			}
+			m_parent_sprite.removeChild(b);
+			m_chargableManager.removeChargable(b);
+		}
+
 		public function setUpdatePhysics(updatePhys:Boolean):void {
 			m_updatePhysics = updatePhys;
 		}
@@ -208,6 +229,10 @@ package {
 
 		public function resetLevel():void {
 			m_levelDone = false;
+		}
+
+		public function getChargableManager():ChargableManager {
+			return m_chargableManager;
 		}
 	}
 }
