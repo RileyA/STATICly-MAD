@@ -27,12 +27,15 @@ package {
 		public static const HEIGHT:Number = -1.2;
 		public static const HEIGHT_MID:Number = -0.9;
 		public static const HEIGHT_CHARGE:Number = -0.5;
+		public static const HEIGHT_ACTION:Number = -0.5;
 
 		private var m_sprite:Sprite;
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
 		private var charges:Vector.<Charge>;
+		
+		private var faceRight:Boolean;
 		
 		public function Player(world:b2World, position:UVec2):void {
 
@@ -104,8 +107,24 @@ package {
 			}
 			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
 			
+			
+			
+			function weight(a:ActionMarker):Number{
+				var pos:b2Vec2=m_physics.GetLocalPoint(a.fixture.GetBody().GetPosition());
+				if (!faceRight){
+					pos.x=-pos.x;
+				}
+				pos.y=pos.y-HEIGHT_ACTION;
+				pos.x=pos.x*4;
+				return pos.x-Math.abs(pos.y);
+			}
+			
+			function cmp(a:ActionMarker,b:ActionMarker):Number{
+				return weight(b)-weight(a);
+			}
+			
 			// TODO : Sort by priority/location
-			// markers.sort(compare);
+			markers.sort(cmp);
 			// don't have fixture data
 			// might need to reimplement getCollosions logic
 			
@@ -127,6 +146,11 @@ package {
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
 			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
 			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
+			
+			// no logical xor :(
+			if ((left || right)&&!(left && right)) {
+				faceRight=right;
+			}
 			
 			// do actions
 			if ((!didAction) && action) {

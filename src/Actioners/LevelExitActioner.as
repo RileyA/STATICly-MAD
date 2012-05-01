@@ -13,7 +13,7 @@ package Actioners {
 			var center:b2Vec2 = new b2Vec2(offset.x, offset.y + HEIGHT/2);
 			function cb(level:Level):void { level.markAsDone(); }
 			function tr(player:Player):Boolean { return true; }
-			super(rectDef, center, new ActionMarker(cb, tr), world);
+			super(rectDef, center, new ActionMarker(cb, tr, null), world);
 		}
 
 		override protected function getPolyShape():b2PolygonShape {

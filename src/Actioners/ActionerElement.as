@@ -31,7 +31,7 @@ package Actioners
 			fd.userData = am;
 			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
-			m_physics.CreateFixture(fd);
+			am.fixture=m_physics.CreateFixture(fd);
 
 			addChild(getSprite(offset.x, offset.y));
 		}

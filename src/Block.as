@@ -114,8 +114,8 @@ package {
 					}
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
-				fd.userData = new ActionMarker(act,ck);
-				m_physics.CreateFixture(fd);
+				var fix:b2Fixture=m_physics.CreateFixture(fd);
+				fix.SetUserData(new ActionMarker(act,ck,fix));
 			}
 			
 			//body.SetFixedRotation(true);
