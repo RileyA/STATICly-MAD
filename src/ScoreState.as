@@ -37,7 +37,7 @@ package {
 			player_time_text.x = 100;
 			player_time_text.y = 250;
 			player_time_text.defaultTextFormat = format;
-			player_time_text.text = "Your time:\t" + setPrecision(m_score.playerTime, 1);
+			player_time_text.text = "Your time:\t" + MiscUtils.setPrecision(m_score.playerTime, 1);
 			player_time_text.selectable = false;
 			addChild(player_time_text);
 
@@ -48,7 +48,7 @@ package {
 			par_time_text.x = 100;
 			par_time_text.y = 300;
 			par_time_text.defaultTextFormat = format;
-			par_time_text.text = "Par time:\t" + setPrecision(m_score.targetTime, 0);
+			par_time_text.text = "Par time:\t" + MiscUtils.setPrecision(m_score.targetTime, 0);
 			par_time_text.selectable = false;
 			addChild(par_time_text);
 
@@ -69,11 +69,6 @@ package {
 
 		override public function update(delta:Number):Boolean {
 			return !Keys.isKeyPressed(Keyboard.UP);
-		}
-
-		private function setPrecision(number:Number, precision:int):Number {
-			precision = Math.pow(10, precision);
-			return (Math.round(number * precision)/precision);
 		}
 	}
 }
