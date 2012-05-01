@@ -25,6 +25,19 @@ package Chargable {
 			chargables.push(c);
 		}
 
+		/** 
+		* Removes a chargable object
+		**/
+		public function removeChargable(c:Chargable):void{
+			for (var i:uint=0; i < chargables.length; ++i) {
+				if (chargables[i] == c) {
+					chargables[i] = chargables[chargables.length - 1];
+					chargables.pop();
+					break;
+				}
+			}
+		}
+
 		/**
 		* Applies electrostatic force from all Chargable objects onto all
 		*  Chargable objects that are dynamic (non static).

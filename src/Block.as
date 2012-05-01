@@ -153,7 +153,7 @@ package {
 		}
 
 		// helper that cleans up a block
-		private function deinit():void {
+		public function deinit():void {
 			for (var i:uint = 0; i < surfaces.length; ++i)
 				surfaces[i].cleanup();
 			for (i = 0; i < actioners.length; ++i)
@@ -172,6 +172,11 @@ package {
 		/** deinit and reinit to reflect any changes in blockinfo */
 		public function reinit():void {
 			deinit();
+			// if it's in the charge manager, nuke it
+			m_level.getChargableManager().removeChargable(this);
+			// then re-add if need be
+			if (isChargableBlock())
+				m_level.getChargableManager().addChargable(this);
 			init();
 		}
 
