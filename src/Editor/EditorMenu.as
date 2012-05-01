@@ -24,6 +24,8 @@ package Editor {
 		public var saveButton:SimpleButton;
 		public var loadButton:SimpleButton;
 		public var focusedRect:Sprite;
+		public var pauseButton:SimpleButton;
+		public var resetButton:SimpleButton;
 		
 		public function EditorMenu(name:String):void {
 			super(0,0,150,15);
@@ -34,12 +36,12 @@ package Editor {
 			focusedRect = new Sprite();
 			addChild(focusedRect);
 			focusedRect.x = 0; 
-			focusedRect.y = 95; 
+			focusedRect.y = 80; 
 
 			var s:Shape = new Shape();
 			s.graphics.beginFill(0xcccccc);
 			s.graphics.lineStyle(2.0,0x777777,1.0,false,LineScaleMode.NONE);
-			s.graphics.drawRect(1,0,148,335);
+			s.graphics.drawRect(1,0,148,375);
 			s.graphics.endFill();
 			body.addChild(s);
 			body.alpha = 0.9;
@@ -63,7 +65,7 @@ package Editor {
 			focusedCaption.defaultTextFormat = textFormat;
 			focusedCaption.text = "Selected: Nothing";
 			focusedCaption.x = 4;
-			focusedCaption.y = 66;
+			focusedCaption.y = 54;
 			focusedCaption.width = 140;
 			focusedCaption.height = 12;
 			focusedCaption.selectable = false;
@@ -128,6 +130,20 @@ package Editor {
 			newButton.y = 35;
 			newButton.height = 12;
 			body.addChild(newButton);
+
+			resetButton = new SimpleButton();
+			makeButtonStates(resetButton, "Reset (R)", 70, 12, textButtonFormat);
+			resetButton.x = 4;
+			resetButton.y = 360;
+			resetButton.height = 12;
+			body.addChild(resetButton);
+
+			pauseButton = new SimpleButton();
+			makeActiveButtonStates(pauseButton, "Pause (P)", 70, 12, textButtonFormat);
+			pauseButton.x = 75;
+			pauseButton.y = 360;
+			pauseButton.height = 12;
+			body.addChild(pauseButton);
 		}
 
 		public static function makeButtonStates(btn:SimpleButton, cap:String,

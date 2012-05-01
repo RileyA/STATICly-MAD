@@ -15,12 +15,12 @@ package Editor {
 	import Box2D.Collision.Shapes.*;
 	import GameState;
 
-	/** A basic level */
 	public class EditorState extends GameState {
 
 		private static const PAUSE_KEY:Number = Keyboard.P;
 		private static const RESET_KEY:Number = Keyboard.R;
-		private static const SAVE_KEY:Number = Keyboard.S;
+		private static const BLOCK_KEY:Number = Keyboard.SHIFT;
+		private static const WIDGET_KEY:Number = Keyboard.W;
 
 		private var m_blocks:Vector.<BlockProxy>;
 		private var m_player:PlayerProxy;
@@ -29,6 +29,8 @@ package Editor {
 
 		private var m_pauseKey:Boolean;
 		private var m_resetKey:Boolean;
+		private var m_widgetKey:Boolean;
+		private var m_widgetsHidden:Boolean;
 		private var m_paused:Boolean;
 
 		private var m_levelInfo:LevelInfo;
@@ -44,6 +46,8 @@ package Editor {
 			super(game);
 			m_pauseKey = true;
 			m_resetKey = true;
+			m_widgetKey = true;
+			m_widgetsHidden = false;
 			m_paused = true;
 		}
 
@@ -51,6 +55,7 @@ package Editor {
 			/** create editor UI stuffs */
 			m_levelLoaded = false;
 			m_levelSprite = new Sprite();
+
 			// add something clickable
 			var s:Shape = new Shape();
 			s.alpha = 0.0;
@@ -60,15 +65,18 @@ package Editor {
 			m_levelSprite.addChild(s);
 			addChild(m_levelSprite);
 
-			m_menu = new EditorMenu("N/A");
+			m_menu = new EditorMenu("New Level");
 			addChild(m_menu);
 			addEventListener(MouseEvent.CLICK, addBlock);
 			addEventListener(MouseEvent.MOUSE_DOWN, handleFocus);
 			m_menu.saveButton.addEventListener(MouseEvent.CLICK, save);
 			m_menu.loadButton.addEventListener(MouseEvent.CLICK, load);
 			m_menu.newButton.addEventListener(MouseEvent.CLICK, newLevel);
-			m_menu.x = 325;
-			m_menu.y = 125;
+			m_menu.resetButton.addEventListener(MouseEvent.CLICK, resetClicked);
+			m_menu.pauseButton.addEventListener(MouseEvent.CLICK, pauseClicked);
+			m_menu.x = 50;
+			m_menu.y = 50;
+			newLevel(new MouseEvent(MouseEvent.CLICK));
 		}
 
 		private function unloadLevel():void {
@@ -117,6 +125,7 @@ package Editor {
 			MiscUtils.loadJSON(m_loadRef.data as ByteArray, m_levelInfo);
 			loadLevel(m_levelInfo);
 			m_levelLoaded = true;
+			if (!m_paused) togglePause();
 		}
 
 		override public function deinit():void {
@@ -126,15 +135,7 @@ package Editor {
 			if (m_levelLoaded) {
 				if (m_focused) m_focused.updateForm();
 				if (!m_pauseKey && Keys.isKeyPressed(PAUSE_KEY)) {
-					m_paused = !m_paused;
-					m_level.setUpdatePhysics(!m_paused);
-
-					if (!m_paused) {
-						var blocks:Vector.<Block> = m_level.getBlocks();
-						for (var i:uint=0;i<blocks.length;++i) {
-							blocks[i].getPhysics().SetAwake(true);
-						}
-					}
+					togglePause();
 					m_pauseKey = true;
 				} else if(!Keys.isKeyPressed(PAUSE_KEY)) {
 					m_pauseKey = false;
@@ -142,16 +143,23 @@ package Editor {
 
 				if (!m_resetKey && Keys.isKeyPressed(RESET_KEY)) {
 					m_resetKey = true;
-					for (i=0;i<m_blocks.length;++i) {
-						m_blocks[i].reposition();
-					}
-					m_player.reposition();
+					doReset();
 				} else if (!Keys.isKeyPressed(RESET_KEY)) {
 					m_resetKey = false;
 				}
 
-				m_level.update(delta);
-	
+				if (!m_widgetKey && Keys.isKeyPressed(WIDGET_KEY)) {
+					toggleWidgets();
+					m_widgetKey = true;
+				} else if (!Keys.isKeyPressed(WIDGET_KEY)) {
+					m_widgetKey = false;
+				}
+
+				if (!m_level.update(delta)) {
+					if (!m_paused) togglePause();
+					doReset();
+					m_level.resetLevel();
+				}
 			}
 
 			return !Keys.isKeyPressed(Keyboard.ESCAPE);
@@ -160,7 +168,7 @@ package Editor {
 		public function addBlock(e:MouseEvent):void { 
 			if (!m_levelLoaded) return;
 			if (e.target == m_levelSprite 
-				&& Keys.isKeyPressed(Keyboard.CONTROL)) {
+				&& Keys.isKeyPressed(BLOCK_KEY)) {
 
 				// make a new block, default 1x1 meter, fixed
 				var info:BlockInfo = new BlockInfo();
@@ -178,7 +186,14 @@ package Editor {
 				var proxy:BlockProxy = new BlockProxy(newBlock);
 				m_blocks.push(proxy);
 				m_levelSprite.addChild(proxy);
-				refocus(proxy);
+				m_levelSprite.swapChildren(newBlock, m_player.getPlayer());
+				m_levelSprite.swapChildren(proxy, m_player);
+				if (!m_widgetsHidden) {
+					refocus(proxy);
+				} else {
+					refocus(null);
+				}
+				proxy.visible = !m_widgetsHidden;
 			} else {
 				handleFocus(e);
 			}
@@ -220,6 +235,14 @@ package Editor {
 			m_loadRef.browse([fileFilter]);
 		}
 
+		public function pauseClicked(e:MouseEvent):void {
+			togglePause();
+		}
+
+		public function resetClicked(e:MouseEvent):void {
+			doReset();
+		}
+
 		public function newLevel(e:MouseEvent):void {
 			e.stopPropagation();
 			unloadLevel();
@@ -237,6 +260,7 @@ package Editor {
 			m_levelSprite.addChild(m_player);
 			m_blocks = new Vector.<BlockProxy>;
 			m_levelLoaded = true;
+			if (!m_paused) togglePause();
 		}
 
 		public function refocus(focused:EditorProxy):void {
@@ -252,6 +276,42 @@ package Editor {
 			} else {
 				m_menu.focusedCaption.text = "Selected: None";
 			}
+		}
+
+		public function togglePause():void {
+			if (m_levelLoaded) {
+				m_paused = !m_paused;
+				m_level.setUpdatePhysics(!m_paused);
+				if (!m_paused) {
+					var blocks:Vector.<Block> = m_level.getBlocks();
+					for (var i:uint=0;i<blocks.length;++i) {
+						blocks[i].getPhysics().SetAwake(true);
+					}
+				}
+				if (m_paused)
+					EditorMenu.makeActiveButtonStates(m_menu.pauseButton,
+						"Unpause (P)", 70, 12, m_menu.textButtonFormat);
+				else 
+					EditorMenu.makeButtonStates(m_menu.pauseButton, 
+						"Pause (P)", 70, 12, m_menu.textButtonFormat);
+			}
+		}
+
+		public function doReset():void {
+			if (m_levelLoaded) {
+				for (var i:uint=0;i<m_blocks.length;++i) {
+					m_blocks[i].reposition();
+				}
+				m_player.reposition();
+			}
+		}
+
+		public function toggleWidgets():void {
+			m_widgetsHidden = !m_widgetsHidden;
+			for (var i:uint=0;i<m_blocks.length;++i) {
+				m_blocks[i].visible = !m_widgetsHidden;
+			}
+			m_player.visible = !m_widgetsHidden;
 		}
 	}
 }

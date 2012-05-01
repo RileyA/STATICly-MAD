@@ -142,5 +142,9 @@ package Editor {
 			posX.text = Number(x / m_child.scaleX).toFixed(4);
 			posY.text = Number(y / m_child.scaleY).toFixed(4);
 		}
+
+		public function getPlayer():Player {
+			return m_child;
+		}
 	}
 }

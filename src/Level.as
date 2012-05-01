@@ -205,5 +205,9 @@ package {
 		public function markAsDone():void {
 			m_levelDone = true;
 		}
+
+		public function resetLevel():void {
+			m_levelDone = false;
+		}
 	}
 }
