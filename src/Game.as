@@ -5,7 +5,6 @@ package {
 
 	/** Manages a stack of game states */
 	public class Game {
-
 		private var m_parent:Sprite;
 		private var m_lastTime:Number;
 		private var m_currentState:GameState;
@@ -25,9 +24,16 @@ package {
 
 		/** Adds a state 
 				@param state The state to add */
-		public function addState(state:GameState, start:Boolean = true):void {
+		public function addState(state:GameState):void {
 			m_states.push(state);
-			m_newStateReady = start;
+			m_newStateReady = true;
+		}
+
+		/** Replaces the current state 
+				@param state The state to replace it with */
+		public function replaceState(state:GameState):void {
+			addState(state);
+			terminate(m_currentState);
 		}
 
 		/** Update the game, advance a frame 
@@ -69,12 +75,19 @@ package {
 			}
 
 			if (!m_currentState.update(delta)) {
-				m_parent.removeChild(m_currentState);
-				m_currentState.deinit();
-				m_currentState = null;
+				terminate(m_currentState);
 			}
 
 			return true;
+		}
+
+		/**
+		* Terminates the currently running state, removing it from the Game state machine
+		*/
+		private function terminate(state:GameState):void {
+			m_parent.removeChild(state);
+			m_currentState.deinit();
+			m_currentState = null;
 		}
 	}
 }

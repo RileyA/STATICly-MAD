@@ -9,7 +9,6 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 	import Player;
-	import Chargable.*;
 
 	/** A basic level gameplay state */
 	public class LevelState extends GameState {
@@ -28,19 +27,19 @@ package {
 			m_level = null;
 		}
 
+		/**
+		* Returns false if this LevelState has reached a termination state.
+		*/
 		override public function update(delta:Number):Boolean {
 			var isDone:Boolean = false;
 			var levelFinish:Boolean = !m_level.update(delta);
-			if (levelFinish) {
-				finishLevel();
-				isDone ||= levelFinish;
-			}
+			if (levelFinish) { finishLevel(); }
 			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
 			return !isDone;
 		}
 
 		private function finishLevel():void {
-			//m_game.addState(new ScoreState(m_game));
+			m_game.replaceState(new ScoreState(m_game, m_level.getScore()));
 		}
 	}
 }

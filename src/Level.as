@@ -26,6 +26,7 @@ package {
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_blocks:Vector.<Block>;
 		private var m_info:LevelInfo;
+		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
 
@@ -79,6 +80,9 @@ package {
 				addBlock(loadedBlock);
 			}
 
+			// prep the score card
+			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
+
 			// make the player
 			m_player = new Player(world, m_info.playerPosition);
 			m_chargableManager.addChargable(m_player);
@@ -110,6 +114,9 @@ package {
 			return m_blocks;
 		}
 
+		/**
+		* Returns false if the level is marked as finished.
+		*/
 		public function update(delta:Number):Boolean {
 
 			if (m_updatePhysics) {
@@ -132,6 +139,8 @@ package {
 
 			if (m_debugDraw)
 				world.DrawDebugData();
+
+			m_score.playerTime += delta;
 
 			return !m_levelDone;
 		}
@@ -202,6 +211,12 @@ package {
 			return m_info;
 		}	
 
+		/** Get the current score info for this level. */
+		public function getScore():ScoreInfo {
+			return m_score;
+		}
+
+		/** Mark this level as done.  The update() function will return accordingly. */
 		public function markAsDone():void {
 			m_levelDone = true;
 		}
