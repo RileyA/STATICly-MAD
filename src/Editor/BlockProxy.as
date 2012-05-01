@@ -29,6 +29,10 @@ package Editor {
 		private var scaleVec:EditorVectorOption;
 		private var trackPos1:EditorVectorOption;
 		private var trackPos2:EditorVectorOption;
+		private var surfaceLabel:TextField;
+		private var actionLabel:TextField;
+		private var surfaceElems:BlockElementForm;
+		private var actionElems:BlockElementForm;
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
@@ -55,6 +59,10 @@ package Editor {
 
 		override public function beginDrag():void {
 			m_child.getPhysics().SetType(b2Body.b2_staticBody);
+		}
+
+		public function getBlock():Block {
+			return m_child;
 		}
 
 		override public function endDrag():void {
@@ -93,6 +101,7 @@ package Editor {
 		}
 
 		public function populateForm(form:Sprite):void {
+			var textFormat:TextFormat = new TextFormat("Sans", 8, 0x000000);
 
 			posVec = new EditorVectorOption(
 				"Pos: ", x / m_child.scaleX, y / m_child.scaleY);
@@ -159,6 +168,65 @@ package Editor {
 			trackPos2.y = 114;
 			form.addChild(trackPos2);
 
+			function assignSelections(input:Vector.<String>, types:Vector.<String>, out:Vector.<int>):void {
+				for (var i:uint = 0; i < input.length; ++i) {
+					var j:uint = 0;
+					var direct:String = input[i].split(",")[0];
+					var objType:String = input[i].split(",")[1];
+					if (direct == "up") j = 0;
+					else if (direct == "down") j = 1;
+					else if (direct == "left") j = 2;
+					else if (direct == "right") j = 3;
+					for (var k:uint = 0; k < types.length; ++k) {
+						if (types[k] == objType) {
+							out[j] = k;
+							continue;
+						}
+					}
+				}
+			}
+
+			var sopts:Vector.<String> = new Vector.<String>();
+			var ssels:Vector.<int> = new Vector.<int>();
+			sopts.push("None", "bcarpet", "rcarpet", "ground");
+			ssels.push(0,0,0,0);
+			assignSelections(m_child.getInfo().surfaces, sopts, ssels);
+			
+			surfaceElems = new BlockElementForm(sopts, ssels);
+			surfaceElems.x = 4;
+			surfaceElems.y = 145;
+			form.addChild(surfaceElems);
+
+			var aopts:Vector.<String> = new Vector.<String>();
+			var asels:Vector.<int> = new Vector.<int>();
+			aopts.push("None", "exit", "computer");
+			asels.push(0,0,0,0);
+			assignSelections(m_child.getInfo().actions, aopts, asels);
+			actionElems = new BlockElementForm(aopts, asels);
+			actionElems.x = 4;
+			actionElems.y = 220;
+			form.addChild(actionElems);
+
+			surfaceLabel = new TextField();
+			surfaceLabel.defaultTextFormat = textFormat;
+			surfaceLabel.text = "Surface Elements: ";
+			surfaceLabel.x = 4;
+			surfaceLabel.y = 130;
+			surfaceLabel.width = 100;
+			surfaceLabel.height = 12;
+			surfaceLabel.selectable = false;
+			form.addChild(surfaceLabel);
+
+			actionLabel = new TextField();
+			actionLabel.defaultTextFormat = textFormat;
+			actionLabel.text = "Action Elements: ";
+			actionLabel.x = 4;
+			actionLabel.y = 205;
+			actionLabel.width = 100;
+			actionLabel.height = 12;
+			actionLabel.selectable = false;
+			form.addChild(actionLabel);
+
 			insulatedBox.addEventListener(Event.CHANGE, handlePropChange);
 			strongBox.addEventListener(Event.CHANGE, handlePropChange);
 			polarityBox.addEventListener(Event.CHANGE, handlePropChange);
@@ -167,6 +235,8 @@ package Editor {
 			scaleVec.addEventListener(Event.CHANGE, handlePropChange);
 			trackPos1.addEventListener(Event.CHANGE, handlePropChange);
 			trackPos2.addEventListener(Event.CHANGE, handlePropChange);
+			surfaceElems.addEventListener(Event.CHANGE, handlePropChange);
+			actionElems.addEventListener(Event.CHANGE, handlePropChange);
 		}
 
 		public function updateForm():void {
@@ -199,6 +269,25 @@ package Editor {
 			m_child.getInfo().bounds = new Vector.<UVec2>();
 			var pA:UVec2 = trackPos1.getValue().getCopy();
 			var pB:UVec2 = trackPos2.getValue().getCopy();
+
+			m_child.getInfo().actions = new Vector.<String>;
+			m_child.getInfo().surfaces = new Vector.<String>;
+
+			var temp:Vector.<String> = new Vector.<String>;
+			temp.push("up", "down", "left", "right");
+			for (var i:uint = 0; i < 4; ++i) {
+				if (actionElems.options[actionElems.selections[i]] != "None") {
+					m_child.getInfo().actions.push(temp[i] + ","
+						+ actionElems.options[actionElems.selections[i]]);
+				}
+			}
+			for (i = 0; i < 4; ++i) {
+				if (surfaceElems.options[surfaceElems.selections[i]] != "None") {
+					m_child.getInfo().surfaces.push(temp[i] + ","
+						+ surfaceElems.options[surfaceElems.selections[i]]);
+				}
+			}
+
 			m_child.getInfo().bounds.push(pA, pB);
 			m_child.reinit();
 		}
