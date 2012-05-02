@@ -22,7 +22,7 @@ package {
 		private static const MOVE_AIR_SPEED:Number=4.0;
 		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
 		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
-		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
+		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.1;
 		private static const DENSITY:Number=20.0;
 		private static const CHARGE_DENSITY:Number=1.5;
 
