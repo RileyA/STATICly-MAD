@@ -169,8 +169,8 @@ package {
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
-			if(anchor != null)
-				m_level.getParent().removeChild(anchor);
+			//if(anchor != null)
+				//m_level.getParent().removeChild(anchor);
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
@@ -323,7 +323,6 @@ package {
 			var axis:b2Vec2 = r.Copy();
 			axis.Subtract(l);
 			axis.Normalize();
-			//trace(axis.x, axis.y);
 			var center:b2Vec2 = m_physics.GetPosition().Copy();
 			
 			var anchorDef:b2BodyDef = new b2BodyDef();
@@ -333,8 +332,6 @@ package {
 			anchor = new GfxPhysObject(anchorBody);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			//l.Subtract(center);
-			//r.Subtract(center);
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
@@ -351,12 +348,17 @@ package {
 			sprite.graphics.endFill();
 			
 			anchor.addChild(sprite);
+			addChild(anchor);
 			
 			sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
 			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			sprite.graphics.moveTo(0, .1);
-			sprite.graphics.lineTo(0, -.1);
+			
+			var dy:Number = r.y - l.y;
+			var dx:Number = r.x - l.x;
+			var length:Number = 5 * Math.sqrt((dy * dy) + (dx * dx));
+			sprite.graphics.moveTo(l.y / length, l.x / length);
+			sprite.graphics.lineTo(r.y / length, r.x / length);
 			sprite.graphics.endFill();
 			addChild(sprite);
 		}
