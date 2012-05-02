@@ -37,8 +37,8 @@ package Chargable {
 			const gridSize:Number=.5;
 			var xCount:int=Math.max(1,Math.floor(w/gridSize));
 			var yCount:int=Math.max(1,Math.floor(h/gridSize));
-			xCount=Math.min(xCount,4);
-			yCount=Math.min(yCount,4);
+			xCount=Math.min(xCount,6);
+			yCount=Math.min(yCount,6);
 			var count:int=xCount*yCount;
 			var cStren:Number=strength/count;
 			var x:int;
