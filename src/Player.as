@@ -262,25 +262,27 @@ package {
 
 		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
 			var isCharged:Boolean = chargePolarity != ChargableUtils.CHARGE_NONE;
+			shuffleStrength=Math.max(shuffleStrength,-1);
+			shuffleStrength=Math.min(shuffleStrength,1);
+			
 			if (!isShuffling) {
 				if (!isCharged && shuffleStrength != 0.0) {
 					// If not shuffling, not charged, and shuffle strength is not zero
 					// Decrement shuffle strength until it reaches zero
 					if (shuffleStrength < 0)
-						shuffleStrength += SHUFFLE_INCREMENT_FACTOR;
+						shuffleStrength = Math.max(0,shuffleStrength + SHUFFLE_INCREMENT_FACTOR);
 					else
-						shuffleStrength -= SHUFFLE_INCREMENT_FACTOR;
-				} else if (isCharged && shuffleStrength < 1.0) {
+						shuffleStrength = Math.min(0,shuffleStrength - SHUFFLE_INCREMENT_FACTOR);
+				} else if (isCharged && Math.abs(shuffleStrength) < 1.0) {
 					// If we are charged, but shuffleStrength is not full
 					// (e.g. half-assed shuffle on opposite carpet)
 					// increment shuffle strength in direction of current polarity until it reaches full
 					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
 			} else if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-				if ((int)(shuffleStrength * carpetPolarity) == 1) {
+				if ((shuffleStrength * carpetPolarity) >= 1.0) {
 					// We have reached full shuffle strength matching the current carpet. We are charged!
 					chargePolarity = carpetPolarity;
-					ChargableUtils.matchColorToPolarity(this, chargePolarity);
 				} else {
 					// increment shuffle strength in direction of current carpet polarity
 					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
