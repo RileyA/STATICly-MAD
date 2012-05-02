@@ -51,7 +51,7 @@
 			"scale" : {"x" : 4.0, "y": 0.5},
 			"position" : {"x" : 6.5, "y" : 17.5},
 			"movement" : "fixed",
-			"actions" : [],
+			"actions" : ["up,exit"],
 			"surfaces" : []
 		},
 		{

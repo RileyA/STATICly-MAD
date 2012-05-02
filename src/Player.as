@@ -9,32 +9,33 @@ package {
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
-	import Chargable.Chargable;
-	import Chargable.ChargableUtils;
+	import Chargable.*;
+	import Box2D.Dynamics.Contacts.*;
+	import Box2D.Collision.*;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
+		private static const DO_REACTION_FORCES:Boolean=true;
+
 		private static const JUMP_STRENGTH:Number=8.0;
 		private static const MOVE_SPEED:Number=6.0;
-		private static const ACELL_TIME_CONSTANT:Number=0.5;
-		private var chargeStrength:Number;
+		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
+		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
-
-		// Keyboard controls
-		private static const LEFT_KEY:Number = Keyboard.LEFT;
-		private static const RIGHT_KEY:Number = Keyboard.RIGHT;
-		private static const JUMP_KEY:Number = Keyboard.UP;
-		private static const ACTION_KEY:Number = Keyboard.DOWN;
 
 		public static const WIDTH:Number = 0.7;
 		public static const HEIGHT:Number = -1.2;
 		public static const HEIGHT_MID:Number = -0.9;
+		public static const HEIGHT_CHARGE:Number = -0.5;
+		public static const HEIGHT_ACTION:Number = -0.5;
 
 		private var m_sprite:Sprite;
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
+		private var charges:Vector.<Charge>;
 		
+		private var faceRight:Boolean;
 		
 		public function Player(world:b2World, position:UVec2):void {
 
@@ -51,7 +52,7 @@ package {
 			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
 			fd.density = Block.strongDensity*2;
-			fd.friction = 0.3;
+			fd.friction = 0.0;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
 			m_physics = world.CreateBody(ccDef);
@@ -60,7 +61,12 @@ package {
 			m_physics.SetLinearDamping(.2);
 			
 			var area:Number=m_physics.GetMass()/fd.density;
-			chargeStrength=area*Block.strongChargeDensity;
+			var chargeStrength:Number=area*Block.strongChargeDensity;
+			this.charges=new Vector.<Charge>();
+			this.charges.push(new Charge(chargeStrength,new b2Vec2(
+								0,
+								HEIGHT_CHARGE
+							)));
 
 			// placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
@@ -101,8 +107,26 @@ package {
 			}
 			var markers:Vector.<*>=PhysicsUtils.getCollosions(m_physics,actionFilter);
 			
+			
+			
+			function weight(a:ActionMarker):Number{
+				var pos:b2Vec2=m_physics.GetLocalPoint(a.fixture.GetBody().GetPosition());
+				if (!faceRight){
+					pos.x=-pos.x;
+				}
+				pos.y=pos.y-HEIGHT_ACTION;
+				pos.x=pos.x*4;
+				return pos.x-Math.abs(pos.y);
+			}
+			
+			function cmp(a:ActionMarker,b:ActionMarker):Number{
+				return weight(b)-weight(a);
+			}
+			
 			// TODO : Sort by priority/location
-			// markers.sort(compare);
+			markers.sort(cmp);
+			// don't have fixture data
+			// might need to reimplement getCollosions logic
 			
 			var i:int;
 			for (i=0;i<markers.length;i++){
@@ -118,6 +142,80 @@ package {
 		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 			
+			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
+			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
+			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
+			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
+			
+			// no logical xor :(
+			if ((left || right)&&!(left && right)) {
+				faceRight=right;
+			}
+			
+			// do actions
+			if ((!didAction) && action) {
+				var marker:ActionMarker=getBestAction();
+				if (marker!=null) {
+					marker.callAction(level);
+					didAction=true;
+				}
+			} else if (!action) {
+				didAction=false;
+			}
+			
+			groundCollision(); // for grounding
+			carpetCollision(left || right); // for chargeing
+			
+			// do movement //
+			// get contacts with feet
+			function jumpFilter(a:*,b:*):Boolean{
+				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
+			}
+			
+			var footContacts:Vector.<*>=PhysicsUtils.getCollosions(m_physics,jumpFilter,PhysicsUtils.OUT_EDGE);
+			var canJump:Boolean=footContacts.length>0;
+			
+			// setup for reaction forces
+			var reactBody:b2Body;
+			var reactLoc:b2Vec2
+			if (canJump && DO_REACTION_FORCES){
+				var con0:b2ContactEdge=footContacts[0];
+				reactBody=con0.other;
+				reactLoc=m_physics.GetWorldPoint(new b2Vec2(0,0));
+			}
+			
+			// x movement //
+			var xspeed:Number = 0;
+			if (left) { xspeed -= MOVE_SPEED; }
+			if (right) { xspeed += MOVE_SPEED; }
+			
+			if (canJump || xspeed!=0) {
+				var fx:Number=m_physics.GetMass()/(canJump?GROUND_ACELL_TIME_CONSTANT:AIR_ACELL_TIME_CONSTANT);
+				var vx:Number=m_physics.GetLinearVelocity().x;
+				var deltaSpeed:Number=xspeed-vx;
+				fx*=deltaSpeed;
+				if (canJump || (deltaSpeed*xspeed)>0) {
+					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
+					if (canJump && DO_REACTION_FORCES){
+						reactBody.ApplyForce(new b2Vec2(-fx, 0),reactLoc);
+					}
+				}
+			}
+			
+			// jumping
+			if (up && canJump) {
+				var fy:Number=m_physics.GetMass()*(m_physics.GetLinearVelocity().y+JUMP_STRENGTH);
+				if (DO_REACTION_FORCES){
+					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactLoc);
+				}
+				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
+				// That should be the same as this:
+				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
+			}
+		}
+
+
+		private function groundCollision():void {
 			function groundFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.GROUND_SENSOR_ID &&
 					(b==LevelContactListener.FOOT_SENSOR_ID ||
@@ -128,13 +226,9 @@ package {
 			if (isGrounded) {
 				groundPlayer();
 			}
-			
-			function jumpFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
-			var canJump:Boolean=PhysicsUtils.getCollosions(m_physics,jumpFilter).length>0;
-			
-			
+		}
+
+		private function carpetCollision(isMoving:Boolean):void {
 			// Shuffling over carpet
 			function carpetRedFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.CARPET_RED_SENSOR_ID && b==LevelContactListener.FOOT_SENSOR_ID;
@@ -151,46 +245,12 @@ package {
 				carpetPolarity = ChargableUtils.CHARGE_RED;
 			if (onCarpetBlue)
 				carpetPolarity = ChargableUtils.CHARGE_BLUE;
-			
-			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
-			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
-			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
-			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
-			
-			// do actions
-			if ((!didAction) && action) {
-				var marker:ActionMarker=getBestAction();
-				if (marker!=null) {
-					marker.callAction(level);
-					didAction=true;
-				}
-			} else if (!action) {
-				didAction=false;
-			}
-			
-			// do movement
-			var xspeed:Number = 0;
-			if (left) { xspeed -= MOVE_SPEED; }
-			if (right) { xspeed += MOVE_SPEED; }
-			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && (left || right));
 
-			if (canJump) {
-				m_physics.GetLinearVelocity().x=xspeed;
-			} else if (xspeed!=0) {
-				
-				var fx:Number=m_physics.GetMass()/ACELL_TIME_CONSTANT;
-				var vx:Number=m_physics.GetLinearVelocity().x;
-				var deltaSpeed:Number=xspeed-vx;
-				fx*=deltaSpeed;
-				if ((deltaSpeed*xspeed)>0) {
-					m_physics.ApplyForce(new b2Vec2(fx, 0),m_physics.GetWorldCenter());
-				}
-			}
-			
-			if (up && canJump) {
-				m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
-			}
+
+			shuffleCarpet(carpetPolarity, carpetPolarity != ChargableUtils.CHARGE_NONE && isMoving);
 		}
+
+
 
 		private function shuffleCarpet(carpetPolarity:Number, isShuffling:Boolean):void {
 			var isCharged:Boolean = chargePolarity != ChargableUtils.CHARGE_NONE;
@@ -229,8 +289,13 @@ package {
 		/**
 		* Returns the charge of this Chargable for electrostatics computations.
 		*/
+		
 		public function getCharge():Number{
-			return chargePolarity*chargeStrength;
+			return chargePolarity;
+		}
+		
+		public function getCharges():Vector.<Charge>{
+			return charges;
 		}
 
 		/**
@@ -242,6 +307,10 @@ package {
 
 		public function setPosition(pos:UVec2):void {
 			m_physics.SetPosition(pos.toB2Vec2());
+		}
+
+		public function resetCharge():void {
+			chargePolarity = 0;
 		}
 	}
 }

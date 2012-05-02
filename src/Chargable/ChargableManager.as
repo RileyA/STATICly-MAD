@@ -25,6 +25,19 @@ package Chargable {
 			chargables.push(c);
 		}
 
+		/** 
+		* Removes a chargable object
+		**/
+		public function removeChargable(c:Chargable):void{
+			for (var i:uint=0; i < chargables.length; ++i) {
+				if (chargables[i] == c) {
+					chargables[i] = chargables[chargables.length - 1];
+					chargables.pop();
+					break;
+				}
+			}
+		}
+
 		/**
 		* Applies electrostatic force from all Chargable objects onto all
 		*  Chargable objects that are dynamic (non static).
@@ -59,13 +72,26 @@ package Chargable {
 		private static function applyChargeForce(from:Chargable, onto:Chargable):void{
 			var ontoBody:b2Body = onto.getBody();
 			var fromBody:b2Body = from.getBody();
-			var vec:b2Vec2 = ontoBody.GetWorldCenter();
-			vec=new b2Vec2(vec.x,vec.y);
-			vec.Subtract(fromBody.GetWorldCenter());
-			var s:Number=from.getCharge()*onto.getCharge()*(1.0/vec.LengthSquared());
-			s=s*200.0;
-			vec.Multiply(s/vec.Length());
-			ontoBody.ApplyForce(vec,ontoBody.GetWorldCenter());
+			var fc:Vector.<Charge>=from.getCharges();
+			var oc:Vector.<Charge>=onto.getCharges();
+			var fi:int;
+			var oi:int;
+			var stength:Number=from.getCharge()*onto.getCharge()*200.0;
+			for (fi=0;fi<fc.length;fi++){
+				// from location in world
+				var fromLoc:b2Vec2=fromBody.GetWorldPoint(fc[fi].loc);
+				var fromStr:Number=fc[fi].strength*stength;
+				for (oi=0;oi<oc.length;oi++){
+					var ontoLoc:b2Vec2=ontoBody.GetWorldPoint(oc[oi].loc);
+					var totalStr:Number=oc[oi].strength*fromStr;
+					
+					var vec:b2Vec2 = ontoLoc.Copy();
+					vec.Subtract(fromLoc);
+					var s:Number=totalStr*(1.0/vec.LengthSquared());
+					vec.Multiply(s/vec.Length());
+					ontoBody.ApplyForce(vec,ontoLoc);
+				}
+			}
 		}
 	}
 

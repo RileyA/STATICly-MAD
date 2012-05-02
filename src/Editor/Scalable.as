@@ -10,9 +10,11 @@ package Editor {
 		private var m_drag:Number = 0;
 		private var m_anchor:Number = 0;
 		private var m_dragging:Boolean = false;
-		private var m_scale_x:Number;
-		private var m_scale_y:Number;
+		protected var m_scale_x:Number;
+		protected var m_scale_y:Number;
 		protected var m_children:Vector.<Sprite>;
+		public var m_scalepx_x:Number;
+		public var m_scalepx_y:Number;
 
 		private static const WIDGET_DIMENSIONS:Number = 5;
 		
@@ -23,6 +25,8 @@ package Editor {
 			super(pos_x, pos_y, scale_x, scale_y);
 			m_scale_x = scale_x;
 			m_scale_y = scale_y;
+			m_scalepx_x = scale_x;
+			m_scalepx_y = scale_y;
 			m_corners.push(new Draggable(0,0,
 				WIDGET_DIMENSIONS, WIDGET_DIMENSIONS));
 			m_corners.push(new Draggable(0, scale_y - WIDGET_DIMENSIONS,
@@ -153,11 +157,30 @@ package Editor {
 			for (i = 0; i < m_children.length; ++i) {
 				m_children[i].x = Math.min(m_corners[m_anchor].x, m_corners[m_drag].x);
 				m_children[i].y = Math.min(m_corners[m_anchor].y, m_corners[m_drag].y);
+
+				m_scalepx_x = (Math.max(m_corners[m_anchor].x, m_corners[m_drag].x) 
+					- m_children[i].x + WIDGET_DIMENSIONS);
+				m_scalepx_y = (Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
+					- m_children[i].y + WIDGET_DIMENSIONS);
 				m_children[i].scaleX = (Math.max(m_corners[m_anchor].x, m_corners[m_drag].x) 
 					- m_children[i].x + WIDGET_DIMENSIONS) / m_scale_x;
 				m_children[i].scaleY = (Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
 					- m_children[i].y + WIDGET_DIMENSIONS) / m_scale_y;
 			}
+		}
+
+		public function forceScale(sx:Number, sy:Number):void {
+			m_corners[0].x = 0;
+			m_corners[0].y = 0;
+			m_corners[1].x = sx - WIDGET_DIMENSIONS;
+			m_corners[1].y = sy - WIDGET_DIMENSIONS;
+			m_corners[2].x = 0;
+			m_corners[2].y = sy - WIDGET_DIMENSIONS;
+			m_corners[3].x = sx - WIDGET_DIMENSIONS;
+			m_corners[3].y = 0;
+			//m_scale_x = sx;
+			//m_scale_y = sy;
+			reposition();
 		}
 	}
 }

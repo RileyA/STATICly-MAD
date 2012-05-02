@@ -8,8 +8,7 @@ package {
 	import Box2D.Collision.*;
 	import Surfaces.*;
 	import Actioners.*;
-	import Chargable.Chargable;
-	import Chargable.ChargableUtils;
+	import Chargable.*;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -20,16 +19,13 @@ package {
 		public static const RIGHT:String = "right";
 		public static const UP:String = "up";
 		public static const DOWN:String = "down";
-		public static const BCARPET:String = "bcarpet";
-		public static const RCARPET:String = "rcarpet";
-		public static const GROUND:String = "ground";
 		
 		private var movement:String;
 		private var scale:UVec2;
 		private var surfaces:Vector.<SurfaceElement>;
-		private var actions:Vector.<ActionerElement>;
+		private var actioners:Vector.<ActionerElement>;
 		private var sprite:Sprite;
-		private var anchor:GfxPhysObject;
+		private var joints:Vector.<b2Joint>;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -44,17 +40,36 @@ package {
 		private var strong:Boolean;
 		private var insulated:Boolean;
 		
-		private var chargeStrength:Number;
-		
-		
-		public function Block(blockInfo:BlockInfo, level:Level):void {
+		private var charges:Vector.<Charge>;
 
-			var position:UVec2 = blockInfo.position.getCopy();
-			scale = blockInfo.scale.getCopy();
-			movement = blockInfo.movement;
-			insulated=blockInfo.insulated;
-			strong=blockInfo.strong;
-			chargePolarity=blockInfo.chargePolarity;
+		// somewhat hacky... but it prevents having to pass the level in
+		// when reinit-ing blocks in the editor, and presumably a block
+		// will only ever belong to a single level at once...
+		private var m_level:Level = null;
+		private var m_info:BlockInfo;
+		
+		/**
+		 * @param	blockInfo Info struct containing various block properties
+		 * @param	level The level this block lives in
+		 */
+		public function Block(blockInfo:BlockInfo, level:Level):void {
+			m_level= level;
+			m_info = blockInfo;
+			init();
+		}
+
+		public function init():void {
+
+			joints = new Vector.<b2Joint>();
+			surfaces = new Vector.<SurfaceElement>();
+			actioners = new Vector.<ActionerElement>();
+
+			var position:UVec2 = m_info.position.getCopy();
+			scale = m_info.scale.getCopy();
+			movement = m_info.movement;
+			insulated=m_info.insulated;
+			strong=m_info.strong;
+			chargePolarity=m_info.chargePolarity;
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsBox(scale.x / 2, scale.y / 2);
@@ -64,7 +79,7 @@ package {
 				? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
 			rectDef.position.Set(position.x, position.y);
 			rectDef.angle = 0.0;
-			m_physics = level.world.CreateBody(rectDef);
+			m_physics = m_level.world.CreateBody(rectDef);
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.shape = polyShape;
@@ -75,12 +90,16 @@ package {
 			m_physics.CreateFixture(fd);
 			
 			var area:Number=scale.x*scale.y;//m_physics.GetMass()/fd.density;
-			chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
+			var chargeStrength:Number=area*(strong?strongChargeDensity:weakChargeDensity);
+			this.charges=ChargableUtils.makeCharges(chargeStrength, -scale.x / 2, -scale.y / 2, scale.x / 2, scale.y / 2);
+			//this.charges=new Vector.<Charge>();
+			//this.charges.push(new Charge(chargeStrength,new b2Vec2(0,0)));
+			
 			
 			// make block actionable
 			if (!insulated){
-				function act(level:Level):void{
-					var player:Player= level.getPlayer();
+				function act(m_level:Level):void{
+					var player:Player= m_level.getPlayer();
 					if (strong) {
 						if (chargePolarity==-player.chargePolarity) {
 							chargePolarity=ChargableUtils.CHARGE_NONE;
@@ -95,8 +114,8 @@ package {
 					}
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
-				fd.userData = new ActionMarker(act,ck);
-				m_physics.CreateFixture(fd);
+				var fix:b2Fixture=m_physics.CreateFixture(fd);
+				fix.SetUserData(new ActionMarker(act,ck,fix));
 			}
 			
 			//body.SetFixedRotation(true);
@@ -119,21 +138,54 @@ package {
 
 			var i:int = 0;
 
-			for (i = 0; i < blockInfo.surfaces.length; i++) {
+			for (i = 0; i < m_info.surfaces.length; i++) {
 				rectDef.position.Set(position.x, position.y);
-				addSurface(blockInfo.surfaces[i], rectDef, level.world);
+				addSurface(m_info.surfaces[i], rectDef, m_level.world);
 			}
-			for (i = 0; i < blockInfo.actions.length; i++) {
-				addAction(blockInfo.actions[i], level.world);
+			for (i = 0; i < m_info.actions.length; i++) {
+				rectDef.position.Set(position.x, position.y);
+				addActioner(m_info.actions[i], rectDef, m_level.world);
 			}
 			
-			anchor = null;
 			if (movement == TRACKED) {
-				var hold:Vector.<Number> = new Vector.<Number>();
-				hold.push(0, 18, 26.66, 18);
-				makeTracked(blockInfo.bounds, level);
+				makeTracked(m_info.bounds);
 			}
-			
+		}
+
+		// helper that cleans up a block
+		public function deinit():void {
+			for (var i:uint = 0; i < surfaces.length; ++i)
+				surfaces[i].cleanup();
+			for (i = 0; i < actioners.length; ++i)
+				actioners[i].cleanup();
+			var world:b2World = m_physics.GetWorld();
+			world.DestroyBody(m_physics);
+			for (i = 0; i < joints.length; ++i)
+				world.DestroyJoint(joints[i]);
+			while (numChildren > 0)
+				removeChildAt(0);
+			joints = new Vector.<b2Joint>();
+			surfaces = new Vector.<SurfaceElement>();
+			actioners = new Vector.<ActionerElement>();
+		}
+
+		/** deinit and reinit to reflect any changes in blockinfo */
+		public function reinit():void {
+			deinit();
+			// if it's in the charge manager, nuke it
+			m_level.getChargableManager().removeChargable(this);
+			// then re-add if need be
+			if (isChargableBlock())
+				m_level.getChargableManager().addChargable(this);
+			init();
+		}
+
+		public function resetCharge():void {
+			chargePolarity = m_info.chargePolarity;
+		}
+
+		public function getInfo():BlockInfo {
+			return m_info;
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -141,8 +193,6 @@ package {
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
 			}
-			if (anchor != null)
-				anchor.updateTransform(pixelsPerMeter);
 		}
 
 		public function setPosition(pos:UVec2):void {
@@ -166,7 +216,11 @@ package {
 		}
 		
 		public function getCharge():Number{
-			return chargePolarity*chargeStrength;
+			return chargePolarity;
+		}
+		
+		public function getCharges():Vector.<Charge>{
+			return charges;
 		}
 		
 		public function getBody():b2Body{
@@ -183,32 +237,72 @@ package {
 			var type:String = key.substr(split + 1, key.length);
 			var se:SurfaceElement;
 
-			if (dir == UP) {
+			switch (dir) {
+			case UP:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), 
 													scale.x, SurfaceElement.DEPTH, world);			
-			}else if (dir == DOWN) {
+				break;
+			case DOWN:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), 
 													scale.x, SurfaceElement.DEPTH, world);
-			}else if (dir == LEFT) {
+				break;
+			case LEFT:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
-			}else if (dir == RIGHT) {
+				break;
+			case RIGHT:
 				se = SurfaceElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), 
 													SurfaceElement.DEPTH, scale.y, world);
+				break;
+			default:
+				se == null;
 			}
 			if(se != null) {
 				var joint:b2WeldJointDef = new b2WeldJointDef();
 				joint.Initialize(m_physics, se.getPhysics(), rectDef.position);
-				world.CreateJoint(joint);
+				joints.push(world.CreateJoint(joint));
+				surfaces.push(se);
 				addChild(se);
 			}
 		}
-		
-		private function addAction(key:String, world:b2World):void {
-			
+
+		private function addActioner(key:String, rectDef:b2BodyDef, world:b2World):void {
+			var split:int = key.search(",");
+			var dir:String = key.substr(0, split);
+			var type:String = key.substr(split + 1, key.length);
+			var ae:ActionerElement;
+			var am:ActionMarker;
+
+			switch (dir) {
+			case UP:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), am, world);
+				break;
+			case DOWN:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), am, world);
+				break;
+			case LEFT:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), am, world);
+				break;
+			case RIGHT:
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), am, world);
+				break;
+			default:
+				ae == null;
+			}
+			if(ae != null) {
+				var joint:b2WeldJointDef = new b2WeldJointDef();
+				joint.Initialize(m_physics, ae.getPhysics(), rectDef.position);
+				joints.push(world.CreateJoint(joint));
+				actioners.push(ae);
+				addChild(ae);
+			}
+		}
+
+		private function removeActions():void {
+			// TODO
 		}
 		
-		private function makeTracked(ends:Vector.<UVec2>, level:Level):void {
+		private function makeTracked(ends:Vector.<UVec2>):void {
 			var l:b2Vec2 = ends[0].toB2Vec2();
 			var r:b2Vec2 = ends[1].toB2Vec2();
 			var axis:b2Vec2 = r.Copy();
@@ -220,35 +314,21 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center;
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchorBody:b2Body = level.world.CreateBody(anchorDef);
-			anchor = new GfxPhysObject(anchorBody);
+			var anchor:b2Body = m_level.world.CreateBody(anchorDef);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			l.Subtract(center);
-			r.Subtract(center);
+			//l.Subtract(center);
+			//r.Subtract(center);
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
-			trackDef.Initialize(anchorBody, m_physics, center, axis);
-			level.world.CreateJoint(trackDef);
-			
-			var sprite:Sprite = new Sprite();
-			sprite.graphics.beginFill(0xB0B0B0);
-			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE); 
-			sprite.graphics.moveTo(l.x + scale.x / 2, l.y);
-			sprite.graphics.lineTo(r.x + scale.x / 2, r.y);
-			sprite.graphics.endFill();
-			
-			redraw();
-			anchor.addChild(sprite);
-			level.getParent().addChild(anchor);
-			
+			trackDef.Initialize(anchor, m_physics, center, axis);
+			joints.push(m_level.world.CreateJoint(trackDef));
 		}
 		
 		public function getBodyType():uint {
 			return movement == FIXED ? b2Body.b2_staticBody 
 				: b2Body.b2_dynamicBody;
 		}
-		
 	}
 }

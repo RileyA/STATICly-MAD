@@ -7,7 +7,9 @@ package {
 
 	/** A set of constants and helpers for box2d stuffs */
 	public class PhysicsUtils {
-		public static function getCollosions(body:b2Body,filterFunc:Function):Vector.<*> {
+		public static const OUT_USER_DATA:int=0;
+		public static const OUT_EDGE:int=1;
+		public static function getCollosions(body:b2Body,filterFunc:Function,out:int=OUT_USER_DATA):Vector.<*> {
 			var v:Vector.<*>= new Vector.<*>;
 			var con:b2ContactEdge=body.GetContactList();
 			while (con!=null){
@@ -16,9 +18,21 @@ package {
 					var a:*=c.GetFixtureA().GetUserData();
 					var b:*=c.GetFixtureB().GetUserData();
 					if (filterFunc(a,b)) {
-						v.push(a);
+						if (out==OUT_USER_DATA){
+							v.push(a);
+						} else if (out==OUT_EDGE){
+							v.push(con);
+						} else {
+							throw new Error("Pass a valid out constant");
+						}
 					} else if (filterFunc(b,a)) {
-						v.push(b);
+						if (out==OUT_USER_DATA){
+							v.push(b);
+						} else if (out==OUT_EDGE){
+							v.push(con);
+						} else {
+							throw new Error("Pass a valid out constant");
+						}
 					}
 				}
 				con=con.next;

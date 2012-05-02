@@ -42,5 +42,74 @@ package {
 				}
 			}
 		}
+
+		public static function outputJSON(obj:Object):String {
+			return outputObject(obj);
+		}
+	
+		/** This mess takes a simple object and dumps its fields into a JSON 
+			formatted string */
+		private static function outputObject(obj:Object, tabs:String=""):String {
+			var out:String = "{";
+			var xml:XML = describeType(obj);
+			var first:Boolean = true;
+			for each(var v:XML in xml..variable) {
+				if (first) {
+					first = false;
+				} else {
+					out += ","
+				}
+				out += "\n" + tabs + "\t";
+				out += "\"" + v.@name + "\" : ";
+				if (obj[v.@name] is Number) {
+					out += obj[v.@name];
+				} else if (obj[v.@name] is String) {
+					out += "\"" + obj[v.@name] + "\"";
+				} else if (obj[v.@name] is Boolean) {
+					out += obj[v.@name] ? "true" : "false";
+				} else if (obj[v.@name] is Vector.<*> || 
+					getQualifiedClassName(v.@name) 
+					== "__AS3__.vec::Vector.<Number>") {
+					out += "\n" + tabs + "\t[";
+					var firstArr:Boolean = true;
+					for (var i:uint = 0; i < obj[v.@name].length; ++i) {
+						if (firstArr)
+							firstArr = false;
+						else 
+							out += ",";
+						out += "\n" + tabs + "\t";
+						if (obj[v.@name][i] is Number) {
+							out += obj[v.@name][i];
+						} else if (obj[v.@name][i] is String) {
+							out += "\"" + obj[v.@name][i] + "\"";
+						} else if (obj[v.@name][i] is Boolean) {
+							out += obj[v.@name][i] ? "true" : "false";
+						} else if (obj[v.@name][i] is Vector.<*> || 
+							getQualifiedClassName(v.@name) 
+							== "__AS3__.vec::Vector.<Number>") {
+							out += "[]";// not supported!
+						} else {
+							out += tabs + "\t" +
+							outputObject(obj[v.@name][i], tabs + "\t\t");
+						}
+					}
+					out += "\n" + tabs + "\t]";
+				} else {
+					out += "\n" + tabs + "\t" + outputObject(obj[v.@name], 
+						tabs + "\t");
+				}
+			}
+			out += "\n" + tabs + "}";
+			return out;
+		}
+
+
+		/**
+		* Takes a number and rounds it to the specified number of decimal places.
+		*/
+		public static function setPrecision(number:Number, precision:int):Number {
+			precision = Math.pow(10, precision);
+			return (Math.round(number * precision)/precision);
+		}
 	}
 }

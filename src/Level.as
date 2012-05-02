@@ -20,6 +20,7 @@ package {
 		public var pixelsPerMeter:Number;
 		public var world:b2World;
 		public var contactListener:LevelContactListener;
+		private var m_levelDone:Boolean;
 		private var m_updatePhysics:Boolean;
 		private var m_debugDraw:Boolean;
 		private var m_debugDrawKey:Boolean;
@@ -28,6 +29,7 @@ package {
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_blocks:Vector.<Block>;
 		private var m_info:LevelInfo;
+		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
 
@@ -38,6 +40,8 @@ package {
 			"application/octet-stream")] private const test_level_01:Class;
 		[Embed(source="../media/levels/proto01_knothole.json",  mimeType=
 			"application/octet-stream")] private const proto01_knothole:Class;
+		[Embed(source="../media/levels/Hole.json",  mimeType=
+			"application/octet-stream")] private const proto01_knothole2:Class;
 		[Embed(source="../media/levels/proto02_stack.json",  mimeType=
 			"application/octet-stream")] private const proto02_stack:Class;
 
@@ -49,19 +53,24 @@ package {
 		private static const DO_SLEEP:Boolean = true;
 		private static const BORDER_THICKNESS:Number = 10;
 
-		public function Level(parent:Sprite):void {
+		public function Level(parent:Sprite, info:LevelInfo=null):void {
 
 			m_parent_sprite = parent;
 			m_debugDraw = false;
 			m_updatePhysics = true;
+			m_levelDone = false;
 
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
 			m_blocks = new Vector.<Block>;
 
 			// load level JSON
+			if (!info) {
 			m_info = new LevelInfo();
-			MiscUtils.loadJSON(new test_level_01() as ByteArray, m_info);
+			MiscUtils.loadJSON(new proto02_stack() as ByteArray, m_info);
+			} else {
+				m_info = info;
+			}
 
 			// make world
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
@@ -73,13 +82,11 @@ package {
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
 				var loadedBlock:Block = new Block(m_info.blocks[i], this);
-				m_blocks.push(loadedBlock);
-				m_parent_sprite.addChild(loadedBlock);
-				m_gfxPhysObjects.push(loadedBlock);
-				if (loadedBlock.isChargableBlock()) {
-					m_chargableManager.addChargable(loadedBlock);
-				}
+				addBlock(loadedBlock);
 			}
+
+			// prep the score card
+			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
 
 			// make the player
 			m_player = new Player(world, m_info.playerPosition);
@@ -89,16 +96,36 @@ package {
 
 			// prep debug stuff
 			prepareDebugVisualization();
+		}
 
-			// some debug text
-			/*var levelNameText:TextField = new TextField();
-			levelNameText.width = 600;
-			levelNameText.height = 500;
-			levelNameText.x = 5;
-			levelNameText.y = 5;
-			levelNameText.text = "Testing Level: " + m_info.title;
-			levelNameText.selectable = false;
-			m_parent_sprite.addChild(levelNameText);*/
+		public function addBlock(b:Block):void {
+			m_blocks.push(b);
+			m_parent_sprite.addChild(b);
+			m_gfxPhysObjects.push(b);
+			if (b.isChargableBlock()) {
+				m_chargableManager.addChargable(b);
+			}
+		}
+
+		public function removeBlock(b:Block):void {
+			b.deinit();
+			for (var i:uint = 0; i < m_blocks.length; ++i) { 
+				if (m_blocks[i] == b) {
+					m_blocks[i] = m_blocks[m_blocks.length-1];
+					m_blocks.pop();
+					break;
+				}
+			}
+			for (i = 0; i < m_blocks.length; ++i) { 
+				if (m_gfxPhysObjects[i] == b) {
+					m_gfxPhysObjects[i] = m_gfxPhysObjects[
+						m_gfxPhysObjects.length-1];
+					m_gfxPhysObjects.pop();
+					break;
+				}
+			}
+			m_parent_sprite.removeChild(b);
+			m_chargableManager.removeChargable(b);
 		}
 
 		public function setUpdatePhysics(updatePhys:Boolean):void {
@@ -117,7 +144,10 @@ package {
 			return m_parent_sprite;
 		}
 
-		public function update(delta:Number):void {
+		/**
+		* Returns false if the level is marked as finished.
+		*/
+		public function update(delta:Number):Boolean {
 
 			if (m_updatePhysics) {
 				world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
@@ -139,6 +169,10 @@ package {
 
 			if (m_debugDraw)
 				world.DrawDebugData();
+
+			m_score.playerTime += delta;
+
+			return !m_levelDone;
 		}
 
 		public function getPlayer():Player{
@@ -177,22 +211,52 @@ package {
 			desc.position.y = -desc.scale.y / 2;
 			desc.movement = "fixed";
 			
-			m_gfxPhysObjects.push(new Block(desc, this));
+			var wall:Block = new Block(desc, this);
+			m_gfxPhysObjects.push(wall);
+			m_parent_sprite.addChild(wall);
 
 			desc.position.y = m_info.levelSize.y + desc.scale.y / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, this));
+			wall = new Block(desc, this);
+			m_gfxPhysObjects.push(wall);
+			m_parent_sprite.addChild(wall);
 
 			desc.scale.x = BORDER_THICKNESS;
 			desc.scale.y = m_info.levelSize.y;
 			desc.position.x = -desc.scale.x / 2;
 			desc.position.y = desc.scale.y / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, this));
+			wall = new Block(desc, this);
+			m_gfxPhysObjects.push(wall);
+			m_parent_sprite.addChild(wall);
 
 			desc.position.x = m_info.levelSize.x + desc.scale.x / 2;
 
-			m_gfxPhysObjects.push(new Block(desc, this));
+			wall = new Block(desc, this);
+			m_gfxPhysObjects.push(wall);
+			m_parent_sprite.addChild(wall);
+		}
+
+		public function getInfo():LevelInfo {
+			return m_info;
+		}	
+
+		/** Get the current score info for this level. */
+		public function getScore():ScoreInfo {
+			return m_score;
+		}
+
+		/** Mark this level as done.  The update() function will return accordingly. */
+		public function markAsDone():void {
+			m_levelDone = true;
+		}
+
+		public function resetLevel():void {
+			m_levelDone = false;
+		}
+
+		public function getChargableManager():ChargableManager {
+			return m_chargableManager;
 		}
 	}
 }
