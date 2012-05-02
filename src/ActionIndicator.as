@@ -22,7 +22,6 @@ package
 			var ccDef:b2BodyDef = new b2BodyDef();
 			ccDef.type = b2Body.b2_dynamicBody;
 			ccDef.allowSleep = false;
-			ccDef.awake = true;
 			ccDef.position = player.getPhysics().GetPosition();
 			fd.isSensor = true;
 			var shape:b2PolygonShape = new b2PolygonShape();
@@ -34,6 +33,8 @@ package
 			
 			this.player = player;
 			this.target = target;
+			
+			
 		}
 		
 		public function update():void {

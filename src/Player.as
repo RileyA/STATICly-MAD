@@ -166,9 +166,7 @@ package {
 				}else {
 					remove(level, actionInd);
 					actionInd = new ActionIndicator(this, marker.fixture.GetBody(), level.world);
-					if (actionInd == null) {
-						addChild(actionInd);
-					}
+					addChild(actionInd);
 				}
 			} else {
 				remove(level, actionInd);
