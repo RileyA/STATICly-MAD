@@ -32,7 +32,7 @@ package {
 		public static const weakChargeDensity:Number = 1.0; // charge per square m
 
 		public static const strongDensity:Number = 10.0; // kg per square m
-		public static const weakDensity:Number = 10.0; // kg per square m
+		public static const weakDensity:Number = 3.0; // kg per square m
 		
 		private var chargePolarity:int;
 		private var drawnChargePolarity:int;

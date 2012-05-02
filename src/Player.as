@@ -17,11 +17,14 @@ package {
 
 		private static const DO_REACTION_FORCES:Boolean=true;
 
-		private static const JUMP_STRENGTH:Number=8.0;
+		private static const JUMP_STRENGTH:Number=7.8;
 		private static const MOVE_SPEED:Number=6.0;
+		private static const MOVE_AIR_SPEED:Number=4.0;
 		private static const AIR_ACELL_TIME_CONSTANT:Number=0.5;
 		private static const GROUND_ACELL_TIME_CONSTANT:Number=0.1;
 		private static const SHUFFLE_INCREMENT_FACTOR:Number=0.05;
+		private static const DENSITY:Number=20.0;
+		private static const CHARGE_DENSITY:Number=1.5;
 
 		public static const WIDTH:Number = 0.7;
 		public static const HEIGHT:Number = -1.2;
@@ -51,17 +54,17 @@ package {
 			ccDef.awake = true;
 			ccDef.position = position.toB2Vec2();
 			fd.shape = polyShape;
-			fd.density = Block.strongDensity*2;
+			fd.density = DENSITY;
 			fd.friction = 0.0;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.PLAYER_BODY_ID;
 			m_physics = world.CreateBody(ccDef);
 			m_physics.CreateFixture(fd);
 			m_physics.SetFixedRotation(true);
-			m_physics.SetLinearDamping(.2);
+			m_physics.SetLinearDamping(.5);
 			
 			var area:Number=m_physics.GetMass()/fd.density;
-			var chargeStrength:Number=area*Block.strongChargeDensity;
+			var chargeStrength:Number=area*CHARGE_DENSITY;
 			this.charges=new Vector.<Charge>();
 			this.charges.push(new Charge(chargeStrength,new b2Vec2(
 								0,
@@ -80,14 +83,14 @@ package {
 			// make foot/jump sensor
 			fd = new b2FixtureDef();
 			polyShape = new b2PolygonShape();
-			polyShape.SetAsBox(0.3, 0.2);
+			polyShape.SetAsBox(WIDTH/3, 0.1);
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.FOOT_SENSOR_ID;
 			m_physics.CreateFixture(fd);
 			
 			// make action sensor
-			const m:Number=.3;//action region margin
+			const m:Number=.15;//action region margin
 			fd = new b2FixtureDef();
 			polyShape = new b2PolygonShape();
 			polyShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
@@ -186,8 +189,13 @@ package {
 			
 			// x movement //
 			var xspeed:Number = 0;
-			if (left) { xspeed -= MOVE_SPEED; }
-			if (right) { xspeed += MOVE_SPEED; }
+			if (left) { xspeed -= 1; }
+			if (right) { xspeed += 1; }
+			if (canJump) {
+				xspeed*=MOVE_SPEED;
+			} else {
+				xspeed*=MOVE_AIR_SPEED;
+			}
 			
 			if (canJump || xspeed!=0) {
 				var fx:Number=m_physics.GetMass()/(canJump?GROUND_ACELL_TIME_CONSTANT:AIR_ACELL_TIME_CONSTANT);
