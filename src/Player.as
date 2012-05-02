@@ -144,6 +144,12 @@ package {
 			return null;
 		}
 		
+		public override function updateTransform(pixelsPerMeter:Number):void {
+			super.updateTransform(pixelsPerMeter);
+			if (actionInd != null){
+				actionInd.updateTransform(pixelsPerMeter);
+			}
+		}
 		
 		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
