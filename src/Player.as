@@ -38,6 +38,9 @@ package {
 		private var didAction:Boolean; // true when already did action for this action button press
 		private var charges:Vector.<Charge>;
 		
+		private var bestAction:ActionMarker;
+		private var actionInd:ActionIndicator;
+		
 		private var faceRight:Boolean;
 		
 		public function Player(world:b2World, position:UVec2):void {
@@ -154,12 +157,29 @@ package {
 			if ((left || right)&&!(left && right)) {
 				faceRight=right;
 			}
+
+			
+			var marker:ActionMarker = getBestAction();
+			if (marker != null) {
+				if (marker == bestAction) {
+					actionInd.update();
+				}else {
+					remove(level, actionInd);
+					actionInd = new ActionIndicator(this, marker.fixture.GetBody(), level.world);
+					if (actionInd == null) {
+						addChild(actionInd);
+					}
+				}
+			} else {
+				remove(level, actionInd);
+				actionInd = null;
+			}
+			bestAction = marker;
 			
 			// do actions
 			if ((!didAction) && action) {
-				var marker:ActionMarker=getBestAction();
-				if (marker!=null) {
-					marker.callAction(level);
+				if (bestAction!=null) {
+					bestAction.callAction(level);
 					didAction=true;
 				}
 			} else if (!action) {
@@ -222,7 +242,13 @@ package {
 			}
 		}
 
-
+		private function remove(level:Level, obj:GfxPhysObject):void {
+			if (obj != null) {
+				removeChild(obj);
+				level.world.DestroyBody(obj.getPhysics());
+			}
+		}
+		
 		private function groundCollision():void {
 			function groundFilter(a:*,b:*):Boolean{
 				return a==LevelContactListener.GROUND_SENSOR_ID &&
