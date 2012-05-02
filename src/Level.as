@@ -101,6 +101,8 @@ package {
 		public function addBlock(b:Block):void {
 			m_blocks.push(b);
 			m_parent_sprite.addChild(b);
+			if (b.getMovement() == Block.TRACKED)
+				m_parent_sprite.addChild(b.getAnchor());
 			m_gfxPhysObjects.push(b);
 			if (b.isChargableBlock()) {
 				m_chargableManager.addChargable(b);

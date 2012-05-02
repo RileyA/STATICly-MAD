@@ -25,6 +25,7 @@ package {
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actioners:Vector.<ActionerElement>;
 		private var sprite:Sprite;
+		private var anchor:GfxPhysObject;
 		private var joints:Vector.<b2Joint>;
 		
 		// for charge
@@ -147,6 +148,7 @@ package {
 				addActioner(m_info.actions[i], rectDef, m_level.world);
 			}
 			
+			anchor = null;
 			if (movement == TRACKED) {
 				makeTracked(m_info.bounds);
 			}
@@ -167,6 +169,8 @@ package {
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
+			if(anchor != null)
+				m_level.getParent().removeChild(anchor);
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
@@ -193,6 +197,9 @@ package {
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
 			}
+			if (movement == TRACKED){
+				anchor.updateTransform(pixelsPerMeter);
+			}
 		}
 
 		public function setPosition(pos:UVec2):void {
@@ -208,6 +215,14 @@ package {
 
 		public function getScale():UVec2 {
 			return scale.getCopy();
+		}
+		
+		public function getMovement():String {
+			return movement;
+		}
+		
+		public function getAnchor():GfxPhysObject {
+			return anchor;
 		}
 		
 		private function redraw():void{
@@ -314,7 +329,8 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center;
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchor:b2Body = m_level.world.CreateBody(anchorDef);
+			var anchorBody:b2Body = m_level.world.CreateBody(anchorDef);
+			anchor = new GfxPhysObject(anchorBody);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			//l.Subtract(center);
@@ -322,8 +338,27 @@ package {
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
-			trackDef.Initialize(anchor, m_physics, center, axis);
+			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			joints.push(m_level.world.CreateJoint(trackDef));
+			
+			var sprite:Sprite = new Sprite();
+			sprite.graphics.beginFill(0xB0B0B0);
+			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			sprite.graphics.moveTo(l.x, l.y);
+			sprite.graphics.lineTo(r.x, r.y);
+			sprite.graphics.drawCircle(l.x, l.y, 0.1);
+			sprite.graphics.drawCircle(r.x, r.y, 0.1);
+			sprite.graphics.endFill();
+			
+			anchor.addChild(sprite);
+			
+			sprite = new Sprite();
+			sprite.graphics.beginFill(0xB0B0B0);
+			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			sprite.graphics.moveTo(0, .1);
+			sprite.graphics.lineTo(0, -.1);
+			sprite.graphics.endFill();
+			addChild(sprite);
 		}
 		
 		public function getBodyType():uint {
