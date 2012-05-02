@@ -197,7 +197,8 @@ package {
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
 			}
-			if (movement == TRACKED){
+			if (anchor != null) {
+				//trace(anchor.getPhysics().GetPosition().x, anchor.getPhysics().GetPosition().y);
 				anchor.updateTransform(pixelsPerMeter);
 			}
 		}
