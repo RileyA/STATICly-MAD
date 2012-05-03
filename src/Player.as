@@ -2,9 +2,7 @@ package {
 
 	import Actioners.*;
 	import GfxPhysObject;
-	import flash.display.Sprite;
-	import flash.display.Shape;
-	import flash.display.DisplayObjectContainer;
+	import flash.display.*;
 	import flash.ui.Keyboard;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
@@ -104,6 +102,14 @@ package {
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
+			
+			actionInd = new Sprite();
+			actionInd.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionInd.graphics.moveTo(-.1, -.1);
+			actionInd.graphics.lineTo(.1, .1);
+			actionInd.graphics.moveTo(-.1, .1);
+			actionInd.graphics.lineTo(.1, -.1);
+			actionInd.graphics.endFill();
 		}
 		
 		
@@ -159,16 +165,14 @@ package {
 
 			
 			var marker:ActionMarker = getBestAction();
-			if (marker != null) {
-				if (marker == bestAction) {
-					//actionInd.update();
-				}else {
-					//remove(level, actionInd);
-					//actionInd = new ActionIndicator(this, marker.fixture.GetBody());
-				}
-			} else {
-				//remove(level, actionInd);
-				actionInd = null;
+			if (marker != null && marker != bestAction) {
+				if(bestAction != null)
+					bestAction.sprite.removeChild(actionInd);
+				marker.sprite.addChild(actionInd);
+				
+			} else if (marker == null){
+				if(bestAction != null)
+					bestAction.sprite.removeChild(actionInd);
 			}
 			bestAction = marker;
 			
