@@ -39,7 +39,7 @@ package {
 		private var charges:Vector.<Charge>;
 		
 		private var bestAction:ActionMarker;
-		private var actionInd:ActionIndicator;
+		private var actionInd:Sprite;
 		
 		private var faceRight:Boolean;
 		
@@ -144,13 +144,6 @@ package {
 			return null;
 		}
 		
-		public override function updateTransform(pixelsPerMeter:Number):void {
-			super.updateTransform(pixelsPerMeter);
-			if (actionInd != null){
-				actionInd.updateTransform(pixelsPerMeter);
-			}
-		}
-		
 		public function update(level:Level):void {
 			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 			
@@ -168,14 +161,13 @@ package {
 			var marker:ActionMarker = getBestAction();
 			if (marker != null) {
 				if (marker == bestAction) {
-					actionInd.update();
+					//actionInd.update();
 				}else {
-					remove(level, actionInd);
-					actionInd = new ActionIndicator(this, marker.fixture.GetBody(), level.world);
-					addChild(actionInd);
+					//remove(level, actionInd);
+					actionInd = new ActionIndicator(this, marker.fixture.GetBody());
 				}
 			} else {
-				remove(level, actionInd);
+				//remove(level, actionInd);
 				actionInd = null;
 			}
 			bestAction = marker;
@@ -243,13 +235,6 @@ package {
 				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
 				// That should be the same as this:
 				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
-			}
-		}
-
-		private function remove(level:Level, obj:GfxPhysObject):void {
-			if (obj != null) {
-				removeChild(obj);
-				level.world.DestroyBody(obj.getPhysics());
 			}
 		}
 		
