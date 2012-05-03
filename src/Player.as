@@ -164,7 +164,7 @@ package {
 					//actionInd.update();
 				}else {
 					//remove(level, actionInd);
-					actionInd = new ActionIndicator(this, marker.fixture.GetBody());
+					//actionInd = new ActionIndicator(this, marker.fixture.GetBody());
 				}
 			} else {
 				//remove(level, actionInd);

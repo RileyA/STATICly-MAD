@@ -352,7 +352,6 @@ package {
 			sprite.graphics.endFill();
 			
 			anchor.addChild(sprite);
-			addChild(anchor);
 			
 			sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
