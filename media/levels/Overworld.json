@@ -85,7 +85,7 @@
 			"movement" : "fixed",
 			"actions" : 
 			[
-			"up,entrance,hole"
+			"up,entrance,wall"
 			],
 			"strong" : false,
 			"chargePolarity" : 0,
@@ -135,7 +135,7 @@
 			"movement" : "fixed",
 			"actions" : 
 			[
-			"up,entrance,lifts"
+			"up,entrance,exchange"
 			],
 			"strong" : false,
 			"chargePolarity" : 0,

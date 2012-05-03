@@ -36,7 +36,7 @@ package {
 			block_text.x = 100;
 			block_text.y = 300;
 			block_text.defaultTextFormat = format;
-			block_text.text = "Or click here for prelim level state!";
+			block_text.text = "Or click here for the Overworld!";
 			block_text.selectable = false;
 			block_text.addEventListener(MouseEvent.MOUSE_UP, clickedDemo);
 			addChild(block_text);
@@ -68,7 +68,7 @@ package {
 
 		private function clickedDemo(event:MouseEvent):void {
 			if (!m_done) {
-				m_game.addState(new LevelState(m_game, "intro"));
+				m_game.addState(new OverworldState(m_game));
 			}
 		}
 

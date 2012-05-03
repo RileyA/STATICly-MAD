@@ -9,8 +9,12 @@ package {
 			"application/octet-stream")] private static const launch_lvl:Class;
 		[Embed(source="../media/levels/Lifts.json",  mimeType=
 			"application/octet-stream")] private static const lifts_lvl:Class;
+		[Embed(source="../media/levels/Wall.json",  mimeType=
+			"application/octet-stream")] private static const wall_lvl:Class;
 		[Embed(source="../media/levels/Escalator.json",  mimeType=
 			"application/octet-stream")] private static const escalator_lvl:Class;
+		[Embed(source="../media/levels/Exchange.json",  mimeType=
+			"application/octet-stream")] private static const exchange_lvl:Class;
 		[Embed(source="../media/levels/Hang.json",  mimeType=
 			"application/octet-stream")] private static const hang_lvl:Class;
 		[Embed(source="../media/levels/Canyon2.json",  mimeType=
@@ -28,7 +32,9 @@ package {
 			associativeArray["hole"] = hole_lvl;
 			associativeArray["launch"] = launch_lvl;
 			associativeArray["lifts"] = lifts_lvl;
+			associativeArray["wall"] = wall_lvl;
 			associativeArray["escalator"] = escalator_lvl;
+			associativeArray["exchange"] = exchange_lvl;
 			associativeArray["hang"] = hang_lvl;
 			associativeArray["canyon2"] = canyon2_lvl;
 			associativeArray["overworld"] = overworld_lvl;
