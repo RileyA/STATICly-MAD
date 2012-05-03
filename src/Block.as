@@ -169,8 +169,8 @@ package {
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
-			if(anchor != null)
-				m_level.getParent().removeChild(anchor);
+			//if(anchor != null)
+				//m_level.getParent().removeChild(anchor);
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
@@ -197,7 +197,8 @@ package {
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
 			}
-			if (movement == TRACKED){
+			if (anchor != null) {
+				//trace(anchor.getPhysics().GetPosition().x, anchor.getPhysics().GetPosition().y);
 				anchor.updateTransform(pixelsPerMeter);
 			}
 		}
@@ -282,24 +283,27 @@ package {
 		}
 
 		private function addActioner(key:String, rectDef:b2BodyDef, world:b2World):void {
-			var split:int = key.search(",");
-			var dir:String = key.substr(0, split);
-			var type:String = key.substr(split + 1, key.length);
+			var tokens:Array = key.split(",", 3);
+			var dir:String = tokens[0];
+			var type:String = tokens[1];
+			var extra:String = null;
+			if (tokens.length > 2) {
+				extra = tokens[2];
+			}
 			var ae:ActionerElement;
-			var am:ActionMarker;
 
 			switch (dir) {
 			case UP:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), extra, world);
 				break;
 			case DOWN:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), extra, world);
 				break;
 			case LEFT:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), extra, world);
 				break;
 			case RIGHT:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), extra, world);
 				break;
 			default:
 				ae == null;
@@ -323,7 +327,6 @@ package {
 			var axis:b2Vec2 = r.Copy();
 			axis.Subtract(l);
 			axis.Normalize();
-			//trace(axis.x, axis.y);
 			var center:b2Vec2 = m_physics.GetPosition().Copy();
 			
 			var anchorDef:b2BodyDef = new b2BodyDef();
@@ -333,8 +336,6 @@ package {
 			anchor = new GfxPhysObject(anchorBody);
 			
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			//l.Subtract(center);
-			//r.Subtract(center);
 			trackDef.lowerTranslation = -l.Length();
 			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
@@ -351,12 +352,17 @@ package {
 			sprite.graphics.endFill();
 			
 			anchor.addChild(sprite);
+			addChild(anchor);
 			
 			sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
 			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			sprite.graphics.moveTo(0, .1);
-			sprite.graphics.lineTo(0, -.1);
+			
+			var dy:Number = r.y - l.y;
+			var dx:Number = r.x - l.x;
+			var length:Number = 5 * Math.sqrt((dy * dy) + (dx * dx));
+			sprite.graphics.moveTo(l.y / length, l.x / length);
+			sprite.graphics.lineTo(r.y / length, r.x / length);
 			sprite.graphics.endFill();
 			addChild(sprite);
 		}

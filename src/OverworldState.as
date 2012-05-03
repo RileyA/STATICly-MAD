@@ -14,7 +14,7 @@ package {
 		}
 
 		override public function init():void {
-			m_level = new Level(this);
+			m_level = new Level(this, MiscUtils.loadLevelInfo("overworld"));
 		}
 		
 		override public function deinit():void {
@@ -26,10 +26,24 @@ package {
 		*/
 		override public function update(delta:Number):Boolean {
 			var isDone:Boolean = false;
-			var levelFinish:Boolean = !m_level.update(delta);
+			var levelEnter:Boolean = !m_level.update(delta);
+			if (levelEnter) {
+				enterLevel(m_level.getNextLevel());
+				m_level.resetLevel();
+			}
 			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
 			return !isDone;
 		}
 
+		/**
+		* Enter the specified level
+		*/
+		private function enterLevel(name:String):void {
+			if (name == null){ return; }
+			//else if (name == overworld level) {
+			//	m_game.addState(new OverworldState(m_game, name));
+			//} else {
+			m_game.addState(new LevelState(m_game, name));
+		}
 	}
 }

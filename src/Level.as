@@ -21,6 +21,7 @@ package {
 		public var world:b2World;
 		public var contactListener:LevelContactListener;
 		private var m_levelDone:Boolean;
+		private var m_nextLevel:String;
 		private var m_updatePhysics:Boolean;
 		private var m_debugDraw:Boolean;
 		private var m_debugDrawKey:Boolean;
@@ -36,14 +37,6 @@ package {
 		// TODO don't hardcode/embed these...
 		private static const WIDTH_PIXELS:Number  = 800;
 		private static const HEIGHT_PIXELS:Number = 600;
-		[Embed(source="../media/levels/test_level_01.json",  mimeType=
-			"application/octet-stream")] private const test_level_01:Class;
-		[Embed(source="../media/levels/proto01_knothole.json",  mimeType=
-			"application/octet-stream")] private const proto01_knothole:Class;
-		[Embed(source="../media/levels/Hole.json",  mimeType=
-			"application/octet-stream")] private const proto01_knothole2:Class;
-		[Embed(source="../media/levels/proto02_stack.json",  mimeType=
-			"application/octet-stream")] private const proto02_stack:Class;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -53,9 +46,10 @@ package {
 		private static const DO_SLEEP:Boolean = true;
 		private static const BORDER_THICKNESS:Number = 10;
 
-		public function Level(parent:Sprite, info:LevelInfo=null):void {
+		public function Level(parent:Sprite, info:LevelInfo):void {
 
 			m_parent_sprite = parent;
+			m_info = info;
 			m_debugDraw = false;
 			m_updatePhysics = true;
 			m_levelDone = false;
@@ -63,14 +57,6 @@ package {
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
 			m_blocks = new Vector.<Block>;
-
-			// load level JSON
-			if (!info) {
-			m_info = new LevelInfo();
-			MiscUtils.loadJSON(new proto02_stack() as ByteArray, m_info);
-			} else {
-				m_info = info;
-			}
 
 			// make world
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
@@ -101,8 +87,8 @@ package {
 		public function addBlock(b:Block):void {
 			m_blocks.push(b);
 			m_parent_sprite.addChild(b);
-			if (b.getMovement() == Block.TRACKED)
-				m_parent_sprite.addChild(b.getAnchor());
+			//if (b.getMovement() == Block.TRACKED)
+				//m_parent_sprite.addChild(b.getAnchor());
 			m_gfxPhysObjects.push(b);
 			if (b.isChargableBlock()) {
 				m_chargableManager.addChargable(b);
@@ -249,12 +235,18 @@ package {
 		}
 
 		/** Mark this level as done.  The update() function will return accordingly. */
-		public function markAsDone():void {
+		public function markAsDone(nextLevel:String=null):void {
 			m_levelDone = true;
+			m_nextLevel = nextLevel;
 		}
 
 		public function resetLevel():void {
 			m_levelDone = false;
+			m_nextLevel = null;
+		}
+
+		public function getNextLevel():String {
+			return m_nextLevel;
 		}
 
 		public function getChargableManager():ChargableManager {
