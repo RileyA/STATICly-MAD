@@ -11,6 +11,7 @@ package Actioners
 	 */
 	public class ActionerElement extends GfxPhysObject{
 		public static const EXIT:String = "exit";
+		public static const ENTRANCE:String = "entrance";
 		public static const SWITCH:String = "switch";
 
 		public static const WIDTH:Number = 1.0;
@@ -65,11 +66,13 @@ package Actioners
 				removeChildAt(0);
 		}
 
-		public static function getRelatedType(type:String, rectDef:b2BodyDef, offset:b2Vec2, am:ActionMarker, world:b2World):ActionerElement {
+		public static function getRelatedType(type:String, rectDef:b2BodyDef, offset:b2Vec2, extra:String, world:b2World):ActionerElement {
 			
 			switch (type) {
 			case EXIT:
 				return new LevelExitActioner(rectDef, offset, world);
+			case ENTRANCE:
+				return new LevelEntranceActioner(rectDef, offset, world, extra);
 			default:
 				return null;
 			}

@@ -21,6 +21,7 @@ package {
 		public var world:b2World;
 		public var contactListener:LevelContactListener;
 		private var m_levelDone:Boolean;
+		private var m_nextLevel:String;
 		private var m_updatePhysics:Boolean;
 		private var m_debugDraw:Boolean;
 		private var m_debugDrawKey:Boolean;
@@ -234,12 +235,18 @@ package {
 		}
 
 		/** Mark this level as done.  The update() function will return accordingly. */
-		public function markAsDone():void {
+		public function markAsDone(nextLevel:String=null):void {
 			m_levelDone = true;
+			m_nextLevel = nextLevel;
 		}
 
 		public function resetLevel():void {
 			m_levelDone = false;
+			m_nextLevel = null;
+		}
+
+		public function getNextLevel():String {
+			return m_nextLevel;
 		}
 
 		public function getChargableManager():ChargableManager {

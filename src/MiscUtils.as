@@ -7,7 +7,7 @@ package {
 	public class MiscUtils {
 
 		/**
-		* Returns a Level matching the given level name.
+		* Returns a LevelInfo matching the given level name.
 		*/
 		public static function loadLevelInfo(name:String):LevelInfo {
 			var sourceClass:Class = LevelAssets.getLevelSource(name);

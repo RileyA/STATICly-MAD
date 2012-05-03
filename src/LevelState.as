@@ -49,7 +49,7 @@ package {
 			var isDone:Boolean = false;
 			var levelFinish:Boolean = !m_level.update(delta);
 			if (levelFinish) { finishLevel(); }
-			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
+			isDone ||= Keys.isKeyPressed(Keyboard.Q);
 			return !isDone;
 		}
 

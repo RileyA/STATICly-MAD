@@ -283,24 +283,27 @@ package {
 		}
 
 		private function addActioner(key:String, rectDef:b2BodyDef, world:b2World):void {
-			var split:int = key.search(",");
-			var dir:String = key.substr(0, split);
-			var type:String = key.substr(split + 1, key.length);
+			var tokens:Array = key.split(",", 3);
+			var dir:String = tokens[0];
+			var type:String = tokens[1];
+			var extra:String = null;
+			if (tokens.length > 2) {
+				extra = tokens[2];
+			}
 			var ae:ActionerElement;
-			var am:ActionMarker;
 
 			switch (dir) {
 			case UP:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, -scale.y / 2), extra, world);
 				break;
 			case DOWN:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(0, scale.y / 2), extra, world);
 				break;
 			case LEFT:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(-scale.x / 2, 0), extra, world);
 				break;
 			case RIGHT:
-				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), am, world);
+				ae = ActionerElement.getRelatedType(type, rectDef, new b2Vec2(scale.x / 2, 0), extra, world);
 				break;
 			default:
 				ae == null;
