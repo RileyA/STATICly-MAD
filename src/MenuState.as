@@ -68,7 +68,7 @@ package {
 
 		private function clickedDemo(event:MouseEvent):void {
 			if (!m_done) {
-				m_game.addState(new LevelState(m_game));
+				m_game.addState(new LevelState(m_game, "intro"));
 			}
 		}
 

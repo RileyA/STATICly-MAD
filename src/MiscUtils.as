@@ -6,6 +6,16 @@ package {
 	/** A collection of random utilities */
 	public class MiscUtils {
 
+		/**
+		* Returns a Level matching the given level name.
+		*/
+		public static function loadLevelInfo(name:String):LevelInfo {
+			var sourceClass:Class = LevelAssets.getLevelSource(name);
+			var info:LevelInfo = new LevelInfo();
+			loadJSON(new sourceClass() as ByteArray, info);
+			return info;
+		}
+
 		/** Loads a ByteArray containing JSON info into an object 
 				@param raw The JSON data
 				@param out The object to output to */

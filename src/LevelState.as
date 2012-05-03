@@ -10,10 +10,12 @@ package {
 	public class LevelState extends GameState {
 
 		private var m_level:Level;
+		private var m_levelName:String;
 		private var m_timerText:TextField;
 
-		public function LevelState(game:Game):void {
+		public function LevelState(game:Game, levelName:String):void {
 			super(game);
+			m_levelName = levelName;
 
 			var format:TextFormat = new TextFormat("Sans", 15, 0x000000);
 			format.align = "left";
@@ -29,7 +31,7 @@ package {
 		}
 
 		override public function init():void {
-			m_level = new Level(this);
+			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
 		}
 		
 		override public function deinit():void {
