@@ -32,8 +32,8 @@ package {
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
 		public static const weakChargeDensity:Number = 1.0; // charge per square m
 
-		public static const strongDensity:Number = 10.0; // kg per square m
-		public static const weakDensity:Number = 3.0; // kg per square m
+		public static const strongDensity:Number = 20.0; // kg per square m
+		public static const weakDensity:Number = 12.0; // kg per square m
 		
 		private var chargePolarity:int;
 		private var drawnChargePolarity:int;
@@ -84,7 +84,7 @@ package {
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			fd.shape = polyShape;
-			fd.density = 10.0;
+			fd.density = strong?strongDensity:weakDensity;
 			fd.friction = 0.3;
 			fd.restitution = 0.0;
 			fd.userData = LevelContactListener.JUMPABLE_ID;
@@ -115,6 +115,7 @@ package {
 					}
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
+				fd.density=0;
 				var fix:b2Fixture=m_physics.CreateFixture(fd);
 				fix.SetUserData(new ActionMarker(act,ck,fix,this));
 			}

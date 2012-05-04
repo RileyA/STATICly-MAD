@@ -83,6 +83,7 @@ package {
 			
 			// make foot/jump sensor
 			fd = new b2FixtureDef();
+			fd.density=0;
 			polyShape = new b2PolygonShape();
 			polyShape.SetAsBox(WIDTH/3, 0.1);
 			fd.shape = polyShape;
@@ -93,6 +94,7 @@ package {
 			// make action sensor
 			const m:Number=.15;//action region margin
 			fd = new b2FixtureDef();
+			fd.density=0;
 			polyShape = new b2PolygonShape();
 			polyShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
 				new b2Vec2(WIDTH/2+m,HEIGHT_MID-m),
