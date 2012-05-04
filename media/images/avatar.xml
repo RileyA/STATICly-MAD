@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<TextureAtlas imagePath="avatar-sheet.png">
+		<SubTexture name="avatar0001" x="0" y="0" width="140" height="200"/>
+		<SubTexture name="avatar0002" x="140" y="0" width="120" height="200"/>
+		<SubTexture name="avatar0003" x="260" y="0" width="120" height="200"/>
+		<SubTexture name="avatar0004" x="380" y="0" width="170" height="200"/>
+	</TextureAtlas>
+</data>

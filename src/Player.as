@@ -1,8 +1,12 @@
 package {
 
+	import flash.display.*;
+	import starling.core.Starling;
+	import starling.display.*;
+	import starling.textures.*;
+	
 	import Actioners.*;
 	import GfxPhysObject;
-	import flash.display.*;
 	import flash.ui.Keyboard;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
@@ -40,6 +44,13 @@ package {
 		private var actionInd:Sprite;
 		
 		private var faceRight:Boolean;
+		
+		[Embed(source="../media/images/avater.xml", mimeType="application/octet-stream")]
+		[Embed(source = "../media/images/avater.png")]
+		public static const SpriteSheetXML:Class;
+		private static const SpriteSheet:Class;
+		private var mMovie:MovieClip;
+		
 		
 		public function Player(world:b2World, position:UVec2):void {
 
@@ -112,6 +123,31 @@ package {
 			actionInd.graphics.endFill();
 		}
 		
+		private function loadAnimation():void {
+			// creates the embedded bitmap (spritesheet file)
+			var bitmap:Bitmap = new SpriteSheet();
+			
+			// creates a texture out of it
+			var texture:Texture = Texture.fromBitmap(bitmap);
+			
+			// creates the XML file detailing the frames in the spritesheet
+			var xml:XML = XML(new SpriteSheetXML());
+			
+			// creates a texture atlas (binds the spritesheet and XML description)
+			var sTextureAtlas:TextureAtlas = new TextureAtlas(texture, xml);
+			
+			// retrieve the frames the running boy frames
+			var frames:Vector.<Texture> = sTextureAtlas.getTextures("running_");
+			
+			// creates a MovieClip playing at 40fps
+			mMovie = new MovieClip(frames, 40);
+			
+			// centers the MovieClip
+			mMovie.x = stage.stageWidth - mMovie.width >> 1;
+			mMovie.y = stage.stageHeight - mMovie.height >> 1;
+			// show it
+			addChild ( mMovie );
+		}
 		
 		public function getBestAction():ActionMarker {
 			function actionFilter(a:*,b:*):Boolean{
