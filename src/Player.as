@@ -166,12 +166,12 @@ package {
 			
 			var marker:ActionMarker = getBestAction();
 			if (marker != null && marker != bestAction) {
-				if(bestAction != null)
+				if(bestAction != null && bestAction.sprite.contains(actionInd))
 					bestAction.sprite.removeChild(actionInd);
 				marker.sprite.addChild(actionInd);
 				
 			} else if (marker == null){
-				if(bestAction != null)
+				if(bestAction != null && bestAction.sprite.contains(actionInd))
 					bestAction.sprite.removeChild(actionInd);
 			}
 			bestAction = marker;

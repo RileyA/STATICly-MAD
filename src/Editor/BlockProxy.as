@@ -39,6 +39,7 @@ package Editor {
 			var sc:UVec2 = b.getScale();
 			super(b.x - sc.x * b.scaleX / 2, b.y -sc.y * b.scaleY / 2,
 				sc.x * b.scaleX, sc.y * b.scaleY);
+			super.setSnap(b.scaleX);
 		}
 
 		override public function reposition():void {

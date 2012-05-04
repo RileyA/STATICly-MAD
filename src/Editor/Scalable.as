@@ -35,8 +35,18 @@ package Editor {
 				WIDGET_DIMENSIONS, WIDGET_DIMENSIONS));
 			m_corners.push(new Draggable(scale_x - WIDGET_DIMENSIONS,
 				scale_y - WIDGET_DIMENSIONS, WIDGET_DIMENSIONS, WIDGET_DIMENSIONS));
-			for (var i:uint = 0; i < m_corners.length; ++i)
+			for (var i:uint = 0; i < m_corners.length; ++i) {
 				addChild(m_corners[i]);
+				m_corners[i].snapOffsetX = WIDGET_DIMENSIONS/2;
+				m_corners[i].snapOffsetY = WIDGET_DIMENSIONS/2;
+			}
+		}
+
+		override public function setSnap(snap:Number):void {
+			snapTo = snap;
+			for (var i:uint = 0; i < m_corners.length; ++i) {
+				m_corners[i].snapTo = snap;
+			}
 		}
 
 		override public function makeSprite(pos_x:Number, pos_y:Number, 

@@ -3,6 +3,7 @@ package {
 	import flash.events.*;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
+	import flash.display.Sprite;
 	
 	// adapted from:
 	// http://lassieadventurestudio.wordpress.com/2008/09/03/as3-key-isdown-behavior/
@@ -10,7 +11,7 @@ package {
 	public class Keys {
 		private static var _keys:Array = new Array();
 
-		public static function init(main:Main):void{ 
+		public static function init(main:Sprite):void{ 
 
 			function handleKeyDown(evt:KeyboardEvent):void{
 				if (_keys.indexOf(evt.keyCode) == -1){
