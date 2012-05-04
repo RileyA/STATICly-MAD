@@ -8,7 +8,7 @@ CC = mxmlc
 
 main:
 	${CC} Main.as -o ${OUT} ${OPTS}
-editor:
+ed:
 	${CC} EditorMain.as -o ${OUT_ED} ${OPTS} 
 clean: 
 	rm ${OUT} ${OUT_ED}
