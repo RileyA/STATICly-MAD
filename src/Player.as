@@ -10,6 +10,8 @@ package {
 	import Chargable.*;
 	import Box2D.Dynamics.Contacts.*;
 	import Box2D.Collision.*;
+	import Box2D.Common.Math.*;
+	import Box2D.Collision.b2Collision;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
@@ -37,12 +39,16 @@ package {
 		private var charges:Vector.<Charge>;
 		
 		private var bestAction:ActionMarker;
-		private var actionInd:Sprite;
+		private var actionInd:Sprite; // on target of potential action
+		private var actionMid:Sprite; // between player and action target
+		private var actionHit:Sprite; // at player hit action target
+		private var actionShape:b2PolygonShape;
 		
 		private var faceRight:Boolean;
 		
-		public function Player(world:b2World, position:UVec2):void {
-
+		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
+			var world:b2World=level.world;
+			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsArray([new b2Vec2(0,HEIGHT),new b2Vec2(WIDTH/2,
 				HEIGHT_MID), new b2Vec2(WIDTH/2,0),new b2Vec2(-WIDTH/2,0),
@@ -95,12 +101,12 @@ package {
 			const m:Number=.15;//action region margin
 			fd = new b2FixtureDef();
 			fd.density=0;
-			polyShape = new b2PolygonShape();
-			polyShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
+			actionShape = new b2PolygonShape();
+			actionShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
 				new b2Vec2(WIDTH/2+m,HEIGHT_MID-m),
 				new b2Vec2(WIDTH/2+m,m),new b2Vec2(-WIDTH/2-m,m),
 				new b2Vec2(-WIDTH/2-m,HEIGHT_MID-m)]);
-			fd.shape = polyShape;
+			fd.shape = actionShape;
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
@@ -112,8 +118,72 @@ package {
 			actionInd.graphics.moveTo(-.1, .1);
 			actionInd.graphics.lineTo(.1, -.1);
 			actionInd.graphics.endFill();
+			
+			actionMid = new Sprite();
+			actionMid.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionMid.graphics.moveTo(-.1, -.1);
+			actionMid.graphics.lineTo(.1, .1);
+			actionMid.graphics.moveTo(-.1, .1);
+			actionMid.graphics.lineTo(.1, -.1);
+			actionMid.graphics.endFill();
+			
+			actionHit = new Sprite();
+			actionHit.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionHit.graphics.moveTo(-.1, -.1);
+			actionHit.graphics.lineTo(.1, .1);
+			actionHit.graphics.moveTo(-.1, .1);
+			actionHit.graphics.lineTo(.1, -.1);
+			actionHit.graphics.endFill();
+			
+			parentSprite.addChild(this);
+			
+			parentSprite.addChild(actionInd);
+			parentSprite.addChild(actionMid);
+			parentSprite.addChild(actionHit);
 		}
 		
+		private function doActionSprite(s:Sprite,pos:b2Vec2,pixelsPerMeter:Number):void{
+			s.scaleX = pixelsPerMeter;
+			s.scaleY = pixelsPerMeter;
+			s.visible=true;
+			s.x = pos.x * pixelsPerMeter;
+			s.y = pos.y * pixelsPerMeter;
+		}
+		
+		
+		public override function updateTransform(pixelsPerMeter:Number):void {
+			super.updateTransform(pixelsPerMeter);
+			
+			var marker:ActionMarker = getBestAction();
+			if (marker != null) {
+
+				var markerPos:b2Vec2 = marker.fixture.GetBody().GetPosition().Copy();
+				doActionSprite(actionInd,markerPos,pixelsPerMeter);
+				
+				var pos:b2Vec2=m_physics.GetPosition().Copy();
+				pos.y+=HEIGHT_ACTION;
+				
+				var midPos:b2Vec2=pos.Copy()
+				midPos.Add(markerPos);
+				midPos.Multiply(.5);
+				doActionSprite(actionMid,midPos,pixelsPerMeter);
+				
+				var diff:b2Vec2=pos.Copy()
+				diff.Subtract(markerPos);
+				var dist:Number=diff.Normalize();
+				var hitPos:b2Vec2=pos.Copy()
+				if (dist>HEIGHT_ACTION){
+					diff.Multiply(HEIGHT_ACTION);
+					hitPos.Add(diff);
+				}
+
+				doActionSprite(actionHit,hitPos,pixelsPerMeter);
+			} else {
+				actionInd.visible=false;
+				actionMid.visible=false;
+				actionHit.visible=false;
+			}
+		}
 		
 		public function getBestAction():ActionMarker {
 			function actionFilter(a:*,b:*):Boolean{
@@ -165,18 +235,9 @@ package {
 				faceRight=right;
 			}
 
-			
-			var marker:ActionMarker = getBestAction();
-			if (marker != null && marker != bestAction) {
-				if(bestAction != null && bestAction.sprite.contains(actionInd))
-					bestAction.sprite.removeChild(actionInd);
-				marker.sprite.addChild(actionInd);
-				
-			} else if (marker == null){
-				if(bestAction != null && bestAction.sprite.contains(actionInd))
-					bestAction.sprite.removeChild(actionInd);
-			}
-			bestAction = marker;
+
+			var bestAction:ActionMarker = getBestAction();
+
 			
 			// do actions
 			if ((!didAction) && action) {
