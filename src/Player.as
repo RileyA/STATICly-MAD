@@ -45,9 +45,9 @@ package {
 		
 		private var faceRight:Boolean;
 		
-		//[Embed(source="../media/images/avater.xml", mimeType="application/octet-stream")]
-		//[Embed(source="../media/images/avater.png")]
+		//[Embed(source = "../media/images/avater.xml", mimeType = "application/octet-stream")]
 		//public static const SpriteSheetXML:Class;
+		//[Embed(source = "../media/images/avater.png")]
 		//private static const SpriteSheet:Class;
 		//private var mMovie:MovieClip;
 		
