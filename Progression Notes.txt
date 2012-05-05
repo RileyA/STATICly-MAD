@@ -1,4 +1,4 @@
-Howe to move + win
+How to move + win
 	Intro
 Teach Discharging weak blocks
 	Discharge (Force player to use discharge)
@@ -6,8 +6,7 @@ Teach Discharging weak blocks
 	Collect (Force player to discharge as part of puzzle)
 	Insulated (Show Insulated vs. not)
 Teach Blue Repels blue
-	(Discharge fixed blocks holding up others)
-	(Mix Insulated back in, puzzle with insulated and non insulated)
+	Drop (Discharge fixed blocks holding up others)
 Teach Player can be charged, acts like blocks
 	Fly (Make player get charge to fly)
 	Wall (More flying)
@@ -15,8 +14,9 @@ Teach Player can be discharged (grounding)
 	Hole (force player to discharge)
 	(Puzzle with flying and avoiding+using grounding)
 Teach player can charge blocks (weak only)
-	(Force player to charge a block)
-	Escalator (simply charging+grounding, and maybe a bit of flying, puzzle)
+	Fly2 (Force player to charge a block)
+	ChargeDischarge (charging blocks+grounding player)
+	Escalator (simple charging+grounding, and maybe a bit of flying, puzzle)
 	Launch (Mix in flying: charge blocks to fly)
 
 Teach about red:
@@ -36,7 +36,13 @@ Teach about strong
 	StrongTut (Force player to use give charge to, and take charge from strong blocks)
 	BigStrongTut (can cancel charge)
 	TowerBreaker (general strong use/practice)
+	Canyon2
 	Exchange (Strong puzzle - teach/emphasize reset level)
 	Lifts (mix strong and weak)
+
+
+Misc/bad/extra:
+	Canyon
+	FlyingEnd2
 	
 		
