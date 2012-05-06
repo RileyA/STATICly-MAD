@@ -34,7 +34,7 @@ package Chargable {
 		public static function makeCharges(strength:Number, x1:Number, y1:Number, x2:Number, y2:Number):Vector.<Charge>{
 			var w:Number = (x2-x1);
 			var h:Number = (y2-y1);
-			const gridSize:Number=.5;
+			const gridSize:Number=.8;
 			var xCount:int=Math.max(1,Math.floor(w/gridSize));
 			var yCount:int=Math.max(1,Math.floor(h/gridSize));
 			xCount=Math.min(xCount,6);

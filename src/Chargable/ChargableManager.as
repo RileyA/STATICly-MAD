@@ -70,27 +70,32 @@ package Chargable {
 		* to the specified onto Chargable.
 		*/
 		private static function applyChargeForce(from:Chargable, onto:Chargable):void{
+			var stength:Number=from.getCharge()*onto.getCharge()*200.0;
+			if (stength==0) {
+				return;
+			}
 			var ontoBody:b2Body = onto.getBody();
 			var fromBody:b2Body = from.getBody();
 			var fc:Vector.<Charge>=from.getCharges();
 			var oc:Vector.<Charge>=onto.getCharges();
 			var fi:int;
 			var oi:int;
-			var stength:Number=from.getCharge()*onto.getCharge()*200.0;
-			for (fi=0;fi<fc.length;fi++){
-				// from location in world
-				var fromLoc:b2Vec2=fromBody.GetWorldPoint(fc[fi].loc);
-				var fromStr:Number=fc[fi].strength*stength;
-				for (oi=0;oi<oc.length;oi++){
-					var ontoLoc:b2Vec2=ontoBody.GetWorldPoint(oc[oi].loc);
-					var totalStr:Number=oc[oi].strength*fromStr;
-					
-					var vec:b2Vec2 = ontoLoc.Copy();
-					vec.Subtract(fromLoc);
-					var s:Number=totalStr*(1.0/vec.LengthSquared());
+			
+			for (oi=0;oi<oc.length;oi++){
+				var ontoLoc:b2Vec2=ontoBody.GetWorldPoint(oc[oi].loc);
+				var ontoStr:Number=oc[oi].strength*stength;
+				var force:b2Vec2=new b2Vec2(0,0);
+				for (fi=0;fi<fc.length;fi++){
+					// from location in world
+					var vec:b2Vec2=fromBody.GetWorldPoint(fc[fi].loc);
+					var totalStr:Number=fc[fi].strength*ontoStr;
+
+					vec.Subtract(ontoLoc);
+					var s:Number=totalStr/vec.LengthSquared();
 					vec.Multiply(s/vec.Length());
-					ontoBody.ApplyForce(vec,ontoLoc);
+					force.Subtract(vec);
 				}
+				ontoBody.ApplyForce(force,ontoLoc);
 			}
 		}
 	}
