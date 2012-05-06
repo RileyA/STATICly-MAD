@@ -3,3 +3,4 @@ bin/*
 *.as3proj
 lib/*
 obj/*
+src/LevelAssets.as

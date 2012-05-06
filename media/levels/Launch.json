@@ -1,13 +1,4 @@
 {
-	"levelSize" : 
-	{
-		"y" : 20,
-		"x_px" : 0,
-		"y_px" : 0,
-		"x_rel" : 0,
-		"x" : 26.666,
-		"y_rel" : 0
-	},
 	"blocks" : 
 	[
 		{
@@ -39,7 +30,9 @@
 				"x" : 20.258333333333333,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
@@ -52,12 +45,10 @@
 				"x" : 13.086666666666668,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"insulated" : false
+			"insulated" : false,
+			"chargePolarity" : 0
 		},
 		{
 			"bounds" : 
@@ -88,7 +79,9 @@
 				"x" : 7.103333333333333,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			"up,bcarpet"
@@ -99,15 +92,13 @@
 				"x_px" : 0,
 				"y_px" : 0,
 				"x_rel" : 0,
-				"x" : 13.629999999999999,
+				"x" : 13.63,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"insulated" : true
+			"insulated" : true,
+			"chargePolarity" : 0
 		},
 		{
 			"bounds" : 
@@ -138,7 +129,9 @@
 				"x" : 26.500833333333333,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			"left,ground"
@@ -152,12 +145,10 @@
 				"x" : 0.6083333333333333,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"insulated" : true
+			"insulated" : true,
+			"chargePolarity" : 0
 		},
 		{
 			"bounds" : 
@@ -185,10 +176,12 @@
 				"x_px" : 0,
 				"y_px" : 0,
 				"x_rel" : 0,
-				"x" : 0.11916666666666667,
+				"x" : 0.11916666666666668,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			"right,ground"
@@ -202,12 +195,10 @@
 				"x" : 0.515,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"insulated" : true
+			"insulated" : true,
+			"chargePolarity" : 0
 		},
 		{
 			"bounds" : 
@@ -231,14 +222,17 @@
 			],
 			"position" : 
 			{
-				"y" : 8.158333333333335,
+				"y" : 8.725000000000001,
 				"x_px" : 0,
 				"y_px" : 0,
 				"x_rel" : 0,
 				"x" : 12.001666666666667,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			"up,exit"
+			],
 			"surfaces" : 
 			[
 			],
@@ -251,13 +245,10 @@
 				"x" : 4.233333333333333,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			"up,exit"
-			],
-			"insulated" : true
+			"insulated" : true,
+			"chargePolarity" : 0
 		},
 		{
 			"bounds" : 
@@ -288,7 +279,9 @@
 				"x" : 9.866666666666667,
 				"y_rel" : 0
 			},
-			"strong" : false,
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			"up,ground",
@@ -305,12 +298,10 @@
 				"x" : 1.43,
 				"y_rel" : 0
 			},
-			"chargePolarity" : 0,
+			"strong" : false,
 			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"insulated" : true
+			"insulated" : true,
+			"chargePolarity" : 0
 		}
 	],
 	"playerPosition" : 
@@ -332,5 +323,14 @@
 		"y_rel" : 0
 	},
 	"targetTime" : 60,
-	"title" : "Launch"
+	"title" : "Launch",
+	"levelSize" : 
+	{
+		"y" : 20,
+		"x_px" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x" : 26.666,
+		"y_rel" : 0
+	}
 }

@@ -20,17 +20,17 @@ Teach player can charge blocks (weak only)
 	Launch (Mix in flying: charge blocks to fly)
 
 Teach about red:
-		(red attracts blue, blue attracts red, can discharge red, can make red blue)
+		Red (red attracts blue, blue attracts red, can discharge red, can make red blue)
 	red is like blue:
-		(red repels red)
+		RedRiver (red repels red)
 		(player can get red - charge some blocks red)
 		(fly red - ground works on red)
-	(red+blue puzzles)
+	Lifts (red+blue puzzles)
 
 Weak only puzzles
 	Hang (Show hanging)
 	Stuck (emphasize reset level, general puzzle)
-	Random (save as above)
+X	Random (save as above)
 
 Teach about strong
 	StrongTut (Force player to use give charge to, and take charge from strong blocks)
@@ -38,7 +38,6 @@ Teach about strong
 	TowerBreaker (general strong use/practice)
 	Canyon2
 	Exchange (Strong puzzle - teach/emphasize reset level)
-	Lifts (mix strong and weak)
 
 
 Misc/bad/extra:

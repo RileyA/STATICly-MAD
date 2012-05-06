@@ -17,7 +17,7 @@ package {
 			m_game = new Game(this);
 			m_game.addState(new MenuState(m_game));
 			m_game.addState(new OverworldState(m_game));
-			m_game.addState(new LevelState(m_game, "intro"));
+			m_game.addState(new LevelState(m_game, "Intro"));
 			addEventListener(Event.ENTER_FRAME, update);
 		}
 
