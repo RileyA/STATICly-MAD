@@ -170,8 +170,9 @@ package {
 			joints = new Vector.<b2Joint>();
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
-			//if(anchor != null)
-				//m_level.getParent().removeChild(anchor);
+			if(anchor != null){
+				m_level.getParent().removeChild(anchor);
+			}
 		}
 
 		/** deinit and reinit to reflect any changes in blockinfo */
@@ -179,10 +180,12 @@ package {
 			deinit();
 			// if it's in the charge manager, nuke it
 			m_level.getChargableManager().removeChargable(this);
+			
+			init();
+			
 			// then re-add if need be
 			if (isChargableBlock())
 				m_level.getChargableManager().addChargable(this);
-			init();
 		}
 
 		public function resetCharge():void {
@@ -199,7 +202,6 @@ package {
 				redraw();
 			}
 			if (anchor != null) {
-				//trace(anchor.getPhysics().GetPosition().x, anchor.getPhysics().GetPosition().y);
 				anchor.updateTransform(pixelsPerMeter);
 			}
 		}
@@ -372,6 +374,9 @@ package {
 			sprite.graphics.endFill();
 			
 			anchor.addChild(sprite);
+			
+			
+			m_level.getParent().addChild(anchor);
 			
 			sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
