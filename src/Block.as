@@ -327,8 +327,17 @@ package {
 			var center:b2Vec2 = m_physics.GetPosition().Copy();
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			
+			
+			
 			var slope:b2Vec2 = ends[0].toB2Vec2();
 			var weights:b2Vec2 = ends[1].toB2Vec2();
+			
+			if (weights.x > weights.y) {
+				var hold:Number = weights.y;
+				weights.y = weights.x;
+				weights.x = hold;
+			}
+			
 			var l:b2Vec2 = new b2Vec2(weights.x * slope.x, weights.x * slope.y); 
 			var r:b2Vec2 = new b2Vec2(weights.y * slope.x, weights.y * slope.y);
 			var axis:b2Vec2 = slope.Copy();
