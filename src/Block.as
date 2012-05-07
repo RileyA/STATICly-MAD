@@ -323,22 +323,33 @@ package {
 		}
 		
 		private function makeTracked(ends:Vector.<UVec2>):void {
-			var l:b2Vec2 = ends[0].toB2Vec2();
-			var r:b2Vec2 = ends[1].toB2Vec2();
-			var axis:b2Vec2 = r.Copy();
-			axis.Subtract(l);
-			axis.Normalize();
+			
 			var center:b2Vec2 = m_physics.GetPosition().Copy();
+			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
+			
+			var slope:b2Vec2 = ends[0].toB2Vec2();
+			var weights:b2Vec2 = ends[1].toB2Vec2();
+			var l:b2Vec2 = new b2Vec2(weights.x * slope.x, weights.x * slope.y); 
+			var r:b2Vec2 = new b2Vec2(weights.y * slope.x, weights.y * slope.y);
+			var axis:b2Vec2 = slope.Copy();
+			trackDef.lowerTranslation = weights.x;
+			trackDef.upperTranslation = weights.y;
+			trace(l.x, l.y, r.x, r.y);
+			
+			//var l:b2Vec2 = ends[0].toB2Vec2();
+			//var r:b2Vec2 = ends[1].toB2Vec2();
+			//var axis:b2Vec2 = l.Copy();
+			//axis.Subtract(r);
+			//trackDef.lowerTranslation = -l.Length();
+			//trackDef.upperTranslation = r.Length();
+						
+			axis.Normalize();
 			
 			var anchorDef:b2BodyDef = new b2BodyDef();
-			anchorDef.position = center;
+			anchorDef.position = center.Copy();
 			anchorDef.type = b2Body.b2_staticBody;
 			var anchorBody:b2Body = m_level.world.CreateBody(anchorDef);
 			anchor = new GfxPhysObject(anchorBody);
-			
-			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			trackDef.lowerTranslation = -l.Length();
-			trackDef.upperTranslation = r.Length();
 			trackDef.enableLimit = true;
 			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			joints.push(m_level.world.CreateJoint(trackDef));
