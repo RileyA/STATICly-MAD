@@ -334,7 +334,6 @@ package {
 			var axis:b2Vec2 = slope.Copy();
 			trackDef.lowerTranslation = weights.x;
 			trackDef.upperTranslation = weights.y;
-			trace(l.x, l.y, r.x, r.y);
 			
 			//var l:b2Vec2 = ends[0].toB2Vec2();
 			//var r:b2Vec2 = ends[1].toB2Vec2();
