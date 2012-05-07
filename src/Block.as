@@ -332,6 +332,7 @@ package {
 			
 			
 			var slope:b2Vec2 = ends[0].toB2Vec2();
+			slope.Normalize();
 			var weights:b2Vec2 = ends[1].toB2Vec2();
 			
 			if (weights.x > weights.y) {
