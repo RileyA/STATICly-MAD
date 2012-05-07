@@ -1,0 +1,47 @@
+How to move + win
+	Intro
+Teach Discharging weak blocks
+	Discharge (Force player to use discharge)
+	FlyingEnd (Force player to use on floating block)
+	Collect (Force player to discharge as part of puzzle)
+	Insulated (Show Insulated vs. not)
+Teach Blue Repels blue
+	Drop (Discharge fixed blocks holding up others)
+Teach Player can be charged, acts like blocks
+	Fly (Make player get charge to fly)
+	Wall (More flying)
+Teach Player can be discharged (grounding)
+	Hole (force player to discharge)
+	(Puzzle with flying and avoiding+using grounding)
+Teach player can charge blocks (weak only)
+	Fly2 (Force player to charge a block)
+	ChargeDischarge (charging blocks+grounding player)
+	Escalator (simple charging+grounding, and maybe a bit of flying, puzzle)
+	Launch (Mix in flying: charge blocks to fly)
+
+Teach about red:
+		Red (red attracts blue, blue attracts red, can discharge red, can make red blue)
+	red is like blue:
+		RedRiver (red repels red)
+		(player can get red - charge some blocks red)
+		(fly red - ground works on red)
+	Lifts (red+blue puzzles)
+
+Weak only puzzles
+	Hang (Show hanging)
+	Stuck (emphasize reset level, general puzzle)
+X	Random (save as above)
+
+Teach about strong
+	StrongTut (Force player to use give charge to, and take charge from strong blocks)
+	BigStrongTut (can cancel charge)
+	TowerBreaker (general strong use/practice)
+	Canyon2
+	Exchange (Strong puzzle - teach/emphasize reset level)
+
+
+Misc/bad/extra:
+	Canyon
+	FlyingEnd2
+	
+		

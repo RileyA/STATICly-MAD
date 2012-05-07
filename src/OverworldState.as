@@ -14,7 +14,7 @@ package {
 		}
 
 		override public function init():void {
-			m_level = new Level(this, MiscUtils.loadLevelInfo("overworld"));
+			m_level = new Level(this, MiscUtils.loadLevelInfo("Overworld"));
 		}
 		
 		override public function deinit():void {

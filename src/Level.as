@@ -75,9 +75,8 @@ package {
 			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
 
 			// make the player
-			m_player = new Player(world, m_info.playerPosition);
+			m_player = new Player(this, m_parent_sprite, m_info.playerPosition);
 			m_chargableManager.addChargable(m_player);
-			m_parent_sprite.addChild(m_player);
 			m_gfxPhysObjects.push(m_player);
 
 			// prep debug stuff

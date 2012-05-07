@@ -2,10 +2,19 @@
 # you've got the mxmlc compiler in your PATH.
 
 OUT = STATIClyMAD.swf
+OUT_ED = Editor.swf
 OPTS = -static-link-runtime-shared-libraries=true
 CC = mxmlc
 
-main:
+all: main ed
+	
+main: levels
 	${CC} Main.as -o ${OUT} ${OPTS}
+ed:
+	${CC} EditorMain.as -o ${OUT_ED} ${OPTS} 
 clean: 
-	rm ${OUT}
+	rm ${OUT} ${OUT_ED}
+
+levels:
+	python LevelCompiler.py
+	
