@@ -19,17 +19,18 @@ package {
 			super(game);
 			m_levelName = levelName;
 
-			var format:TextFormat = new TextFormat("Sans", 15, 0x000000);
-			format.align = "left";
-			m_timerText = new TextField();
-			m_timerText.width = 50;
-			m_timerText.height = 50;
-			m_timerText.x = 10;
-			m_timerText.y = 10;
-			m_timerText.defaultTextFormat = format;
-			m_timerText.text = "0";
-			m_timerText.selectable = false;
-			addChild(m_timerText);
+			//TODO
+			//var format:TextFormat = new TextFormat("Sans", 15, 0x000000);
+			//format.align = "left";
+			//m_timerText = new TextField();
+			//m_timerText.width = 50;
+			//m_timerText.height = 50;
+			//m_timerText.x = 10;
+			//m_timerText.y = 10;
+			//m_timerText.defaultTextFormat = format;
+			//m_timerText.text = "0";
+			//m_timerText.selectable = false;
+			//addChild(m_timerText);
 		}
 		
 		override public function init():void {
@@ -38,7 +39,8 @@ package {
 		
 		override public function deinit():void {
 			m_level = null;
-			removeChild(m_timerText);
+			//TODO
+			//removeChild(m_timerText);
 		}
 
 		/**

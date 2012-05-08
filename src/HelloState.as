@@ -16,6 +16,7 @@ package {
 		}
 
 		override public function init():void {
+			//TODO
 			//var format:TextFormat = new TextFormat("Sans", 30, 0x000000);
 			//format.align = "center";
 			//m_hello_text = new TextField();

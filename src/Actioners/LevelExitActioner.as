@@ -1,8 +1,11 @@
 package Actioners {
-	import flash.display.Sprite;
+	
 	import Box2D.Dynamics.*;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.Shapes.*;
+	import starling.display.DisplayObject;
+	import starling.display.Sprite;
+	import starling.display.Quad;
 
 	public class LevelExitActioner extends ActionerElement {
 
@@ -22,11 +25,11 @@ package Actioners {
 			return ps;
 		}
 
-		override protected function getSprite(x:Number, y:Number):Sprite {
-			sprite = new Sprite();
-			sprite.graphics.beginFill(0x990099);
-			sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
-			sprite.graphics.endFill();
+		override protected function getSprite(x:Number, y:Number):DisplayObject {
+			sprite = new Quad(WIDTH, HEIGHT, 0x990099);
+			//sprite.graphics.beginFill(0x990099);
+			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
+			//sprite.graphics.endFill();
 			return sprite;
 		}
 	}

@@ -1,5 +1,7 @@
 package Actioners {
-	import flash.display.Sprite;
+	import starling.display.DisplayObject;
+	import starling.display.Sprite;
+	import starling.display.Quad;
 	import Box2D.Dynamics.*;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.Shapes.*;
@@ -22,11 +24,11 @@ package Actioners {
 			return ps;
 		}
 
-		override protected function getSprite(x:Number, y:Number):Sprite {
-			sprite = new Sprite();
-			sprite.graphics.beginFill(0xff6600);
-			sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
-			sprite.graphics.endFill();
+		override protected function getSprite(x:Number, y:Number):DisplayObject {
+			sprite = new Quad(WIDTH, HEIGHT, 0xff6600);
+			//sprite.graphics.beginFill(0xff6600);
+			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
+			//sprite.graphics.endFill();
 			return sprite;
 		}
 	}
