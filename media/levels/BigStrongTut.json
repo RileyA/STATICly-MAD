@@ -1,61 +1,80 @@
 {
+	"playerPosition" : 
+	{
+		"y" : 9.466666666666667,
+		"x" : 1.195,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x_px" : 0,
+		"y_rel" : 0
+	},
+	"gravity" : 
+	{
+		"y" : 9.8,
+		"x" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x_px" : 0,
+		"y_rel" : 0
+	},
 	"targetTime" : 60,
 	"levelSize" : 
 	{
 		"y" : 20,
-		"y_rel" : 0,
 		"x" : 26.666,
-		"x_px" : 0,
 		"y_px" : 0,
-		"x_rel" : 0
+		"x_rel" : 0,
+		"x_px" : 0,
+		"y_rel" : 0
 	},
+	"title" : "BigStrongTut",
 	"blocks" : 
 	[
 		{
 			"position" : 
 			{
-				"y" : 10.433333333333334,
-				"y_rel" : 0,
-				"x" : 17.066666666666666,
-				"x_px" : 0,
+				"y" : 10.4317,
+				"x" : 17.0667,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "tracked",
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
 			"actions" : 
 			[
 			"up,exit"
 			],
+			"surfaces" : 
+			[
+			],
+			"strong" : false,
 			"scale" : 
 			{
 				"y" : 1,
-				"y_rel" : 0,
 				"x" : 6,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
-					"y" : 8,
-					"y_rel" : 0,
+					"y" : 1,
 					"x" : 0,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
-					"y" : -1,
-					"y_rel" : 0,
-					"x" : 0,
-					"x_px" : 0,
+					"y" : 8,
+					"x" : -1,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -65,46 +84,46 @@
 			"position" : 
 			{
 				"y" : 4.949166666666667,
-				"y_rel" : 0,
 				"x" : 15.083333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : true,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 9.631666666666666,
-				"y_rel" : 0,
 				"x" : 2.3,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : false,
@@ -114,46 +133,46 @@
 			"position" : 
 			{
 				"y" : 19.433333333333337,
-				"y_rel" : 0,
 				"x" : 17.931666666666665,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : true,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 1.1,
-				"y_rel" : 0,
 				"x" : 8.5,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : false,
@@ -163,46 +182,46 @@
 			"position" : 
 			{
 				"y" : 12.333333333333332,
-				"y_rel" : 0,
 				"x" : 10.781666666666666,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 7.4,
-				"y_rel" : 0,
 				"x" : 6.3,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -211,47 +230,47 @@
 		{
 			"position" : 
 			{
-				"y" : 10.566666666666666,
-				"y_rel" : 0,
-				"x" : 6.783333333333333,
-				"x_px" : 0,
+				"y" : 10.633333333333333,
+				"x" : 6.583333333333334,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 0.8,
-				"y_rel" : 0,
 				"x" : 2.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -261,46 +280,46 @@
 			"position" : 
 			{
 				"y" : 12.933333333333334,
-				"y_rel" : 0,
-				"x" : 0.9666666666666667,
-				"x_px" : 0,
+				"x" : 0.9666666666666668,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 0.8,
-				"y_rel" : 0,
 				"x" : 2.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -310,46 +329,46 @@
 			"position" : 
 			{
 				"y" : 15.366666666666667,
-				"y_rel" : 0,
 				"x" : 6.5,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 0.8,
-				"y_rel" : 0,
 				"x" : 2.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -359,46 +378,46 @@
 			"position" : 
 			{
 				"y" : 17.433333333333334,
-				"y_rel" : 0,
 				"x" : 1.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 0.8,
-				"y_rel" : 0,
 				"x" : 2.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
@@ -408,69 +427,50 @@
 			"position" : 
 			{
 				"y" : 18.666666666666664,
-				"y_rel" : 0,
 				"x" : 6.033333333333333,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"movement" : "fixed",
+			"actions" : 
+			[
+			],
 			"surfaces" : 
 			[
 			],
 			"strong" : false,
-			"actions" : 
-			[
-			],
 			"scale" : 
 			{
 				"y" : 0.8,
-				"y_rel" : 0,
 				"x" : 2.7333333333333334,
-				"x_px" : 0,
 				"y_px" : 0,
-				"x_rel" : 0
+				"x_rel" : 0,
+				"x_px" : 0,
+				"y_rel" : 0
 			},
 			"bounds" : 
 			[
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : -1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				},
 						{
 					"y" : 0,
-					"y_rel" : 0,
 					"x" : 1,
-					"x_px" : 0,
 					"y_px" : 0,
-					"x_rel" : 0
+					"x_rel" : 0,
+					"x_px" : 0,
+					"y_rel" : 0
 				}
 			],
 			"insulated" : true,
 			"chargePolarity" : 0
 		}
-	],
-	"playerPosition" : 
-	{
-		"y" : 9.466666666666667,
-		"y_rel" : 0,
-		"x" : 1.1983333333333333,
-		"x_px" : 0,
-		"y_px" : 0,
-		"x_rel" : 0
-	},
-	"title" : "BigStrongTut",
-	"gravity" : 
-	{
-		"y" : 9.8,
-		"y_rel" : 0,
-		"x" : 0,
-		"x_px" : 0,
-		"y_px" : 0,
-		"x_rel" : 0
-	}
+	]
 }
