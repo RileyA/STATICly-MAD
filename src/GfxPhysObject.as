@@ -5,11 +5,11 @@ package {
 	import Box2D.Collision.Shapes.*;
 
 	import starling.display.Sprite;
-	import flash.display.DisplayObject;
+	import starling.display.DisplayObject;
 
 	/** This keeps a collection of graphics sprites updated with 
 		their physics counterparts */
-	public class GfxPhysObject extends Sprite {
+	public class GfxPhysObject extends starling.display.Sprite {
 
 		protected var m_physics:b2Body;
 		

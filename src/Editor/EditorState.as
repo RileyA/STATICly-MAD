@@ -3,7 +3,7 @@ package Editor {
 	import flash.display.Shape;
 	import flash.net.FileReference;
 	import flash.net.FileFilter;
-	import starling.display.Sprite;
+	import flash.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;

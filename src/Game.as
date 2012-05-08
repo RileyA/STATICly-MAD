@@ -1,5 +1,5 @@
 package {
-	import starling.display.Sprite;
+	import flash.display.Sprite;
 	import flash.utils.getTimer;
 	import GameState;
 
