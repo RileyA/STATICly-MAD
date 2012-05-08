@@ -1,6 +1,6 @@
 package {
 	import Box2D.Dynamics.Joints.*;
-	import flash.display.*;
+	import starling.display.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Common.*;
 	import Box2D.Dynamics.*;

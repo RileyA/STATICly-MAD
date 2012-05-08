@@ -6,7 +6,7 @@ package
 	 */
 	 
 	import Box2D.Dynamics.*;
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	
 	public class ActionMarker {
 		

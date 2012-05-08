@@ -1,5 +1,5 @@
 package {
-	import flash.display.Shape;
+	import starling.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;

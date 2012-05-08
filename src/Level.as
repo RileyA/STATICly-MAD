@@ -1,7 +1,7 @@
 package {
 
 	import flash.display.Shape;
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
@@ -80,7 +80,7 @@ package {
 			m_gfxPhysObjects.push(m_player);
 
 			// prep debug stuff
-			prepareDebugVisualization();
+			//prepareDebugVisualization();
 		}
 
 		public function addBlock(b:Block):void {
@@ -144,13 +144,13 @@ package {
 			for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)
 				m_gfxPhysObjects[i].updateTransform(pixelsPerMeter);
 
-			if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
-				m_debugDrawKey = true;
-				m_debugDraw = !m_debugDraw;
-				m_debugSprite.visible = m_debugDraw;
-			} else if (!Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
-				m_debugDrawKey = false;
-			}
+			//if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
+				//m_debugDrawKey = true;
+				//m_debugDraw = !m_debugDraw;
+				//m_debugSprite.visible = m_debugDraw;
+			//} else if (!Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
+				//m_debugDrawKey = false;
+			//}
 
 			if (m_debugDraw)
 				world.DrawDebugData();
@@ -164,17 +164,17 @@ package {
 			return m_player;
 		}
 
-		private function prepareDebugVisualization():void {
-			m_debugSprite = new Sprite();
-			m_parent_sprite.addChild(m_debugSprite);
-			var debugDraw:b2DebugDraw = new b2DebugDraw();
-			debugDraw.SetSprite(m_debugSprite);
-			debugDraw.SetDrawScale(pixelsPerMeter);
-			debugDraw.SetFillAlpha(0.3);
-			debugDraw.SetLineThickness(1.0);
-			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-			world.SetDebugDraw(debugDraw);
-		}
+		//private function prepareDebugVisualization():void {
+			//m_debugSprite = new Sprite();
+			//m_parent_sprite.addChild(m_debugSprite);
+			//var debugDraw:b2DebugDraw = new b2DebugDraw();
+			//debugDraw.SetSprite(m_debugSprite);
+			//debugDraw.SetDrawScale(pixelsPerMeter);
+			//debugDraw.SetFillAlpha(0.3);
+			//debugDraw.SetLineThickness(1.0);
+			//debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+			//world.SetDebugDraw(debugDraw);
+		//}
 
 		private function buildBounds():void {
 

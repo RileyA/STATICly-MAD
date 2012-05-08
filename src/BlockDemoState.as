@@ -3,7 +3,7 @@ package {
 	import Block;
 	import BlockManager;
 	import CharacterController;
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.display.Shape;
 	import flash.text.TextField;
 	import flash.text.TextFormat;

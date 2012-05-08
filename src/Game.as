@@ -1,5 +1,5 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.utils.getTimer;
 	import GameState;
 
@@ -70,7 +70,6 @@ package {
 				} else {
 					m_currentState.resume();
 				}
-
 				m_parent.stage.focus = m_currentState;
 			}
 

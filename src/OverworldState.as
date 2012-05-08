@@ -1,5 +1,5 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;

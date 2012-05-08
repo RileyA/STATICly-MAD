@@ -1,5 +1,5 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.display.Shape;
 	import flash.events.Event;
 

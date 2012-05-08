@@ -4,7 +4,7 @@ package {
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
 
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.display.DisplayObject;
 
 	/** This keeps a collection of graphics sprites updated with 

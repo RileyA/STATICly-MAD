@@ -1,5 +1,5 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;

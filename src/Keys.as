@@ -3,7 +3,7 @@ package {
 	import flash.events.*;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import flash.display.Sprite;
+	import starling.display.Sprite;
 	
 	// adapted from:
 	// http://lassieadventurestudio.wordpress.com/2008/09/03/as3-key-isdown-behavior/
