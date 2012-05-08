@@ -1,11 +1,12 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
+	import starling.events.Event;
 	import flash.utils.getTimer;
 	import GameState;
 
 	/** Manages a stack of game states */
-	public class Game {
-		private var m_parent:Sprite;
+	public class Game extends Sprite {
+		//private var m_parent:flash.display.Sprite;
 		private var m_lastTime:Number;
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
@@ -13,15 +14,30 @@ package {
 
 		/** Constructor
 			@param parent Reference to parent sprite */
-		public function Game(parent:Sprite):void {
-			m_parent = parent;
-			m_parent.stage.stageFocusRect = false;
+		//public function Game(parent:flash.display.Sprite):void {
+			//m_parent = parent;
+			//m_parent.stage.stageFocusRect = false;
+			//m_lastTime = getTimer();
+			//m_currentState = null;
+			//m_states = new Vector.<GameState>;
+			//m_newStateReady = false;
+			//
+			//addEventListener(Event.ADDED_TO_STAGE, onAdded);
+		//}
+		
+		public function Game():void {
 			m_lastTime = getTimer();
 			m_currentState = null;
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
+			
+			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 		}
 
+		private function onAdded(e:Event):void {
+			
+		}
+		
 		/** Adds a state 
 				@param state The state to add */
 		public function addState(state:GameState):void {
@@ -53,7 +69,7 @@ package {
 				var lastState:GameState = m_currentState;
 				if (m_currentState) {
 					m_currentState.suspend();
-					m_parent.removeChild(m_currentState);
+					this.removeChild(m_currentState);
 				}
 
 				if (m_states.length == 0)
@@ -62,7 +78,7 @@ package {
 				m_currentState = m_states.pop();
 				if (lastState) m_states.push(lastState);
 
-				m_parent.addChild(m_currentState);
+				this.addChild(m_currentState);
 
 				if (!m_currentState.initialized) {
 					m_currentState.init();
@@ -70,7 +86,7 @@ package {
 				} else {
 					m_currentState.resume();
 				}
-				m_parent.stage.focus = m_currentState;
+				//m_parent.stage.focus = m_currentState;
 			}
 
 			if (!m_currentState.update(delta)) {
@@ -84,7 +100,7 @@ package {
 		* Terminates the currently running state, removing it from the Game state machine
 		*/
 		private function terminate(state:GameState):void {
-			m_parent.removeChild(state);
+			this.removeChild(state);
 			m_currentState.deinit();
 			m_currentState = null;
 		}

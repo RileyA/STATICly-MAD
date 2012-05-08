@@ -1,6 +1,6 @@
 package {
 	import flash.display.Shape;
-	import flash.text.TextField;
+	import starling.text.TextField;
 	import flash.text.TextFormat;
 
 	/** A simple example state, displays hello world and exits after
@@ -16,16 +16,16 @@ package {
 		}
 
 		override public function init():void {
-			var format:TextFormat = new TextFormat("Sans", 30, 0x000000);
-			format.align = "center";
-			m_hello_text = new TextField();
-			m_hello_text.width = 600;
-			m_hello_text.height = 100;
-			m_hello_text.x = 100;
-			m_hello_text.y = 150;
-			m_hello_text.defaultTextFormat = format;
-			m_hello_text.text = "Hello, World!";
-			addChild(m_hello_text);
+			//var format:TextFormat = new TextFormat("Sans", 30, 0x000000);
+			//format.align = "center";
+			//m_hello_text = new TextField();
+			//m_hello_text.width = 600;
+			//m_hello_text.height = 100;
+			//m_hello_text.x = 100;
+			//m_hello_text.y = 150;
+			//m_hello_text.defaultTextFormat = format;
+			//m_hello_text.text = "Hello, World!";
+			//addChild(m_hello_text);
 		}
 
 		override public function deinit():void {

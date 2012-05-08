@@ -36,7 +36,7 @@ package {
 		public static const HEIGHT_CHARGE:Number = -0.5;
 		public static const HEIGHT_ACTION:Number = -0.5;
 
-		private var m_sprite:Sprite;
+		private var m_sprite:Quad;
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
@@ -90,10 +90,10 @@ package {
 							)));
 
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
-			m_sprite = new Sprite();
-			m_sprite.graphics.beginFill(0xBBBBBB);
-			m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
-			m_sprite.graphics.endFill();
+			m_sprite = new Quad(WIDTH, HEIGHT, 0xBBBBBB);
+			//m_sprite.graphics.beginFill(0xBBBBBB);
+			//m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
+			//m_sprite.graphics.endFill();
 			addChild(m_sprite);
 			//loadAnimation();
 			
@@ -123,35 +123,36 @@ package {
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
 			
-			actionInd = new Sprite();
-			actionInd.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			actionInd.graphics.moveTo(-.1, -.1);
-			actionInd.graphics.lineTo(.1, .1);
-			actionInd.graphics.moveTo(-.1, .1);
-			actionInd.graphics.lineTo(.1, -.1);
-			actionInd.graphics.endFill();
-			
-			actionMid = new Sprite();
-			actionMid.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			actionMid.graphics.moveTo(-.1, -.1);
-			actionMid.graphics.lineTo(.1, .1);
-			actionMid.graphics.moveTo(-.1, .1);
-			actionMid.graphics.lineTo(.1, -.1);
-			actionMid.graphics.endFill();
-			
-			actionHit = new Sprite();
-			actionHit.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			actionHit.graphics.moveTo(-.1, -.1);
-			actionHit.graphics.lineTo(.1, .1);
-			actionHit.graphics.moveTo(-.1, .1);
-			actionHit.graphics.lineTo(.1, -.1);
-			actionHit.graphics.endFill();
-			
-			parentSprite.addChild(this);
-			
-			parentSprite.addChild(actionInd);
-			parentSprite.addChild(actionMid);
-			parentSprite.addChild(actionHit);
+			//TODO Redo action indicator
+			//actionInd = new Sprite();
+			//actionInd.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionInd.graphics.moveTo(-.1, -.1);
+			//actionInd.graphics.lineTo(.1, .1);
+			//actionInd.graphics.moveTo(-.1, .1);
+			//actionInd.graphics.lineTo(.1, -.1);
+			//actionInd.graphics.endFill();
+			//
+			//actionMid = new Sprite();
+			//actionMid.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionMid.graphics.moveTo(-.1, -.1);
+			//actionMid.graphics.lineTo(.1, .1);
+			//actionMid.graphics.moveTo(-.1, .1);
+			//actionMid.graphics.lineTo(.1, -.1);
+			//actionMid.graphics.endFill();
+			//
+			//actionHit = new Sprite();
+			//actionHit.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionHit.graphics.moveTo(-.1, -.1);
+			//actionHit.graphics.lineTo(.1, .1);
+			//actionHit.graphics.moveTo(-.1, .1);
+			//actionHit.graphics.lineTo(.1, -.1);
+			//actionHit.graphics.endFill();
+			//
+			//parentSprite.addChild(this);
+			//
+			//parentSprite.addChild(actionInd);
+			//parentSprite.addChild(actionMid);
+			//parentSprite.addChild(actionHit);
 		}
 		
 		private function doActionSprite(s:Sprite,pos:b2Vec2,pixelsPerMeter:Number):void{

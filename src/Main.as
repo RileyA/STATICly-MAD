@@ -16,15 +16,15 @@ package {
 
 		public function Main():void{
 			Keys.init(this);
-			m_game = new Game(this);
+			//m_game = new Game(this);
+			m_starling = new Starling(Game, stage);
+			m_starling.antiAliasing = .5;
+			
 			m_game.addState(new MenuState(m_game));
 			m_game.addState(new OverworldState(m_game));
 			m_game.addState(new LevelState(m_game, "Intro"));
 			addEventListener(Event.ENTER_FRAME, update);
-			
-			m_starling = new Starling(m_game, stage);
-			mStarling.antiAliasing = .5;
-			mStarling.start();
+			m_starling.start();
 		}
 
 		public function update(event:Event):void {

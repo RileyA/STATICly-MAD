@@ -24,7 +24,7 @@ package {
 		private var scale:UVec2;
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actioners:Vector.<ActionerElement>;
-		private var sprite:Sprite;
+		private var sprite:Quad;
 		private var anchor:GfxPhysObject;
 		private var joints:Vector.<b2Joint>;
 		
@@ -124,17 +124,17 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
-			sprite = new Sprite();
-			if (insulated){
-				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
-			}
-			sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
-			if (movement == FIXED) {
-				sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
-			} else {
-				sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, .8);
-			}
-			sprite.graphics.endFill();
+			sprite = new Quad(scale.x, scale.y, 0xBBBBBB);
+			//if (insulated){
+				//sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
+			//}
+			//sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
+			//if (movement == FIXED) {
+				//sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
+			//} else {
+				//sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, .8);
+			//}
+			//sprite.graphics.endFill();
 			redraw();
 			addChild(sprite);
 
@@ -365,31 +365,31 @@ package {
 			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			joints.push(m_level.world.CreateJoint(trackDef));
 			
-			var sprite:Sprite = new Sprite();
-			sprite.graphics.beginFill(0xB0B0B0);
-			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			sprite.graphics.moveTo(l.x, l.y);
-			sprite.graphics.lineTo(r.x, r.y);
-			sprite.graphics.drawCircle(l.x, l.y, 0.1);
-			sprite.graphics.drawCircle(r.x, r.y, 0.1);
-			sprite.graphics.endFill();
+			//var sprite:Sprite = new Sprite();
+			//sprite.graphics.beginFill(0xB0B0B0);
+			//sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//sprite.graphics.moveTo(l.x, l.y);
+			//sprite.graphics.lineTo(r.x, r.y);
+			//sprite.graphics.drawCircle(l.x, l.y, 0.1);
+			//sprite.graphics.drawCircle(r.x, r.y, 0.1);
+			//sprite.graphics.endFill();
+			//
+			//anchor.addChild(sprite);
 			
-			anchor.addChild(sprite);
 			
-			
-			m_level.getParent().addChild(anchor);
-			
-			sprite = new Sprite();
-			sprite.graphics.beginFill(0xB0B0B0);
-			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
-			
-			var dy:Number = r.y - l.y;
-			var dx:Number = r.x - l.x;
-			var length:Number = 5 * Math.sqrt((dy * dy) + (dx * dx));
-			sprite.graphics.moveTo(l.y / length, l.x / length);
-			sprite.graphics.lineTo(r.y / length, r.x / length);
-			sprite.graphics.endFill();
-			addChild(sprite);
+			//m_level.getParent().addChild(anchor);
+			//
+			//sprite = new Sprite();
+			//sprite.graphics.beginFill(0xB0B0B0);
+			//sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//
+			//var dy:Number = r.y - l.y;
+			//var dx:Number = r.x - l.x;
+			//var length:Number = 5 * Math.sqrt((dy * dy) + (dx * dx));
+			//sprite.graphics.moveTo(l.y / length, l.x / length);
+			//sprite.graphics.lineTo(r.y / length, r.x / length);
+			//sprite.graphics.endFill();
+			//addChild(sprite);
 		}
 		
 		public function getBodyType():uint {

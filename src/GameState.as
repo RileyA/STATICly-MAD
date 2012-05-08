@@ -1,5 +1,6 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
+	import starling.events.Event;
 	import flash.display.Shape;
 	import flash.events.KeyboardEvent;
 	import Game;
@@ -17,7 +18,7 @@ package {
 		public function GameState(game:Game):void {
 			m_game = game;
 		}
-
+		
 		/** Called at start of state */
 		public function init():void {
 		}

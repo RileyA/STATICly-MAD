@@ -1,5 +1,6 @@
 package Chargable {
-	import flash.display.Sprite;
+	import starling.display.DisplayObject;
+	import starling.display.Sprite;
 	import flash.geom.ColorTransform;
 	import Box2D.Common.Math.b2Vec2;
 	
@@ -17,18 +18,19 @@ package Chargable {
 			COLOR_TRANS_BLUE.blueOffset=150;
 		}
 
-		public static function matchColorToPolarity(sprite:Sprite, polarity:int):void {
-			switch (polarity) {
-			case CHARGE_BLUE:
-				sprite.transform.colorTransform = COLOR_TRANS_BLUE;
-				break;
-			case CHARGE_RED:
-				sprite.transform.colorTransform = COLOR_TRANS_RED;
-				break;
-			default:
-				sprite.transform.colorTransform = COLOR_TRANS_NONE;
-				break;
-			}
+		public static function matchColorToPolarity(sprite:DisplayObject, polarity:int):void {
+			//TODO redo change charge polarity gfx
+			//switch (polarity) {
+			//case CHARGE_BLUE:
+				//sprite.transform.colorTransform = COLOR_TRANS_BLUE;
+				//break;
+			//case CHARGE_RED:
+				//sprite.transform.colorTransform = COLOR_TRANS_RED;
+				//break;
+			//default:
+				//sprite.transform.colorTransform = COLOR_TRANS_NONE;
+				//break;
+			//}
 		}
 		
 		public static function makeCharges(strength:Number, x1:Number, y1:Number, x2:Number, y2:Number):Vector.<Charge>{

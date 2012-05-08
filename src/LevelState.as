@@ -1,10 +1,12 @@
 package {
-	import flash.display.Sprite;
+	import starling.display.Sprite;
+	import starling.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
+	import starling.events.Event;
 
 	/** A basic level gameplay state */
 	public class LevelState extends GameState {
@@ -29,7 +31,7 @@ package {
 			m_timerText.selectable = false;
 			addChild(m_timerText);
 		}
-
+		
 		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
 		}
