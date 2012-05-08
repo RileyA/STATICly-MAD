@@ -1,9 +1,9 @@
 package {
 
 	import flash.display.*;
-	import starling.core.*;
-	import starling.display.*;
-	import starling.textures.*;
+	//import starling.textures.*;
+	//import starling.display.*;
+	//import starling.core.*;
 	
 	import Actioners.*;
 	import GfxPhysObject;
@@ -50,11 +50,11 @@ package {
 		
 		private var faceRight:Boolean;
 		
-		//[Embed(source = "../media/images/avater.xml", mimeType = "application/octet-stream")]
+		//[Embed(source = "../media/images/avatar.xml", mimeType = "application/octet-stream")]
 		//public static const SpriteSheetXML:Class;
-		//[Embed(source = "../media/images/avater.png")]
+		//[Embed(source = "../media/images/avatar.png")]
 		//private static const SpriteSheet:Class;
-		//private var mMovie:MovieClip;
+		//private var m_movie:MovieClip;
 		
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
@@ -89,12 +89,13 @@ package {
 								HEIGHT_CHARGE
 							)));
 
-			// placeholder sprite to be replaced with an animated MovieClip at some point...
+			 //placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Sprite();
 			m_sprite.graphics.beginFill(0xBBBBBB);
 			m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
 			m_sprite.graphics.endFill();
 			addChild(m_sprite);
+			//loadAnimation();
 			
 			groundPlayer();
 			
@@ -161,7 +162,7 @@ package {
 			s.y = pos.y * pixelsPerMeter;
 		}
 		
-		private function loadAnimation():void {
+		//private function loadAnimation():void {
 			 //creates the embedded bitmap (spritesheet file)
 			//var bitmap:Bitmap = new SpriteSheet();
 			//
@@ -178,14 +179,11 @@ package {
 			//var frames:Vector.<Texture> = sTextureAtlas.getTextures("running_");
 			//
 			 //creates a MovieClip playing at 40fps
-			//mMovie = new MovieClip(frames, 40);
+			//m_movie = new MovieClip(frames, 40);
 			//
-			 //centers the MovieClip
-			//mMovie.x = stage.stageWidth - mMovie.width >> 1;
-			//mMovie.y = stage.stageHeight - mMovie.height >> 1;
 			 //show it
-			//addChild ( mMovie );
-		}
+			//addChild(m_movie);
+		//}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
 			super.updateTransform(pixelsPerMeter);
