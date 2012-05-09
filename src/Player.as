@@ -214,9 +214,11 @@ package {
 
 				doActionSprite(actionHit,hitPos,pixelsPerMeter);
 			} else {
-				actionInd.visible=false;
-				actionMid.visible=false;
-				actionHit.visible=false;
+				if(actionInd != null && actionMid != null && actionHit != null){
+					actionInd.visible=false;
+					actionMid.visible=false;
+					actionHit.visible = false;
+				}
 			}
 		}
 		

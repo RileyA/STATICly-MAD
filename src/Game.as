@@ -59,7 +59,7 @@ package {
 				@return True if continuing as usual, false if out of
 					game states */
 		public function update():Boolean {
-			trace("mah");
+			//trace("mah");
 			// timing
 			var currentTime:Number = getTimer();
 			var delta:Number = (currentTime - m_lastTime) / 1000.0;
