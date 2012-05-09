@@ -43,6 +43,7 @@ package {
 		private var actionInd:Sprite; // on target of potential action
 		private var actionMid:Sprite; // between player and action target
 		private var actionHit:Sprite; // at player hit action target
+		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
 		
 		private var faceRight:Boolean;
@@ -156,6 +157,16 @@ package {
 			super.updateTransform(pixelsPerMeter);
 			
 			var marker:ActionMarker = getBestAction();
+			
+			if (this.currentlyHinting!=marker){
+				if (this.currentlyHinting!=null){
+					this.currentlyHinting.endHint();
+				}
+				if (marker!=null){
+					marker.startHint();
+				}
+			}
+			
 			if (marker != null) {
 
 				var markerPos:b2Vec2 = marker.fixture.GetBody().GetPosition().Copy();
@@ -184,6 +195,9 @@ package {
 				actionMid.visible=false;
 				actionHit.visible=false;
 			}
+			
+			this.currentlyHinting=marker;
+			
 		}
 		
 		public function getBestAction():ActionMarker {
