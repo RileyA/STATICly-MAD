@@ -35,7 +35,10 @@ package {
 		}
 
 		private function onAdded(e:Event):void {
-			
+			addState(new MenuState(this));
+			addState(new OverworldState(this));
+			addState(new LevelState(this, "Intro"));
+			update();
 		}
 		
 		/** Adds a state 
@@ -56,6 +59,7 @@ package {
 				@return True if continuing as usual, false if out of
 					game states */
 		public function update():Boolean {
+			trace("mah");
 			// timing
 			var currentTime:Number = getTimer();
 			var delta:Number = (currentTime - m_lastTime) / 1000.0;

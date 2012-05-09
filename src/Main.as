@@ -1,11 +1,7 @@
 package {
 	import flash.display.Sprite;
 	import starling.core.Starling;
-	import flash.display.Shape;
 	import flash.events.Event;
-
-	import Game;
-	import MenuState;
 
 	[SWF(backgroundColor='#EEEEEE', frameRate='30', width='800', height='600')]
 
@@ -14,17 +10,13 @@ package {
 		private var m_game:Game;
 		private var m_starling:Starling;
 
-		public function Main():void{
-			Keys.init(this);
-			//m_game = new Game(this);
+		public function Main():void {
+			super();
 			m_starling = new Starling(Game, stage);
 			m_starling.antiAliasing = .5;
-			
-			m_game.addState(new MenuState(m_game));
-			m_game.addState(new OverworldState(m_game));
-			m_game.addState(new LevelState(m_game, "Intro"));
-			addEventListener(Event.ENTER_FRAME, update);
 			m_starling.start();
+			//addEventListener(Event.ENTER_FRAME, update);
+			Keys.init(this);
 		}
 
 		public function update(event:Event):void {

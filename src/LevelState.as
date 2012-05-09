@@ -47,7 +47,7 @@ package {
 		* Returns false if this LevelState has reached a termination state.
 		*/
 		override public function update(delta:Number):Boolean {
-			if (m_level != null)
+			if (m_level != null && m_timerText != null)
 				m_timerText.text = ""+MiscUtils.setPrecision(m_level.getScore().playerTime, 0);
 
 			var isDone:Boolean = false;

@@ -73,10 +73,10 @@ package {
 			}
 		}
 
-		private function clickedEditor(event:MouseEvent):void {
-			if (!m_done) {
-				m_game.addState(new Editor.EditorState(m_game));
-			}
-		}
+		//private function clickedEditor(event:MouseEvent):void {
+			//if (!m_done) {
+				//m_game.addState(new Editor.EditorState(m_game));
+			//}
+		//}
 	}
 }

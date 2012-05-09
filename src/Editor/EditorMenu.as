@@ -32,7 +32,7 @@ package Editor {
 			body = new Sprite();
 			body.y = 15;
 			addChild(body);
-
+ 
 			focusedRect = new Sprite();
 			addChild(focusedRect);
 			focusedRect.x = 0; 
