@@ -126,7 +126,7 @@ package {
 
 			sprite = new Sprite();
 			if (insulated){
-				sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
+				sprite.graphics.lineStyle(3.0,0xFFFFBB,1.0,false,LineScaleMode.NONE);
 			}
 			sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
 			if (movement == FIXED) {
@@ -367,7 +367,7 @@ package {
 			
 			var sprite:Sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
-			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			sprite.graphics.lineStyle(3.0, 0x333333, .8, false, LineScaleMode.NONE);
 			sprite.graphics.moveTo(l.x, l.y);
 			sprite.graphics.lineTo(r.x, r.y);
 			sprite.graphics.drawCircle(l.x, l.y, 0.1);
@@ -381,7 +381,7 @@ package {
 			
 			sprite = new Sprite();
 			sprite.graphics.beginFill(0xB0B0B0);
-			sprite.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			sprite.graphics.lineStyle(3.0, 0x333333, .8, false, LineScaleMode.NONE);
 			
 			var dy:Number = r.y - l.y;
 			var dx:Number = r.x - l.x;

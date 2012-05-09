@@ -2,8 +2,6 @@ package {
 
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
@@ -11,6 +9,7 @@ package {
 	import Box2D.Collision.Shapes.*;
 	import Player;
 	import Chargable.*;
+	import Config
 
 	public class Level {
 
@@ -143,17 +142,19 @@ package {
 
 			for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)
 				m_gfxPhysObjects[i].updateTransform(pixelsPerMeter);
-
-			if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
-				m_debugDrawKey = true;
-				m_debugDraw = !m_debugDraw;
-				m_debugSprite.visible = m_debugDraw;
-			} else if (!Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
-				m_debugDrawKey = false;
+			
+			if (Config.debug) {
+				if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
+					m_debugDrawKey = true;
+					m_debugDraw = !m_debugDraw;
+					m_debugSprite.visible = m_debugDraw;
+				} else if (!Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
+					m_debugDrawKey = false;
+				}
+	
+				if (m_debugDraw)
+					world.DrawDebugData();
 			}
-
-			if (m_debugDraw)
-				world.DrawDebugData();
 
 			m_score.playerTime += delta;
 

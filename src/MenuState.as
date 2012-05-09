@@ -5,6 +5,7 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import Editor.*;
+	import Colors;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
@@ -17,7 +18,7 @@ package {
 		}
 
 		override public function init():void {
-			var format:TextFormat = new TextFormat("Sans", 30, 0x000000);
+			var format:TextFormat = new TextFormat("Sans", 30, Colors.textColor);
 			format.align = "center";
 			var hello_text:TextField = new TextField();
 			hello_text.width = 800;

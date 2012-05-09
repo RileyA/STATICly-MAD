@@ -6,7 +6,7 @@ package {
 	import Game;
 	import MenuState;
 
-	[SWF(backgroundColor='#EEEEEE', frameRate='30', width='800', height='600')]
+	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
 
 	public class Main extends Sprite {
 

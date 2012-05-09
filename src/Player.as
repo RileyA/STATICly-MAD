@@ -12,6 +12,7 @@ package {
 	import Box2D.Collision.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Collision.b2Collision;
+	import Colors;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
@@ -112,7 +113,7 @@ package {
 			m_physics.CreateFixture(fd);
 			
 			actionInd = new Sprite();
-			actionInd.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionInd.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			actionInd.graphics.moveTo(-.1, -.1);
 			actionInd.graphics.lineTo(.1, .1);
 			actionInd.graphics.moveTo(-.1, .1);
@@ -120,7 +121,7 @@ package {
 			actionInd.graphics.endFill();
 			
 			actionMid = new Sprite();
-			actionMid.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionMid.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			actionMid.graphics.moveTo(-.1, -.1);
 			actionMid.graphics.lineTo(.1, .1);
 			actionMid.graphics.moveTo(-.1, .1);
@@ -128,7 +129,7 @@ package {
 			actionMid.graphics.endFill();
 			
 			actionHit = new Sprite();
-			actionHit.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			actionHit.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			actionHit.graphics.moveTo(-.1, -.1);
 			actionHit.graphics.lineTo(.1, .1);
 			actionHit.graphics.moveTo(-.1, .1);
