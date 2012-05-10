@@ -125,6 +125,9 @@ package {
 			m_physics.SetAngularDamping(1.0);
 
 			sprite = new Quad(scale.x, scale.y, 0xBBBBBB);
+			sprite.x = -scale.x / 2;
+			sprite.y = -scale.y / 2;
+			
 			//if (insulated){
 				//sprite.graphics.lineStyle(3.0,0xDDDD44,1.0,false,LineScaleMode.NONE);
 			//}

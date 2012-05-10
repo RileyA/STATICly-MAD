@@ -90,7 +90,7 @@ package {
 							)));
 
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
-			m_sprite = new Quad(WIDTH, HEIGHT, 0xBBBBBB);
+			m_sprite = new Quad(WIDTH, HEIGHT, 0x333333);
 			//m_sprite.graphics.beginFill(0xBBBBBB);
 			//m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
 			//m_sprite.graphics.endFill();
@@ -193,7 +193,8 @@ package {
 			if (marker != null) {
 
 				var markerPos:b2Vec2 = marker.fixture.GetBody().GetPosition().Copy();
-				doActionSprite(actionInd,markerPos,pixelsPerMeter);
+				if(actionInd != null)
+					doActionSprite(actionInd,markerPos,pixelsPerMeter);
 				
 				var pos:b2Vec2=m_physics.GetPosition().Copy();
 				pos.y+=HEIGHT_ACTION;
@@ -201,7 +202,8 @@ package {
 				var midPos:b2Vec2=pos.Copy()
 				midPos.Add(markerPos);
 				midPos.Multiply(.5);
-				doActionSprite(actionMid,midPos,pixelsPerMeter);
+				if(actionMid != null)
+					doActionSprite(actionMid,midPos,pixelsPerMeter);
 				
 				var diff:b2Vec2=pos.Copy()
 				diff.Subtract(markerPos);
@@ -211,8 +213,8 @@ package {
 					diff.Multiply(HEIGHT_ACTION);
 					hitPos.Add(diff);
 				}
-
-				doActionSprite(actionHit,hitPos,pixelsPerMeter);
+				if(actionHit != null)
+					doActionSprite(actionHit,hitPos,pixelsPerMeter);
 			} else {
 				if(actionInd != null && actionMid != null && actionHit != null){
 					actionInd.visible=false;

@@ -34,7 +34,7 @@ package {
 		public virtual function updateTransform(pixelsPerMeter:Number):void {
 			this.scaleX = pixelsPerMeter;
 			this.scaleY = pixelsPerMeter;
-			// if physics object is null, just reset to origin...
+			 //if physics object is null, just reset to origin...
 			if (m_physics != null) {
 				var pos:b2Vec2 = m_physics.GetPosition();
 				this.x = pos.x * pixelsPerMeter;
