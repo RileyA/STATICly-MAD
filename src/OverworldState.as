@@ -1,9 +1,11 @@
 package {
 	import flash.display.Sprite;
+	import flash.display.DisplayObject;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
 	import Config;
+	import Actioners.LevelEntranceActioner;
 
 	/** A basic level gameplay state */
 	public class OverworldState extends GameState {
@@ -17,15 +19,16 @@ package {
 			compleatedLevels=new Vector.<String>();
 			super(game);
 			m_worldName = worldName;
-		}
-
-		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_worldName));
 			updateDoors();
 		}
+
+		override public function init():void {
+			
+		}
 		
 		override public function deinit():void {
-			m_level = null;
+			//m_level = null;
 		}
 
 		/**
@@ -58,7 +61,19 @@ package {
 		
 		// update doors to show which can be opened, and which have been beaten
 		public function updateDoors():void{
-			// TODO
+			var blocks:Vector.<Block>=m_level.getBlocks();
+			var i:int;
+			for (i=0;i<blocks.length;i++){
+				var num:int=blocks[i].numChildren;
+				var k:int;
+				for (k=0;k<num;k++){
+					var s:DisplayObject=blocks[i].getChildAt(k);
+					if (s is LevelEntranceActioner) {
+						(s as LevelEntranceActioner).updateGfx(compleatedLevels);
+					}
+				}
+			}
+			
 		}
 		
 		// Called when a level has been beaten
