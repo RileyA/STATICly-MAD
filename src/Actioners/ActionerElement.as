@@ -47,6 +47,8 @@ package Actioners
 
 		protected function getSprite(x:Number, y:Number):DisplayObject {
 			sprite = new Quad(WIDTH, HEIGHT, 0x990099);
+			sprite.x = x;
+			sprite.y = y;
 			//sprite.graphics.beginFill(0x990099);
 			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
 			//sprite.graphics.endFill();

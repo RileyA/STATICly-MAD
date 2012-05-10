@@ -27,6 +27,8 @@ package Actioners {
 
 		override protected function getSprite(x:Number, y:Number):DisplayObject {
 			sprite = new Quad(WIDTH, HEIGHT, 0x990099);
+			sprite.x = -WIDTH/2 + x;
+			sprite.y = -HEIGHT/2 + y;
 			//sprite.graphics.beginFill(0x990099);
 			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
 			//sprite.graphics.endFill();

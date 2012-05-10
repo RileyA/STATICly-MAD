@@ -91,6 +91,8 @@ package {
 
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new Quad(WIDTH, HEIGHT, 0x333333);
+			m_sprite.x = -WIDTH / 2;
+			//m_sprite.y = HEIGHT;
 			//m_sprite.graphics.beginFill(0xBBBBBB);
 			//m_sprite.graphics.drawRect(-WIDTH/2.0, HEIGHT, WIDTH, -HEIGHT);
 			//m_sprite.graphics.endFill();
@@ -148,7 +150,7 @@ package {
 			//actionHit.graphics.lineTo(.1, -.1);
 			//actionHit.graphics.endFill();
 			//
-			//parentSprite.addChild(this);
+			parentSprite.addChild(this);
 			//
 			//parentSprite.addChild(actionInd);
 			//parentSprite.addChild(actionMid);

@@ -39,7 +39,7 @@ package {
 				var pos:b2Vec2 = m_physics.GetPosition();
 				this.x = pos.x * pixelsPerMeter;
 				this.y = pos.y * pixelsPerMeter;
-				this.rotation = getAngle();
+				this.rotation = Math.PI / 180 * getAngle();
 			} else {
 				this.x = 0;
 				this.y = 0;

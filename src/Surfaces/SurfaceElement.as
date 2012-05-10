@@ -35,6 +35,8 @@ package Surfaces
 			m_physics.CreateFixture(fd);
 			
 			q = new Quad(w, h, color);
+			q.x = -w / 2;
+			q.y = -h / 2;
 			addChild(q);
 			//sprite = new Sprite();
 			//sprite.graphics.beginFill(color);
