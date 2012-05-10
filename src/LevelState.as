@@ -50,7 +50,7 @@ package {
 			var isDone:Boolean = false;
 			var levelFinish:Boolean = !m_level.update(delta);
 			if (levelFinish) { finishLevel(); }
-			isDone ||= Keys.isKeyPressed(Keyboard.Q);
+			isDone ||= Keys.isKeyPressed(Keys.ExitLevel);
 			return !isDone;
 		}
 

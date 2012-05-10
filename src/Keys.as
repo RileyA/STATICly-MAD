@@ -9,6 +9,9 @@ package {
 	// http://lassieadventurestudio.wordpress.com/2008/09/03/as3-key-isdown-behavior/
 	
 	public class Keys {
+		
+		public static var ExitLevel:int=Keyboard.ESCAPE;
+		
 		private static var _keys:Array = new Array();
 
 		public static function init(main:Sprite):void{ 

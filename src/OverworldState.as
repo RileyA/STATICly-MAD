@@ -3,6 +3,7 @@ package {
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
+	import Config;
 
 	/** A basic level gameplay state */
 	public class OverworldState extends GameState {
@@ -31,7 +32,9 @@ package {
 				enterLevel(m_level.getNextLevel());
 				m_level.resetLevel();
 			}
-			isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
+			if (Config.debug) {
+				isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
+			}
 			return !isDone;
 		}
 
