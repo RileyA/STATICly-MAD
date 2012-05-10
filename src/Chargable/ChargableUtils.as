@@ -3,6 +3,7 @@ package Chargable {
 	import starling.display.Sprite;
 	import flash.geom.ColorTransform;
 	import Box2D.Common.Math.b2Vec2;
+	import starling.textures.Texture;
 	
 	public class ChargableUtils {
 		// Defines the numeric charge value for blue, red, or no charge.
@@ -19,6 +20,7 @@ package Chargable {
 		}
 
 		public static function matchColorToPolarity(sprite:DisplayObject, polarity:int):void {
+			
 			//TODO redo change charge polarity gfx
 			//switch (polarity) {
 			//case CHARGE_BLUE:
