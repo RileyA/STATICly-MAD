@@ -7,6 +7,7 @@ package Actioners {
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import Colors;
+	import MiscUtils;
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
@@ -28,7 +29,7 @@ package Actioners {
 			textSprite.height = 10;
 			textSprite.x = -textWidth/2*textScale;
 			textSprite.defaultTextFormat = format;
-			textSprite.text = levelName;
+			textSprite.text = MiscUtils.getDisplayName(levelName);
 			textSprite.selectable = false;
 			textSprite.visible=false;
 			textSprite.scaleX=textScale;
