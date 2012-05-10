@@ -2,7 +2,9 @@ package {
 	import flash.display.Sprite;
 	import flash.utils.getTimer;
 	import cse481d.Logger;
-
+	import OverworldState;
+	import flash.utils.Dictionary;
+	
 	/** Manages a stack of game states */
 	public class Game {
 
@@ -11,10 +13,14 @@ package {
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
 		private var m_newStateReady:Boolean;
+		
+		private var m_overworlds:Dictionary;
+		//private var m_overworlds:Vector.<OverworldState>;
 
 		/** Constructor
 			@param parent Reference to parent sprite */
 		public function Game(parent:Sprite):void {
+			m_overworlds= new Dictionary();//new Vector.<OverworldState>();
 			m_parent = parent;
 			m_parent.stage.stageFocusRect = false;
 			m_lastTime = getTimer();
@@ -23,6 +29,15 @@ package {
 			m_newStateReady = false;
 
 			LoggerUtils.initLogger();
+		}
+		
+		public function getOverworld(name:String):OverworldState{
+			var x:OverworldState=m_overworlds[name];
+			if (x==null) {
+				x = new OverworldState(this, name);
+				m_overworlds[name]=x;
+			}
+			return x;
 		}
 
 		/** Adds a state 

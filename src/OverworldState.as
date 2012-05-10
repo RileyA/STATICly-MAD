@@ -53,7 +53,7 @@ package {
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
 			else if (name.indexOf("Lab") != -1) {
-				m_game.addState(new OverworldState(m_game, name));
+				m_game.addState(m_game.getOverworld(name));
 			} else {
 				m_game.addState(new LevelState(m_game, name, this));
 			}
