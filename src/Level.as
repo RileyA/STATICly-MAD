@@ -181,21 +181,23 @@ package {
 
 			// compute pixels per meter and an offset so the playable area
 			// is in the center of the screen
+			const margin:Number=.98; // make edges show some
 			if (m_info.levelSize.x / m_info.levelSize.y 
 				>= WIDTH_PIXELS / HEIGHT_PIXELS) {
-				pixelsPerMeter = WIDTH_PIXELS / m_info.levelSize.x;
+				pixelsPerMeter = margin * WIDTH_PIXELS / m_info.levelSize.x;
 				m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
 			} else {
-				pixelsPerMeter = HEIGHT_PIXELS / m_info.levelSize.y;
+				pixelsPerMeter = margin * HEIGHT_PIXELS / m_info.levelSize.y;
 				m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
 			}
 
 			var desc:BlockInfo = new BlockInfo();
-			desc.scale.x = m_info.levelSize.x;
+			desc.scale.x = m_info.levelSize.x+BORDER_THICKNESS*2;
 			desc.scale.y = BORDER_THICKNESS;
-			desc.position.x = desc.scale.x / 2;
+			desc.position.x = desc.scale.x / 2-BORDER_THICKNESS;
 			desc.position.y = -desc.scale.y / 2;
 			desc.movement = "fixed";
+			desc.strong = false;
 			
 			var wall:Block = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
@@ -208,9 +210,9 @@ package {
 			m_parent_sprite.addChild(wall);
 
 			desc.scale.x = BORDER_THICKNESS;
-			desc.scale.y = m_info.levelSize.y;
+			desc.scale.y = m_info.levelSize.y+BORDER_THICKNESS*2;
 			desc.position.x = -desc.scale.x / 2;
-			desc.position.y = desc.scale.y / 2;
+			desc.position.y = desc.scale.y / 2-BORDER_THICKNESS;
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
