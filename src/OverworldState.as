@@ -9,16 +9,18 @@ package {
 	public class OverworldState extends GameState {
 
 		private var m_level:Level;
+		private var m_worldName:String;
 		private var compleatedLevels:Vector.<String>;
 		
 		
-		public function OverworldState(game:Game):void {
+		public function OverworldState(game:Game, worldName:String):void {
 			compleatedLevels=new Vector.<String>();
 			super(game);
+			m_worldName = worldName;
 		}
 
 		override public function init():void {
-			m_level = new Level(this, MiscUtils.loadLevelInfo("Overworld"));
+			m_level = new Level(this, MiscUtils.loadLevelInfo(m_worldName));
 			updateDoors();
 		}
 		
@@ -47,10 +49,11 @@ package {
 		*/
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
-			//else if (name == overworld level) {
-			//	m_game.addState(new OverworldState(m_game, name));
-			//} else {
-			m_game.addState(new LevelState(m_game, name, this));
+			else if (name.indexOf("Lab") != -1) {
+				m_game.addState(new OverworldState(m_game, name));
+			} else {
+				m_game.addState(new LevelState(m_game, name, this));
+			}
 		}
 		
 		// update doors to show which can be opened, and which have been beaten

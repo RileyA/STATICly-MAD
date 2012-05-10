@@ -37,7 +37,7 @@ package {
 			block_text.x = 100;
 			block_text.y = 300;
 			block_text.defaultTextFormat = format;
-			block_text.text = "Or click here for the Overworld!";
+			block_text.text = "Or click here to start the Game!";
 			block_text.selectable = false;
 			block_text.addEventListener(MouseEvent.MOUSE_UP, clickedDemo);
 			addChild(block_text);
@@ -69,7 +69,9 @@ package {
 
 		private function clickedDemo(event:MouseEvent):void {
 			if (!m_done) {
-				m_game.addState(new OverworldState(m_game));
+				var overworldState:OverworldState=new OverworldState(m_game, "DischargeLab");
+				m_game.addState(overworldState);
+				m_game.addState(new LevelState(m_game, "Intro", overworldState));
 			}
 		}
 

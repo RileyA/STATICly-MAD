@@ -16,7 +16,7 @@ package {
 			Keys.init(this);
 			m_game = new Game(this);
 			m_game.addState(new MenuState(m_game));
-			var overworldState:OverworldState=new OverworldState(m_game);
+			var overworldState:OverworldState=new OverworldState(m_game, "DischargeLab");
 			m_game.addState(overworldState);
 			m_game.addState(new LevelState(m_game, "Intro", overworldState));
 			addEventListener(Event.ENTER_FRAME, update);
