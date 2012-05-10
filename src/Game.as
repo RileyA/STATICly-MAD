@@ -1,10 +1,11 @@
 package {
 	import flash.display.Sprite;
 	import flash.utils.getTimer;
-	import GameState;
+	import cse481d.Logger;
 
 	/** Manages a stack of game states */
 	public class Game {
+
 		private var m_parent:Sprite;
 		private var m_lastTime:Number;
 		private var m_currentState:GameState;
@@ -20,6 +21,8 @@ package {
 			m_currentState = null;
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
+
+			LoggerUtils.initLogger();
 		}
 
 		/** Adds a state 

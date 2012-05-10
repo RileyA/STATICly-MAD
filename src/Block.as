@@ -102,6 +102,7 @@ package {
 				function act(m_level:Level):void{
 					var player:Player= m_level.getPlayer();
 					if (strong) {
+						LoggerUtils.logChargeStrong(player.chargePolarity, chargePolarity);
 						if (chargePolarity==-player.chargePolarity) {
 							chargePolarity=ChargableUtils.CHARGE_NONE;
 							player.groundPlayer();
@@ -111,6 +112,7 @@ package {
 							chargePolarity=tmp;
 						}
 					} else { // make weak block copy players state, even if no charge
+						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
 						chargePolarity=player.chargePolarity;
 					}
 				}

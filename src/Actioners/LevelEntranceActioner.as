@@ -35,7 +35,7 @@ package Actioners {
 			textSprite.scaleX=textScale;
 			textSprite.scaleY=textSprite.scaleX;
 			
-			function cb(level:Level):void { level.markAsDone(levelName); }
+			function cb(level:Level):void {	level.markAsDone(levelName); }
 			function tr(player:Player):Boolean { return true; }
 			function startHint():void {
 				textSprite.visible=true;
