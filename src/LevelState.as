@@ -1,8 +1,7 @@
 package {
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
+	import starling.text.TextField;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
@@ -30,7 +29,11 @@ package {
 			//m_timerText.defaultTextFormat = format;
 			//m_timerText.text = "0";
 			//m_timerText.selectable = false;
-			//addChild(m_timerText);
+			m_timerText = new TextField(50, 50, "0");
+			m_timerText.x = 10;
+			m_timerText.y = 10;
+			m_timerText.hAlign = "left";
+			addChild(m_timerText);
 		}
 		
 		override public function init():void {
@@ -39,8 +42,7 @@ package {
 		
 		override public function deinit():void {
 			m_level = null;
-			//TODO
-			//removeChild(m_timerText);
+			removeChild(m_timerText);
 		}
 
 		/**
