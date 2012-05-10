@@ -12,7 +12,7 @@ package {
 		public static var l:Logger;
 
 		public static function initLogger():void {
-			l = Logger.initialize(GID, NAME, SKEY, {"isdebug":true});
+	//		l = Logger.initialize(GID, NAME, SKEY, {"isdebug":true});
 		}
 
 		/** Return the QID of the specified level */
@@ -22,12 +22,12 @@ package {
 
 		/** Log the charging of a weak block */
 		public static function logChargeWeak(playerC:Number, blockC:Number):void {
-			l.logAction(CHARGE_WEAK_AID, {"playerC":playerC, "blockC":blockC});
+	//		l.logAction(CHARGE_WEAK_AID, {"playerC":playerC, "blockC":blockC});
 		}
 
 		/** Log the charging of a strong block */
 		public static function logChargeStrong(playerC:Number, blockC:Number):void {
-			l.logAction(CHARGE_STRONG_AID, {"playerC":playerC, "blockC":blockC});
+	//		l.logAction(CHARGE_STRONG_AID, {"playerC":playerC, "blockC":blockC});
 		}
 	}
 }

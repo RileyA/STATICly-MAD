@@ -35,7 +35,7 @@ package {
 
 		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
-			LoggerUtils.l.logLevelStart(LoggerUtils.getQid(m_levelName), null);
+//			LoggerUtils.l.logLevelStart(LoggerUtils.getQid(m_levelName), null);
 		}
 		
 		override public function deinit():void {
@@ -54,7 +54,7 @@ package {
 			var levelFinish:Boolean = !m_level.update(delta);
 			if (levelFinish) { finishLevel(); }
 			if (Keys.isKeyPressed(Keyboard.Q)) {
-				LoggerUtils.l.logLevelEnd({"didwin":false});
+//				LoggerUtils.l.logLevelEnd({"didwin":false});
 				isDone = true;
 			}
 			return !isDone;
@@ -62,7 +62,7 @@ package {
 
 		private function finishLevel():void {
 			m_overworldState.compleated(m_levelName);
-			LoggerUtils.l.logLevelEnd({"didwin":true});
+//			LoggerUtils.l.logLevelEnd({"didwin":true});
 			m_game.replaceState(new ScoreState(m_game, m_level.getScore()));
 		}
 	}
