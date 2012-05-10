@@ -23,7 +23,7 @@ package {
 			var format:TextFormat = new TextFormat("Sans", 15, Colors.textColor);
 			format.align = "left";
 			m_timerText = new TextField();
-			m_timerText.width = 50;
+			m_timerText.width = 500;
 			m_timerText.height = 50;
 			m_timerText.x = 10;
 			m_timerText.y = 10;
@@ -47,13 +47,13 @@ package {
 		* Returns false if this LevelState has reached a termination state.
 		*/
 		override public function update(delta:Number):Boolean {
-			if (m_level != null)
-				m_timerText.text = ""+MiscUtils.setPrecision(m_level.getScore().playerTime, 0);
-
+			if (m_level != null){
+				m_timerText.text = m_level.getInfo().title+": "+MiscUtils.setPrecision(m_level.getScore().playerTime, 0);
+			}
 			var isDone:Boolean = false;
 			var levelFinish:Boolean = !m_level.update(delta);
 			if (levelFinish) { finishLevel(); }
-			if (Keys.isKeyPressed(Keyboard.Q)) {
+			if (Keys.exitLevel()) {
 				LoggerUtils.l.logLevelEnd({"didwin":false});
 				isDone = true;
 			}
