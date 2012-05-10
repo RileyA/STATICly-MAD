@@ -5,6 +5,7 @@ package {
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
+	import Colors;
 
 	/** A basic level gameplay state */
 	public class LevelState extends GameState {
@@ -12,13 +13,14 @@ package {
 		private var m_level:Level;
 		private var m_levelName:String;
 		private var m_timerText:TextField;
-		private const textColor:Number=0xBBBBBB;
+		private var m_overworldState:OverworldState;
 
-		public function LevelState(game:Game, levelName:String):void {
+		public function LevelState(game:Game, levelName:String, overworldState:OverworldState):void {
 			super(game);
 			m_levelName = levelName;
+			m_overworldState=overworldState;
 
-			var format:TextFormat = new TextFormat("Sans", 15, textColor);
+			var format:TextFormat = new TextFormat("Sans", 15, Colors.textColor);
 			format.align = "left";
 			m_timerText = new TextField();
 			m_timerText.width = 50;
@@ -55,6 +57,7 @@ package {
 		}
 
 		private function finishLevel():void {
+			m_overworldState.compleated(m_levelName);
 			m_game.replaceState(new ScoreState(m_game, m_level.getScore()));
 		}
 	}
