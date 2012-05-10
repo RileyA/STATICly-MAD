@@ -27,7 +27,6 @@ package Actioners {
 			textSprite.width = textWidth;
 			textSprite.height = 10;
 			textSprite.x = -textWidth/2*textScale;
-			textSprite.y = -3.5;
 			textSprite.defaultTextFormat = format;
 			textSprite.text = levelName;
 			textSprite.selectable = false;
@@ -58,6 +57,8 @@ package Actioners {
 			sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
 			sprite.graphics.endFill();
 			
+			
+			textSprite.y = HEIGHT/2 + y + HEIGHT - .3;
 
 			sprite.addChild(textSprite)
 			return sprite;
