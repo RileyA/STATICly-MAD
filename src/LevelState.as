@@ -53,7 +53,7 @@ package {
 			var isDone:Boolean = false;
 			var levelFinish:Boolean = !m_level.update(delta);
 			if (levelFinish) { finishLevel(); }
-			if (Keys.isKeyPressed(Keyboard.Q)) {
+			if (Keys.exitLevel()) {
 //				LoggerUtils.l.logLevelEnd({"didwin":false});
 				isDone = true;
 			}

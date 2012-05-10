@@ -10,7 +10,9 @@ package {
 	
 	public class Keys {
 		
-		public static var ExitLevel:int=Keyboard.ESCAPE;
+		public static function exitLevel():Boolean{
+			return isKeyPressed(Keyboard.ESCAPE)||isKeyPressed(Keyboard.Q);
+		}
 		
 		private static var _keys:Array = new Array();
 
