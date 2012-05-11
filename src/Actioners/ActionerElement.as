@@ -1,6 +1,6 @@
 package Actioners
 {
-	import starling.display.DisplayObject;
+	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
@@ -18,8 +18,6 @@ package Actioners
 
 		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.0;
-
-		protected var sprite:DisplayObject;
 		protected var actionString:String;
 
 		/**
@@ -34,8 +32,8 @@ package Actioners
 			fd.userData = am;
 			rectDef.position.Add(offset);
 			m_physics = world.CreateBody(rectDef);
-			am.fixture=m_physics.CreateFixture(fd);
-
+			am.fixture = m_physics.CreateFixture(fd);
+			
 			addChild(getSprite(offset.x, offset.y));
 		}
 
@@ -45,14 +43,14 @@ package Actioners
 			return ps;
 		}
 
-		protected function getSprite(x:Number, y:Number):DisplayObject {
-			sprite = new Quad(WIDTH, HEIGHT, 0x990099);
-			sprite.x = x;
-			sprite.y = y;
+		protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
+			//sprite = new Quad(WIDTH, HEIGHT, 0x990099);
+			//sprite.x = x;
+			//sprite.y = y;
 			//sprite.graphics.beginFill(0x990099);
 			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
 			//sprite.graphics.endFill();
-			return sprite;
+			return this;
 		}
 		
 		/**

@@ -9,7 +9,7 @@ package {
 
 	/** This keeps a collection of graphics sprites updated with 
 		their physics counterparts */
-	public class GfxPhysObject extends starling.display.Sprite {
+	public class GfxPhysObject extends Sprite {
 
 		protected var m_physics:b2Body;
 		

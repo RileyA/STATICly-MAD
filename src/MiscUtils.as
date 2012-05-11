@@ -5,7 +5,13 @@ package {
 
 	/** A collection of random utilities */
 	public class MiscUtils {
-
+		
+		
+		public static function getDisplayName(levelName:String):String{
+			var l:LevelInfo=loadLevelInfo(levelName);
+			return l.title;
+		}
+		
 		/**
 		* Returns a LevelInfo matching the given level name.
 		*/

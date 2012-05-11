@@ -1,0 +1,6 @@
+[
+
+{"pageloads": [{"log_pl_id": 1, "uid": "cgs_4fac39b96a1f37.43925659", "vid": 1, "cid": 1, "log_ts": 1336686741, "client_ip": "69.91.156.120", "gid": 37, "eid": 0, "pl_detail": "{\"os\":\"Linux 2.6.32-35-generic\",\"language\":\"en\",\"resX\":1024,\"cpu\":\"x86\",\"dpi\":72,\"flash\":\"LNX 11,1,102,55\",\"resY\":600,\"pixelAspect\":0.99871604938272,\"isdebug\":true}", "cd_id": 0}], "levels": [{"qid": 23, "dqid": "dqid_4fac39b96e4b37.16982164", "log_q_ts": 1336686741, "actions": [], "q_detail": null}, {"qid": 38, "dqid": "dqid_4fac39d3d96947.44088417", "log_q_ts": 1336686767, "actions": [{"log_id": 1, "aid": 1, "log_ts": 1336686772, "ts": 4277, "a_detail": "{\"playerC\":0,\"blockC\":1}"}], "q_detail": null}, {"qid": 37, "dqid": "dqid_4fac39f1cdccb3.68265872", "log_q_ts": 1336686797, "actions": [{"log_id": 2, "aid": 1, "log_ts": 1336686799, "ts": 821, "a_detail": "{\"playerC\":0,\"blockC\":1}"}, {"log_id": 3, "aid": 1, "log_ts": 1336686802, "ts": 3327, "a_detail": "{\"playerC\":0,\"blockC\":1}"}, {"log_id": 4, "aid": 1, "log_ts": 1336686805, "ts": 5713, "a_detail": "{\"playerC\":0,\"blockC\":1}"}], "q_detail": null}], "uid": "cgs_4fac39b96a1f37.43925659", "actions": []}
+
+]
+

@@ -16,6 +16,7 @@ package {
 	import Box2D.Collision.*;
 	import Box2D.Common.Math.*;
 	import Box2D.Collision.b2Collision;
+	import Colors;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
@@ -46,6 +47,7 @@ package {
 		private var actionInd:Sprite; // on target of potential action
 		private var actionMid:Sprite; // between player and action target
 		private var actionHit:Sprite; // at player hit action target
+		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
 		
 		private var faceRight:Boolean;
@@ -121,9 +123,8 @@ package {
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
 			
-			//TODO Redo action indicator
 			//actionInd = new Sprite();
-			//actionInd.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionInd.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			//actionInd.graphics.moveTo(-.1, -.1);
 			//actionInd.graphics.lineTo(.1, .1);
 			//actionInd.graphics.moveTo(-.1, .1);
@@ -131,7 +132,7 @@ package {
 			//actionInd.graphics.endFill();
 			//
 			//actionMid = new Sprite();
-			//actionMid.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionMid.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			//actionMid.graphics.moveTo(-.1, -.1);
 			//actionMid.graphics.lineTo(.1, .1);
 			//actionMid.graphics.moveTo(-.1, .1);
@@ -139,13 +140,13 @@ package {
 			//actionMid.graphics.endFill();
 			//
 			//actionHit = new Sprite();
-			//actionHit.graphics.lineStyle(3.0, 0x1A1A1A, .8, false, LineScaleMode.NONE);
+			//actionHit.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
 			//actionHit.graphics.moveTo(-.1, -.1);
 			//actionHit.graphics.lineTo(.1, .1);
 			//actionHit.graphics.moveTo(-.1, .1);
 			//actionHit.graphics.lineTo(.1, -.1);
 			//actionHit.graphics.endFill();
-			//
+			
 			parentSprite.addChild(this);
 			//
 			//parentSprite.addChild(actionInd);
@@ -188,6 +189,16 @@ package {
 			super.updateTransform(pixelsPerMeter);
 			
 			var marker:ActionMarker = getBestAction();
+			
+			if (this.currentlyHinting!=marker){
+				if (this.currentlyHinting!=null){
+					this.currentlyHinting.endHint();
+				}
+				if (marker!=null){
+					marker.startHint();
+				}
+			}
+			
 			if (marker != null) {
 
 				var markerPos:b2Vec2 = marker.fixture.GetBody().GetPosition().Copy();
@@ -220,6 +231,9 @@ package {
 					actionHit.visible = false;
 				}
 			}
+			
+			this.currentlyHinting=marker;
+			
 		}
 		
 		public function getBestAction():ActionMarker {

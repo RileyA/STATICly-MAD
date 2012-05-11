@@ -21,18 +21,27 @@ f.write("""
 		* Load all existing levels into a dictionary
 		*/
 		private static var associativeArray:Object;
+		private static var qidArray:Object;
 		{
 			associativeArray = new Object();
+			qidArray = new Object();
 """)
 
+qid = 1
 for name in names:
-    f.write("""		    associativeArray["{name}"] = {name}_lvl;
-""".format(name=name))
+    f.write("""			associativeArray["{name}"] = {name}_lvl;
+			qidArray["{name}"] = {qid};
+""".format(name=name,qid=qid))
+    qid = qid + 1
 
 f.write("""		}
 
 		public static function getLevelSource(name:String):Class {
 			return associativeArray[name];
+		}
+
+		public static function getLevelQid(name:String):int {
+			return qidArray[name];
 		}
 	}
 }

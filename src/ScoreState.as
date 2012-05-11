@@ -15,7 +15,7 @@ package {
 
 		override public function init():void {
 			var fontSize:int = 30;
-			var fontColor:uint = 0x000000;
+			var fontColor:uint = 0xBBBBBB;
 			var fontStyle:String = "Sans"
 			
 			var hello_text:TextField = new TextField(800, 100, 

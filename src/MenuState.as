@@ -3,6 +3,7 @@ package {
 	import starling.events.*;
 	import starling.text.TextField;
 	import Editor.*;
+	import Colors;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class MenuState extends GameState {
@@ -16,14 +17,14 @@ package {
 
 		override public function init():void {
 			//TODO
-			var hello_text:TextField = new TextField(800,100,"STATICly MAD! Click here for hello world...", "Verdana", 30);
+			var hello_text:TextField = new TextField(800,100,"STATICly MAD! Click here for hello world...", "Verdana", 30, Colors.textColor);
 			hello_text.x = 0;
 			hello_text.y = 150;
 			hello_text.hAlign = "center";
 			hello_text.addEventListener(TouchEvent.TOUCH, clickedPlay);
 			addChild(hello_text);
 			
-			var block_text:TextField = new TextField(800,100,"Or click here for the Overworld!", "Verdana", 30);
+			var block_text:TextField = new TextField(800,100,"Or click here to start the Game!", "Verdana", 30, Colors.textColor);
 			block_text.x = 0;
 			block_text.y = 150;
 			block_text.hAlign = "center";
@@ -57,7 +58,9 @@ package {
 		
 		private function clickedDemo(event:TouchEvent):void {
 			if (!m_done) {
-				m_game.addState(new OverworldState(m_game));
+				var overworldState:OverworldState=new OverworldState(m_game, "DischargeLab");
+				m_game.addState(overworldState);
+				m_game.addState(new LevelState(m_game, "Intro", overworldState));
 			}
 		}
 		

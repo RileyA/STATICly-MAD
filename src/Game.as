@@ -2,8 +2,10 @@ package {
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import flash.utils.getTimer;
-	import GameState;
-
+	import cse481d.Logger;
+	import OverworldState;
+	import flash.utils.Dictionary;
+	
 	/** Manages a stack of game states */
 	public class Game extends Sprite {
 		//private var m_parent:flash.display.Sprite;
@@ -11,33 +13,37 @@ package {
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
 		private var m_newStateReady:Boolean;
+		
+		private var m_overworlds:Dictionary; // name -> overworld
 
 		/** Constructor
 			@param parent Reference to parent sprite */
-		//public function Game(parent:flash.display.Sprite):void {
+		public function Game():void {
+			m_overworlds = new Dictionary();
 			//m_parent = parent;
 			//m_parent.stage.stageFocusRect = false;
-			//m_lastTime = getTimer();
-			//m_currentState = null;
-			//m_states = new Vector.<GameState>;
-			//m_newStateReady = false;
-			//
-			//addEventListener(Event.ADDED_TO_STAGE, onAdded);
-		//}
-		
-		public function Game():void {
 			m_lastTime = getTimer();
 			m_currentState = null;
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
+			LoggerUtils.initLogger();
+		}
+		
+		public function getOverworld(name:String):OverworldState{
+			var x:OverworldState=m_overworlds[name];
+			if (x==null) {
+				x = new OverworldState(this, name);
+				m_overworlds[name]=x;
+			}
+			return x;
 		}
 
 		private function onAdded(e:Event):void {
 			addState(new MenuState(this));
-			addState(new OverworldState(this));
-			addState(new LevelState(this, "Intro"));
+			addState(getOverworld("DischargeLab"));
+			addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
 			update();
 		}
 		
