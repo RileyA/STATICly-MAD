@@ -14,13 +14,12 @@ package {
 		private var m_states:Vector.<GameState>;
 		private var m_newStateReady:Boolean;
 		
-		private var m_overworlds:Dictionary;
-		//private var m_overworlds:Vector.<OverworldState>;
+		private var m_overworlds:Dictionary; // name -> overworld
 
 		/** Constructor
 			@param parent Reference to parent sprite */
 		public function Game(parent:Sprite):void {
-			m_overworlds= new Dictionary();//new Vector.<OverworldState>();
+			m_overworlds= new Dictionary();
 			m_parent = parent;
 			m_parent.stage.stageFocusRect = false;
 			m_lastTime = getTimer();

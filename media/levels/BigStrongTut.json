@@ -1,23 +1,4 @@
 {
-	"playerPosition" : 
-	{
-		"y" : 9.466666666666667,
-		"x" : 1.195,
-		"y_px" : 0,
-		"x_rel" : 0,
-		"x_px" : 0,
-		"y_rel" : 0
-	},
-	"gravity" : 
-	{
-		"y" : 9.8,
-		"x" : 0,
-		"y_px" : 0,
-		"x_rel" : 0,
-		"x_px" : 0,
-		"y_rel" : 0
-	},
-	"targetTime" : 60,
 	"levelSize" : 
 	{
 		"y" : 20,
@@ -27,7 +8,6 @@
 		"x_px" : 0,
 		"y_rel" : 0
 	},
-	"title" : "BigStrongTut",
 	"blocks" : 
 	[
 		{
@@ -45,10 +25,7 @@
 			[
 			"up,exit"
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : -1,
 			"scale" : 
 			{
 				"y" : 1,
@@ -78,7 +55,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : -1
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -94,10 +74,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : true,
+			"chargePolarity" : 1,
 			"scale" : 
 			{
 				"y" : 9.631666666666666,
@@ -127,7 +104,10 @@
 				}
 			],
 			"insulated" : false,
-			"chargePolarity" : 1
+			"surfaces" : 
+			[
+			],
+			"strong" : true
 		},
 		{
 			"position" : 
@@ -143,10 +123,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : true,
+			"chargePolarity" : -1,
 			"scale" : 
 			{
 				"y" : 1.1,
@@ -176,7 +153,10 @@
 				}
 			],
 			"insulated" : false,
-			"chargePolarity" : -1
+			"surfaces" : 
+			[
+			],
+			"strong" : true
 		},
 		{
 			"position" : 
@@ -192,10 +172,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 7.4,
@@ -225,7 +202,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -241,10 +221,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 0.8,
@@ -274,7 +251,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -290,10 +270,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 0.8,
@@ -323,7 +300,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -339,10 +319,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 0.8,
@@ -372,7 +349,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -388,10 +368,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 0.8,
@@ -421,7 +398,10 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		},
 		{
 			"position" : 
@@ -437,10 +417,7 @@
 			"actions" : 
 			[
 			],
-			"surfaces" : 
-			[
-			],
-			"strong" : false,
+			"chargePolarity" : 0,
 			"scale" : 
 			{
 				"y" : 0.8,
@@ -470,7 +447,30 @@
 				}
 			],
 			"insulated" : true,
-			"chargePolarity" : 0
+			"surfaces" : 
+			[
+			],
+			"strong" : false
 		}
-	]
+	],
+	"playerPosition" : 
+	{
+		"y" : 9.465986394557824,
+		"x" : 1.1935374149659865,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x_px" : 0,
+		"y_rel" : 0
+	},
+	"gravity" : 
+	{
+		"y" : 9.8,
+		"x" : 0,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"x_px" : 0,
+		"y_rel" : 0
+	},
+	"targetTime" : 60,
+	"title" : "Cancellation"
 }
