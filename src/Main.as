@@ -4,7 +4,6 @@ package {
 	import flash.events.Event;
 
 	import Game;
-	import MenuState;
 
 	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
 
@@ -15,7 +14,6 @@ package {
 		public function Main():void{
 			Keys.init(this);
 			m_game = new Game(this);
-			m_game.addState(new MenuState(m_game));
 			var overworldState:OverworldState=m_game.getOverworld("DischargeLab");
 			m_game.addState(overworldState);
 			m_game.addState(new LevelState(m_game, "Intro", overworldState));
