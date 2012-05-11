@@ -24,11 +24,16 @@ package {
 		}
 
 		override public function init():void {
-			
+			LoggerUtils.logLevelStart(m_worldName, null);
 		}
 		
 		override public function deinit():void {
 			//m_level = null;
+		}
+
+		/** Called when the state above this is popped and this one is resumed */
+		override public function resume():void {
+			LoggerUtils.logLevelStart(m_worldName, null);
 		}
 
 		/**
@@ -53,8 +58,10 @@ package {
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
 			else if (name.indexOf("Lab") != -1) {
+				LoggerUtils.logLevelEnd({"didwin":true});
 				m_game.replaceState(m_game.getOverworld(name));
 			} else {
+				LoggerUtils.logLevelEnd({"didwin":false});
 				m_game.addState(new LevelState(m_game, name, this));
 			}
 		}

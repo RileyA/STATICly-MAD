@@ -48,8 +48,10 @@ package cse481d
 		 * The system will also automatically log system information such
 		 * as their OS, language settings, etc.
 		 * Returns the logger, which is available for immediate use.
+		 * @param cid The category id to use for this session. All logs will
+		 * have this cid attached, and the logs can be later be filtered by cid.
 		 */
-		public static function initialize(gid:int, name:String, skey:String, data:Object):Logger
+		public static function initialize(gid:int, name:String, skey:String, cid:int, data:Object):Logger
 		{
 			if (gid <= 0 || name == null || skey == null) throw new ArgumentError("invalid game info");
 			
@@ -58,7 +60,7 @@ package cse481d
 			var DOLOG_URL:String = "http://games.cs.washington.edu/cgs/py/cse481d/dolog.py?gid=" + gid.toString() + "&code=304236658355552";
 			
 			logger.server = new CGSServer();
-			var props:CGSServerProps = new CGSServerProps(skey, 0, name, gid, 1, 1, CGSServerConstants.DEV_URL, false, null);
+			var props:CGSServerProps = new CGSServerProps(skey, 0, name, gid, 1, cid, CGSServerConstants.DEV_URL, false, null);
 			logger.server.init(props,false);
 			
 			logger.server.requestUUID(function(uuid:String, failed:Boolean):void {
