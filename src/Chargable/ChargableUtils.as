@@ -20,7 +20,7 @@ package Chargable {
 		}
 
 		public static function matchColorToPolarity(sprite:DisplayObject, polarity:int):void {
-			
+			//
 			//TODO redo change charge polarity gfx
 			//switch (polarity) {
 			//case CHARGE_BLUE:
