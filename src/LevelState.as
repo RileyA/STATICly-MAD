@@ -24,7 +24,7 @@ package {
 			m_levelName = levelName;
 			m_overworldState=overworldState;
 
-			m_timerText = new TextField(50, 50, m_level.getInfo().title+": 0");
+			m_timerText = new TextField(50, 50, "0");
 			m_timerText.x = 10;
 			m_timerText.y = 10;
 			m_timerText.hAlign = "left";
