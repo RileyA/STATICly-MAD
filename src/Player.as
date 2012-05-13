@@ -52,11 +52,8 @@ package {
 		
 		private var faceRight:Boolean;
 		
-		//[Embed(source = "../media/images/avatar.xml", mimeType = "application/octet-stream")]
-		//public static const SpriteSheetXML:Class;
-		//[Embed(source = "../media/images/avatar.png")]
-		//private static const SpriteSheet:Class;
-		//private var m_movie:MovieClip;
+		[Embed(source = "../media/images/avatar.png")]
+		private static const SpriteSheet:Class;
 		
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
