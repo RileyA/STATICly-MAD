@@ -31,13 +31,12 @@ package {
 		private static const DENSITY:Number=20.0;
 		private static const CHARGE_DENSITY:Number=1.5;
 
-		public static const WIDTH:Number = 0.7;
-		public static const HEIGHT:Number = -1.2;
+		public static const WIDTH:Number = .7;
+		public static const HEIGHT:Number = 1.2;
 		public static const HEIGHT_MID:Number = -0.9;
 		public static const HEIGHT_CHARGE:Number = -0.5;
 		public static const HEIGHT_ACTION:Number = -0.5;
-
-		private var m_sprite:Quad;
+		
 		public var chargePolarity:int;
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
@@ -52,15 +51,13 @@ package {
 		
 		private var faceRight:Boolean;
 		
-		//[Embed(source = "../media/images/avatar.png")]
-		//private static const SpriteSheet:Class;
-		
+		private var m_sprite:PlayerSprite;
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
 			var world:b2World=level.world;
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
-			polyShape.SetAsArray([new b2Vec2(0,HEIGHT),new b2Vec2(WIDTH/2,
+			polyShape.SetAsArray([new b2Vec2(0,-HEIGHT),new b2Vec2(WIDTH/2,
 				HEIGHT_MID), new b2Vec2(WIDTH/2,0),new b2Vec2(-WIDTH/2,0),
 					new b2Vec2(-WIDTH/2,HEIGHT_MID)]);
 
@@ -89,7 +86,7 @@ package {
 							)));
 
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
-			m_sprite = new Quad(WIDTH, HEIGHT, 0x333333);
+			m_sprite = new PlayerSprite();
 			m_sprite.x = -WIDTH / 2;
 			addChild(m_sprite);
 			//loadAnimation();
@@ -111,7 +108,7 @@ package {
 			fd = new b2FixtureDef();
 			fd.density=0;
 			actionShape = new b2PolygonShape();
-			actionShape.SetAsArray([new b2Vec2(0,HEIGHT-m),
+			actionShape.SetAsArray([new b2Vec2(0,-HEIGHT-m),
 				new b2Vec2(WIDTH/2+m,HEIGHT_MID-m),
 				new b2Vec2(WIDTH/2+m,m),new b2Vec2(-WIDTH/2-m,m),
 				new b2Vec2(-WIDTH/2-m,HEIGHT_MID-m)]);
