@@ -1,5 +1,8 @@
 package {
+	import flash.display.Bitmap;
+	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.textures.Texture;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import flash.ui.Keyboard;
@@ -16,15 +19,17 @@ package {
 		private var m_timerText:TextField;
 		private var m_overworldState:OverworldState;
 
-		//[Embed(source = "../media/images/TiledBackground.jpg")]
-		//private static const background:Class;
+		[Embed(source = "../media/images/TiledBackground.jpg")]
+		private static const Background:Class;
 		
 		public function LevelState(game:Game, levelName:String, overworldState:OverworldState):void {
 			super(game);
 			m_levelName = levelName;
 			m_overworldState=overworldState;
 
-			m_timerText = new TextField(50, 50, "0");
+			tileBG(Background);
+			
+			m_timerText = new TextField(50, 50, "0","Sans",12,Colors.textColor);
 			m_timerText.x = 10;
 			m_timerText.y = 10;
 			m_timerText.hAlign = "left";

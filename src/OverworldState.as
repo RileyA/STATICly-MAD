@@ -1,7 +1,10 @@
 package {
 
+	import flash.display.Bitmap;
 	import starling.display.Sprite;
 	import starling.display.DisplayObject;
+	import starling.textures.Texture;
+	import starling.display.Image;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
@@ -15,15 +18,19 @@ package {
 		private var m_worldName:String;
 		private var completedLevels:Vector.<String>;
 		
+		[Embed(source = "../media/images/TiledBackground.jpg")]
+		private static const Background:Class;
 		
 		public function OverworldState(game:Game, worldName:String):void {
 			completedLevels=new Vector.<String>();
 			super(game);
 			m_worldName = worldName;
+			tileBG(Background);
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_worldName));
 			updateDoors();
+			
 		}
-
+		
 		override public function init():void {
 			LoggerUtils.logLevelStart(m_worldName, null);
 		}
