@@ -29,11 +29,12 @@ package Actioners {
 			
 			//var format:TextFormat = new TextFormat("Sans", 1, Colors.textColor);
 			//format.align = TextFormatAlign.CENTER;
-			var textWidth:Number=WIDTH*16;
-			textSprite = new TextField(textWidth, 10, "", "Sans", 1, Colors.textColor);
+			var textScale:Number=.03;
+			var textWidth:Number=WIDTH*200;
+			var textSize:Number=16.0;
+			textSprite = new TextField(textWidth, 1.5*textSize, "0","Sans",textSize,Colors.textColor);
 			textSprite.hAlign = "center";
-			var textScale:Number=.5;
-			textSprite.height = 10;
+			
 			textSprite.x = -textWidth / 2 * textScale;
 			m_levelTitle=MiscUtils.getDisplayName(levelName);
 			
@@ -78,7 +79,7 @@ package Actioners {
 				door.y = -HEIGHT / 2 + y;
 				s.addChild(door);
 				
-				textSprite.y = HEIGHT / 2 + y + HEIGHT - .3;
+				textSprite.y = HEIGHT / 2 + y - .1 - textSprite.height;
 				s.addChild(textSprite);
 			}
 			return s;

@@ -1,14 +1,7 @@
 package {
-	import flash.display.Bitmap;
-	import starling.display.Image;
-	import starling.display.Sprite;
-	import starling.textures.Texture;
-	import starling.events.Event;
 	import starling.text.TextField;
-	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
-	import starling.events.Event;
 	import Colors;
 
 	/** A basic level gameplay state */
@@ -29,7 +22,7 @@ package {
 
 			tileBG(Background);
 			
-			m_timerText = new TextField(50, 50, "0","Sans",12,Colors.textColor);
+			m_timerText = new TextField(200, 50, "0","Sans",12,Colors.textColor);
 			m_timerText.x = 10;
 			m_timerText.y = 10;
 			m_timerText.hAlign = "left";
