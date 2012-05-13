@@ -52,8 +52,42 @@ package {
 		
 		private var faceRight:Boolean;
 		
-		//[Embed(source = "../media/images/avatar.png")]
-		//private static const SpriteSheet:Class;
+		[Embed(source = "../media/images/MaddyNeutralFalling.png")]
+		private static const n_falling:Class;
+		[Embed(source = "../media/images/MaddyNeutralFloating.png")]
+		private static const n_floating:Class;
+		[Embed(source = "../media/images/MaddyNeutralJumping.png")]
+		private static const n_jumping:Class;
+		[Embed(source = "../media/images/MaddyNeutralRunning1.png")]
+		private static const n_running1:Class;
+		[Embed(source = "../media/images/MaddyNeutralRunning2.png")]
+		private static const n_running2:Class;
+		[Embed(source = "../media/images/MaddyNeutralStanding.png")]
+		private static const n_standing:Class;
+		[Embed(source = "../media/images/MaddyBlueFalling.png")]
+		private static const b_falling:Class;
+		[Embed(source = "../media/images/MaddyBlueFloating.png")]
+		private static const b_floating:Class;
+		[Embed(source = "../media/images/MaddyBlueJumping.png")]
+		private static const b_jumping:Class;
+		[Embed(source = "../media/images/MaddyBlueRunning1.png")]
+		private static const b_running1:Class;
+		[Embed(source = "../media/images/MaddyBlueRunning2.png")]
+		private static const b_running2:Class;
+		[Embed(source = "../media/images/MaddyBlueStanding.png")]
+		private static const b_standing:Class;
+		[Embed(source = "../media/images/MaddyRedFalling.png")]
+		private static const r_falling:Class;
+		[Embed(source = "../media/images/MaddyRedFloating.png")]
+		private static const r_floating:Class;
+		[Embed(source = "../media/images/MaddyRedJumping.png")]
+		private static const r_jumping:Class;
+		[Embed(source = "../media/images/MaddyRedRunning1.png")]
+		private static const r_running1:Class;
+		[Embed(source = "../media/images/MaddyRedRunning2.png")]
+		private static const r_running2:Class;
+		[Embed(source = "../media/images/MaddyRedStanding.png")]
+		private static const r_standing:Class;
 		
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
