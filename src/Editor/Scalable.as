@@ -37,8 +37,26 @@ package Editor {
 				scale_y - WIDGET_DIMENSIONS, WIDGET_DIMENSIONS, WIDGET_DIMENSIONS));
 			for (var i:uint = 0; i < m_corners.length; ++i) {
 				addChild(m_corners[i]);
-				m_corners[i].snapOffsetX = WIDGET_DIMENSIONS/2;
-				m_corners[i].snapOffsetY = WIDGET_DIMENSIONS/2;
+				//m_corners[i].snapOffsetX = WIDGET_DIMENSIONS/2;
+				//m_corners[i].snapOffsetY = WIDGET_DIMENSIONS/2;
+			}
+
+			m_corners[0].snapOffsetX = 0;
+			m_corners[0].snapOffsetY = 0;
+			m_corners[1].snapOffsetX = 0;
+			m_corners[1].snapOffsetY = 0;
+			m_corners[2].snapOffsetX = 0;
+			m_corners[2].snapOffsetY = 0;
+			m_corners[3].snapOffsetX = 0;
+			m_corners[3].snapOffsetY = 0;
+			snapOffsetX = 0;
+			snapOffsetY = 0;
+		}
+
+		override public function setParentContext(p:DisplayObjectContainer):void {
+			par = p;
+			for (var i:uint = 0; i < m_corners.length; ++i) {
+				m_corners[i].par = this;
 			}
 		}
 
@@ -69,8 +87,16 @@ package Editor {
 		}
 
 		override public function grab(e:MouseEvent):void{
-
 			if (!isTarget(e.target as Sprite)) {
+
+				m_corners[0].snapOffsetX = 0;
+				m_corners[0].snapOffsetY = 0;
+				m_corners[1].snapOffsetX = 0;
+				m_corners[1].snapOffsetY = 0;
+				m_corners[2].snapOffsetX = 0;
+				m_corners[2].snapOffsetY = 0;
+				m_corners[3].snapOffsetX = 0;
+				m_corners[3].snapOffsetY = 0;
 
 				var index:uint = m_corners.length;
 				beginDrag();
@@ -98,6 +124,13 @@ package Editor {
 					return;
 				}
 
+				if (m_corners[index2].x < m_corners[index].x) {
+					m_corners[index].snapOffsetX = WIDGET_DIMENSIONS;
+				}
+				if (m_corners[index2].y < m_corners[index].y) {
+					m_corners[index].snapOffsetY = WIDGET_DIMENSIONS;
+				}
+
 				m_dragging = true;
 				m_drag = index;
 				m_anchor = index2;
@@ -117,7 +150,7 @@ package Editor {
 			}
 		}
 
-		override public function drop(e:MouseEvent):void {
+		override public function drop(e:Event):void {
 			if (!isTarget(e.target as Sprite)) {
 				stage.removeEventListener(MouseEvent.MOUSE_UP, drop);
 				stage.removeEventListener(MouseEvent.MOUSE_MOVE, drag);
@@ -177,14 +210,37 @@ package Editor {
 				m_children[i].scaleY = (Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
 					- m_children[i].y + WIDGET_DIMENSIONS) / m_scale_y;
 			}
+
+			m_scalepx_x = Math.max(m_corners[m_anchor].x, m_corners[m_drag].x) 
+				- Math.min(m_corners[m_anchor].x, m_corners[m_drag].x) + WIDGET_DIMENSIONS;
+			m_scalepx_y = Math.max(m_corners[m_anchor].y, m_corners[m_drag].y) 
+				- Math.min(m_corners[m_anchor].y, m_corners[m_drag].y) + WIDGET_DIMENSIONS;
 		}
 
 		public function forceScale(sx:Number, sy:Number):void {
+
+			//var index:uint = 0;
+			//var minx:Number = 5000;
+			//var miny:Number = 5000;
+			//for (var i:uint = 0; i < 4; ++i) {
+			//	if (m_conrers[i].x == minx)
+			//}
+
+			/*for (i = 0; i  < 4; ++i) {
+				if (i != m_anchor) {
+					m_corners[i].x = sx - ((m_corners[i].x > m_corners[m_anchor].x) ? WIDGET_DIMENSIONS : 0);
+					m_corners[i].y = sy - ((m_corners[i].y > m_corners[m_anchor].y) ? WIDGET_DIMENSIONS : 0);
+				}
+			}
+
+			m_corners[m_drag].x = sx + WIDGET_DIMENSIONS;
+			m_corners[m_drag].y = sy + WIDGET_DIMENSIONS;*/
+
 			m_corners[0].x = 0;
 			m_corners[0].y = 0;
 			m_corners[1].x = sx - WIDGET_DIMENSIONS;
 			m_corners[1].y = sy - WIDGET_DIMENSIONS;
-			m_corners[2].x = 0;
+			m_corners[2].x = 0;;//
 			m_corners[2].y = sy - WIDGET_DIMENSIONS;
 			m_corners[3].x = sx - WIDGET_DIMENSIONS;
 			m_corners[3].y = 0;

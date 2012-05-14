@@ -9,7 +9,7 @@ package {
 		
 		public static function getDisplayName(levelName:String):String{
 			var l:LevelInfo=loadLevelInfo(levelName);
-			return l.title;
+			return l?l.title:"";
 		}
 		
 		/**
@@ -17,6 +17,7 @@ package {
 		*/
 		public static function loadLevelInfo(name:String):LevelInfo {
 			var sourceClass:Class = LevelAssets.getLevelSource(name);
+			if (!sourceClass)return null;
 			var info:LevelInfo = new LevelInfo();
 			loadJSON(new sourceClass() as ByteArray, info);
 			return info;

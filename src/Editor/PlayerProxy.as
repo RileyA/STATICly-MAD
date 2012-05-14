@@ -25,6 +25,7 @@ package Editor {
 			m_child = p;
 			super(p.x - Player.WIDTH * p.scaleX / 2, p.y,
 				Player.WIDTH * p.scaleX, Player.HEIGHT * p.scaleY);
+			super.setSnap(p.scaleX * snapTo);
 		}
 
 		override public function reposition():void {
