@@ -9,6 +9,7 @@ package {
 	import Surfaces.*;
 	import Actioners.*;
 	import Chargable.*;
+	import starling.utils.Color;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -235,7 +236,28 @@ package {
 		}
 		
 		private function redraw():void{
-			ChargableUtils.matchColorToPolarity(sprite, chargePolarity);
+			//ChargableUtils.matchColorToPolarity(sprite, chargePolarity, strong);
+			var main:uint=0xFF;
+			var off:uint=strong?0x10:0xA0;
+			
+			const blue:uint = Color.rgb(off,off,main);
+			const none:uint = strong?0x999999:0xFFFFFF;
+			const red:uint =  Color.rgb(main,off,off);
+			
+
+			switch (chargePolarity) {
+			case ChargableUtils.CHARGE_BLUE:
+				sprite.color = blue;
+				break;
+			case ChargableUtils.CHARGE_RED:
+				sprite.color = red;
+				break;
+			default:
+				sprite.color = none;
+				break;
+			}
+			
+			
 			drawnChargePolarity=chargePolarity;
 		}
 		

@@ -246,7 +246,6 @@ package {
 		}
 		
 		public function update(level:Level):void {
-			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 			
 			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
 			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
@@ -401,7 +400,6 @@ package {
 		public function groundPlayer():void {
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
-			ChargableUtils.matchColorToPolarity(this, chargePolarity);
 		}
 
 		/**
