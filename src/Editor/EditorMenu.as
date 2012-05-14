@@ -135,14 +135,14 @@ package Editor {
 			resetButton = new SimpleButton();
 			makeButtonStates(resetButton, "Reset (R)", 70, 12, textButtonFormat);
 			resetButton.x = 4;
-			resetButton.y = 360;
+			resetButton.y = 410;
 			resetButton.height = 12;
 			body.addChild(resetButton);
 
 			pauseButton = new SimpleButton();
 			makeActiveButtonStates(pauseButton, "Pause (P)", 70, 12, textButtonFormat);
 			pauseButton.x = 75;
-			pauseButton.y = 360;
+			pauseButton.y = 410;
 			pauseButton.height = 12;
 			body.addChild(pauseButton);
 		}

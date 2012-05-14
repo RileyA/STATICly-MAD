@@ -218,9 +218,9 @@ package Editor {
 				}
 
 				if (!m_level.update(delta)) {
-					if (!m_paused) togglePause();
 					doReset();
 					m_level.resetLevel();
+					if (!m_paused) togglePause();
 				}
 			}
 
@@ -236,8 +236,8 @@ package Editor {
 				var info:BlockInfo = new BlockInfo();
 				info.scale.x = 1;
 				info.scale.y = 1;
-				info.position.x = m_levelSprite.mouseX / m_level.pixelsPerMeter;
-				info.position.y = m_levelSprite.mouseY / m_level.pixelsPerMeter;
+				info.position.x = Math.round((m_levelSprite.mouseX / m_level.pixelsPerMeter)/0.25) * 0.25;
+				info.position.y = Math.round((m_levelSprite.mouseY / m_level.pixelsPerMeter)/0.25) * 0.25;
 				info.movement = "fixed";
 				info.insulated = false;
 				info.strong = false;

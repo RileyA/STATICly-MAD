@@ -174,11 +174,13 @@ package Editor {
 			trackPos2.y = 114;
 			form.addChild(trackPos2);
 
-			function assignSelections(input:Vector.<String>, types:Vector.<String>, out:Vector.<int>):void {
+			function assignSelections(input:Vector.<String>, types:Vector.<String>, out:Vector.<int>,
+				extras:Vector.<String>=null):void {
 				for (var i:uint = 0; i < input.length; ++i) {
 					var j:uint = 0;
-					var direct:String = input[i].split(",")[0];
-					var objType:String = input[i].split(",")[1];
+					var strs:Array = input[i].split(",");
+					var direct:String = strs[0];
+					var objType:String = strs[1];
 					if (direct == "up") j = 0;
 					else if (direct == "down") j = 1;
 					else if (direct == "left") j = 2;
@@ -186,6 +188,15 @@ package Editor {
 					for (var k:uint = 0; k < types.length; ++k) {
 						if (types[k] == objType) {
 							out[j] = k;
+							if (extras)
+							{
+								var extraStr:String = "";
+								for (var m:uint = 2; m < strs.length; ++m) {
+									if(strs[m] == "") break;
+									extraStr += (m>2?",":"") + strs[m];
+								}
+								extras[j] = extraStr;
+							}
 							continue;
 						}
 					}
@@ -193,22 +204,26 @@ package Editor {
 			}
 
 			var sopts:Vector.<String> = new Vector.<String>();
+			var sxtras:Vector.<String> = null;//new Vector.<String>();
 			var ssels:Vector.<int> = new Vector.<int>();
 			sopts.push("None", "bcarpet", "rcarpet", "ground");
+			//sxtras.push("", "", "", "");
 			ssels.push(0,0,0,0);
-			assignSelections(m_child.getInfo().surfaces, sopts, ssels);
+			assignSelections(m_child.getInfo().surfaces, sopts, ssels, sxtras);
 			
-			surfaceElems = new BlockElementForm(sopts, ssels);
+			surfaceElems = new BlockElementForm(sopts, ssels, sxtras);
 			surfaceElems.x = 4;
 			surfaceElems.y = 145;
 			form.addChild(surfaceElems);
 
 			var aopts:Vector.<String> = new Vector.<String>();
 			var asels:Vector.<int> = new Vector.<int>();
-			aopts.push("None", "exit", "computer");
+			var axtras:Vector.<String> = new Vector.<String>();
+			aopts.push("None", "exit", "entrance", "computer");
+			axtras.push("Intro", "Intro", "Intro", "Intro");
 			asels.push(0,0,0,0);
-			assignSelections(m_child.getInfo().actions, aopts, asels);
-			actionElems = new BlockElementForm(aopts, asels);
+			assignSelections(m_child.getInfo().actions, aopts, asels, axtras);
+			actionElems = new BlockElementForm(aopts, asels, axtras);
 			actionElems.x = 4;
 			actionElems.y = 220;
 			form.addChild(actionElems);
@@ -283,8 +298,13 @@ package Editor {
 			temp.push("up", "down", "left", "right");
 			for (var i:uint = 0; i < 4; ++i) {
 				if (actionElems.options[actionElems.selections[i]] != "None") {
+					var extraInfo:String = "";
+					if (actionElems.extras != null && actionElems.extras[i] != "")
+						extraInfo += "," + actionElems.extras[i];
+					else if (actionElems.extras != null)
+						extraInfo = ",NULL";
 					m_child.getInfo().actions.push(temp[i] + ","
-						+ actionElems.options[actionElems.selections[i]]);
+						+ actionElems.options[actionElems.selections[i]] + extraInfo);
 				}
 			}
 			for (i = 0; i < 4; ++i) {

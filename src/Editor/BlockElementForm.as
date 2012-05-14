@@ -17,23 +17,28 @@ package Editor {
 		
 		private var labels:Vector.<TextField>;
 		private var selectionLabels:Vector.<TextField>;
+		private var extraBoxes:Vector.<TextField>;
 		private var leftBtns:Vector.<SimpleButton>;
 		private var rightBtns:Vector.<SimpleButton>;
 		public var options:Vector.<String>;
 		public var selections:Vector.<int>;
+		public var extras:Vector.<String>;
 		
 		public function BlockElementForm(opts:Vector.<String>, 
-			vals:Vector.<int>):void {
+			vals:Vector.<int>, extra:Vector.<String>=null):void {
 			labels = new Vector.<TextField>();
+			extraBoxes = new Vector.<TextField>();
 			selectionLabels = new Vector.<TextField>();
 			leftBtns = new Vector.<SimpleButton>();
 			rightBtns = new Vector.<SimpleButton>();
 			options = opts;
 			selections = vals;
+			extras = extra;
+			var step:Number = extras?30:15;
 			makeDirection("UP", 0, 0);
-			makeDirection("DOWN", 15, 1);
-			makeDirection("LEFT", 30, 2);
-			makeDirection("RIGHT", 45, 3);
+			makeDirection("DOWN", step, 1);
+			makeDirection("LEFT", step*2, 2);
+			makeDirection("RIGHT", step*3, 3);
 		}
 
 		private function makeDirection(dir:String, ypos:Number, i:int):void {
@@ -82,6 +87,25 @@ package Editor {
 			btn.addEventListener(MouseEvent.CLICK, clickedRight);
 			addChild(btn);
 			rightBtns.push(btn);
+
+			
+			if (extras)
+			{
+				extraBoxes.push(new TextField());
+				extraBoxes[i].defaultTextFormat = textFormat;
+				extraBoxes[i].x = 3;
+				extraBoxes[i].y = ypos + 15;
+				extraBoxes[i].width = 134;
+				extraBoxes[i].height = 12;
+				extraBoxes[i].type = TextFieldType.INPUT;
+				extraBoxes[i].border = true;
+				extraBoxes[i].alpha = 1;
+				extraBoxes[i].addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+				extraBoxes[i].addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+				extraBoxes[i].addEventListener(Event.CHANGE, changedExtra);
+				extraBoxes[i].text = extras[i];
+				addChild(extraBoxes[i]);
+			}
 		}
 
 		public function clickedLeft(e:MouseEvent):void {
@@ -110,6 +134,15 @@ package Editor {
 					return;
 				}
 			}
+		}
+
+		public function changedExtra(e:Event):void {
+			for (var i:uint = 0; i < 4; ++i) {
+				if (e.target == extraBoxes[i]) {
+					extras[i] = extraBoxes[i].text;
+				}
+			}
+			dispatchEvent(new Event(Event.CHANGE));
 		}
 
 		public function getSelection(dir:String):String {

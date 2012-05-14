@@ -165,6 +165,7 @@ package {
 				actioners[i].cleanup();
 			var world:b2World = m_physics.GetWorld();
 			world.DestroyBody(m_physics);
+			m_physics = null;
 			for (i = 0; i < joints.length; ++i)
 				world.DestroyJoint(joints[i]);
 			while (numChildren > 0)
