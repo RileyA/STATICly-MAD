@@ -220,7 +220,7 @@ package Editor {
 			var asels:Vector.<int> = new Vector.<int>();
 			var axtras:Vector.<String> = new Vector.<String>();
 			aopts.push("None", "exit", "entrance", "computer");
-			axtras.push("Intro", "Intro", "Intro", "Intro");
+			axtras.push("", "", "", "");
 			asels.push(0,0,0,0);
 			assignSelections(m_child.getInfo().actions, aopts, asels, axtras);
 			actionElems = new BlockElementForm(aopts, asels, axtras);
@@ -302,7 +302,7 @@ package Editor {
 					if (actionElems.extras != null && actionElems.extras[i] != "")
 						extraInfo += "," + actionElems.extras[i];
 					else if (actionElems.extras != null)
-						extraInfo = ",NULL";
+						extraInfo = ",";
 					m_child.getInfo().actions.push(temp[i] + ","
 						+ actionElems.options[actionElems.selections[i]] + extraInfo);
 				}
