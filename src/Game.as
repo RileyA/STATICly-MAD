@@ -18,7 +18,7 @@ package {
 
 		/** Constructor
 			@param parent Reference to parent sprite */
-		public function Game(parent:Sprite):void {
+		public function Game(parent:Sprite, logSession:Boolean = true):void {
 			m_overworlds= new Dictionary();
 			m_parent = parent;
 			m_parent.stage.stageFocusRect = false;
@@ -27,7 +27,8 @@ package {
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
 
-			LoggerUtils.initLogger();
+			if (logSession)
+				LoggerUtils.initLogger();
 		}
 		
 		public function getOverworld(name:String):OverworldState{

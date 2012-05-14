@@ -29,7 +29,7 @@ package Editor {
 		
 		public function EditorMenu(name:String):void {
 			super(0,0,150,15);
-			super.setSnap(20);
+			super.setSnap(1);
 			body = new Sprite();
 			body.y = 15;
 			addChild(body);
@@ -42,7 +42,7 @@ package Editor {
 			var s:Shape = new Shape();
 			s.graphics.beginFill(0xcccccc);
 			s.graphics.lineStyle(2.0,0x777777,1.0,false,LineScaleMode.NONE);
-			s.graphics.drawRect(1,0,148,375);
+			s.graphics.drawRect(1,0,148,425);
 			s.graphics.endFill();
 			body.addChild(s);
 			body.alpha = 0.9;
@@ -64,7 +64,7 @@ package Editor {
 
 			focusedCaption = new TextField();
 			focusedCaption.defaultTextFormat = textFormat;
-			focusedCaption.text = "Selected: Nothing";
+			focusedCaption.text = "Selected: ";
 			focusedCaption.x = 4;
 			focusedCaption.y = 54;
 			focusedCaption.width = 140;

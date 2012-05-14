@@ -14,7 +14,7 @@ package {
 
 		public function EditorMain():void{
 			Keys.init(this);
-			m_game = new Game(this);
+			m_game = new Game(this, false);
 			m_game.addState(new EditorState(m_game));
 			addEventListener(Event.ENTER_FRAME, update);
 		}
