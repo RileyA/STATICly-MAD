@@ -12,6 +12,7 @@ package {
 	import Player;
 	import Chargable.*;
 	import Config
+	import starling.core.Starling;
 
 	public class Level {
 
@@ -26,7 +27,7 @@ package {
 		private var m_updatePhysics:Boolean;
 		private var m_debugDraw:Boolean;
 		private var m_debugDrawKey:Boolean;
-		private var m_debugSprite:Sprite;
+		private var m_debugSprite:flash.display.Sprite;
 		private var m_player:Player;
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_blocks:Vector.<Block>;
@@ -81,7 +82,7 @@ package {
 			m_gfxPhysObjects.push(m_player);
 
 			// prep debug stuff
-			//prepareDebugVisualization();
+			prepareDebugVisualization();
 		}
 
 		public function addBlock(b:Block):void {
@@ -168,17 +169,17 @@ package {
 			return m_player;
 		}
 
-		//private function prepareDebugVisualization():void {
-			//m_debugSprite = new Sprite();
-			//m_parent_sprite.addChild(m_debugSprite);
-			//var debugDraw:b2DebugDraw = new b2DebugDraw();
-			//debugDraw.SetSprite(m_debugSprite);
-			//debugDraw.SetDrawScale(pixelsPerMeter);
-			//debugDraw.SetFillAlpha(0.3);
-			//debugDraw.SetLineThickness(1.0);
-			//debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-			//world.SetDebugDraw(debugDraw);
-		//}
+		private function prepareDebugVisualization():void {
+			m_debugSprite = new flash.display.Sprite();
+			Starling.current.nativeOverlay.addChild(m_debugSprite);
+			var debugDraw:b2DebugDraw = new b2DebugDraw();
+			debugDraw.SetSprite(m_debugSprite);
+			debugDraw.SetDrawScale(pixelsPerMeter);
+			debugDraw.SetFillAlpha(0.3);
+			debugDraw.SetLineThickness(1.0);
+			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+			world.SetDebugDraw(debugDraw);
+		}
 
 		private function buildBounds():void {
 

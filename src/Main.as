@@ -3,6 +3,7 @@ package {
 	import starling.core.Starling;
 	import flash.events.Event;
 	import starling.events.Event;
+	import Config;
 
 	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
 
@@ -14,7 +15,8 @@ package {
 		public function Main():void {
 			super();
 			m_starling = new Starling(Game, stage);
-			m_starling.antiAliasing = .5;
+			m_starling.antiAliasing = 0; // 0 to 16. 0=fast, 2=pretty good looking
+			m_starling.showStats=Config.debug;
 			m_starling.start();			
 			addEventListener(flash.events.Event.ENTER_FRAME, update);
 			Keys.init(this);
