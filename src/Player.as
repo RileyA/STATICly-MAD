@@ -86,7 +86,7 @@ package {
 							)));
 
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
-			m_sprite = new PlayerSprite();
+			m_sprite = new PlayerSprite(this);
 			m_sprite.x = -WIDTH / 2;
 			addChild(m_sprite);
 			//loadAnimation();
@@ -155,29 +155,6 @@ package {
 			s.x = pos.x * pixelsPerMeter;
 			s.y = pos.y * pixelsPerMeter;
 		}
-		
-		//private function loadAnimation():void {
-			 //creates the embedded bitmap (spritesheet file)
-			//var bitmap:Bitmap = new SpriteSheet();
-			//
-			 //creates a texture out of it
-			//var texture:Texture = Texture.fromBitmap(bitmap);
-			//
-			 //creates the XML file detailing the frames in the spritesheet
-			//var xml:XML = XML(new SpriteSheetXML());
-			//
-			 //creates a texture atlas (binds the spritesheet and XML description)
-			//var sTextureAtlas:TextureAtlas = new TextureAtlas(texture, xml);
-			//
-			 //retrieve the frames the running boy frames
-			//var frames:Vector.<Texture> = sTextureAtlas.getTextures("running_");
-			//
-			 //creates a MovieClip playing at 40fps
-			//m_movie = new MovieClip(frames, 40);
-			//
-			 //show it
-			//addChild(m_movie);
-		//}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
 			super.updateTransform(pixelsPerMeter);
@@ -299,9 +276,6 @@ package {
 			
 			// do movement //
 			// get contacts with feet
-			function jumpFilter(a:*,b:*):Boolean{
-				return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
-			}
 			
 			var footContacts:Vector.<*>=PhysicsUtils.getCollosions(m_physics,jumpFilter,PhysicsUtils.OUT_EDGE);
 			var canJump:Boolean=footContacts.length>0;
@@ -348,6 +322,12 @@ package {
 				// That should be the same as this:
 				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
+			
+			m_sprite.update(this);
+		}
+		
+		private function jumpFilter(a:*,b:*):Boolean{
+			return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
 		}
 		
 		private function groundCollision():void {
@@ -435,6 +415,14 @@ package {
 			return charges;
 		}
 
+		public function jumpable():Boolean {
+			return PhysicsUtils.getCollosions(m_physics,jumpFilter,PhysicsUtils.OUT_EDGE).length > 0;
+		}
+		
+		public function facingRight():Boolean {
+			return faceRight;
+		}
+		
 		/**
 		* Returns the b2Body of this Chargable for physics operations.
 		*/
