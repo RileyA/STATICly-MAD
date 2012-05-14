@@ -3,7 +3,7 @@
 
 OUT = STATIClyMAD.swf
 OUT_ED = Editor.swf
-OPTS = -static-link-runtime-shared-libraries=true
+OPTS = -static-link-runtime-shared-libraries=true -use-direct-blit=true
 CC = mxmlc
 
 all: main ed
@@ -17,4 +17,3 @@ clean:
 
 levels:
 	python LevelCompiler.py
-	

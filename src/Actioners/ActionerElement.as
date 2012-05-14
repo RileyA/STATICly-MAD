@@ -1,7 +1,6 @@
 package Actioners
 {
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Quad;
 	import starling.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.*;
@@ -18,6 +17,8 @@ package Actioners
 
 		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.0;
+
+		protected var spriteContainer:DisplayObjectContainer;
 		protected var actionString:String;
 
 		/**
@@ -44,12 +45,6 @@ package Actioners
 		}
 
 		protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
-			//sprite = new Quad(WIDTH, HEIGHT, 0x990099);
-			//sprite.x = x;
-			//sprite.y = y;
-			//sprite.graphics.beginFill(0x990099);
-			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
-			//sprite.graphics.endFill();
 			return this;
 		}
 		
