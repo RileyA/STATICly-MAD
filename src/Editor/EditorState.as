@@ -73,6 +73,7 @@ package Editor {
 
 			m_menu = new EditorMenu("New Level");
 			addChild(m_menu);
+			m_menu.setParentContext(this);
 			addEventListener(MouseEvent.CLICK, addBlock);
 			addEventListener(MouseEvent.MOUSE_DOWN, handleFocus);
 			m_menu.saveButton.addEventListener(MouseEvent.CLICK, save);
@@ -113,9 +114,11 @@ package Editor {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
 				m_blocks.push(proxy);
 				m_levelSprite.addChild(proxy);
+				proxy.setParentContext(m_levelSprite);
 			}
 			m_player = new PlayerProxy(m_level.getPlayer());
 			m_levelSprite.addChild(m_player);
+			m_player.setParentContext(m_levelSprite);
 		}
 
 		private function selectionComplete(e:Event):void {
@@ -200,6 +203,7 @@ package Editor {
 						var proxy:BlockProxy = new BlockProxy(newBlock);
 						m_blocks.push(proxy);
 						m_levelSprite.addChild(proxy);
+						proxy.setParentContext(m_levelSprite);
 						m_levelSprite.swapChildren(newBlock, m_player.getPlayer());
 						m_levelSprite.swapChildren(proxy, m_player);
 						if (!m_widgetsHidden) {
@@ -244,6 +248,7 @@ package Editor {
 				var proxy:BlockProxy = new BlockProxy(newBlock);
 				m_blocks.push(proxy);
 				m_levelSprite.addChild(proxy);
+				proxy.setParentContext(m_levelSprite);
 				m_levelSprite.swapChildren(newBlock, m_player.getPlayer());
 				m_levelSprite.swapChildren(proxy, m_player);
 				if (!m_widgetsHidden) {
@@ -316,6 +321,7 @@ package Editor {
 			m_level.update(0);
 			m_player = new PlayerProxy(m_level.getPlayer());
 			m_levelSprite.addChild(m_player);
+			m_player.setParentContext(m_levelSprite);
 			m_blocks = new Vector.<BlockProxy>;
 			m_levelLoaded = true;
 			if (!m_paused) togglePause();

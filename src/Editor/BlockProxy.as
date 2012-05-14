@@ -39,7 +39,9 @@ package Editor {
 			var sc:UVec2 = b.getScale();
 			super(b.x - sc.x * b.scaleX / 2, b.y -sc.y * b.scaleY / 2,
 				sc.x * b.scaleX, sc.y * b.scaleY);
-			super.setSnap(b.scaleX);
+			super.setSnap(b.scaleX * snapTo);
+			snapOffsetX = 0;
+			snapOffsetY = 0;
 		}
 
 		override public function reposition():void {
@@ -52,10 +54,12 @@ package Editor {
 				y + m_children[0].y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
+			posVec.setValue(pos);
 			pos.x += sc.x/2;
 			pos.y += sc.y/2;
 			m_child.setPosition(pos);
 			m_child.clearVelocity();
+			scaleVec.setValue(sc);
 		}
 
 		override public function beginDrag():void {
@@ -79,6 +83,7 @@ package Editor {
 			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
 			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
 			m_child.reinit();
+			//populateForm();
 		}
 
 		public function gainFocus():void {

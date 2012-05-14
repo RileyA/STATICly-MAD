@@ -29,6 +29,7 @@ package Editor {
 		
 		public function EditorMenu(name:String):void {
 			super(0,0,150,15);
+			super.setSnap(20);
 			body = new Sprite();
 			body.y = 15;
 			addChild(body);
