@@ -1,0 +1,192 @@
+{
+	"blocks" : 
+	[
+		{
+			"bounds" : 
+			[
+						{
+					"x_px" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				},
+						{
+					"x_px" : 0,
+					"y" : 1,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				}
+			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 0.875,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 3.875
+			},
+			"actions" : 
+			[
+			],
+			"chargePolarity" : 0,
+			"insulated" : false,
+			"surfaces" : 
+			[
+			"up,ground",
+			"down,ground",
+			"left,ground",
+			"right,ground"
+			],
+			"movement" : "tracked",
+			"strong" : false,
+			"scale" : 
+			{
+				"x_px" : 0,
+				"y" : 0.75,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 0.75
+			}
+		},
+		{
+			"bounds" : 
+			[
+						{
+					"x_px" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				},
+						{
+					"x_px" : 0,
+					"y" : 1,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				}
+			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 3.25,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 3.125
+			},
+			"actions" : 
+			[
+			],
+			"chargePolarity" : 0,
+			"insulated" : true,
+			"surfaces" : 
+			[
+			"up,bcarpet",
+			"right,ground"
+			],
+			"movement" : "free",
+			"strong" : false,
+			"scale" : 
+			{
+				"x_px" : 0,
+				"y" : 1,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 1.25
+			}
+		},
+		{
+			"bounds" : 
+			[
+						{
+					"x_px" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				},
+						{
+					"x_px" : 0,
+					"y" : 1,
+					"y_px" : 0,
+					"x_rel" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				}
+			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 3.3583333333333334,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 1.2819727891156463
+			},
+			"actions" : 
+			[
+			"up,exit,"
+			],
+			"chargePolarity" : 0,
+			"insulated" : false,
+			"surfaces" : 
+			[
+			"up,ground",
+			"down,ground",
+			"left,ground",
+			"right,ground"
+			],
+			"movement" : "fixed",
+			"strong" : false,
+			"scale" : 
+			{
+				"x_px" : 0,
+				"y" : 0.7166666666666667,
+				"y_px" : 0,
+				"x_rel" : 0,
+				"y_rel" : 0,
+				"x" : 1.5639455782312925
+			}
+		}
+	],
+	"playerPosition" : 
+	{
+		"x_px" : 0,
+		"y" : 2,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"y_rel" : 0,
+		"x" : 2.5
+	},
+	"gravity" : 
+	{
+		"x_px" : 0,
+		"y" : 9.8,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"y_rel" : 0,
+		"x" : 0
+	},
+	"targetTime" : 60,
+	"title" : "Small",
+	"levelSize" : 
+	{
+		"x_px" : 0,
+		"y" : 4,
+		"y_px" : 0,
+		"x_rel" : 0,
+		"y_rel" : 0,
+		"x" : 5
+	}
+}
