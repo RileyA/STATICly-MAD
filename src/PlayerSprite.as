@@ -165,7 +165,7 @@ package
 		
 		private function chooseMove(p:Player):int {
 			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
-			if (Math.abs(v.y) < .01) {
+			if (p.jumpable()) {
 				if (v.Length() < .5) {
 					return STANDING;
 				} else {
@@ -187,7 +187,6 @@ package
 					removeChild(currentImg);
 					if (!currentFacing){
 						currentImg.scaleX *= -1;
-						currentImg.x = -.07;
 					}
 				}
 				var scale:Number = 1.2;
@@ -197,7 +196,9 @@ package
 				if (!right) {
 					//trace("left");
 					currentImg.scaleX *= -1;
-					currentImg.x += Player.WIDTH * scale;
+					currentImg.x = Player.WIDTH * scale;
+				} else {
+					currentImg.x = -.07;
 				}
 				currentImg.height = Player.HEIGHT * scale;
 				currentImg.y = -currentImg.height;
