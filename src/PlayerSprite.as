@@ -165,17 +165,18 @@ package
 		
 		private function chooseMove(p:Player):int {
 			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
-			if (p.jumpable()) {
+			if (Math.abs(v.y) < .01) {
 				if (v.Length() < .5) {
 					return STANDING;
 				} else {
 					return RUNNING;
 				}
-			}else {
+			} else {
+				var bound:Number = .7
 				if (v.y < 0)
-					return FALLING;
-				else
 					return JUMPING;
+				else
+					return FALLING;
 			}
 			
 		}
@@ -186,18 +187,19 @@ package
 					removeChild(currentImg);
 					if (!currentFacing){
 						currentImg.scaleX *= -1;
-						currentImg.x = 0;
+						currentImg.x = -.1;
 					}
 				}
+				var scale:Number = 1.3;
 				currentImg = newImg;
 				currentFacing = right;
-				currentImg.width = Player.WIDTH;
+				currentImg.width = Player.WIDTH * scale;
 				if (!right) {
 					//trace("left");
 					currentImg.scaleX *= -1;
-					currentImg.x += Player.WIDTH;
+					currentImg.x += Player.WIDTH * scale;
 				}
-				currentImg.height = Player.HEIGHT;
+				currentImg.height = Player.HEIGHT * scale;
 				currentImg.y = -currentImg.height;
 				addChild(currentImg);
 			}

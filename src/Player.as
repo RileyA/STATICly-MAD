@@ -88,6 +88,7 @@ package {
 			 //placeholder sprite to be replaced with an animated MovieClip at some point...
 			m_sprite = new PlayerSprite(this);
 			m_sprite.x = -WIDTH / 2;
+			m_sprite.y += .05;
 			addChild(m_sprite);
 			//loadAnimation();
 			
