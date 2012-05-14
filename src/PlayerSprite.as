@@ -187,10 +187,10 @@ package
 					removeChild(currentImg);
 					if (!currentFacing){
 						currentImg.scaleX *= -1;
-						currentImg.x = -.1;
+						currentImg.x = -.07;
 					}
 				}
-				var scale:Number = 1.3;
+				var scale:Number = 1.2;
 				currentImg = newImg;
 				currentFacing = right;
 				currentImg.width = Player.WIDTH * scale;

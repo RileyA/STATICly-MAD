@@ -35,7 +35,9 @@ package Actioners {
 				spriteContainer = new Sprite();
 				var deImage:Image = new Image(Texture.fromBitmap(new DoorExit()));
 				deImage.x = -WIDTH/2 + x;
-				deImage.y = -HEIGHT/2 + y;
+				deImage.y = -HEIGHT / 2 + y;
+				deImage.height = HEIGHT;
+				deImage.width = WIDTH;
 				spriteContainer.addChild(deImage);
 			}
 			return spriteContainer;

@@ -95,7 +95,10 @@ package Actioners {
 			}
 			currImage = new Image(Texture.fromBitmap(asset));
 			currImage.x = -WIDTH/2 + x;
-			currImage.y = -HEIGHT/2 + y;
+			currImage.y = -HEIGHT / 2 + y;
+			currImage.height = HEIGHT;
+			currImage.width = WIDTH;
+			
 			spriteContainer.addChild(currImage);
 		}
 	}
