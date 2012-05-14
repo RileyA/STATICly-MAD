@@ -1,31 +1,38 @@
 package Actioners {
-	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
-	import starling.display.Quad;
+	import flash.display.Bitmap;
+	import starling.textures.*;
+	import starling.display.*;
+	import starling.core.*;
+	import starling.text.TextField;
 	import Box2D.Dynamics.*;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.Shapes.*;
-	import starling.text.TextField;
 	import Colors;
 	import MiscUtils;
-	import flash.geom.ColorTransform;
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
 		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.4;
+
+		[Embed(source = "../../media/images/DoorActive2.png")]
+		private static const DoorActive:Class;
+		[Embed(source = "../../media/images/DoorInactive.png")]
+		private static const DoorInactive:Class;
+		[Embed(source = "../../media/images/DoorFinished.png")]
+		private static const DoorFinished:Class;
+
 		private var textSprite:TextField;
+		private var currImage:Image;
 		private var m_levelName:String;
 		private var m_levelTitle:String;
-		private var s:DisplayObjectContainer;
+
 
 		public function LevelEntranceActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World, levelName:String):void {
 			
 			m_levelName=levelName;
 			
-			var center:b2Vec2 = new b2Vec2(offset.x, offset.y + HEIGHT / 2);
-			
-			
+			var center:b2Vec2 = new b2Vec2(offset.x + WIDTH / 2, offset.y + HEIGHT / 2);
 			
 			//var format:TextFormat = new TextFormat("Sans", 1, Colors.textColor);
 			//format.align = TextFormatAlign.CENTER;
@@ -54,15 +61,13 @@ package Actioners {
 		}
 		
 		public function updateGfx(completedLevels:Vector.<String>):void{
-			var trans:ColorTransform;
 			if (completedLevels.indexOf(m_levelName)!=-1) {
 				textSprite.text = m_levelTitle+" (Completed)";
-				//trans = new ColorTransform(.6,.6,.6);
+				replaceImage(new DoorFinished());
 			} else {
 				textSprite.text = m_levelTitle;
-				//trans = new ColorTransform(1.0,1.0,1.0);
+				replaceImage(new DoorActive());
 			}
-			//sprite.transform.colorTransform = trans;
 		}
 		
 		override protected function getPolyShape():b2PolygonShape {
@@ -72,17 +77,26 @@ package Actioners {
 		}
 		
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
-			if (s == null) {
-				s = new Sprite();
-				var door:Quad = new Quad(WIDTH, HEIGHT, 0xff6600);
-				door.x = -WIDTH/2 + x;
-				door.y = -HEIGHT / 2 + y;
-				s.addChild(door);
-				
+			if(spriteContainer == null){
+				spriteContainer = new Sprite();
+				replaceImage(new DoorActive(), x, y);
+
 				textSprite.y = HEIGHT / 2 + y - .1 - textSprite.height;
-				s.addChild(textSprite);
+				spriteContainer.addChild(textSprite);
 			}
-			return s;
+			return spriteContainer;
+		}
+
+		private function replaceImage(asset:Bitmap, x:int=-1, y:int=-1):void {
+			if (currImage != null) {
+				x = currImage.x;
+				y = currImage.y;
+				spriteContainer.removeChild(currImage);
+			}
+			currImage = new Image(Texture.fromBitmap(asset));
+			currImage.x = -WIDTH/2 + x;
+			currImage.y = -HEIGHT/2 + y;
+			spriteContainer.addChild(currImage);
 		}
 	}
 }

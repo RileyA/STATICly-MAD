@@ -3,15 +3,18 @@ package Actioners {
 	import Box2D.Dynamics.*;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.Shapes.*;
-	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
-	import starling.display.Quad;
+	import flash.display.Bitmap;
+	import starling.textures.*;
+	import starling.display.*;
+	import starling.core.*;
 
 	public class LevelExitActioner extends ActionerElement {
 
 		public static const WIDTH:Number = 1.5;
 		public static const HEIGHT:Number = -2.0;
-		private var s:DisplayObjectContainer;
+
+		[Embed(source = "../../media/images/DoorExit.png")]
+		private static const DoorExit:Class;
 
 		public function LevelExitActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World):void {		
 			
@@ -28,17 +31,14 @@ package Actioners {
 		}
 
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
-			//sprite.graphics.beginFill(0x990099);
-			//sprite.graphics.drawRect(-WIDTH/2 + x, -HEIGHT/2 + y, WIDTH, HEIGHT);
-			//sprite.graphics.endFill();
-			if(s == null){
-				s = new Sprite();
-				var door:Quad = new Quad(WIDTH, HEIGHT, 0x990099);
-				door.x = -WIDTH/2 + x;
-				door.y = -HEIGHT / 2 + y;
-				s.addChild(door);
+			if(spriteContainer == null){
+				spriteContainer = new Sprite();
+				var deImage:Image = new Image(Texture.fromBitmap(new DoorExit()));
+				deImage.x = -WIDTH/2 + x;
+				deImage.y = -HEIGHT/2 + y;
+				spriteContainer.addChild(deImage);
 			}
-			return s;
+			return spriteContainer;
 		}
 	}
 }
