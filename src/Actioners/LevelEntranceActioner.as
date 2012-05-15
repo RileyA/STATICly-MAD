@@ -26,10 +26,15 @@ package Actioners {
 		private var currImage:Image;
 		private var m_levelName:String;
 		private var m_levelTitle:String;
-
-
-		public function LevelEntranceActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World, levelName:String):void {
-			
+		
+		private var canPlay:Boolean;
+		private var count:int;
+		
+		private static const hideText:Boolean=false;
+		
+		// count == num levels to beat before plating this one
+		public function LevelEntranceActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World, levelName:String, count:int):void {
+			this.count=count;
 			m_levelName=levelName;
 			
 			var center:b2Vec2 = new b2Vec2(offset.x + WIDTH / 2, offset.y + HEIGHT / 2);
@@ -39,13 +44,13 @@ package Actioners {
 			var textScale:Number=.03;
 			var textWidth:Number=WIDTH*200;
 			var textSize:Number=16.0;
-			textSprite = new TextField(textWidth, 1.5*textSize, "0","Sans",textSize,Colors.textColor);
+			textSprite = new TextField(textWidth, 3.5*textSize, "0","Sans",textSize,Colors.textColor);
 			textSprite.hAlign = "center";
 			
 			textSprite.x = -textWidth / 2 * textScale;
 			m_levelTitle=MiscUtils.getDisplayName(levelName);
 			
-			textSprite.visible=false;
+			textSprite.visible=!hideText;
 			textSprite.scaleX=textScale;
 			textSprite.scaleY = textSprite.scaleX;
 			
@@ -55,18 +60,23 @@ package Actioners {
 				textSprite.visible=true;
 			}
 			function endHint():void {
-				textSprite.visible=false;
+				textSprite.visible=!hideText;
 			}
 			super(rectDef, center, new ActionMarker(cb, tr, null, this, startHint, endHint), world);
 		}
 		
 		public function updateGfx(completedLevels:Vector.<String>):void{
+			canPlay=true;
 			if (completedLevels.indexOf(m_levelName)!=-1) {
-				textSprite.text = m_levelTitle+" (Completed)";
-				replaceImage(new DoorFinished());
-			} else {
 				textSprite.text = m_levelTitle;
+				replaceImage(new DoorFinished());
+			} else if (completedLevels.length>=count){
+				textSprite.text = m_levelTitle+"\n(Unlocked)";
 				replaceImage(new DoorActive());
+			} else {
+				textSprite.text = m_levelTitle+"\n(Unlock: "+completedLevels.length+"/"+count+")";
+				replaceImage(new DoorInactive());
+				canPlay=false;
 			}
 		}
 		

@@ -63,13 +63,18 @@ package Actioners
 				removeChildAt(0);
 		}
 
-		public static function getRelatedType(type:String, rectDef:b2BodyDef, offset:b2Vec2, extra:String, world:b2World):ActionerElement {
+		public static function getRelatedType(type:String, rectDef:b2BodyDef, offset:b2Vec2, tokens:Array, world:b2World):ActionerElement {
 			
 			switch (type) {
 			case EXIT:
 				return new LevelExitActioner(rectDef, offset, world);
 			case ENTRANCE:
-				return new LevelEntranceActioner(rectDef, offset, world, extra);
+				var name:String = tokens[0];
+				var count:int = 0;
+				if (tokens.length > 1) {
+					count = parseInt(tokens[1]);
+				}
+				return new LevelEntranceActioner(rectDef, offset, world, name, count);
 			default:
 				return null;
 			}
