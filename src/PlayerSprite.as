@@ -68,6 +68,9 @@ package
 		
 		private var currentImg:Image;
 		private var currentFacing:Boolean;
+		private static var widthRatio:Number = 0;
+		private static var heightRatio:Number = 0;
+		private static var scale:Number = 1.2;
 		
 		public static const FALLING:int = 1;
 		public static const FLOATING:int = 2;
@@ -78,7 +81,6 @@ package
 		public function PlayerSprite(p:Player):void {
 			super();
 			if (n_falling_img == null) {
-				
 				n_falling_img = initImage(new n_falling);
 				n_floating_img = initImage(new n_floating);
 				n_jumping_img = initImage(new n_jumping);
@@ -103,7 +105,15 @@ package
 		
 		private function initImage(b:Bitmap):Image {
 			var result:Image = Image.fromBitmap(b);
+			if (widthRatio == 0) {
+				widthRatio = result.width;
+				heightRatio = result.height;
+			}
 			result.smoothing = TextureSmoothing.TRILINEAR;
+			result.width = result.width / widthRatio * Player.WIDTH * scale;
+			result.height = result.height / heightRatio * Player.HEIGHT * scale;
+			result.x = -.07;
+			result.y = -result.height;
 			return result;
 		}
 		
@@ -194,22 +204,17 @@ package
 				if (currentImg != null){
 					removeChild(currentImg);
 					if (!currentFacing){
-						currentImg.scaleX *= -1;
+						currentImg.width = Math.abs(currentImg.width);
+						currentImg.x = -.07;
 					}
 				}
-				var scale:Number = 1.2;
 				currentImg = newImg;
 				currentFacing = right;
-				currentImg.width = Player.WIDTH * scale;
 				if (!right) {
 					//trace("left");
-					currentImg.scaleX *= -1;
-					currentImg.x = Player.WIDTH * scale;
-				} else {
-					currentImg.x = -.07;
+					currentImg.width *= -1;
+					currentImg.x = currentImg.width - .07;
 				}
-				currentImg.height = Player.HEIGHT * scale;
-				currentImg.y = -currentImg.height;
 				addChild(currentImg);
 			}
 		}
