@@ -32,7 +32,8 @@
 			},
 			"actions" : 
 			[
-			"up,exit,"
+			"up,exit,",
+			"up,info,Press Down\nto Enter Doors"
 			],
 			"chargePolarity" : 0,
 			"strong" : false,
