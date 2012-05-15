@@ -9,6 +9,7 @@ package Actioners {
 	import Box2D.Collision.Shapes.*;
 	import Colors;
 	import MiscUtils;
+	import Config;
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
@@ -59,7 +60,7 @@ package Actioners {
 			textSprite.scaleY = textSprite.scaleX;
 			
 			function cb(level:Level):void {	level.markAsDone(levelName); }
-			function tr(player:Player):Boolean { return canPlay; }
+			function tr(player:Player):Boolean { return canPlay || Config.debug ; }
 			function startHint():void {
 				textSprite.visible=true;
 			}
