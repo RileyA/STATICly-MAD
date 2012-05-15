@@ -13,7 +13,7 @@ package Actioners
 	public class ActionerElement extends GfxPhysObject{
 		public static const EXIT:String = "exit";
 		public static const ENTRANCE:String = "entrance";
-		public static const SWITCH:String = "switch";
+		public static const INFO:String = "info";
 
 		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.0;
@@ -75,6 +75,8 @@ package Actioners
 					count = parseInt(tokens[1]);
 				}
 				return new LevelEntranceActioner(rectDef, offset, world, name, count);
+			case INFO:
+				return new InfoDisplayActioner(rectDef, offset, world, tokens);
 			default:
 				return null;
 			}

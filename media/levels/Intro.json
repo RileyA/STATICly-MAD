@@ -522,6 +522,7 @@
 			},
 			"actions" : 
 			[
+			"up,info,Press Down\nto Action,",
 			"up,exit,"
 			],
 			"chargePolarity" : 1,
