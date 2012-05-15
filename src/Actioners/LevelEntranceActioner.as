@@ -12,7 +12,6 @@ package Actioners {
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
-		public static const WIDTH:Number = 1.0;
 		public static const HEIGHT:Number = -1.4;
 
 		[Embed(source = "../../media/images/DoorActive2.png")]
@@ -32,6 +31,7 @@ package Actioners {
 		
 		private var canPlay:Boolean;
 		private var count:int;
+		private var m_x:Number; // the center x position
 		
 		private static const hideText:Boolean=false;
 		
@@ -41,14 +41,14 @@ package Actioners {
 			m_levelName=levelName;
 			currImage=new Image(doorInactive);
 			
-			var center:b2Vec2 = new b2Vec2(offset.x + WIDTH / 2, offset.y + HEIGHT / 2);
+			var center:b2Vec2 = new b2Vec2(offset.x, offset.y + HEIGHT / 2);
 			
 			//var format:TextFormat = new TextFormat("Sans", 1, Colors.textColor);
 			//format.align = TextFormatAlign.CENTER;
 			var textScale:Number=.03;
-			var textWidth:Number=WIDTH*200;
 			var textSize:Number=16.0;
-			textSprite = new TextField(textWidth, 3.5*textSize, "0","Sans",textSize,Colors.textColor);
+			var textWidth:Number=12*textSize;
+			textSprite = new TextField(textWidth, 2.5*textSize, "0","Sans",textSize,Colors.textColor);
 			textSprite.hAlign = "center";
 			
 			textSprite.x = -textWidth / 2 * textScale;
@@ -59,7 +59,7 @@ package Actioners {
 			textSprite.scaleY = textSprite.scaleX;
 			
 			function cb(level:Level):void {	level.markAsDone(levelName); }
-			function tr(player:Player):Boolean { return true; }
+			function tr(player:Player):Boolean { return canPlay; }
 			function startHint():void {
 				textSprite.visible=true;
 			}
@@ -93,12 +93,14 @@ package Actioners {
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
 			if(spriteContainer == null){
 				spriteContainer = new Sprite();
+				currImage.height=-HEIGHT;
+				m_x=x;
 				replaceImage(doorActive);
-				currImage.x=x-WIDTH/2;
+				
 				currImage.y=y+HEIGHT/2;
 				textSprite.y = HEIGHT / 2 + y - .1 - textSprite.height;
-				currImage.height=-HEIGHT;
-				currImage.width=WIDTH;
+				
+				
 				spriteContainer.addChild(textSprite);
 				spriteContainer.addChild(currImage);
 			}
@@ -107,6 +109,8 @@ package Actioners {
 
 		private function replaceImage(asset:Texture):void {
 			currImage.texture=asset;
+			currImage.width=-HEIGHT*asset.width*1.0/asset.height
+			currImage.x=m_x-currImage.width/2;
 		}
 	}
 }
