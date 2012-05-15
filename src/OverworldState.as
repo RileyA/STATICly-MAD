@@ -18,7 +18,7 @@ package {
 		private var m_worldName:String;
 		private var completedLevels:Vector.<String>;
 		
-		[Embed(source = "../media/images/TiledBackground.jpg")]
+		[Embed(source = "../media/images/TiledBackground.png")]
 		private static const Background:Class;
 		
 		public function OverworldState(game:Game, worldName:String):void {

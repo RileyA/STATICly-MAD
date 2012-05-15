@@ -27,6 +27,13 @@ package {
 		{
 			circuitsTex.repeat=true;
 		}
+
+		[Embed(source = "../media/images/galvanized.png")]
+		private static const n_galv:Class;
+		private static const galvTex:Texture=Texture.fromBitmap(new n_galv);
+		{
+			galvTex.repeat=true;
+		}
 		
 		
 		public static const FREE:String = "free";
@@ -159,17 +166,20 @@ package {
 				return s;
 			}
 			
+			var scalar:Number=0.3;
+			var offx:Number=Math.random();
+			var offy:Number=Math.random();
 			
-			if (!insulated){
-				const scalar:Number=0.3;
-				var offx:Number=Math.random();
-				var offy:Number=Math.random();
+			if (!insulated && isChargableBlock()){
 				overlay=image(x,y,scale.x,scale.y,circuitsTex);
-				overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
-				overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
-				overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
-				overlay.setTexCoords(0,new Point(0+offx,0+offy));
+			} else {
+				overlay=image(x,y,scale.x,scale.y,galvTex);
 			}
+
+			overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
+			overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
+			overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
+			overlay.setTexCoords(0,new Point(0+offx,0+offy));
 			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
 				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
