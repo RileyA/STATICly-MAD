@@ -4,6 +4,7 @@ package
 	import flash.display.Bitmap;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
+	import starling.textures.TextureSmoothing;
 	import starling.display.Image;
 	
 	import Chargable.ChargableUtils;
@@ -76,27 +77,34 @@ package
 		
 		public function PlayerSprite(p:Player):void {
 			super();
-			if(n_falling_img == null){
-				n_falling_img = new Image(Texture.fromBitmap(new n_falling));
-				n_floating_img = new Image(Texture.fromBitmap(new n_floating));
-				n_jumping_img = new Image(Texture.fromBitmap(new n_jumping));
-				n_running_img = new Image(Texture.fromBitmap(new n_running1));
-				//n_running2_img = new Image(Texture.fromBitmap(new n_running2));
-				n_standing_img = new Image(Texture.fromBitmap(new n_standing));
-				b_falling_img = new Image(Texture.fromBitmap(new b_falling));
-				b_floating_img = new Image(Texture.fromBitmap(new b_floating));
-				b_jumping_img = new Image(Texture.fromBitmap(new b_jumping));
-				b_running_img = new Image(Texture.fromBitmap(new b_running1));
-				//b_running2_img = new Image(Texture.fromBitmap(new b_running2));
-				b_standing_img = new Image(Texture.fromBitmap(new b_standing));
-				r_falling_img = new Image(Texture.fromBitmap(new r_falling));
-				r_floating_img = new Image(Texture.fromBitmap(new r_floating));
-				r_jumping_img = new Image(Texture.fromBitmap(new r_jumping));
-				r_running_img = new Image(Texture.fromBitmap(new r_running1));
-				//r_running2_img = new Image(Texture.fromBitmap(new r_running2));
-				r_standing_img = new Image(Texture.fromBitmap(new r_standing));
+			if (n_falling_img == null) {
+				
+				n_falling_img = initImage(new n_falling);
+				n_floating_img = initImage(new n_floating);
+				n_jumping_img = initImage(new n_jumping);
+				n_running_img = initImage(new n_running1);
+				//n_running2_img = initImage(new n_running2);
+				n_standing_img = initImage(new n_standing);
+				b_falling_img = initImage(new b_falling);
+				b_floating_img = initImage(new b_floating);
+				b_jumping_img = initImage(new b_jumping);
+				b_running_img = initImage(new b_running1);
+				//b_running2_img = initImage(new b_running2);
+				b_standing_img = initImage(new b_standing);
+				r_falling_img = initImage(new r_falling);
+				r_floating_img = initImage(new r_floating);
+				r_jumping_img = initImage(new r_jumping);
+				r_running_img = initImage(new r_running1);
+				//r_running2_img = initImage(new r_running2);
+				r_standing_img = initImage(new r_standing);
 			}
 			switchImage(n_standing_img, p.facingRight());
+		}
+		
+		private function initImage(b:Bitmap):Image {
+			var result:Image = Image.fromBitmap(b);
+			result.smoothing = TextureSmoothing.TRILINEAR;
+			return result;
 		}
 		
 		public function update(p:Player):void {
