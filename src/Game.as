@@ -5,6 +5,7 @@ package {
 	import cse481d.Logger;
 	import OverworldState;
 	import flash.utils.Dictionary;
+	import Config;
 	
 	/** Manages a stack of game states */
 	public class Game extends Sprite {
@@ -43,8 +44,12 @@ package {
 
 		private function onAdded(e:Event):void {
 			addState(new MenuState(this));
-			addState(getOverworld("DischargeLab"));
-			addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
+			if (Config.debug) {
+				addState(getOverworld("DebugLab"));
+			} else {
+				addState(getOverworld("DischargeLab"));
+				addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
+			}
 			update();
 		}
 		
