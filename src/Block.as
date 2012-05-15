@@ -21,7 +21,7 @@ package {
 		private static const rivitTex:Texture=Texture.fromBitmap(new n_rivit);
 		
 		
-		[Embed(source = "../media/images/Circuits.png")]
+		[Embed(source = "../media/images/Circuit.png")]
 		private static const n_circuits:Class;
 		private static const circuitsTex:Texture=Texture.fromBitmap(new n_circuits);
 		{
@@ -161,12 +161,14 @@ package {
 			
 			
 			if (!insulated){
-				const scalar:Number=2.0;
+				const scalar:Number=0.3;
+				var offx:Number=Math.random();
+				var offy:Number=Math.random();
 				overlay=image(x,y,scale.x,scale.y,circuitsTex);
-				overlay.setTexCoords(3,new Point(scale.x*scalar,scale.y*scalar));
-				overlay.setTexCoords(1,new Point(scale.x*scalar,0));
-				overlay.setTexCoords(2,new Point(0,scale.y*scalar));
-				overlay.setTexCoords(0,new Point(0,0));
+				overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
+				overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(0,new Point(0+offx,0+offy));
 			}
 			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
