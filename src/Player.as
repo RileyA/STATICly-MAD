@@ -58,9 +58,14 @@ package {
 			var world:b2World=level.world;
 
 			var polyShape:b2PolygonShape = new b2PolygonShape();
-			polyShape.SetAsArray([new b2Vec2(0,-HEIGHT),new b2Vec2(WIDTH/2,
-				HEIGHT_MID), new b2Vec2(WIDTH/2,0),new b2Vec2(-WIDTH/2,0),
-					new b2Vec2(-WIDTH/2,HEIGHT_MID)]);
+			const toeHeight:Number=-.05;
+			polyShape.SetAsArray([
+				new b2Vec2(0,-HEIGHT), // top
+				new b2Vec2(WIDTH/2,HEIGHT_MID), //right mid
+				new b2Vec2(WIDTH/2,toeHeight), // right bottom
+				new b2Vec2(0,0), // center bottom
+				new b2Vec2(-WIDTH/2,toeHeight),
+				new b2Vec2(-WIDTH/2,HEIGHT_MID)]);
 
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var ccDef:b2BodyDef = new b2BodyDef();
