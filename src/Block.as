@@ -127,13 +127,24 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
-			sprite = new Quad(scale.x, scale.y, 0xBBBBBB);
+			sprite = new Quad(scale.x, scale.y);
 			sprite.x = -scale.x / 2;
 			sprite.y = -scale.y / 2;
+			addChild(sprite);
 			
-			//if (insulated){
-				//sprite.graphics.lineStyle(3.0,0xFFFFBB,1.0,false,LineScaleMode.NONE);
-			//}
+			function side(x:Number,y:Number,w:Number,h:Number):void{
+				var s:Quad=new Quad(w, h, Colors.insulation);
+				s.x=x-scale.x / 2;
+				s.y=y-scale.y / 2;
+				addChild(s);
+			}
+			const thick:Number=.1;
+			if (insulated){
+				side(0,thick,thick,scale.y-thick*2);
+				side(scale.x-thick,thick,thick,scale.y-thick*2);
+				side(thick,0,scale.x-thick*2,thick);
+				side(thick,scale.y-thick,scale.x-thick*2,thick);
+			}
 			//sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
 			//if (movement == FIXED) {
 				//sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
@@ -142,7 +153,7 @@ package {
 			//}
 			//sprite.graphics.endFill();
 			redraw();
-			addChild(sprite);
+			
 
 			var i:int = 0;
 
