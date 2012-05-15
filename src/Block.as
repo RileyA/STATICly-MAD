@@ -11,6 +11,7 @@ package {
 	import Chargable.*;
 	import starling.utils.Color;
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import starling.textures.Texture;
 
 	public class Block extends GfxPhysObject implements Chargable {
@@ -18,6 +19,15 @@ package {
 		[Embed(source = "../media/images/Rivet.png")]
 		private static const n_rivit:Class;
 		private static const rivitTex:Texture=Texture.fromBitmap(new n_rivit);
+		
+		
+		[Embed(source = "../media/images/Circuits.png")]
+		private static const n_circuits:Class;
+		private static const circuitsTex:Texture=Texture.fromBitmap(new n_circuits);
+		{
+			circuitsTex.repeat=true;
+		}
+		
 		
 		public static const FREE:String = "free";
 		public static const TRACKED:String = "tracked";
@@ -32,6 +42,7 @@ package {
 		private var surfaces:Vector.<SurfaceElement>;
 		private var actioners:Vector.<ActionerElement>;
 		private var sprite:Quad;
+		private var overlay:Image;
 		private var anchor:GfxPhysObject;
 		private var joints:Vector.<b2Joint>;
 		
@@ -138,6 +149,26 @@ package {
 			sprite.y = -scale.y / 2;
 			addChild(sprite);
 			
+			function image(x:Number,y:Number,w:Number,h:Number,t:Texture):Image{
+				var s:Image=new Image(t);
+				s.height=h;
+				s.width=w;
+				s.x=x-scale.x / 2;
+				s.y=y-scale.y / 2;
+				addChild(s);
+				return s;
+			}
+			
+			
+			if (!insulated){
+				const scalar:Number=2.0;
+				overlay=image(x,y,scale.x,scale.y,circuitsTex);
+				overlay.setTexCoords(3,new Point(scale.x*scalar,scale.y*scalar));
+				overlay.setTexCoords(1,new Point(scale.x*scalar,0));
+				overlay.setTexCoords(2,new Point(0,scale.y*scalar));
+				overlay.setTexCoords(0,new Point(0,0));
+			}
+			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
 				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
 				s.x=x-scale.x / 2;
@@ -155,14 +186,7 @@ package {
 			side(thick,scale.y-thick,scale.x-thick*2,thick);
 
 			
-			function image(x:Number,y:Number,w:Number,h:Number,t:Texture):void{
-				var s:Image=new Image(t);
-				s.height=h;
-				s.width=w;
-				s.x=x-scale.x / 2;
-				s.y=y-scale.y / 2;
-				addChild(s);
-			}
+			
 			
 			function corner(x:Number,y:Number):void{
 				image(x,y,cornerSize,cornerSize,rivitTex);
@@ -274,21 +298,30 @@ package {
 			//ChargableUtils.matchColorToPolarity(sprite, chargePolarity, strong);
 			var main:uint=0xFF;
 			var off:uint=strong?0x10:0xA0;
+			var overlayoff:uint=strong?0x40:0xDD;
 			
 			const blue:uint = Color.rgb(off,off,main);
 			const none:uint = strong?0x999999:0xFFFFFF;
 			const red:uint =  Color.rgb(main,off,off);
 			
+			const overlayblue:uint = Color.rgb(overlayoff,overlayoff,main);
+			const overlaynone:uint = strong?0xD98719:0xEDC393;
+			const overlayred:uint =  Color.rgb(main,overlayoff,overlayoff);
+			
+			
 
 			switch (chargePolarity) {
 			case ChargableUtils.CHARGE_BLUE:
 				sprite.color = blue;
+				if (overlay!=null) overlay.color=overlayblue;
 				break;
 			case ChargableUtils.CHARGE_RED:
 				sprite.color = red;
+				if (overlay!=null) overlay.color=overlayred;
 				break;
 			default:
 				sprite.color = none;
+				if (overlay!=null) overlay.color=overlaynone;
 				break;
 			}
 			
