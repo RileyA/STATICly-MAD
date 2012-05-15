@@ -10,10 +10,12 @@ package {
 		public static const CHARGE_STRONG_AID:uint = 2;
 
 		public static var l:Logger;
+		private static var inLevel:Boolean;
 
 		public static function initLogger():void {
 			if (!Config.logging) { return; }
 			l = Logger.initialize(GID, NAME, SKEY, Config.CID, {"isdebug":true});
+			inLevel = false;
 		}
 
 		/** Return the QID of the specified level */
@@ -23,24 +25,26 @@ package {
 
 		/** Log the charging of a weak block */
 		public static function logChargeWeak(playerC:Number, blockC:Number):void {
-			if (l == null) { return; }
+			if (l == null || !inLevel) { return; }
 			l.logAction(CHARGE_WEAK_AID, {"playerC":playerC, "blockC":blockC});
 		}
 
 		/** Log the charging of a strong block */
 		public static function logChargeStrong(playerC:Number, blockC:Number):void {
-			if (l == null) { return; }
+			if (l == null || !inLevel) { return; }
 			l.logAction(CHARGE_STRONG_AID, {"playerC":playerC, "blockC":blockC});
 		}
 
 		public static function logLevelStart(name:String, hash:Object):void {
-			if (l == null) { return; }
+			if (l == null || inLevel) { return; }
 			l.logLevelStart(getQid(name), hash);
+			inLevel = true;
 		}
 
 		public static function logLevelEnd(hash:Object):void {
-			if (l == null) { return; }
+			if (l == null || !inLevel) { return; }
 			l.logLevelEnd(hash);
+			inLevel = false;
 		}
 	}
 }

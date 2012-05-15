@@ -6,7 +6,7 @@ import urllib
 CHUNK_SIZE = 1 * 1024 * 1024
 
 try:
-    gid = 37  # our unique game gid for the server
+    gid = 37
     cid = int(sys.argv[1])
 except:
     print "Usage: %s <category id> (the A/B test id, default 1)" % (sys.argv[0])
