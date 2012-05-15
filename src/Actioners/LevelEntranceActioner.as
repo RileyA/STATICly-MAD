@@ -17,10 +17,13 @@ package Actioners {
 
 		[Embed(source = "../../media/images/DoorActive2.png")]
 		private static const DoorActive:Class;
+		private static const doorActive:Texture=Texture.fromBitmap(new DoorActive());
 		[Embed(source = "../../media/images/DoorInactive.png")]
 		private static const DoorInactive:Class;
+		private static const doorInactive:Texture=Texture.fromBitmap(new DoorInactive());
 		[Embed(source = "../../media/images/DoorFinished.png")]
 		private static const DoorFinished:Class;
+		private static const doorFinished:Texture=Texture.fromBitmap(new DoorFinished());
 
 		private var textSprite:TextField;
 		private var currImage:Image;
@@ -36,6 +39,7 @@ package Actioners {
 		public function LevelEntranceActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World, levelName:String, count:int):void {
 			this.count=count;
 			m_levelName=levelName;
+			currImage=new Image(doorInactive);
 			
 			var center:b2Vec2 = new b2Vec2(offset.x + WIDTH / 2, offset.y + HEIGHT / 2);
 			
@@ -69,13 +73,13 @@ package Actioners {
 			canPlay=true;
 			if (completedLevels.indexOf(m_levelName)!=-1) {
 				textSprite.text = m_levelTitle;
-				replaceImage(new DoorFinished());
+				replaceImage(doorFinished);
 			} else if (completedLevels.length>=count){
 				textSprite.text = m_levelTitle+"\n(Unlocked)";
-				replaceImage(new DoorActive());
+				replaceImage(doorActive);
 			} else {
 				textSprite.text = m_levelTitle+"\n(Unlock: "+completedLevels.length+"/"+count+")";
-				replaceImage(new DoorInactive());
+				replaceImage(doorInactive);
 				canPlay=false;
 			}
 		}
@@ -89,27 +93,20 @@ package Actioners {
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
 			if(spriteContainer == null){
 				spriteContainer = new Sprite();
-				replaceImage(new DoorActive(), x, y);
-
+				replaceImage(doorActive);
+				currImage.x=x-WIDTH/2;
+				currImage.y=y+HEIGHT/2;
 				textSprite.y = HEIGHT / 2 + y - .1 - textSprite.height;
+				currImage.height=-HEIGHT;
+				currImage.width=WIDTH;
 				spriteContainer.addChild(textSprite);
+				spriteContainer.addChild(currImage);
 			}
 			return spriteContainer;
 		}
 
-		private function replaceImage(asset:Bitmap, x:int=-1, y:int=-1):void {
-			if (currImage != null) {
-				x = currImage.x;
-				y = currImage.y;
-				spriteContainer.removeChild(currImage);
-			}
-			currImage = new Image(Texture.fromBitmap(asset));
-			currImage.x = -WIDTH/2 + x;
-			currImage.y = -HEIGHT / 2 + y;
-			currImage.height = HEIGHT;
-			currImage.width = WIDTH;
-			
-			spriteContainer.addChild(currImage);
+		private function replaceImage(asset:Texture):void {
+			currImage.texture=asset;
 		}
 	}
 }

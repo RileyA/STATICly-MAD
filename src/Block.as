@@ -381,13 +381,10 @@ package {
 		}
 
 		private function addActioner(key:String, rectDef:b2BodyDef, world:b2World):void {
-			var tokens:Array = key.split(",", 3);
+			var tokens:Array = key.split(",");
 			var dir:String = tokens[0];
 			var type:String = tokens[1];
-			var extra:String = null;
-			if (tokens.length > 2) {
-				extra = tokens[2];
-			}
+			var extra:Array = tokens.slice(2);
 			var ae:ActionerElement;
 
 			switch (dir) {
