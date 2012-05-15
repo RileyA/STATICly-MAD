@@ -14,7 +14,8 @@ package Actioners {
 		public static const HEIGHT:Number = -2.0;
 
 		[Embed(source = "../../media/images/DoorExit.png")]
-		private static const DoorExit:Class;
+		private static const n_DoorExit:Class;
+		private static const doorExit:Texture=Texture.fromBitmap(new n_DoorExit());
 
 		public function LevelExitActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World):void {		
 			
@@ -33,10 +34,10 @@ package Actioners {
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
 			if(spriteContainer == null){
 				spriteContainer = new Sprite();
-				var deImage:Image = new Image(Texture.fromBitmap(new DoorExit()));
+				var deImage:Image = new Image(doorExit);
 				deImage.x = -WIDTH/2 + x;
-				deImage.y = -HEIGHT / 2 + y;
-				deImage.height = HEIGHT;
+				deImage.y = HEIGHT / 2 + y;
+				deImage.height = -HEIGHT;
 				deImage.width = WIDTH;
 				spriteContainer.addChild(deImage);
 			}
