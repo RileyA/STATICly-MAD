@@ -376,6 +376,7 @@
 			},
 			"actions" : 
 			[
+			"up,info,Press Down\nto Action"
 			],
 			"chargePolarity" : 1,
 			"strong" : false,
