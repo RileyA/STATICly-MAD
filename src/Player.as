@@ -43,9 +43,10 @@ package {
 		private var charges:Vector.<Charge>;
 		
 		private var bestAction:ActionMarker;
-		private var actionInd:Sprite; // on target of potential action
-		private var actionMid:Sprite; // between player and action target
-		private var actionHit:Sprite; // at player hit action target
+		private static const markSize:Number=.3;
+		private var actionInd:Quad; // on target of potential action
+		private var actionMid:Quad; // between player and action target
+		private var actionHit:Quad; // at player hit action target
 		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
 		
@@ -118,43 +119,27 @@ package {
 			fd.userData = LevelContactListener.PLAYER_ACTION_ID;
 			m_physics.CreateFixture(fd);
 			
-			//actionInd = new Sprite();
-			//actionInd.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
-			//actionInd.graphics.moveTo(-.1, -.1);
-			//actionInd.graphics.lineTo(.1, .1);
-			//actionInd.graphics.moveTo(-.1, .1);
-			//actionInd.graphics.lineTo(.1, -.1);
-			//actionInd.graphics.endFill();
-			//
-			//actionMid = new Sprite();
-			//actionMid.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
-			//actionMid.graphics.moveTo(-.1, -.1);
-			//actionMid.graphics.lineTo(.1, .1);
-			//actionMid.graphics.moveTo(-.1, .1);
-			//actionMid.graphics.lineTo(.1, -.1);
-			//actionMid.graphics.endFill();
-			//
-			//actionHit = new Sprite();
-			//actionHit.graphics.lineStyle(3.0, Colors.markerColor, .8, false, LineScaleMode.NONE);
-			//actionHit.graphics.moveTo(-.1, -.1);
-			//actionHit.graphics.lineTo(.1, .1);
-			//actionHit.graphics.moveTo(-.1, .1);
-			//actionHit.graphics.lineTo(.1, -.1);
-			//actionHit.graphics.endFill();
+			actionInd = new Quad(markSize,markSize,Colors.markerColor);
+			actionInd.alpha=.8;
+			actionMid = new Quad(markSize,markSize,Colors.markerColor);
+			actionMid.alpha=.8;
+			actionHit = new Quad(markSize,markSize,Colors.markerColor);
+			actionHit.alpha=.8;
+			
 			
 			parentSprite.addChild(this);
-			//
-			//parentSprite.addChild(actionInd);
-			//parentSprite.addChild(actionMid);
-			//parentSprite.addChild(actionHit);
+			
+			parentSprite.addChild(actionInd);
+			parentSprite.addChild(actionMid);
+			parentSprite.addChild(actionHit);
 		}
 		
-		private function doActionSprite(s:Sprite,pos:b2Vec2,pixelsPerMeter:Number):void{
+		private function doActionSprite(s:Quad,pos:b2Vec2,pixelsPerMeter:Number):void{
 			s.scaleX = pixelsPerMeter;
 			s.scaleY = pixelsPerMeter;
 			s.visible=true;
-			s.x = pos.x * pixelsPerMeter;
-			s.y = pos.y * pixelsPerMeter;
+			s.x = (pos.x-markSize/2) * pixelsPerMeter;
+			s.y = (pos.y-markSize/2) * pixelsPerMeter;
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
