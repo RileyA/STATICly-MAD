@@ -10,8 +10,14 @@ package {
 	import Actioners.*;
 	import Chargable.*;
 	import starling.utils.Color;
+	import flash.display.Bitmap;
+	import starling.textures.Texture;
 
 	public class Block extends GfxPhysObject implements Chargable {
+		
+		[Embed(source = "../media/images/Rivet.png")]
+		private static const n_rivit:Class;
+		private static const rivitTex:Texture=Texture.fromBitmap(new n_rivit);
 		
 		public static const FREE:String = "free";
 		public static const TRACKED:String = "tracked";
@@ -133,25 +139,42 @@ package {
 			addChild(sprite);
 			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
-				var s:Quad=new Quad(w, h, Colors.insulation);
+				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
+				s.x=x-scale.x / 2;
+				s.y=y-scale.y / 2;
+				if (!insulated){
+					s.alpha=Colors.edgeAlpha;
+				}
+				addChild(s);
+			}
+			const thick:Number=.1;
+
+			side(0,0,thick,scale.y);
+			side(scale.x-thick,0,thick,scale.y);
+			side(thick,0,scale.x-thick*2,thick);
+			side(thick,scale.y-thick,scale.x-thick*2,thick);
+
+			
+			function image(x:Number,y:Number,w:Number,h:Number,t:Texture):void{
+				var s:Image=new Image(t);
+				s.height=h;
+				s.width=w;
 				s.x=x-scale.x / 2;
 				s.y=y-scale.y / 2;
 				addChild(s);
 			}
-			const thick:Number=.1;
-			if (insulated){
-				side(0,thick,thick,scale.y-thick*2);
-				side(scale.x-thick,thick,thick,scale.y-thick*2);
-				side(thick,0,scale.x-thick*2,thick);
-				side(thick,scale.y-thick,scale.x-thick*2,thick);
+			
+			function corner(x:Number,y:Number):void{
+				image(x,y,cornerSize,cornerSize,rivitTex);
 			}
-			//sprite.graphics.beginFill(strong ? 0x333333 : 0xBBBBBB);
-			//if (movement == FIXED) {
-				//sprite.graphics.drawRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y);
-			//} else {
-				//sprite.graphics.drawRoundRect(-scale.x / 2, -scale.y / 2, scale.x, scale.y, .8);
-			//}
-			//sprite.graphics.endFill();
+			const cornerSize:Number=.4;
+			if (movement == FIXED){
+				corner(0,0);
+				corner(scale.x-cornerSize,0);
+				corner(scale.x-cornerSize,scale.y-cornerSize);
+				corner(0,scale.y-cornerSize);
+			}
+
 			redraw();
 			
 
