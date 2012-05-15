@@ -82,7 +82,9 @@ package {
 			m_gfxPhysObjects.push(m_player);
 
 			// prep debug stuff
-			prepareDebugVisualization();
+			if (Config.debug) {
+				prepareDebugVisualization();
+			}
 		}
 
 		public function addBlock(b:Block):void {
