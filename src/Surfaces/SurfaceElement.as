@@ -1,6 +1,8 @@
 package Surfaces
 {
-	import starling.display.Quad;
+	import starling.display.Image;
+	import flash.geom.Point;
+	import starling.textures.Texture;
 	import starling.display.Sprite;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Collision.b2WorldManifold;
@@ -21,9 +23,10 @@ package Surfaces
 		
 		public static const DEPTH:Number = 0.1;
 		
-		private var q:Quad;
+		private var q:Image;
+		public static const scalar:Number=2;
 		
-		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, userData:*, world:b2World, color:uint):void {
+		public function SurfaceElement(rectDef:b2BodyDef, offset:b2Vec2, w:Number, h:Number, userData:*, world:b2World, tex:Texture):void {
 			var fd:b2FixtureDef = new b2FixtureDef();
 			var ps:b2PolygonShape = new b2PolygonShape();
 			ps.SetAsBox(w / 2, h / 2);
@@ -34,15 +37,17 @@ package Surfaces
 			m_physics = world.CreateBody(rectDef);
 			m_physics.CreateFixture(fd);
 			
-			q = new Quad(w, h, color);
+			q = new Image(tex);
+			q.width=w;
+			q.height=h;
 			q.x = -w / 2 + offset.x;
 			q.y = -h / 2 + offset.y;
+			
+			q.setTexCoords(3,new Point(w*scalar,h*scalar));
+			q.setTexCoords(1,new Point(w*scalar,0));
+			q.setTexCoords(2,new Point(0,h*scalar));
+			q.setTexCoords(0,new Point(0,0));
 			addChild(q);
-			//sprite = new Sprite();
-			//sprite.graphics.beginFill(color);
-			//sprite.graphics.drawRect(-w/2 + offset.x, -h/2 + offset.y, w, h);
-			//sprite.graphics.endFill();
-			//addChild(sprite);
 		}
 
 		public function cleanup():void {
