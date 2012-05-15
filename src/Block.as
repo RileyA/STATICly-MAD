@@ -451,12 +451,6 @@ package {
 			trackDef.lowerTranslation = weights.x;
 			trackDef.upperTranslation = weights.y;
 			
-			//var l:b2Vec2 = ends[0].toB2Vec2();
-			//var r:b2Vec2 = ends[1].toB2Vec2();
-			//var axis:b2Vec2 = l.Copy();
-			//axis.Subtract(r);
-			//trackDef.lowerTranslation = -l.Length();
-			//trackDef.upperTranslation = r.Length();
 						
 			axis.Normalize();
 			
