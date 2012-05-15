@@ -36,10 +36,6 @@ package {
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
 
-		// TODO don't hardcode/embed these...
-		private static const WIDTH_PIXELS:Number  = 800;
-		private static const HEIGHT_PIXELS:Number = 600;
-
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
 		private static const TIMESTEP:Number = 0.033333;
@@ -188,6 +184,12 @@ package {
 			// compute pixels per meter and an offset so the playable area
 			// is in the center of the screen
 			const margin:Number=.98; // make edges show some
+			var HEIGHT_PIXELS:int=Starling.current.viewPort.height;
+			var WIDTH_PIXELS:int=Starling.current.viewPort.width;
+			
+			//Starling.current.stage.stageHeight=HEIGHT_PIXELS;
+			//Starling.current.stage.stageWidth=WIDTH_PIXELS;
+			
 			if (m_info.levelSize.x / m_info.levelSize.y 
 				>= WIDTH_PIXELS / HEIGHT_PIXELS) {
 				pixelsPerMeter = margin * WIDTH_PIXELS / m_info.levelSize.x;
