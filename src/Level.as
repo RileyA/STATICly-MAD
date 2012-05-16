@@ -193,16 +193,17 @@ package {
 			if (m_info.levelSize.x / m_info.levelSize.y 
 				>= WIDTH_PIXELS / HEIGHT_PIXELS) {
 				pixelsPerMeter = margin * WIDTH_PIXELS / m_info.levelSize.x;
-				m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
 			} else {
 				pixelsPerMeter = margin * HEIGHT_PIXELS / m_info.levelSize.y;
-				m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
 			}
+			
+			m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
+			m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
 
 			var desc:BlockInfo = new BlockInfo();
-			desc.scale.x = m_info.levelSize.x+BORDER_THICKNESS*2;
+			desc.scale.x = m_info.levelSize.x;
 			desc.scale.y = BORDER_THICKNESS;
-			desc.position.x = desc.scale.x / 2-BORDER_THICKNESS;
+			desc.position.x = desc.scale.x / 2;
 			desc.position.y = -desc.scale.y / 2;
 			desc.movement = "fixed";
 			desc.strong = false;

@@ -26,11 +26,11 @@ package {
 			m_timerText.x = 10;
 			m_timerText.y = 10;
 			m_timerText.hAlign = "left";
-			addChild(m_timerText);
 		}
 		
 		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
+			addChild(m_timerText);
 			LoggerUtils.logLevelStart(m_levelName, null);
 		}
 		
