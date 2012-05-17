@@ -87,6 +87,10 @@ package {
 			m_blocks.push(b);
 			m_parent_sprite.addChild(b);
 			m_gfxPhysObjects.push(b);
+			if (b.getAnchor() != null) {
+				m_parent_sprite.addChild(b.getAnchor());
+				m_gfxPhysObjects.push(b.getAnchor());
+			}
 			if (b.isChargableBlock()) {
 				m_chargableManager.addChargable(b);
 			}

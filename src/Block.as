@@ -35,6 +35,13 @@ package {
 			galvTex.repeat=true;
 		}
 		
+		[Embed(source = "../media/images/pipe.png")]
+		private static const n_pipe:Class;
+		private static const pipeTex:Texture=Texture.fromBitmap(new n_pipe);
+		{
+			pipeTex.repeat=true;
+		}
+		
 		
 		public static const FREE:String = "free";
 		public static const TRACKED:String = "tracked";
@@ -463,7 +470,44 @@ package {
 			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			joints.push(m_level.world.CreateJoint(trackDef));
 			
-
+			
+			var trackGfx:Image = new Image(pipeTex);
+			var w:Number = (weights.y - weights.x);
+			var h:Number = .25;
+			trackGfx.width = w;
+			trackGfx.height = h;
+			//trace(w, h, -scale.x / 2, -scale.y / 2);
+			trackGfx.setTexCoords(3,new Point(w,h));
+			trackGfx.setTexCoords(1,new Point(w,0));
+			trackGfx.setTexCoords(2,new Point(0,h));
+			trackGfx.setTexCoords(0, new Point(0, 0));
+			var m:Number = slope.y / slope.x;
+			//trace(m, w);
+			trackGfx.x = 0;
+			trackGfx.y = 0;
+			if (m == 0) {
+				if(slope.y > 0) {
+					trackGfx.x += w / 2;
+					trackGfx.y += h / 2;
+				} else {
+					trackGfx.x += -w / 2;
+					trackGfx.y += -h / 2;
+				}
+			} else if(isFinite(m)){
+				trackGfx.x += h / 2;
+				trackGfx.y += w / 2;
+			} else {
+				if (slope.y > 0) {
+					trackGfx.x += h / 2;
+					trackGfx.y += -w;
+				} else {
+					trackGfx.x += -h / 2;
+					trackGfx.y += w / 2;
+				}
+			}
+			trackGfx.rotation = Math.atan(m);
+			anchor.addChild(trackGfx);
+			
 			//var sprite:Sprite = new Sprite();
 			//sprite.graphics.beginFill(0xB0B0B0);
 			//sprite.graphics.lineStyle(3.0, 0x333333, .8, false, LineScaleMode.NONE);
