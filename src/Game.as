@@ -120,11 +120,6 @@ package {
 			m_currentState = null;
 		}
 
-		public function reset():void {
-			m_currentState.deinit();
-			m_currentState.init();
-		}
-
 		public function getMenu():Menu {
 			return m_menu;
 		}

@@ -51,7 +51,8 @@ package {
 			
 			if (Keys.resetLevel()) {
 				LoggerUtils.logLevelEnd({"didwin":false});
-				m_game.reset();
+				m_game.replaceState(new LevelState(m_game, m_levelName, m_overworldState));
+				
 			}else if (Keys.exitLevel()) {
 				LoggerUtils.logLevelEnd({"didwin":false});
 				isDone = true;
