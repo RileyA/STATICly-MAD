@@ -447,6 +447,7 @@ package {
 		
 		private function makeTracked(ends:Vector.<UVec2>):void {
 			
+			
 			var center:b2Vec2 = m_physics.GetPosition().Copy();
 			var trackDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			
@@ -515,8 +516,20 @@ package {
 			}
 			trackGfx.rotation = Math.atan(m);
 			anchor.addChild(trackGfx);
-			this.alpha=.7;
+			sprite.alpha=.5;
 			
+			
+			const mkSize:Number=.4;
+			var s:Quad=new Image(pipeTex);//new Quad(mkSize,mkSize);
+			s.height=mkSize;
+			s.width=mkSize;
+			s.color=0xAAAAAA;
+			s.x=-mkSize/2;
+			s.y=-mkSize/2;
+			s.alpha=10;
+			addChild(s);
+			
+			//s.rotation=trackGfx.rotation;
 			
 			//var sprite:Sprite = new Sprite();
 			//sprite.graphics.beginFill(0xB0B0B0);
