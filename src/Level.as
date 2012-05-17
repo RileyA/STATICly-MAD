@@ -187,20 +187,17 @@ package {
 
 			// compute pixels per meter and an offset so the playable area
 			// is in the center of the screen
-			//const margin:Number=.98; // make edges show some
-			const margin:Number=.98; // make edges show some
+			const marginY:Number=.93; // make edges show some
+			const marginX:Number=.98;
 			var HEIGHT_PIXELS:int=Starling.current.viewPort.height;
 			var WIDTH_PIXELS:int=Starling.current.viewPort.width;
 			
 			//Starling.current.stage.stageHeight=HEIGHT_PIXELS;
 			//Starling.current.stage.stageWidth=WIDTH_PIXELS;
 			
-			if (m_info.levelSize.x / m_info.levelSize.y 
-				>= WIDTH_PIXELS / HEIGHT_PIXELS) {
-				pixelsPerMeter = margin * WIDTH_PIXELS / m_info.levelSize.x;
-			} else {
-				pixelsPerMeter = margin * HEIGHT_PIXELS / m_info.levelSize.y;
-			}
+			
+			pixelsPerMeter = Math.min(marginX * WIDTH_PIXELS / m_info.levelSize.x,
+					marginY * HEIGHT_PIXELS / m_info.levelSize.y);
 			
 			m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
 			m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
