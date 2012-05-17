@@ -514,7 +514,7 @@ package {
 				//trace(bigPopa);
 				trackGfx.y += -w*bigPoppa;
 			}
-			trackGfx.rotation = Math.atan(m);
+			trackGfx.rotation = Math.atan2(slope.y , slope.x);
 			anchor.addChild(trackGfx);
 			sprite.alpha=.5;
 			
