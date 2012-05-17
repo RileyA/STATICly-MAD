@@ -13,6 +13,10 @@ package {
 		public static function exitLevel():Boolean{
 			return isKeyPressed(Keyboard.ESCAPE)||isKeyPressed(Keyboard.Q);
 		}
+
+		public static function resetLevel():Boolean{
+			return isKeyPressed(Keyboard.R);
+		}
 		
 		private static var _keys:Array = new Array();
 

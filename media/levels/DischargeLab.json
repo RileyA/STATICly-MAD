@@ -55,7 +55,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -105,7 +105,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -155,7 +155,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -205,7 +205,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -255,7 +255,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -305,7 +305,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -355,7 +355,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -584,7 +584,7 @@
 			[
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -617,7 +617,7 @@
 			[
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -650,7 +650,7 @@
 			[
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],
@@ -700,7 +700,7 @@
 				}
 			],
 			"movement" : "fixed",
-			"insulated" : false,
+			"insulated" : true,
 			"surfaces" : 
 			[
 			],

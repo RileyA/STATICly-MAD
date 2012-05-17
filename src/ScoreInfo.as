@@ -4,6 +4,7 @@ package {
 		public var title:String;
 		public var playerTime:Number;
 		public var targetTime:Number;
+		public var score:int;
 		public var playerComps:int;
 		public var targetComps:int;
 
@@ -11,6 +12,7 @@ package {
 			this.title = title;
 			this.targetTime = targetTime;
 			this.targetComps = targetComps;
+			score = 0;
 			playerTime = 0;
 			playerComps = 0;
 		}

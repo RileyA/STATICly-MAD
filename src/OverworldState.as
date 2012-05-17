@@ -5,7 +5,6 @@ package {
 	import starling.display.DisplayObject;
 	import starling.textures.Texture;
 	import starling.display.Image;
-	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
 	import Config;
@@ -53,7 +52,7 @@ package {
 				m_level.resetLevel();
 			}
 			if (Config.debug) {
-				isDone ||= Keys.isKeyPressed(Keyboard.ESCAPE);
+				isDone ||= Keys.exitLevel();
 			}
 			return !isDone;
 		}
@@ -65,8 +64,10 @@ package {
 			if (name == null){ return; }
 			else if (name.indexOf("Lab") != -1) {
 				m_game.replaceState(m_game.getOverworld(name));
+				m_game.getMenu().setOverworldMenu();
 			} else {
 				m_game.addState(new LevelState(m_game, name, this));
+				m_game.getMenu().setLevelMenu();
 			}
 		}
 		

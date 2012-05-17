@@ -10,8 +10,6 @@ package
 	import flash.text.TextFormat;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
 
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;

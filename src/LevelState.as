@@ -31,6 +31,7 @@ package {
 		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
 			addChild(m_timerText);
+			//m_game.getMenu().updateInfo(m_level.getScore());
 			LoggerUtils.logLevelStart(m_levelName, null);
 		}
 		
@@ -46,6 +47,7 @@ package {
 
 			if (m_level != null){
 				m_timerText.text = m_level.getInfo().title+": "+MiscUtils.setPrecision(m_level.getScore().playerTime, 0);
+				//m_game.getMenu().updateTime(m_level.getScore().playerTime);
 			}
 			
 			var isDone:Boolean = false;

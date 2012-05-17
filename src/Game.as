@@ -14,6 +14,7 @@ package {
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
 		private var m_newStateReady:Boolean;
+		private var m_menu:Menu;
 		
 		private var m_overworlds:Dictionary; // name -> overworld
 
@@ -26,6 +27,8 @@ package {
 			m_currentState = null;
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
+			m_menu = new Menu();
+			addChild(m_menu);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			if (logSession) {
@@ -118,6 +121,10 @@ package {
 			this.removeChild(state);
 			m_currentState.deinit();
 			m_currentState = null;
+		}
+
+		public function getMenu():Menu {
+			return m_menu;
 		}
 	}
 }
