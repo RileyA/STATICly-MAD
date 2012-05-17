@@ -66,12 +66,12 @@ package {
 				@param state The state to replace it with */
 		public function replaceState(state:GameState):void {
 			addState(state);
-			terminate(m_currentState);
+			terminate();
 		}
 
 		/** Update the game, advance a frame 
-				@return True if continuing as usual, false if out of
-					game states */
+		  @return True if continuing as usual, false if out of
+		  game states */
 		public function update():Boolean {
 			// timing
 			var currentTime:Number = getTimer();
@@ -107,7 +107,7 @@ package {
 			}
 
 			if (!m_currentState.update(delta)) {
-				terminate(m_currentState);
+				terminate();
 			}
 
 			return true;
@@ -116,10 +116,15 @@ package {
 		/**
 		* Terminates the currently running state, removing it from the Game state machine
 		*/
-		private function terminate(state:GameState):void {
-			this.removeChild(state);
+		private function terminate():void {
+			this.removeChild(m_currentState);
 			m_currentState.deinit();
 			m_currentState = null;
+		}
+
+		public function reset():void {
+			m_currentState.deinit();
+			m_currentState.init();
 		}
 
 		public function getMenu():Menu {

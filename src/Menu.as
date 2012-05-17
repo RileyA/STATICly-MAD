@@ -109,11 +109,15 @@ package {
 			scoreText.visible = true;
 		}
 
-		public function updateInfo(info:ScoreInfo):void {
+		public function updateOverworldInfo(name:String, score:int):void {
+			titleText.text = name;
+			scoreText.text = scoreString + MiscUtils.setPrecision(score, 0);
+		}
+
+		public function updateLevelInfo(info:ScoreInfo):void {
 			timerText.text = timerString + MiscUtils.setPrecision(info.playerTime, 0);
 			titleText.text = info.title;
 			parTimeText.text = parTimeString + MiscUtils.setPrecision(info.targetTime, 0);
-			scoreText.text = scoreString + MiscUtils.setPrecision(info.score, 0);
 		}
 
 		public function updateTime(time:Number):void {
