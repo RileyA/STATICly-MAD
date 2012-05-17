@@ -19,7 +19,7 @@ package {
 		private var m_overworlds:Dictionary; // name -> overworld
 
 		/** Constructor */
-		public function Game(logSession:Boolean = true):void {
+		public function Game():void {
 			m_overworlds = new Dictionary();
 			//m_parent = parent;
 			//m_parent.stage.stageFocusRect = false;
@@ -30,9 +30,6 @@ package {
 			m_menu = new Menu();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
-			if (logSession) {
-				LoggerUtils.initLogger();
-			}
 		}
 		
 		public function getOverworld(name:String):OverworldState{
@@ -44,7 +41,8 @@ package {
 			return x;
 		}
 
-		private function onAdded(e:Event):void {
+		protected function onAdded(e:Event):void {
+			LoggerUtils.initLogger();
 			addState(new MenuState(this));
 			if (Config.debug) {
 				addState(getOverworld("DebugLab"));
@@ -54,7 +52,7 @@ package {
 			}
 			update();
 		}
-		
+
 		/** Adds a state 
 				@param state The state to add */
 		public function addState(state:GameState):void {

@@ -85,6 +85,10 @@ package {
 
 		public function addBlock(b:Block):void {
 			m_blocks.push(b);
+			if (b.getAnchor() != null) {
+				m_parent_sprite.addChild(b.getAnchor());
+				m_gfxPhysObjects.push(b.getAnchor());
+			}
 			m_parent_sprite.addChild(b);
 			m_gfxPhysObjects.push(b);
 			if (b.isChargableBlock()) {
@@ -183,6 +187,7 @@ package {
 
 			// compute pixels per meter and an offset so the playable area
 			// is in the center of the screen
+			//const margin:Number=.98; // make edges show some
 			const margin:Number=.98; // make edges show some
 			var HEIGHT_PIXELS:int=Starling.current.viewPort.height;
 			var WIDTH_PIXELS:int=Starling.current.viewPort.width;
