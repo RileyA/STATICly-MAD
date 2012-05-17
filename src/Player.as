@@ -50,7 +50,7 @@ package {
 		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
 		
-		private var faceRight:Boolean;
+		private var faceRight:Boolean=true;
 		
 		private var m_sprite:PlayerSprite;
 		
@@ -111,7 +111,7 @@ package {
 			m_physics.CreateFixture(fd);
 			
 			// make action sensor
-			const m:Number=.15;//action region margin
+			const m:Number=.2;//action region margin
 			fd = new b2FixtureDef();
 			fd.density=0;
 			actionShape = new b2PolygonShape();
