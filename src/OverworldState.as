@@ -31,10 +31,14 @@ package {
 		}
 		
 		override public function init():void {
+			var menu:Menu = m_game.getMenu();
+			menu.setOverworldMenu();
+	//		menu.attachTo(this);
 		}
 		
 		override public function deinit():void {
 			//m_level = null;
+	//		m_game.getMenu().removeFrom(this);
 		}
 
 		/** Called when the state above this is popped and this one is resumed */

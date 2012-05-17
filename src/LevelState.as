@@ -30,14 +30,18 @@ package {
 		
 		override public function init():void {
 			m_level = new Level(this, MiscUtils.loadLevelInfo(m_levelName));
-			addChild(m_timerText);
-			//m_game.getMenu().updateInfo(m_level.getScore());
+			//addChild(m_timerText);
+			var menu:Menu = m_game.getMenu();
+			menu.setLevelMenu();
+			menu.updateInfo(m_level.getScore());
+			menu.attachTo(this);
 			LoggerUtils.logLevelStart(m_levelName, null);
 		}
 		
 		override public function deinit():void {
 			m_level = null;
-			removeChild(m_timerText);
+			//removeChild(m_timerText);
+			m_game.getMenu().removeFrom(this);
 		}
 
 		/**
@@ -47,7 +51,7 @@ package {
 
 			if (m_level != null){
 				m_timerText.text = m_level.getInfo().title+": "+MiscUtils.setPrecision(m_level.getScore().playerTime, 0);
-				//m_game.getMenu().updateTime(m_level.getScore().playerTime);
+				m_game.getMenu().updateTime(m_level.getScore().playerTime);
 			}
 			
 			var isDone:Boolean = false;

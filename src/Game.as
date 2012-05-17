@@ -28,7 +28,6 @@ package {
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
 			m_menu = new Menu();
-			addChild(m_menu);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 			if (logSession) {
