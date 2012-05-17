@@ -187,6 +187,7 @@ package {
 
 			// compute pixels per meter and an offset so the playable area
 			// is in the center of the screen
+			//const margin:Number=.98; // make edges show some
 			const margin:Number=.98; // make edges show some
 			var HEIGHT_PIXELS:int=Starling.current.viewPort.height;
 			var WIDTH_PIXELS:int=Starling.current.viewPort.width;
