@@ -1,5 +1,13 @@
 package Editor {
 
+	import starling.textures.Texture;
+	import starling.display.Image;
+	import starling.display.Sprite;
+	import starling.core.Starling;
+	//import starling.events.Event;
+	import flash.events.Event;
+	//import starling.events.TouchPhase;
+	//import starling.events.TouchEvent;
 	import flash.display.Shape;
 	import flash.net.FileReference;
 	import flash.net.FileFilter;
@@ -8,8 +16,6 @@ package Editor {
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
@@ -45,6 +51,7 @@ package Editor {
 
 		private var m_focused:EditorProxy;
 		private var m_copied:BlockInfo = null;
+		private var m_native:flash.display.Sprite;
 
 		private var m_levelSprite:Sprite;
 
@@ -61,6 +68,7 @@ package Editor {
 			/** create editor UI stuffs */
 			m_levelLoaded = false;
 			m_levelSprite = new Sprite();
+			m_native = new flash.display.Sprite;
 
 			// add something clickable
 			var s:Shape = new Shape();
@@ -68,43 +76,57 @@ package Editor {
 			s.graphics.beginFill(0x000000);
 			s.graphics.drawRect(-800,-600,2400,1800);
 			s.graphics.endFill();
-			m_levelSprite.addChild(s);
+			m_native.addChild(s);
 			addChild(m_levelSprite);
+			Starling.current.nativeOverlay.addChild(m_native);
 
 			m_menu = new EditorMenu("New Level");
-			addChild(m_menu);
-			m_menu.setParentContext(this);
-			addEventListener(MouseEvent.CLICK, addBlock);
-			addEventListener(MouseEvent.MOUSE_DOWN, handleFocus);
-			m_menu.saveButton.addEventListener(MouseEvent.CLICK, save);
-			m_menu.loadButton.addEventListener(MouseEvent.CLICK, load);
-			m_menu.newButton.addEventListener(MouseEvent.CLICK, newLevel);
-			m_menu.resetButton.addEventListener(MouseEvent.CLICK, resetClicked);
-			m_menu.pauseButton.addEventListener(MouseEvent.CLICK, pauseClicked);
+			m_native.addChild(m_menu);
+			m_menu.setParentContext(m_native);
+			m_native.addEventListener(flash.events.MouseEvent.CLICK, addBlock);
+			m_native.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, handleFocus);
+			m_menu.saveButton.addEventListener(flash.events.MouseEvent.CLICK,
+				save);
+			m_menu.loadButton.addEventListener(flash.events.MouseEvent.CLICK, 
+				load);
+			m_menu.newButton.addEventListener(flash.events.MouseEvent.CLICK,
+				newLevel);
+			m_menu.resetButton.addEventListener(flash.events.MouseEvent.CLICK,
+				resetClicked);
+			m_menu.pauseButton.addEventListener(flash.events.MouseEvent.CLICK,
+				pauseClicked);
 			m_menu.x = 50;
 			m_menu.y = 50;
-			newLevel(new MouseEvent(MouseEvent.CLICK));
+			newLevel(new flash.events.MouseEvent(flash.events.MouseEvent.CLICK));
 		}
 
 		private function unloadLevel():void {
 			m_focused = null;
 			m_levelSprite.x = 0;
 			m_levelSprite.y = 0;
+			m_native.x = 0;
+			m_native.y = 0;
 			m_level = null;
+			while (m_native.numChildren > 0)
+				m_native.removeChildAt(0);
 			while (m_levelSprite.numChildren > 0)
 				m_levelSprite.removeChildAt(0);
+			m_native.addChild(m_menu);
 			m_levelLoaded = false;
+
 			var s:Shape = new Shape();
 			s.alpha = 0.0;
 			s.graphics.beginFill(0x000000);
 			s.graphics.drawRect(-800,-600,2400,1800);
 			s.graphics.endFill();
-			m_levelSprite.addChild(s);
+			m_native.addChild(s);
 		}
 
 		public function loadLevel(info:LevelInfo):void {
 			m_menu.levelName.text = info.title;
 			m_level = new Level(m_levelSprite, info);
+			m_native.x = m_levelSprite.x;
+			m_native.y = m_levelSprite.y;
 			m_blocks = new Vector.<BlockProxy>;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
@@ -113,23 +135,28 @@ package Editor {
 			for (var i:uint=0;i<blocks.length;++i) {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
 				m_blocks.push(proxy);
-				m_levelSprite.addChild(proxy);
-				proxy.setParentContext(m_levelSprite);
+				//m_levelSprite.addChild(proxy);
+				m_native.addChild(proxy);
+				proxy.setParentContext(m_native);
 			}
 			m_player = new PlayerProxy(m_level.getPlayer());
-			m_levelSprite.addChild(m_player);
-			m_player.setParentContext(m_levelSprite);
+			//m_levelSprite.addChild(m_player);
+			m_native.addChild(m_player);
+			m_player.setParentContext(m_native);
 		}
 
-		private function selectionComplete(e:Event):void {
+		private function selectionComplete(e:flash.events.Event):void {
 			unloadLevel();
-			m_loadRef.removeEventListener(Event.SELECT, selectionComplete);
-			m_loadRef.addEventListener(Event.COMPLETE, loadComplete);
+			m_loadRef.removeEventListener(flash.events.Event.SELECT, 
+				selectionComplete);
+			m_loadRef.addEventListener(flash.events.Event.COMPLETE, 
+				loadComplete);
 			m_loadRef.load();
 		}
 
-		private function loadComplete(e:Event):void {
-			m_loadRef.removeEventListener(Event.COMPLETE, loadComplete);
+		private function loadComplete(e:flash.events.Event):void {
+			m_loadRef.removeEventListener(flash.events.Event.COMPLETE,
+				loadComplete);
 			m_levelInfo = new LevelInfo();
 			MiscUtils.loadJSON(m_loadRef.data as ByteArray, m_levelInfo);
 			loadLevel(m_levelInfo);
@@ -175,7 +202,7 @@ package Editor {
 								break;
 							}
 						}
-						m_levelSprite.removeChild(bp);
+						m_native.removeChild(bp);
 						m_focused = null;
 						refocus(null);
 						bp = null;
@@ -193,19 +220,20 @@ package Editor {
 					m_pasteKey = true;
 					if (m_copied) {
 						var info:BlockInfo = m_copied.getCopy();
-						info.position.x = m_levelSprite.mouseX 
+						info.position.x = m_native.mouseX 
 							/ m_level.pixelsPerMeter;
-						info.position.y = m_levelSprite.mouseY 
+						info.position.y = m_native.mouseY 
 							/ m_level.pixelsPerMeter;
 						var newBlock:Block = new Block(info, m_level);
 						m_level.addBlock(newBlock);
 						newBlock.updateTransform(m_level.pixelsPerMeter);
 						var proxy:BlockProxy = new BlockProxy(newBlock);
 						m_blocks.push(proxy);
-						m_levelSprite.addChild(proxy);
-						proxy.setParentContext(m_levelSprite);
-						m_levelSprite.swapChildren(newBlock, m_player.getPlayer());
-						m_levelSprite.swapChildren(proxy, m_player);
+						//m_levelSprite.addChild(proxy);
+						m_native.addChild(proxy);
+						proxy.setParentContext(m_native);
+						//m_native.swapChildren(newBlock, m_player.getPlayer());
+						m_native.swapChildren(proxy, m_player);
 						if (!m_widgetsHidden) {
 							refocus(proxy);
 						} else {
@@ -227,17 +255,17 @@ package Editor {
 			return !Keys.isKeyPressed(Keyboard.ESCAPE);
 		}
 
-		public function addBlock(e:MouseEvent):void { 
+		public function addBlock(e:flash.events.MouseEvent):void { 
 			if (!m_levelLoaded) return;
-			if (e.target == m_levelSprite 
+			if (e.target == m_native 
 				&& Keys.isKeyPressed(BLOCK_KEY)) {
 
 				// make a new block, default 1x1 meter, fixed
 				var info:BlockInfo = new BlockInfo();
 				info.scale.x = 1;
 				info.scale.y = 1;
-				info.position.x = Math.round((m_levelSprite.mouseX / m_level.pixelsPerMeter)/0.25) * 0.25;
-				info.position.y = Math.round((m_levelSprite.mouseY / m_level.pixelsPerMeter)/0.25) * 0.25;
+				info.position.x = Math.round((m_native.mouseX / m_level.pixelsPerMeter)/0.25) * 0.25;
+				info.position.y = Math.round((m_native.mouseY / m_level.pixelsPerMeter)/0.25) * 0.25;
 				info.movement = "fixed";
 				info.insulated = false;
 				info.strong = false;
@@ -247,10 +275,11 @@ package Editor {
 				newBlock.updateTransform(m_level.pixelsPerMeter);
 				var proxy:BlockProxy = new BlockProxy(newBlock);
 				m_blocks.push(proxy);
-				m_levelSprite.addChild(proxy);
-				proxy.setParentContext(m_levelSprite);
-				m_levelSprite.swapChildren(newBlock, m_player.getPlayer());
-				m_levelSprite.swapChildren(proxy, m_player);
+				//m_levelSprite.addChild(proxy);
+				m_native.addChild(proxy);
+				proxy.setParentContext(m_native);
+				//m_native.swapChildren(newBlock, m_player.getPlayer());
+				m_native.swapChildren(proxy, m_player);
 				if (!m_widgetsHidden) {
 					refocus(proxy);
 				} else {
@@ -262,19 +291,19 @@ package Editor {
 			}
 		}
 
-		public function handleFocus(e:MouseEvent):void { 
+		public function handleFocus(e:flash.events.MouseEvent):void { 
 			if (!m_levelLoaded) return;
 			if (e.target.parent is EditorProxy
 				|| e.target is EditorProxy) {
 				var tmp:EditorProxy = e.target.parent is EditorProxy ? 
 					e.target.parent as EditorProxy : e.target as EditorProxy;
 				refocus(tmp);
-			} else if(e.target == m_levelSprite) {
+			} else if(e.target == m_native) {
 				refocus(null);
 			}
 		}
 
-		public function save(e:MouseEvent):void {
+		public function save(e:flash.events.MouseEvent):void {
 			e.stopPropagation();
 			if (m_levelLoaded) {
 				m_levelInfo.blocks = new Vector.<BlockInfo>;
@@ -289,7 +318,7 @@ package Editor {
 			}
 		}
 
-		public function load(e:MouseEvent):void {
+		public function load(e:flash.events.MouseEvent):void {
 			e.stopPropagation();
 			m_loadRef = new FileReference();
 			m_loadRef.addEventListener(Event.SELECT, selectionComplete);
@@ -298,15 +327,15 @@ package Editor {
 			m_loadRef.browse([fileFilter]);
 		}
 
-		public function pauseClicked(e:MouseEvent):void {
+		public function pauseClicked(e:flash.events.MouseEvent):void {
 			togglePause();
 		}
 
-		public function resetClicked(e:MouseEvent):void {
+		public function resetClicked(e:flash.events.MouseEvent):void {
 			doReset();
 		}
 
-		public function newLevel(e:MouseEvent):void {
+		public function newLevel(e:flash.events.MouseEvent):void {
 			e.stopPropagation();
 			unloadLevel();
 			var info:LevelInfo = new LevelInfo();
@@ -317,11 +346,14 @@ package Editor {
 			info.playerPosition.x = parseFloat(m_menu.levelW.text)/2;
 			info.playerPosition.y = parseFloat(m_menu.levelH.text)/2;
 			m_level = new Level(m_levelSprite, info);
+			m_native.x = m_levelSprite.x;
+			m_native.y = m_levelSprite.y;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
 			m_player = new PlayerProxy(m_level.getPlayer());
-			m_levelSprite.addChild(m_player);
-			m_player.setParentContext(m_levelSprite);
+			//m_levelSprite.addChild(m_player);
+			m_native.addChild(m_player);
+			m_player.setParentContext(m_native);
 			m_blocks = new Vector.<BlockProxy>;
 			m_levelLoaded = true;
 			if (!m_paused) togglePause();
