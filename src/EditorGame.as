@@ -11,9 +11,6 @@ package {
 
 	public class EditorGame extends Game  {
 		public function EditorGame():void {
-			removeEventListener(Event.ADDED_TO_STAGE, 
-				super.onAdded);
-			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 		}
 
 		override protected function onAdded(e:Event):void {

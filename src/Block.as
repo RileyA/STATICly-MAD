@@ -196,8 +196,6 @@ package {
 			side(scale.x-thick,0,thick,scale.y);
 			side(thick,0,scale.x-thick*2,thick);
 			side(thick,scale.y-thick,scale.x-thick*2,thick);
-
-			
 			
 			
 			function corner(x:Number,y:Number):void{

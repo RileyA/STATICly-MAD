@@ -23,14 +23,15 @@ package Editor {
 
 		public function PlayerProxy(p:Player):void {
 			m_child = p;
-			super(p.x - Player.WIDTH * p.scaleX / 2, p.y,
+			super(p.x - Player.WIDTH * p.scaleX / 2, p.y 
+				- Player.HEIGHT * p.scaleY,
 				Player.WIDTH * p.scaleX, Player.HEIGHT * p.scaleY);
 			super.setSnap(p.scaleX * snapTo);
 		}
 
 		override public function reposition():void {
 			super.reposition();
-			var pos:UVec2 = new UVec2(x, y);
+			var pos:UVec2 = new UVec2(x, y+height);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
 			pos.x += Player.WIDTH/2;

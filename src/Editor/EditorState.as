@@ -4,10 +4,7 @@ package Editor {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.core.Starling;
-	//import starling.events.Event;
 	import flash.events.Event;
-	//import starling.events.TouchPhase;
-	//import starling.events.TouchEvent;
 	import flash.display.Shape;
 	import flash.net.FileReference;
 	import flash.net.FileFilter;
@@ -54,6 +51,7 @@ package Editor {
 		private var m_native:flash.display.Sprite;
 
 		private var m_levelSprite:Sprite;
+		private var lolwut:Boolean = false;
 
 		public function EditorState(game:Game):void {
 			super(game);
@@ -65,10 +63,12 @@ package Editor {
 		}
 
 		override public function init():void {
+			
 			/** create editor UI stuffs */
 			m_levelLoaded = false;
 			m_levelSprite = new Sprite();
 			m_native = new flash.display.Sprite;
+			//m_native = Starling.current.nativeOverlay;
 
 			// add something clickable
 			var s:Shape = new Shape();
@@ -77,12 +77,14 @@ package Editor {
 			s.graphics.drawRect(-800,-600,2400,1800);
 			s.graphics.endFill();
 			m_native.addChild(s);
-			addChild(m_levelSprite);
 			Starling.current.nativeOverlay.addChild(m_native);
 
+			addChild(m_levelSprite);
+
 			m_menu = new EditorMenu("New Level");
-			m_native.addChild(m_menu);
-			m_menu.setParentContext(m_native);
+			Starling.current.nativeOverlay.addChild(m_menu);
+			m_menu.setParentContext(Starling.current.nativeOverlay);
+
 			m_native.addEventListener(flash.events.MouseEvent.CLICK, addBlock);
 			m_native.addEventListener(flash.events.MouseEvent.MOUSE_DOWN, handleFocus);
 			m_menu.saveButton.addEventListener(flash.events.MouseEvent.CLICK,
@@ -111,7 +113,6 @@ package Editor {
 				m_native.removeChildAt(0);
 			while (m_levelSprite.numChildren > 0)
 				m_levelSprite.removeChildAt(0);
-			m_native.addChild(m_menu);
 			m_levelLoaded = false;
 
 			var s:Shape = new Shape();
