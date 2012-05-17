@@ -59,6 +59,8 @@ package {
 		private var overlay:Image;
 		private var anchor:GfxPhysObject;
 		private var joints:Vector.<b2Joint>;
+		private var hinting:Boolean=false;
+		private var hintPhase:Number=0;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -151,7 +153,19 @@ package {
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
 				fd.density=0;
 				var fix:b2Fixture=m_physics.CreateFixture(fd);
-				fix.SetUserData(new ActionMarker(act,ck,fix,this));
+				
+				var that:Block=this;
+				function startHint():void {
+					hinting=true;
+					hintPhase=0;
+				}
+				function endHint():void {
+					hinting=false;
+					hintPhase=0;
+				}
+				
+				
+				fix.SetUserData(new ActionMarker(act,ck,fix,this,startHint,endHint));
 			}
 			
 			//body.SetFixedRotation(true);
@@ -280,6 +294,11 @@ package {
 		
 		private var m_hackLastPos:b2Vec2; // for hacking stupid track bug
 		public override function updateTransform(pixelsPerMeter:Number):void {
+			if (hinting){
+				hintPhase+=.5; // TODO make frame rate independant;
+			}
+			overlay.alpha=.5+.5*((Math.cos(hintPhase)+1)/2);
+			
 			super.updateTransform(pixelsPerMeter);
 			if (drawnChargePolarity!=chargePolarity) {
 				redraw();
