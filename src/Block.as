@@ -498,9 +498,9 @@ package {
 				trackGfx.y += w / 2;
 			} else {
 				trackGfx.x += h / 2;
-				var bigPopa:Number = - weights.x / (weights.y - weights.x);
-				trace(bigPopa);
-				trackGfx.y += -w*bigPopa;
+				var bigPoppa:Number = - weights.x / (weights.y - weights.x);
+				//trace(bigPopa);
+				trackGfx.y += -w*bigPoppa;
 			}
 			trackGfx.rotation = Math.atan(m);
 			anchor.addChild(trackGfx);
