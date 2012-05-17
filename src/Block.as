@@ -278,6 +278,7 @@ package {
 			return m_info;
 		}
 		
+		private var m_hackLastPos:b2Vec2; // for hacking stupid track bug
 		public override function updateTransform(pixelsPerMeter:Number):void {
 			super.updateTransform(pixelsPerMeter);
 			if (drawnChargePolarity!=chargePolarity) {
@@ -285,6 +286,17 @@ package {
 			}
 			if (anchor != null) {
 				anchor.updateTransform(pixelsPerMeter);
+				
+				// start hacking stupid track bug
+				if (m_hackLastPos != null) {
+					m_hackLastPos.Subtract(m_physics.GetPosition());
+					if (m_hackLastPos.LengthSquared()<.00001) {
+						m_physics.SetLinearVelocity(new b2Vec2(0,0));
+					}
+				}
+				m_hackLastPos=m_physics.GetPosition().Copy();
+				// end hacking stupid track bug
+				
 			}
 		}
 
