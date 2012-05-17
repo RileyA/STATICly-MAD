@@ -104,7 +104,7 @@ package {
 			fd = new b2FixtureDef();
 			fd.density=0;
 			polyShape = new b2PolygonShape();
-			polyShape.SetAsBox(WIDTH/3, 0.1);
+			polyShape.SetAsBox(WIDTH/4, 0.1);
 			fd.shape = polyShape;
 			fd.isSensor = true;
 			fd.userData = LevelContactListener.FOOT_SENSOR_ID;
