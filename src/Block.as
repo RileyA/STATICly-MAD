@@ -497,13 +497,10 @@ package {
 				trackGfx.x += h / 2;
 				trackGfx.y += w / 2;
 			} else {
-				if (slope.y > 0) {
-					trackGfx.x += h / 2;
-					trackGfx.y += -w;
-				} else {
-					trackGfx.x += -h / 2;
-					trackGfx.y += w / 2;
-				}
+				trackGfx.x += h / 2;
+				var bigPopa:Number = - weights.x / (weights.y - weights.x);
+				trace(bigPopa);
+				trackGfx.y += -w*bigPopa;
 			}
 			trackGfx.rotation = Math.atan(m);
 			anchor.addChild(trackGfx);
