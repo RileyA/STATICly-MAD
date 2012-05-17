@@ -493,9 +493,10 @@ package {
 					trackGfx.x += -w / 2;
 					trackGfx.y += -h / 2;
 				}
-			} else if(isFinite(m)){
-				trackGfx.x += h / 2;
-				trackGfx.y += w / 2;
+			} else if (isFinite(m)) {
+				var bigPoppa:Number = - weights.x / (weights.y - weights.x);
+				//trackGfx.x += h / 2;
+				//trackGfx.y += w / 2;
 			} else {
 				trackGfx.x += h / 2;
 				var bigPoppa:Number = - weights.x / (weights.y - weights.x);
