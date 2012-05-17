@@ -515,6 +515,8 @@ package {
 			}
 			trackGfx.rotation = Math.atan(m);
 			anchor.addChild(trackGfx);
+			this.alpha=.7;
+			
 			
 			//var sprite:Sprite = new Sprite();
 			//sprite.graphics.beginFill(0xB0B0B0);
