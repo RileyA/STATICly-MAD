@@ -494,7 +494,7 @@ package {
 					trackGfx.y += -h / 2;
 				}
 			} else if (isFinite(m)) {
-				var bigPoppa:Number = - weights.x / (weights.y - weights.x);
+				//var bigPoppa:Number = - weights.x / (weights.y - weights.x);
 				//trackGfx.x += h / 2;
 				//trackGfx.y += w / 2;
 			} else {
