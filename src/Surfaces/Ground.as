@@ -12,7 +12,7 @@ package Surfaces
 	 * @author Matthew Hall
 	 */
 	public class Ground extends SurfaceElement {
-		[Embed(source = "../../media/images/Ground.png")]
+		[Embed(source = "../../media/images/Ground1.png")]
 		private static const n_tex:Class;
 		private static const tex:Texture=Texture.fromBitmap(new n_tex);
 		{
