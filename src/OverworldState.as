@@ -33,7 +33,7 @@ package {
 		override public function init():void {
 			var menu:Menu = m_game.getMenu();
 			menu.setOverworldMenu();
-			menu.updateOverworldInfo(m_worldName, computeScore());
+			menu.updateOverworldInfo(m_worldName, 0);
 			menu.attachTo(this);
 		}
 		
