@@ -123,5 +123,13 @@ package {
 		public function getMenu():Menu {
 			return m_menu;
 		}
+
+		public function getTotalScore():int {
+			var total:int = 0;
+			for(var name:String in m_overworlds){
+				total += m_overworlds[name].getTotalScore();
+			}
+			return total;
+		}
 	}
 }

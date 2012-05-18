@@ -16,12 +16,14 @@ package {
 		private var m_level:Level;
 		private var m_worldName:String;
 		private var completedLevels:Vector.<String>;
+		private var m_bestLevelScores:Object;
 		
 		[Embed(source = "../media/images/TiledBackground.png")]
 		private static const Background:Class;
 		
 		public function OverworldState(game:Game, worldName:String):void {
 			completedLevels=new Vector.<String>();
+			m_bestLevelScores = new Object();
 			super(game);
 			m_worldName = worldName;
 			tileBG(Background);
@@ -31,19 +33,23 @@ package {
 		}
 		
 		override public function init():void {
-			var menu:Menu = m_game.getMenu();
-			menu.setOverworldMenu();
-			menu.updateOverworldInfo(m_worldName, 0);
-			menu.attachTo(this);
+			resume();
 		}
 		
 		override public function deinit():void {
-			//m_level = null;
-			m_game.getMenu().removeFrom(this);
+			suspend();
 		}
 
 		/** Called when the state above this is popped and this one is resumed */
 		override public function resume():void {
+			var menu:Menu = m_game.getMenu();
+			menu.setOverworldMenu();
+			menu.updateOverworldInfo(m_worldName, m_game.getTotalScore());
+			menu.attachTo(this);
+		}
+
+		override public function suspend():void {
+			m_game.getMenu().removeFrom(this);
 		}
 
 		/**
@@ -93,11 +99,24 @@ package {
 		}
 		
 		// Called when a level has been beaten
-		public function completed(levelName:String):void{
+		public function completed(levelName:String, score:int):void{
 			if (completedLevels.indexOf(levelName)==-1) {
 				completedLevels.push(levelName);
 				updateDoors();
 			}
+			var old:int = 0;
+			if (levelName in m_bestLevelScores) {
+				old = m_bestLevelScores[levelName];
+			}
+			m_bestLevelScores[levelName] = Math.max(old, score);
+		}
+
+		public function getTotalScore():int {
+			var total:int = 0;
+			for(var name:String in m_bestLevelScores){
+				total += m_bestLevelScores[name];
+			}
+			return total;
 		}
 	}
 }

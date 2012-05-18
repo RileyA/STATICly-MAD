@@ -61,9 +61,11 @@ package {
 		}
 
 		private function finishLevel():void {
-			m_overworldState.completed(m_levelName);
 			LoggerUtils.logLevelEnd({"didwin":true});
-			m_game.replaceState(new ScoreState(m_game, m_level.getScore()));
+			var scoreState:ScoreState = new ScoreState(m_game, m_level.getScore());
+			m_overworldState.completed(m_levelName, m_level.getScore().score);
+			
+			m_game.replaceState(scoreState);
 		}
 	}
 }
