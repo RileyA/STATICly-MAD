@@ -9,6 +9,7 @@ package {
 
 		private var m_level:Level;
 		private var m_levelName:String;
+		private var m_didWin:Boolean;
 		private var m_overworldState:OverworldState;
 
 		[Embed(source = "../media/images/TiledBackground.png")]
@@ -17,6 +18,7 @@ package {
 		public function LevelState(game:Game, levelName:String, overworldState:OverworldState):void {
 			super(game);
 			m_levelName = levelName;
+			m_didWin = false;
 			m_overworldState=overworldState;
 
 			tileBG(Background);
@@ -32,6 +34,7 @@ package {
 		}
 		
 		override public function deinit():void {
+			LoggerUtils.logLevelEnd({"didwin":m_didWin});
 			m_level = null;
 			m_game.getMenu().removeFrom(this);
 		}
@@ -50,18 +53,16 @@ package {
 			if (levelFinish) { finishLevel(); }
 			
 			if (Keys.resetLevel()) {
-				LoggerUtils.logLevelEnd({"didwin":false});
 				m_game.replaceState(new LevelState(m_game, m_levelName, m_overworldState));
 				
 			}else if (Keys.exitLevel()) {
-				LoggerUtils.logLevelEnd({"didwin":false});
 				isDone = true;
 			}
 			return !isDone;
 		}
 
 		private function finishLevel():void {
-			LoggerUtils.logLevelEnd({"didwin":true});
+			m_didWin = true;
 			var scoreState:ScoreState = new ScoreState(m_game, m_level.getScore());
 			m_overworldState.completed(m_levelName, m_level.getScore().score);
 			
