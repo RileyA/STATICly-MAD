@@ -57,7 +57,7 @@ package {
 		private var actioners:Vector.<ActionerElement>;
 		private var sprite:Quad;
 		private var overlay:Image;
-		private var anchor:GfxPhysObject;
+		private var anchor:Sprite;
 		private var joints:Vector.<b2Joint>;
 		private var hinting:Boolean=false;
 		private var hintPhase:Number=0;
@@ -76,6 +76,8 @@ package {
 		private var insulated:Boolean;
 		
 		private var charges:Vector.<Charge>;
+		
+		private var anchorBody:b2Body;
 
 		// somewhat hacky... but it prevents having to pass the level in
 		// when reinit-ing blocks in the editor, and presumably a block
@@ -166,6 +168,7 @@ package {
 				
 				
 				fix.SetUserData(new ActionMarker(act,ck,fix,this,startHint,endHint));
+				
 			}
 			
 			//body.SetFixedRotation(true);
@@ -247,6 +250,8 @@ package {
 			anchor = null;
 			if (movement == TRACKED) {
 				makeTracked(m_info.bounds);
+				m_level.getParent().addChild(anchor);
+				//m_level.m_gfxPhysObjects.push(anchor);
 			}
 		}
 
@@ -304,7 +309,15 @@ package {
 				redraw();
 			}
 			if (anchor != null) {
-				anchor.updateTransform(pixelsPerMeter);
+				//anchor.updateTransform(pixelsPerMeter);
+				anchor.scaleX = pixelsPerMeter;
+				anchor.scaleY = pixelsPerMeter;
+				 //if physics object is null, just reset to origin...
+				if (m_physics != null) {
+					var apos:b2Vec2 = anchorBody.GetPosition();
+					anchor.x = apos.x * pixelsPerMeter;
+					anchor.y = apos.y * pixelsPerMeter;
+				}
 				
 				// start hacking stupid track bug
 				if (m_hackLastPos != null) {
@@ -338,12 +351,8 @@ package {
 			return movement;
 		}
 		
-		public function getAnchor():GfxPhysObject {
-			return anchor;
-		}
 		
 		private function redraw():void{
-			//ChargableUtils.matchColorToPolarity(sprite, chargePolarity, strong);
 			var main:uint=0xFF;
 			var off:uint=strong?0x10:0xA0;
 			var overlayoff:uint=strong?0x40:0xDD;
@@ -355,8 +364,6 @@ package {
 			const overlayblue:uint = Color.rgb(overlayoff,overlayoff,main);
 			const overlaynone:uint = strong?0xD98719:0xEDC393;
 			const overlayred:uint =  Color.rgb(main,overlayoff,overlayoff);
-			
-			
 
 			switch (chargePolarity) {
 			case ChargableUtils.CHARGE_BLUE:
@@ -372,8 +379,6 @@ package {
 				if (overlay!=null) overlay.color=overlaynone;
 				break;
 			}
-			
-			
 			drawnChargePolarity=chargePolarity;
 		}
 		
@@ -494,8 +499,8 @@ package {
 			var anchorDef:b2BodyDef = new b2BodyDef();
 			anchorDef.position = center.Copy();
 			anchorDef.type = b2Body.b2_staticBody;
-			var anchorBody:b2Body = m_level.world.CreateBody(anchorDef);
-			anchor = new GfxPhysObject(anchorBody);
+			anchorBody = m_level.world.CreateBody(anchorDef);
+			anchor = new Sprite();
 			trackDef.enableLimit = true;
 			trackDef.Initialize(anchorBody, m_physics, center, axis);
 			joints.push(m_level.world.CreateJoint(trackDef));
@@ -506,35 +511,14 @@ package {
 			var h:Number = .25;
 			trackGfx.width = w;
 			trackGfx.height = h;
-			//trace(w, h, -scale.x / 2, -scale.y / 2);
 			trackGfx.setTexCoords(3,new Point(w,h));
 			trackGfx.setTexCoords(1,new Point(w,0));
 			trackGfx.setTexCoords(2,new Point(0,h));
 			trackGfx.setTexCoords(0, new Point(0, 0));
-			var m:Number = slope.y / slope.x;
-			//trace(m, w);
-			trackGfx.x = 0;
-			trackGfx.y = 0;
-			if (m == 0) {
-				if(slope.y > 0) {
-					trackGfx.x += w / 2;
-					trackGfx.y += h / 2;
-				} else {
-					trackGfx.x += -w / 2;
-					trackGfx.y += -h / 2;
-				}
-			} else if (isFinite(m)) {
-				//var bigPoppa:Number = - weights.x / (weights.y - weights.x);
-				//trackGfx.x += h / 2;
-				//trackGfx.y += w / 2;
-			} else {
-				trackGfx.x += h / 2;
-				var bigPoppa:Number = - weights.x / (weights.y - weights.x);
-				//trace(bigPopa);
-				trackGfx.y += -w*bigPoppa;
-			}
-			trackGfx.rotation = Math.atan2(slope.y , slope.x);
+			trackGfx.x = weights.x;
+			trackGfx.y = -h/2;
 			anchor.addChild(trackGfx);
+			anchor.rotation = Math.atan2(slope.y , slope.x);
 			sprite.alpha=.5;
 			
 			
@@ -547,34 +531,6 @@ package {
 			s.y=-mkSize/2;
 			s.alpha=10;
 			addChild(s);
-			
-			//s.rotation=trackGfx.rotation;
-			
-			//var sprite:Sprite = new Sprite();
-			//sprite.graphics.beginFill(0xB0B0B0);
-			//sprite.graphics.lineStyle(3.0, 0x333333, .8, false, LineScaleMode.NONE);
-			//sprite.graphics.moveTo(l.x, l.y);
-			//sprite.graphics.lineTo(r.x, r.y);
-			//sprite.graphics.drawCircle(l.x, l.y, 0.1);
-			//sprite.graphics.drawCircle(r.x, r.y, 0.1);
-			//sprite.graphics.endFill();
-			//
-			//anchor.addChild(sprite);
-			//
-			//
-			//m_level.getParent().addChild(anchor);
-			//
-			//sprite = new Sprite();
-			//sprite.graphics.beginFill(0xB0B0B0);
-			//sprite.graphics.lineStyle(3.0, 0x333333, .8, false, LineScaleMode.NONE);
-			//
-			//var dy:Number = r.y - l.y;
-			//var dx:Number = r.x - l.x;
-			//var length:Number = 5 * Math.sqrt((dy * dy) + (dx * dx));
-			//sprite.graphics.moveTo(l.y / length, l.x / length);
-			//sprite.graphics.lineTo(r.y / length, r.x / length);
-			//sprite.graphics.endFill();
-			//addChild(sprite);
 		}
 		
 		public function getBodyType():uint {

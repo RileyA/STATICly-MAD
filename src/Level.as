@@ -85,10 +85,6 @@ package {
 
 		public function addBlock(b:Block):void {
 			m_blocks.push(b);
-			if (b.getAnchor() != null) {
-				m_parent_sprite.addChild(b.getAnchor());
-				m_gfxPhysObjects.push(b.getAnchor());
-			}
 			m_parent_sprite.addChild(b);
 			m_gfxPhysObjects.push(b);
 			if (b.isChargableBlock()) {
