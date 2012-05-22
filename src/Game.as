@@ -9,7 +9,6 @@ package {
 	
 	/** Manages a stack of game states */
 	public class Game extends Sprite {
-		//private var m_parent:flash.display.Sprite;
 		private var m_lastTime:Number;
 		private var m_currentState:GameState;
 		private var m_states:Vector.<GameState>;
@@ -43,9 +42,9 @@ package {
 
 		protected function onAdded(e:Event):void {
 			LoggerUtils.initLogger();
-			addState(new MenuState(this));
 			if (Config.debug) {
 				addState(getOverworld("DebugLab"));
+				addState(new LevelState(this, "Intro", m_overworlds["DebugLab"]));
 			} else {
 				addState(getOverworld("DischargeLab"));
 				addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));

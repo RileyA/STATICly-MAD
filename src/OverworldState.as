@@ -62,9 +62,6 @@ package {
 				enterLevel(m_level.getNextLevel());
 				m_level.resetLevel();
 			}
-			if (Config.debug) {
-				isDone ||= Keys.exitLevel();
-			}
 			return !isDone;
 		}
 

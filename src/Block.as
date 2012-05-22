@@ -129,9 +129,6 @@ package {
 			var area:Number=scale.x*scale.y;//m_physics.GetMass()/fd.density;
 			var chargeStrength:Number=area*(strong?strongChargeDensity:weakChargeDensity);
 			this.charges=ChargableUtils.makeCharges(chargeStrength, -scale.x / 2, -scale.y / 2, scale.x / 2, scale.y / 2);
-			//this.charges=new Vector.<Charge>();
-			//this.charges.push(new Charge(chargeStrength,new b2Vec2(0,0)));
-			
 			
 			// make block actionable
 			if (!insulated){

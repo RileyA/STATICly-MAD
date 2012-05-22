@@ -4,8 +4,6 @@ package {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import flash.display.Shape;
-	import flash.events.KeyboardEvent;
 	import Game;
 
 	/** A game state, this encapsulates some chunk of the game (e.g. a
