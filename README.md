@@ -7,6 +7,6 @@ Riley Adams, Craig Macomber, Matt Hall, David Mailhot
 
 ---------------------
 
-This will be a game eventually. It'll be pretty rad.
+This is a game. It's pretty rad.
 
 ---------------------

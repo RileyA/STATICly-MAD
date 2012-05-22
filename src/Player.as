@@ -1,6 +1,5 @@
 package {
 
-	//import flash.display.*;
 	import starling.textures.*;
 	import starling.display.*;
 	import starling.core.*;

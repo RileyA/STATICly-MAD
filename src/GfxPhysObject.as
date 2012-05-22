@@ -3,9 +3,7 @@ package {
 	import Box2D.Common.Math.*;
 	import Box2D.Dynamics.*;
 	import Box2D.Collision.Shapes.*;
-
 	import starling.display.Sprite;
-	import starling.display.DisplayObject;
 
 	/** This keeps a collection of graphics sprites updated with 
 		their physics counterparts */
@@ -53,11 +51,5 @@ package {
 		public function getAngle():Number {
 			return m_physics == null ? 0.0 : m_physics.GetAngle() * 180.0/Math.PI;
 		}
-		
-		/*override public function addChild(child:DisplayObject):flash.display.DisplayObject {
-			var display:flash.display.DisplayObject = super.addChild(child);
-			updateTransform();
-			return display;
-		}*/
 	}
 }
