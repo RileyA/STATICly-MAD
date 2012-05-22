@@ -53,9 +53,12 @@ package {
 		
 		private var m_sprite:PlayerSprite;
 		
+		private var m_level:Level;
+		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
 			var world:b2World=level.world;
-
+			this.m_level=level;
+			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			const toeHeight:Number=-.05;
 			polyShape.SetAsArray([
@@ -375,18 +378,29 @@ package {
 					// increment shuffle strength in direction of current polarity until it reaches full
 					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
-			} else if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-				if ((shuffleStrength * carpetPolarity) >= 1.0) {
-					// We have reached full shuffle strength matching the current carpet. We are charged!
-					chargePolarity = carpetPolarity;
-				} else {
-					// increment shuffle strength in direction of current carpet polarity
-					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
+			} else {
+			spark(5);
+				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
+					if ((shuffleStrength * carpetPolarity) >= 1.0) {
+						// We have reached full shuffle strength matching the current carpet. We are charged!
+						chargePolarity = carpetPolarity;
+					} else {
+						// increment shuffle strength in direction of current carpet polarity
+						shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
+					}
 				}
 			}
 		}
 
+
+		public function spark(str:Number):void{
+			m_level.addSpark(this.x, this.y, str, false);
+		}
+		
 		public function groundPlayer():void {
+			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
+				spark(400);
+			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
 		}

@@ -95,7 +95,16 @@ package {
 			m_info = blockInfo;
 			init();
 		}
-
+		
+		public function spark():void{
+			var player:Player= m_level.getPlayer();
+			var xv:Number = x - player.x;
+			var yv:Number = y - (player.y + player.height * 0.5);
+			var len:Number = Math.sqrt(xv * xv + yv * yv);
+			m_level.addSpark(player.x + 20*xv/len, player.y + 
+				20*yv/len, chargeStrength*20, false);
+		}
+		
 		public function init():void {
 
 			joints = new Vector.<b2Joint>();
@@ -148,15 +157,8 @@ package {
 					} else { // make weak block copy players state, even if no charge
 						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
 						chargePolarity=player.chargePolarity;
-
-						if (player.chargePolarity == 0) {
-							var xv:Number = x - player.x;
-							var yv:Number = y - (player.y + player.height * 0.5);
-							var len:Number = Math.sqrt(xv * xv + yv * yv);
-							m_level.addSpark(player.x + 20*xv/len, player.y + 
-								20*yv/len, chargeStrength*4, false);
-						}
 					}
+					spark();
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
 				fd.density=0;
