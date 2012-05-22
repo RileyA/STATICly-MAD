@@ -13,6 +13,8 @@ package {
 	import Chargable.*;
 	import Config
 	import starling.core.Starling;
+	import Particle.*;
+	import starling.textures.Texture;
 
 	public class Level {
 
@@ -43,6 +45,15 @@ package {
 		private static const VELOCITY_ITERATIONS:uint = 6;
 		private static const DO_SLEEP:Boolean = true;
 		private static const BORDER_THICKNESS:Number = 10;
+
+		[Embed(source = "../media/images/spark.png")]
+		private static const m_spark:Class;
+		private static const sparkTex:Texture=Texture.fromBitmap(new m_spark);
+
+		public var m_particleSys:ParticleSystem;
+		public var m_particleE:ParticleEmitter;
+		public var m_particles:Vector.<ParticleSystem> 
+			= new Vector.<ParticleSystem>();
 
 		public function Level(parent:Sprite, info:LevelInfo):void {
 
@@ -113,6 +124,27 @@ package {
 			m_chargableManager.removeChargable(b);
 		}
 
+		public function addSpark(x:Number, y:Number, 
+			scale:Number, meters:Boolean = true) :void {
+			var particleSys:ParticleSystem = new ParticleSystem();
+			var emitter:ParticleEmitter = new ParticleEmitter();
+			emitter.setTexture(sparkTex);
+			particleSys.addEmitter(emitter);
+			particleSys.x = x * (meters ? pixelsPerMeter : 1);
+			particleSys.y = y * (meters ? pixelsPerMeter : 1);
+
+			var mp:Particle = new Particle(sparkTex);
+			mp.width = scale;
+			mp.height = scale;
+			mp.x = -scale / 2;
+			mp.y = -scale / 2;
+			mp.lifespan = 0.3;
+			particleSys.addParticle(mp);
+
+			m_particles.push(particleSys);
+			m_parent_sprite.addChild(particleSys);
+		}
+
 		public function setUpdatePhysics(updatePhys:Boolean):void {
 			m_updatePhysics = updatePhys;
 		}
@@ -134,6 +166,19 @@ package {
 		*/
 		public function update(delta:Number):Boolean {
 
+			for (var i:uint = 0; i < m_particles.length; ++i) {
+				if (!m_particles[i].update(delta)) {
+					m_parent_sprite.removeChild(m_particles[i]);
+					if (i != m_particles.length - 1) {
+						var tmp:ParticleSystem = m_particles[
+							m_particles.length - 1];
+						m_particles[i] = tmp;
+					}
+					m_particles.pop();
+					--i;
+				}
+			}
+
 			if (m_updatePhysics) {
 				world.Step(TIMESTEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 				world.ClearForces();
@@ -141,7 +186,7 @@ package {
 				m_player.update(this);
 			}
 
-			for (var i:uint = 0; i < m_gfxPhysObjects.length; ++i)
+			for (i = 0; i < m_gfxPhysObjects.length; ++i)
 				m_gfxPhysObjects[i].updateTransform(pixelsPerMeter);
 
 			

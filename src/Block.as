@@ -61,6 +61,7 @@ package {
 		private var joints:Vector.<b2Joint>;
 		private var hinting:Boolean=false;
 		private var hintPhase:Number=0;
+		private var chargeStrength:Number;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -127,7 +128,7 @@ package {
 			m_physics.CreateFixture(fd);
 			
 			var area:Number=scale.x*scale.y;//m_physics.GetMass()/fd.density;
-			var chargeStrength:Number=area*(strong?strongChargeDensity:weakChargeDensity);
+			chargeStrength=area*(strong?strongChargeDensity:weakChargeDensity);
 			this.charges=ChargableUtils.makeCharges(chargeStrength, -scale.x / 2, -scale.y / 2, scale.x / 2, scale.y / 2);
 			//this.charges=new Vector.<Charge>();
 			//this.charges.push(new Charge(chargeStrength,new b2Vec2(0,0)));
@@ -150,6 +151,14 @@ package {
 					} else { // make weak block copy players state, even if no charge
 						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
 						chargePolarity=player.chargePolarity;
+
+						if (player.chargePolarity == 0) {
+							var xv:Number = x - player.x;
+							var yv:Number = y - (player.y + player.height * 0.5);
+							var len:Number = Math.sqrt(xv * xv + yv * yv);
+							m_level.addSpark(player.x + 20*xv/len, player.y + 
+								20*yv/len, chargeStrength*4, false);
+						}
 					}
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
