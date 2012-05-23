@@ -13,7 +13,7 @@ package {
 	/** A basic level gameplay state */
 	public class OverworldState extends GameState {
 
-		private var m_level:Level;
+		public var m_level:Level;
 		private var m_worldName:String;
 		private var completedLevels:Vector.<String>;
 		private var m_bestLevelScores:Object;
@@ -64,13 +64,18 @@ package {
 			}
 			return !isDone;
 		}
-
+		
+		
+		public static function isLab(name:String):Boolean{
+			return name.indexOf("Lab") != -1;
+		}
+		
 		/**
 		* Enter the specified level
 		*/
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
-			else if (name.indexOf("Lab") != -1) {
+			else if (isLab(name)) {
 				m_game.replaceState(m_game.getOverworld(name));
 				m_game.getMenu().setOverworldMenu();
 			} else {

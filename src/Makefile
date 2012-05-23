@@ -3,6 +3,8 @@
 
 OUT = STATIClyMAD.swf
 OUT_ED = Editor.swf
+OUT_TABLE = table.swf
+
 OPTS = -static-link-runtime-shared-libraries=true -use-direct-blit=true
 CC = mxmlc
 
@@ -17,3 +19,7 @@ clean:
 
 levels:
 	python LevelCompiler.py
+
+table:
+	${CC} LevelTableBuilder.as -o ${OUT_TABLE} ${OPTS}
+	

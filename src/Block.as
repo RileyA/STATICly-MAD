@@ -330,7 +330,7 @@ package {
 				// start hacking stupid track bug
 				if (m_hackLastPos != null) {
 					m_hackLastPos.Subtract(m_physics.GetPosition());
-					if (m_hackLastPos.LengthSquared()<.00001) {
+					if (m_hackLastPos.LengthSquared()<.0000001) {
 						m_physics.SetLinearVelocity(new b2Vec2(0,0));
 					}
 				}

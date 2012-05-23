@@ -21,7 +21,7 @@ f.write("""
 		* Load all existing levels into a dictionary
 		*/
 		private static var associativeArray:Object;
-		private static var qidArray:Object;
+		public static var qidArray:Object;
 		{
 			associativeArray = new Object();
 			qidArray = new Object();
