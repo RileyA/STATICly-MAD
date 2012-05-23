@@ -190,7 +190,6 @@ package
 					return RUNNING;
 				}
 			} else {
-				var bound:Number = .7
 				if (v.y < 0)
 					return JUMPING;
 				else
@@ -203,18 +202,18 @@ package
 			if(newImg != currentImg || right != currentFacing) {
 				if (currentImg != null){
 					removeChild(currentImg);
-					if (!currentFacing){
-						currentImg.width = Math.abs(currentImg.width);
-						currentImg.x = -.07;
-					}
 				}
 				currentImg = newImg;
 				currentFacing = right;
+				
 				if (!right) {
-					//trace("left");
-					currentImg.width *= -1;
-					currentImg.x = currentImg.width - .07;
+				currentImg.width *= -1;
+				currentImg.x = currentImg.width - .07;
+				} else {
+					currentImg.width = Math.abs(currentImg.width);
+					currentImg.x = -.07;
 				}
+				
 				addChild(currentImg);
 			}
 		}
