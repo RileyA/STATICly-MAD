@@ -144,9 +144,10 @@ package {
 		private function doActionSprite(s:Quad,pos:b2Vec2,pixelsPerMeter:Number):void{
 			s.scaleX = pixelsPerMeter;
 			s.scaleY = pixelsPerMeter;
-			s.visible=true;
+			s.visible=false;
 			s.x = (pos.x-markSize/2) * pixelsPerMeter;
 			s.y = (pos.y-markSize/2) * pixelsPerMeter;
+			if (Math.random()<.1) m_level.addSpark(pos.x, pos.y, 10, true);
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -379,8 +380,8 @@ package {
 					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
 			} else {
-			spark(50);
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
+					spark(50);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -388,6 +389,8 @@ package {
 						// increment shuffle strength in direction of current carpet polarity
 						shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
 					}
+				} else {
+					if (Math.random()<.5) spark(10);
 				}
 			}
 		}
