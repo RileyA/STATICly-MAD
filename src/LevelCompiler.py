@@ -26,7 +26,6 @@ f.write("""
 		{
 			associativeArray = new Object();
 			qidArray = new Object();
-			reverseQidArray = new Object();
 """)
 
 qid = 1

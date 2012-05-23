@@ -4,3 +4,4 @@ bin/*
 lib/*
 obj/*
 src/LevelAssets.as
+src/LevelQids.csv
