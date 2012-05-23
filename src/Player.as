@@ -379,7 +379,7 @@ package {
 					shuffleStrength += SHUFFLE_INCREMENT_FACTOR * chargePolarity;
 				}
 			} else {
-			spark(5);
+			spark(50);
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!

@@ -102,7 +102,7 @@ package {
 			var yv:Number = y - (player.y + player.height * 0.5);
 			var len:Number = Math.sqrt(xv * xv + yv * yv);
 			m_level.addSpark(player.x + 20*xv/len, player.y + 
-				20*yv/len, chargeStrength*20, false);
+				20*yv/len,  Math.sqrt(chargeStrength)*80, false);
 		}
 		
 		public function init():void {
