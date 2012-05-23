@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:a041e52554c1109f7c897ede6f8d8da8$ -->
+<TextureAtlas imagePath="MaddyNeutralRunning.png">
+	<SubTexture name="running001" x="2" y="114" width="76" height="118"/>
+    <SubTexture name="running002" x="2" y="2" width="74" height="110"/>
+</TextureAtlas>
