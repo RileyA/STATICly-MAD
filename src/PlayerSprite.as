@@ -90,6 +90,8 @@ package
 		private static var widthRatio:Number = 0;
 		private static var heightRatio:Number = 0;
 		private static var scale:Number = 1.2;
+		private static var count:int = 0;
+		private var mine:int;
 		
 		public static const FALLING:int = 1;
 		public static const FLOATING:int = 2;
@@ -99,7 +101,6 @@ package
 		
 		public function PlayerSprite(p:Player):void {
 			super();
-			initJuggler();
 			if (n_falling_img == null) {
 				n_falling_img = initImage(new n_falling);
 				n_floating_img = initImage(new n_floating);
@@ -118,6 +119,7 @@ package
 				b_running_clip = initClip(new b_running, XML(new b_running_xml));
 				r_running_clip = initClip(new r_running, XML(new r_running_xml));
 			}
+			initJuggler();
 			switchImage(n_standing_img, p.facingRight());
 		}
 		
@@ -228,7 +230,7 @@ package
 		private function chooseMove(p:Player):int {
 			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
 			if (p.jumpable()) {
-				if (v.Length() < .5) {
+				if (Math.abs(v.x) < .5) {
 					return STANDING;
 				} else {
 					return RUNNING;
