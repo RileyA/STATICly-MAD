@@ -4,7 +4,7 @@ package {
 	import flash.events.Event;
 	import Config;
 
-	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
+	[SWF(backgroundColor='#050505', frameRate='30', width='1200', height='800')]
 
 	public class Main extends Sprite {
 
@@ -14,7 +14,7 @@ package {
 		public function Main():void {
 			super();
 			m_starling = new Starling(Game, stage);
-			m_starling.antiAliasing = 0; // 0 to 16. 0=fast, 2=pretty good looking
+			m_starling.antiAliasing = 4; // 0 to 16. 0=fast, 2=pretty good looking
 			m_starling.showStats=Config.debug;
 			m_starling.start();			
 			addEventListener(flash.events.Event.ENTER_FRAME, update);

@@ -10,6 +10,7 @@ package Actioners {
 	import Colors;
 	import MiscUtils;
 	import Config;
+	import LevelAssets;
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
@@ -35,6 +36,11 @@ package Actioners {
 		private var m_x:Number; // the center x position
 		
 		private static const hideText:Boolean=false;
+		
+		// for exporting data about this level
+		public function makeTableString():String{
+			return LevelAssets.getLevelQid(m_levelName).toString()+"\t"+m_levelName+"\t"+m_levelTitle+"\t"+count;
+		}
 		
 		// count == num levels to beat before plating this one
 		public function LevelEntranceActioner(rectDef:b2BodyDef, offset:b2Vec2, world:b2World, levelName:String, count:int):void {

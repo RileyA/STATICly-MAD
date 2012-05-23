@@ -394,7 +394,7 @@ package {
 
 
 		public function spark(str:Number):void{
-			m_level.addSpark(this.x, this.y, str, false);
+			m_level.addSpark(m_physics.GetPosition().x, m_physics.GetPosition().y, str, true);
 		}
 		
 		public function groundPlayer():void {
