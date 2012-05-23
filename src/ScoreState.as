@@ -63,7 +63,7 @@ package {
 
 			
 			var editor_text:TextField = new TextField(600, 100, 
-				"Press (UP) to Continue!", fontStyle, fontSize, fontColor);
+				"Press (ENTER) to Continue!", fontStyle, fontSize, fontColor);
 			editor_text.x = 100;
 			editor_text.y = 450;
 			editor_text.hAlign = "center";
@@ -80,7 +80,7 @@ package {
 		}
 
 		override public function update(delta:Number):Boolean {
-			return !Keys.isKeyPressed(Keyboard.UP);
+			return !Keys.isKeyPressed(Keyboard.ENTER);
 		}
 	}
 }
