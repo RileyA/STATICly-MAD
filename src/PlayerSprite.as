@@ -213,7 +213,6 @@ package
 					currentImg.width = Math.abs(currentImg.width);
 					currentImg.x = -.07;
 				}
-				
 				addChild(currentImg);
 			}
 		}
