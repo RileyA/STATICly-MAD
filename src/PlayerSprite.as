@@ -228,7 +228,7 @@ package
 		private function chooseMove(p:Player):int {
 			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
 			if (p.jumpable()) {
-				if (v.Length() < .5) {
+				if (Math.abs(v.x) < .5) {
 					return STANDING;
 				} else {
 					return RUNNING;
