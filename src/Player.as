@@ -239,10 +239,10 @@ package {
 		
 		public function update(level:Level):void {
 			
-			var left:Boolean=Keys.isKeyPressed(Keyboard.LEFT);
-			var right:Boolean=Keys.isKeyPressed(Keyboard.RIGHT);
-			var up:Boolean=Keys.isKeyPressed(Keyboard.UP);
-			var action:Boolean=Keys.isKeyPressed(Keyboard.DOWN);
+			var left:Boolean=Keys.any(Keyboard.LEFT,Keyboard.A);
+			var right:Boolean=Keys.any(Keyboard.RIGHT,Keyboard.D);;
+			var up:Boolean=Keys.any(Keyboard.UP,Keyboard.W);
+			var action:Boolean=Keys.any(Keyboard.DOWN,Keyboard.SPACE,Keyboard.S);
 			
 			// no logical xor :(
 			if ((left || right)&&!(left && right)) {

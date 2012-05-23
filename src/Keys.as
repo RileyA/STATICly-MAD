@@ -43,5 +43,11 @@ package {
  		public static function isKeyPressed(key:int):Boolean{
 			return _keys.indexOf(key) > -1;
 		}
+		
+		public static function any(... args):Boolean{
+			for (var i:int = 0; i < args.length; i++)
+        		if (isKeyPressed(args[i])) return true;
+        	return false;
+		}
 	}
 }
