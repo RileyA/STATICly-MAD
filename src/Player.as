@@ -16,6 +16,7 @@ package {
 	import Box2D.Common.Math.*;
 	import Box2D.Collision.b2Collision;
 	import Colors;
+	import Particle.*;
 
 	public class Player extends GfxPhysObject implements Chargable {
 
@@ -54,6 +55,8 @@ package {
 		private var m_sprite:PlayerSprite;
 		
 		private var m_level:Level;
+		private var m_carpetEmit:ParticleEmitter;
+		private var m_psys:ParticleSystem;
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
 			var world:b2World=level.world;
@@ -139,6 +142,16 @@ package {
 			parentSprite.addChild(actionInd);
 			parentSprite.addChild(actionMid);
 			parentSprite.addChild(actionHit);
+
+			m_psys = new ParticleSystem();
+			m_carpetEmit = new ParticleEmitter();
+			m_carpetEmit.persistent = true;
+			m_carpetEmit.lifespan = -1;
+			m_carpetEmit.maxAngle = 50.0;
+			m_carpetEmit.setTexture(Level.sparkTex_bs);
+			m_psys.addEmitter(m_carpetEmit);
+			parentSprite.addChild(m_psys);
+			m_level.m_particles.push(m_psys);
 		}
 		
 		private function doActionSprite(s:Quad,pos:b2Vec2,pixelsPerMeter:Number):void{
@@ -158,6 +171,11 @@ package {
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
 			super.updateTransform(pixelsPerMeter);
+			m_carpetEmit.xpos = x;
+			m_carpetEmit.ypos = y;
+			var vel:b2Vec2 = m_physics.GetLinearVelocity().Copy();
+			vel.Normalize();
+			m_carpetEmit.rotation = Math.atan2(vel.y, vel.x) - Math.PI/2;
 			
 			var marker:ActionMarker = getBestAction();
 			
@@ -388,7 +406,10 @@ package {
 				}
 			} else {
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-					spark(1.5);
+					//spark(1.5);
+					m_carpetEmit.lifespan = 0.1;
+					m_carpetEmit.setTexture(carpetPolarity == -1 ? 
+						Level.sparkTex_rs : Level.sparkTex_bs);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -397,19 +418,23 @@ package {
 						shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
 					}
 				} else {
-					if (Math.random()<.5) spark(0.2);
+					if (Math.random()<.5) {
+						m_carpetEmit.lifespan = 1.0/25.0;
+						m_carpetEmit.setTexture(carpetPolarity == -1 ? 
+							Level.sparkTex_rs : Level.sparkTex_bs);
+					}
 				}
 			}
 		}
 
 
 		public function spark(str:Number):void{
-			m_level.addSpark(m_physics.GetPosition().x, m_physics.GetPosition().y, str, true);
 		}
 		
 		public function groundPlayer():void {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
-				spark(10);
+				m_level.addSpark(m_physics.GetPosition().x, 
+					m_physics.GetPosition().y, 5.0, true, chargePolarity == 1);
 			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;

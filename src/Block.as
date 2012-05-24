@@ -102,7 +102,7 @@ package {
 			pos.Subtract(actionPos);
 			pos.Normalize();
 			pos.Add(actionPos);
-			m_level.addSpark(pos.x, pos.y,  Math.sqrt(chargeStrength)*1.2, true);
+			m_level.addSpark(pos.x, pos.y,  Math.sqrt(chargeStrength)*1.2, true, chargePolarity == 1);
 		}
 		
 		public function init():void {
@@ -156,9 +156,14 @@ package {
 						}
 					} else { // make weak block copy players state, even if no charge
 						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
-						chargePolarity=player.chargePolarity;
+						if (player.chargePolarity == 0) {
+							spark();
+							chargePolarity=player.chargePolarity;
+						} else {
+							chargePolarity=player.chargePolarity;
+							spark();
+						}
 					}
-					spark();
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
 				fd.density=0;

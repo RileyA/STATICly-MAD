@@ -46,9 +46,18 @@ package {
 		private static const DO_SLEEP:Boolean = true;
 		private static const BORDER_THICKNESS:Number = 10;
 
-		[Embed(source = "../media/images/spark.png")]
-		private static const m_spark:Class;
-		private static const sparkTex:Texture=Texture.fromBitmap(new m_spark);
+		[Embed(source = "../media/images/bspark.png")]
+		private static const m_spark_b:Class;
+		public static const sparkTex_b:Texture=Texture.fromBitmap(new m_spark_b);
+		[Embed(source = "../media/images/rspark.png")]
+		private static const m_spark_r:Class;
+		public static const sparkTex_r:Texture=Texture.fromBitmap(new m_spark_r);
+		[Embed(source = "../media/images/bspark_small.png")]
+		private static const m_spark_bs:Class;
+		public static const sparkTex_bs:Texture=Texture.fromBitmap(new m_spark_bs);
+		[Embed(source = "../media/images/rspark_small.png")]
+		private static const m_spark_rs:Class;
+		public static const sparkTex_rs:Texture=Texture.fromBitmap(new m_spark_rs);
 
 		public var m_particleSys:ParticleSystem;
 		public var m_particleE:ParticleEmitter;
@@ -125,16 +134,19 @@ package {
 		}
 
 		public function addSpark(x:Number, y:Number, 
-			scale:Number, meters:Boolean = true) :void {
+			scale:Number, meters:Boolean = true, blue:Boolean = true) :void {
 			var particleSys:ParticleSystem = new ParticleSystem();
 			var emitter:ParticleEmitter = new ParticleEmitter();
-			emitter.setTexture(sparkTex);
+			emitter.setTexture(blue ? sparkTex_bs : sparkTex_rs);
+			//emitter.min_size = Math.sqrt(scale);
+			//emitter.max_size = Math.sqrt(scale)*1.25;
 			particleSys.addEmitter(emitter);
 			particleSys.x = x * (meters ? pixelsPerMeter : 1);
 			particleSys.y = y * (meters ? pixelsPerMeter : 1);
 			scale = scale * (meters ? pixelsPerMeter : 1);
 
-			var mp:Particle = new Particle(sparkTex);
+			var mp:Particle = new Particle(blue ? sparkTex_b	
+				: sparkTex_r);
 			mp.width = scale;
 			mp.height = scale;
 			mp.x = -scale / 2;

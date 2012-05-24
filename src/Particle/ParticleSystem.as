@@ -4,7 +4,7 @@ package Particle {
 	import starling.textures.Texture;
 	import flash.utils.*;
 
-	/** A particle system, can be loaded direct from JSON! */
+	/** A particle system! */
 	public class ParticleSystem extends Sprite {
 
 		public var m_particles:Vector.<Particle>  
@@ -13,7 +13,7 @@ package Particle {
 			= new Vector.<ParticleEmitter>();
 		public var m_affectors:Vector.<ParticleAffector> 
 			= new Vector.<ParticleAffector>();
-		
+
 		public function ParticleSystem():void {
 			
 		}

@@ -19,9 +19,17 @@ package Particle {
 		public var min_size:Number = 4.0;
 		public var max_size:Number = 8.0;
 
+		public var persistent:Boolean = false;
+
+		// max angle from direction (either positive or negative)
+		public var maxAngle:Number = 180.0;
+		public var rotation:Number = Math.PI;
+
 		private var system:ParticleSystem = null;
 		private var nextParticle:Number = 1.0 / particlesPerSecond;
 		private var tex:Texture = null;
+		public var xpos:Number = 0;
+		public var ypos:Number = 0;
 
 		public function ParticleEmitter():void {
 		}
@@ -37,7 +45,7 @@ package Particle {
 		public function update(delta:Number):Boolean {
 			lifespan -= delta;
 			if (lifespan <= 0.0)
-				return false;
+				return persistent;
 
 			while (delta > 0 && delta >= nextParticle) {
 				delta -= nextParticle;
@@ -52,8 +60,23 @@ package Particle {
 
 		public function emit():void {
 			var p:Particle = new Particle(tex);
-			p.x_velocity = Math.random() - 0.5;
-			p.y_velocity = Math.random() - 0.5;
+
+			// random direction
+			//p.x_velocity = Math.random() - 0.5;
+			//p.y_velocity = Math.random() - 0.5;
+
+			// default direction is straight up.
+
+			// rotate by -maxAngle to maxAngle
+			var ang:Number = rotation + (Math.random() * maxAngle*2 
+				- maxAngle) * Math.PI / 180.0 - Math.PI/2;
+
+			p.x_velocity = Math.cos(ang);
+			p.y_velocity = Math.sin(ang);
+
+			p.x = xpos;
+			p.y = ypos;
+
 			var len:Number = Math.sqrt(p.x_velocity * p.x_velocity 
 				+ p.y_velocity * p.y_velocity);
 			var vel:Number = min_v + Math.random() * (max_v - min_v);
