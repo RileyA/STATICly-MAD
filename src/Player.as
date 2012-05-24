@@ -294,7 +294,9 @@ package {
 			
 			if (canJump || xspeed!=0) {
 				var fx:Number=m_physics.GetMass()/(canJump?GROUND_ACELL_TIME_CONSTANT:AIR_ACELL_TIME_CONSTANT);
-				var vx:Number=m_physics.GetLinearVelocity().x;
+				var groundSpeed:Number=0;
+				if (reactBody!=null) groundSpeed=reactBody.GetLinearVelocity().x;
+				var vx:Number=m_physics.GetLinearVelocity().x-groundSpeed;
 				var deltaSpeed:Number=xspeed-vx;
 				fx*=deltaSpeed;
 				if (canJump || (deltaSpeed*xspeed)>0) {
