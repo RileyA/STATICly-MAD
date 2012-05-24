@@ -147,13 +147,17 @@ package {
 					if (strong) {
 						LoggerUtils.logChargeStrong(player.chargePolarity, chargePolarity);
 						if (chargePolarity==-player.chargePolarity) {
+							spark();
 							chargePolarity=ChargableUtils.CHARGE_NONE;
 							player.groundPlayer();
 						} else {
+							if (player.chargePolarity==0) spark();
 							var tmp:int=player.chargePolarity;
 							player.chargePolarity=chargePolarity;
 							chargePolarity=tmp;
+							if (player.chargePolarity==0) spark();
 						}
+						
 					} else { // make weak block copy players state, even if no charge
 						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
 						if (player.chargePolarity == 0) {
