@@ -160,7 +160,7 @@ package {
 			s.visible=false;
 			s.x = (pos.x-markSize/2) * pixelsPerMeter;
 			s.y = (pos.y-markSize/2) * pixelsPerMeter;
-			if (Math.random()<.1) m_level.addSpark(pos.x, pos.y, 0.2, true);
+			if (Math.random()<.1) m_level.addSparkAction(pos.x, pos.y, 0.2, true);
 		}
 		
 		public function getActionPos():b2Vec2{

@@ -59,6 +59,10 @@ package {
 		private static const m_spark_rs:Class;
 		public static const sparkTex_rs:Texture=Texture.fromBitmap(new m_spark_rs);
 
+		[Embed(source = "../media/images/longspark.png")]
+		private static const m_longspark:Class;
+		public static const longspark:Texture=Texture.fromBitmap(new m_longspark);
+
 		public var m_particleSys:ParticleSystem;
 		public var m_particleE:ParticleEmitter;
 		public var m_particles:Vector.<ParticleSystem> 
@@ -153,6 +157,28 @@ package {
 			mp.y = -scale / 2;
 			mp.lifespan = 0.3;
 			particleSys.addParticle(mp);
+
+			m_particles.push(particleSys);
+			m_parent_sprite.addChild(particleSys);
+		}
+
+		public function addSparkAction(x:Number, y:Number, 
+			scale:Number, meters:Boolean = true) :void {
+			var particleSys:ParticleSystem = new ParticleSystem();
+			var emitter:ParticleEmitter = new ParticleEmitter();
+			emitter.setTexture(longspark);
+			emitter.follow_direction = true;
+			emitter.min_size = 12.0;
+			emitter.max_size = 25.0;
+			emitter.lifespan = 0.07;
+			emitter.rotation = Math.PI;
+			emitter.maxAngle = 180.0;
+			emitter.particlesPerSecond = 15;
+			
+			particleSys.addEmitter(emitter);
+			particleSys.x = x * (meters ? pixelsPerMeter : 1);
+			particleSys.y = y * (meters ? pixelsPerMeter : 1);
+			scale = scale * (meters ? pixelsPerMeter : 1);
 
 			m_particles.push(particleSys);
 			m_parent_sprite.addChild(particleSys);

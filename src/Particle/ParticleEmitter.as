@@ -19,6 +19,8 @@ package Particle {
 		public var min_size:Number = 4.0;
 		public var max_size:Number = 8.0;
 
+		public var follow_direction:Boolean = false;
+
 		public var persistent:Boolean = false;
 
 		// max angle from direction (either positive or negative)
@@ -86,7 +88,11 @@ package Particle {
 				* (max_size - min_size);
 			p.lifespan = min_lifespan + Math.random() * (max_lifespan 
 				- min_lifespan);
+			p.follow = follow_direction;
+			//if (follow_direction)
+			//	p.color = 0xFF0000;
 			system.addParticle(p);
+			p.update(0.0);
 		}
 	}
 }
