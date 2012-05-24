@@ -56,6 +56,7 @@ package {
 		
 		private var m_level:Level;
 		private var m_carpetEmit:ParticleEmitter;
+		private var m_hairEmit:ParticleEmitter;
 		private var m_psys:ParticleSystem;
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
@@ -149,7 +150,17 @@ package {
 			m_carpetEmit.lifespan = -1;
 			m_carpetEmit.maxAngle = 50.0;
 			m_carpetEmit.setTexture(MiscUtils.sparkTex_bs);
+			
+			m_hairEmit = new ParticleEmitter();
+			m_hairEmit.persistent = true;
+			m_hairEmit.lifespan = -1;
+			m_hairEmit.maxAngle = 180;
+			m_hairEmit.setTexture(MiscUtils.sparkTex_bs);
+			m_hairEmit.min_v = 10;
+			m_hairEmit.max_v = 40;
+			
 			m_psys.addEmitter(m_carpetEmit);
+			m_psys.addEmitter(m_hairEmit);
 			parentSprite.addChild(m_psys);
 			m_level.m_particles.push(m_psys);
 		}
@@ -160,7 +171,7 @@ package {
 			s.visible=false;
 			s.x = (pos.x-markSize/2) * pixelsPerMeter;
 			s.y = (pos.y-markSize/2) * pixelsPerMeter;
-			if (Math.random()<.1) m_level.addSparkAction(pos.x, pos.y, 0.2, true);
+			if (Math.random()<.5) m_level.addSparkAction(pos.x, pos.y, 0.2, true);
 		}
 		
 		public function getActionPos():b2Vec2{
@@ -173,6 +184,14 @@ package {
 			super.updateTransform(pixelsPerMeter);
 			m_carpetEmit.xpos = x;
 			m_carpetEmit.ypos = y;
+			
+			m_hairEmit.xpos = x-.1*pixelsPerMeter;
+			m_hairEmit.ypos = y-HEIGHT*pixelsPerMeter-.1*pixelsPerMeter;
+			
+			m_hairEmit.lifespan = 4.0/25.0;
+			m_hairEmit.setTexture(chargePolarity == -1 ? 
+							MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
+			
 			var vel:b2Vec2 = m_physics.GetLinearVelocity().Copy();
 			vel.Normalize();
 			m_carpetEmit.rotation = Math.atan2(vel.y, vel.x) - Math.PI/2;
@@ -406,7 +425,6 @@ package {
 				}
 			} else {
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-					//spark(1.5);
 					m_carpetEmit.lifespan = 0.1;
 					m_carpetEmit.setTexture(carpetPolarity == -1 ? 
 						MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
@@ -427,9 +445,6 @@ package {
 			}
 		}
 
-
-		public function spark(str:Number):void{
-		}
 		
 		public function groundPlayer():void {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
