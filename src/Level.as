@@ -132,6 +132,7 @@ package {
 			particleSys.addEmitter(emitter);
 			particleSys.x = x * (meters ? pixelsPerMeter : 1);
 			particleSys.y = y * (meters ? pixelsPerMeter : 1);
+			scale = scale * (meters ? pixelsPerMeter : 1);
 
 			var mp:Particle = new Particle(sparkTex);
 			mp.width = scale;

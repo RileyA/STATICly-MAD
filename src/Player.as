@@ -147,7 +147,7 @@ package {
 			s.visible=false;
 			s.x = (pos.x-markSize/2) * pixelsPerMeter;
 			s.y = (pos.y-markSize/2) * pixelsPerMeter;
-			if (Math.random()<.1) m_level.addSpark(pos.x, pos.y, 10, true);
+			if (Math.random()<.1) m_level.addSpark(pos.x, pos.y, 0.2, true);
 		}
 		
 		public override function updateTransform(pixelsPerMeter:Number):void {
@@ -381,7 +381,7 @@ package {
 				}
 			} else {
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-					spark(50);
+					spark(3);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -390,7 +390,7 @@ package {
 						shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
 					}
 				} else {
-					if (Math.random()<.5) spark(10);
+					if (Math.random()<.5) spark(0.2);
 				}
 			}
 		}
@@ -402,7 +402,7 @@ package {
 		
 		public function groundPlayer():void {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
-				spark(400);
+				spark(15);
 			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;

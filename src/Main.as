@@ -4,7 +4,7 @@ package {
 	import flash.events.Event;
 	import Config;
 
-	[SWF(backgroundColor='#050505', frameRate='30', width='1200', height='800')]
+	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
 
 	public class Main extends Sprite {
 
