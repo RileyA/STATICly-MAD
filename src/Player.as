@@ -241,7 +241,7 @@ package {
 		public function update(level:Level):void {
 			
 			var left:Boolean=Keys.any(Keyboard.LEFT,Keyboard.A);
-			var right:Boolean=Keys.any(Keyboard.RIGHT,Keyboard.D);;
+			var right:Boolean=Keys.any(Keyboard.RIGHT,Keyboard.D);
 			var up:Boolean=Keys.any(Keyboard.UP,Keyboard.W);
 			var action:Boolean=Keys.any(Keyboard.DOWN,Keyboard.SPACE,Keyboard.S);
 			

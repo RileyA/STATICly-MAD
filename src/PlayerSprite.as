@@ -2,6 +2,7 @@ package
 {
 	import Box2D.Common.Math.b2Vec2;
 	import flash.display.Bitmap;
+	import flash.ui.Keyboard;
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
@@ -90,8 +91,6 @@ package
 		private static var widthRatio:Number = 0;
 		private static var heightRatio:Number = 0;
 		private static var scale:Number = 1.2;
-		private static var count:int = 0;
-		private var mine:int;
 		
 		public static const FALLING:int = 1;
 		public static const FLOATING:int = 2;
@@ -229,14 +228,16 @@ package
 		
 		private function chooseMove(p:Player):int {
 			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
+			var left:Boolean=Keys.any(Keyboard.LEFT,Keyboard.A);
+			var right:Boolean=Keys.any(Keyboard.RIGHT,Keyboard.D);
 			if (p.jumpable()) {
-				if (Math.abs(v.x) < .5) {
-					return STANDING;
-				} else {
+				if (left || right) {
 					return RUNNING;
+				} else {
+					return STANDING;
 				}
 			} else {
-				if (v.y < 0)
+				if (p.getPhysics().GetLinearVelocity().y < 0)
 					return JUMPING;
 				else
 					return FALLING;
