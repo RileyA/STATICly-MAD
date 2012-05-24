@@ -192,6 +192,8 @@ package {
 			m_hairEmit.setTexture(chargePolarity == -1 ? 
 							Level.sparkTex_rs : Level.sparkTex_bs);
 			
+			var force:b2Vec2=m_level.getChargableManager().getChargeForce(this);
+			
 			var vel:b2Vec2 = m_physics.GetLinearVelocity().Copy();
 			vel.Normalize();
 			m_carpetEmit.rotation = Math.atan2(vel.y, vel.x) - Math.PI/2;
