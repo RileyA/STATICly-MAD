@@ -17,55 +17,55 @@ package
 		
 		[Embed(source = "../media/images/MaddyNeutralFalling.png")]
 		private static const n_falling:Class;
-		private static var n_falling_img:Image;
+		private var n_falling_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralFloating.png")]
 		private static const n_floating:Class;
-		private static var n_floating_img:Image;
+		private var n_floating_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralJumping.png")]
 		private static const n_jumping:Class;
-		private static var n_jumping_img:Image;
+		private var n_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralRunning.png")]
 		private static const n_running:Class;
 		[Embed(source = "../media/images/MaddyNeutralRunning.xml", mimeType="application/octet-stream")]
 		private static const n_running_xml:Class;
-		private static var n_running_clip:MovieClip;
+		private var n_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyNeutralStanding.png")]
 		private static const n_standing:Class;
-		private static var n_standing_img:Image;
+		private var n_standing_img:Image;
 		[Embed(source = "../media/images/MaddyBlueFalling.png")]
 		private static const b_falling:Class;
-		private static var b_falling_img:Image;
+		private var b_falling_img:Image;
 		[Embed(source = "../media/images/MaddyBlueFloating.png")]
 		private static const b_floating:Class;
-		private static var b_floating_img:Image;
+		private var b_floating_img:Image;
 		[Embed(source = "../media/images/MaddyBlueJumping.png")]
 		private static const b_jumping:Class;
-		private static var b_jumping_img:Image;
+		private var b_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyBlueRunning.png")]
 		private static const b_running:Class;
 		[Embed(source = "../media/images/MaddyBlueRunning.xml", mimeType="application/octet-stream")]
 		private static const b_running_xml:Class;
-		private static var b_running_clip:MovieClip;
+		private var b_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyBlueStanding.png")]
 		private static const b_standing:Class;
-		private static var b_standing_img:Image;
+		private var b_standing_img:Image;
 		[Embed(source = "../media/images/MaddyRedFalling.png")]
 		private static const r_falling:Class;
-		private static var r_falling_img:Image;
+		private var r_falling_img:Image;
 		[Embed(source = "../media/images/MaddyRedFloating.png")]
 		private static const r_floating:Class;
-		private static var r_floating_img:Image;
+		private var r_floating_img:Image;
 		[Embed(source = "../media/images/MaddyRedJumping.png")]
 		private static const r_jumping:Class;
-		private static var r_jumping_img:Image;
+		private var r_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyRedRunning.png")]
 		private static const r_running:Class;
 		[Embed(source = "../media/images/MaddyRedRunning.xml", mimeType="application/octet-stream")]
 		private static const r_running_xml:Class;
-		private static var r_running_clip:MovieClip;
+		private var r_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyRedStanding.png")]
 		private static const r_standing:Class;
-		private static var r_standing_img:Image;
+		private var r_standing_img:Image;
 		
 		private var currentImg:Image;
 		private var currentFacing:Boolean;
@@ -101,7 +101,6 @@ package
 				r_running_clip = initClip(new r_running, XML(new r_running_xml));
 			}
 			initJuggler();
-			switchImage(n_standing_img, p.facingRight());
 		}
 		
 		private function initImage(b:Bitmap):Image {
