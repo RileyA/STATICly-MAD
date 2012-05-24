@@ -148,7 +148,7 @@ package {
 			m_carpetEmit.persistent = true;
 			m_carpetEmit.lifespan = -1;
 			m_carpetEmit.maxAngle = 50.0;
-			m_carpetEmit.setTexture(Level.sparkTex_bs);
+			m_carpetEmit.setTexture(MiscUtils.sparkTex_bs);
 			m_psys.addEmitter(m_carpetEmit);
 			parentSprite.addChild(m_psys);
 			m_level.m_particles.push(m_psys);
@@ -409,7 +409,7 @@ package {
 					//spark(1.5);
 					m_carpetEmit.lifespan = 0.1;
 					m_carpetEmit.setTexture(carpetPolarity == -1 ? 
-						Level.sparkTex_rs : Level.sparkTex_bs);
+						MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -421,7 +421,7 @@ package {
 					if (Math.random()<.5) {
 						m_carpetEmit.lifespan = 1.0/25.0;
 						m_carpetEmit.setTexture(carpetPolarity == -1 ? 
-							Level.sparkTex_rs : Level.sparkTex_bs);
+							MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 					}
 				}
 			}
