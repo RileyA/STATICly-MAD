@@ -57,6 +57,7 @@ package {
 		private var m_level:Level;
 		private var m_carpetEmit:ParticleEmitter;
 		private var m_hairEmit:ParticleEmitter;
+		private var m_hintEmit:ParticleEmitter;
 		private var m_psys:ParticleSystem;
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
@@ -159,8 +160,21 @@ package {
 			m_hairEmit.min_v = 10;
 			m_hairEmit.max_v = 40;
 			
+			m_hairEmit.particlesPerSecond=100;
+			
+			m_hintEmit = new ParticleEmitter();
+			m_hintEmit.persistent = true;
+			m_hintEmit.lifespan = -1;
+			m_hintEmit.maxAngle = 180;
+			m_hintEmit.min_v = 10;
+			m_hintEmit.max_v = 40;
+			m_hintEmit.setTexture(MiscUtils.longspark);
+			
+			m_hintEmit.particlesPerSecond=10;
+			
 			m_psys.addEmitter(m_carpetEmit);
 			m_psys.addEmitter(m_hairEmit);
+			m_psys.addEmitter(m_hintEmit);
 			parentSprite.addChild(m_psys);
 			m_level.m_particles.push(m_psys);
 		}
@@ -186,13 +200,33 @@ package {
 			m_carpetEmit.ypos = y;
 			
 			m_hairEmit.xpos = x-.1*pixelsPerMeter;
-			m_hairEmit.ypos = y-HEIGHT*pixelsPerMeter-.1*pixelsPerMeter;
+			m_hairEmit.ypos = y-HEIGHT*pixelsPerMeter-.35*pixelsPerMeter;
 			
-			m_hairEmit.lifespan = 4.0/25.0;
+			m_hairEmit.lifespan = (chargePolarity==0)?-1:2.0/5.0;
 			m_hairEmit.setTexture(chargePolarity == -1 ? 
 							MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 			
+			m_hairEmit.spawnSpread=.5*pixelsPerMeter;
+			
+			m_hairEmit.min_size=.1*pixelsPerMeter;
+			m_hairEmit.max_size=.2*pixelsPerMeter;
+			
+			
+			
+			m_hintEmit.spawnSpread=.3*pixelsPerMeter;
+			
+			m_hintEmit.min_size=.5*pixelsPerMeter;
+			m_hintEmit.max_size=.8*pixelsPerMeter;
+			
+			
 			var force:b2Vec2=m_level.getChargableManager().getChargeForce(this);
+			force.Multiply(.003);
+			if (force.LengthSquared()>1) {
+				force.Normalize();
+			}
+			force.Multiply(pixelsPerMeter*5);
+			m_hairEmit.xv=force.x;
+			m_hairEmit.yv=force.y;
 			
 			var vel:b2Vec2 = m_physics.GetLinearVelocity().Copy();
 			vel.Normalize();
@@ -209,8 +243,10 @@ package {
 				}
 			}
 			
+			m_hintEmit.lifespan = (marker == null)?-1:.05;
+			
 			if (marker != null) {
-
+			
 				var markerPos:b2Vec2 = marker.fixture.GetBody().GetPosition().Copy();
 				if(actionInd != null)
 					doActionSprite(actionInd,markerPos,pixelsPerMeter);
@@ -225,12 +261,19 @@ package {
 				
 				var diff:b2Vec2=pos.Copy()
 				diff.Subtract(markerPos);
+				
+				m_hintEmit.xv=-diff.x*pixelsPerMeter*1;
+				m_hintEmit.yv=-diff.y*pixelsPerMeter*1;
+				
 				var dist:Number=diff.Normalize();
 				var hitPos:b2Vec2=pos.Copy()
 				if (dist>HEIGHT_ACTION){
 					diff.Multiply(HEIGHT_ACTION);
 					hitPos.Add(diff);
 				}
+				m_hintEmit.xpos = hitPos.x*pixelsPerMeter;
+				m_hintEmit.ypos = hitPos.y*pixelsPerMeter;
+				
 				if(actionHit != null)
 					doActionSprite(actionHit,hitPos,pixelsPerMeter);
 			} else {

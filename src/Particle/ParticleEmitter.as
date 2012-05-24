@@ -32,6 +32,10 @@ package Particle {
 		private var tex:Texture = null;
 		public var xpos:Number = 0;
 		public var ypos:Number = 0;
+		
+		public var xv:Number = 0;
+		public var yv:Number = 0;
+		public var spawnSpread:Number = 0;
 
 		public function ParticleEmitter():void {
 		}
@@ -76,14 +80,17 @@ package Particle {
 			p.x_velocity = Math.cos(ang);
 			p.y_velocity = Math.sin(ang);
 
-			p.x = xpos;
-			p.y = ypos;
+			p.x = xpos+spawnSpread*(Math.random()-.5);
+			p.y = ypos+spawnSpread*(Math.random()-.5);
 
 			var len:Number = Math.sqrt(p.x_velocity * p.x_velocity 
 				+ p.y_velocity * p.y_velocity);
 			var vel:Number = min_v + Math.random() * (max_v - min_v);
 			p.x_velocity *= vel / len;
 			p.y_velocity *= vel / len;
+			p.x_velocity += xv
+			p.y_velocity += yv
+			
 			p.width = p.height = min_size + Math.random() 
 				* (max_size - min_size);
 			p.lifespan = min_lifespan + Math.random() * (max_lifespan 
