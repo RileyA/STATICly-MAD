@@ -150,6 +150,12 @@ package {
 			if (Math.random()<.1) m_level.addSpark(pos.x, pos.y, 0.2, true);
 		}
 		
+		public function getActionPos():b2Vec2{
+			var v:b2Vec2=m_physics.GetPosition().Copy();
+			v.y+=HEIGHT_ACTION;
+			return v;
+		}
+		
 		public override function updateTransform(pixelsPerMeter:Number):void {
 			super.updateTransform(pixelsPerMeter);
 			
@@ -170,8 +176,7 @@ package {
 				if(actionInd != null)
 					doActionSprite(actionInd,markerPos,pixelsPerMeter);
 				
-				var pos:b2Vec2=m_physics.GetPosition().Copy();
-				pos.y+=HEIGHT_ACTION;
+				var pos:b2Vec2=getActionPos();
 				
 				var midPos:b2Vec2=pos.Copy()
 				midPos.Add(markerPos);
@@ -383,7 +388,7 @@ package {
 				}
 			} else {
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
-					spark(3);
+					spark(1.5);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -404,7 +409,7 @@ package {
 		
 		public function groundPlayer():void {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
-				spark(15);
+				spark(10);
 			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;

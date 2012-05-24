@@ -97,12 +97,12 @@ package {
 		}
 		
 		public function spark():void{
-			var player:Player= m_level.getPlayer();
-			var xv:Number = x - player.x;
-			var yv:Number = y - (player.y + player.height * 0.5);
-			var len:Number = Math.sqrt(xv * xv + yv * yv);
-			m_level.addSpark(player.x + 20*xv/len, player.y + 
-				20*yv/len,  Math.sqrt(chargeStrength)*80, false);
+			var pos:b2Vec2= m_physics.GetPosition().Copy();
+			var actionPos:b2Vec2=m_level.getPlayer().getActionPos();
+			pos.Subtract(actionPos);
+			pos.Normalize();
+			pos.Add(actionPos);
+			m_level.addSpark(pos.x, pos.y,  Math.sqrt(chargeStrength)*1.2, true);
 		}
 		
 		public function init():void {
@@ -198,7 +198,7 @@ package {
 				return s;
 			}
 			
-			var scalar:Number=0.3;
+			var scalar:Number=strong?.18:0.3;
 			var offx:Number=Math.random();
 			var offy:Number=Math.random();
 			
@@ -362,11 +362,11 @@ package {
 		
 		private function redraw():void{
 			var main:uint=0xFF;
-			var off:uint=strong?0x10:0xA0;
+			var off:uint=strong?0x05:0xA0;
 			var overlayoff:uint=strong?0x40:0xDD;
 			
 			const blue:uint = Color.rgb(off,off,main);
-			const none:uint = strong?0x999999:0xFFFFFF;
+			const none:uint = strong?0x888888:0xFFFFFF;
 			const red:uint =  Color.rgb(main,off,off);
 			
 			const overlayblue:uint = Color.rgb(overlayoff,overlayoff,main);
