@@ -24,17 +24,11 @@ package
 		[Embed(source = "../media/images/MaddyNeutralJumping.png")]
 		private static const n_jumping:Class;
 		private static var n_jumping_img:Image;
-		[Embed(source = "../media/images/MaddyNeutralRunning1.png")]
-		private static const n_running1:Class;
-		private static var n_running_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralRunning.png")]
 		private static const n_running:Class;
 		[Embed(source = "../media/images/MaddyNeutralRunning.xml", mimeType="application/octet-stream")]
 		private static const n_running_xml:Class;
 		private static var n_running_clip:MovieClip;
-		//[Embed(source = "../media/images/MaddyNeutralRunning2.png")]
-		//private static const n_running2:Class;
-		//private static var n_running2_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralStanding.png")]
 		private static const n_standing:Class;
 		private static var n_standing_img:Image;
@@ -47,17 +41,11 @@ package
 		[Embed(source = "../media/images/MaddyBlueJumping.png")]
 		private static const b_jumping:Class;
 		private static var b_jumping_img:Image;
-		[Embed(source = "../media/images/MaddyBlueRunning1.png")]
-		private static const b_running1:Class;
-		private static var b_running_img:Image;
 		[Embed(source = "../media/images/MaddyBlueRunning.png")]
 		private static const b_running:Class;
 		[Embed(source = "../media/images/MaddyBlueRunning.xml", mimeType="application/octet-stream")]
 		private static const b_running_xml:Class;
 		private static var b_running_clip:MovieClip;
-		//[Embed(source = "../media/images/MaddyBlueRunning2.png")]
-		//private static const b_running2:Class;
-		//private static var b_running2_img:Image;
 		[Embed(source = "../media/images/MaddyBlueStanding.png")]
 		private static const b_standing:Class;
 		private static var b_standing_img:Image;
@@ -70,17 +58,11 @@ package
 		[Embed(source = "../media/images/MaddyRedJumping.png")]
 		private static const r_jumping:Class;
 		private static var r_jumping_img:Image;
-		[Embed(source = "../media/images/MaddyRedRunning1.png")]
-		private static const r_running1:Class;
-		private static var r_running_img:Image;
 		[Embed(source = "../media/images/MaddyRedRunning.png")]
 		private static const r_running:Class;
 		[Embed(source = "../media/images/MaddyRedRunning.xml", mimeType="application/octet-stream")]
 		private static const r_running_xml:Class;
 		private static var r_running_clip:MovieClip;
-		//[Embed(source = "../media/images/MaddyRedRunning2.png")]
-		//private static const r_running2:Class;
-		//private static var r_running2_img:Image;
 		[Embed(source = "../media/images/MaddyRedStanding.png")]
 		private static const r_standing:Class;
 		private static var r_standing_img:Image;
@@ -215,7 +197,6 @@ package
 							break;
 						case RUNNING:
 							switchImage(r_running_clip, p.facingRight(), true);
-							
 							break;
 						case STANDING:
 							switchImage(r_standing_img, p.facingRight());
@@ -246,11 +227,9 @@ package
 		}
 		
 		private function switchImage(newImg:Image, right:Boolean, isMovie:Boolean = false):void {
-			if(newImg != currentImg || right != currentFacing) {
+			if (newImg != currentImg || right != currentFacing) {
 				if (currentImg != null){
 					removeChild(currentImg);
-					//if (isMovie)
-						//j.remove(MovieClip(currentImg));
 				}
 				currentImg = newImg;
 				currentFacing = right;
@@ -263,8 +242,6 @@ package
 					currentImg.x = -.07;
 				}
 				addChild(currentImg);
-				//if (isMovie)
-						//j.add(MovieClip(currentImg));
 			}
 		}
 		
