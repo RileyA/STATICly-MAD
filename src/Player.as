@@ -149,13 +149,13 @@ package {
 			m_carpetEmit.persistent = true;
 			m_carpetEmit.lifespan = -1;
 			m_carpetEmit.maxAngle = 50.0;
-			m_carpetEmit.setTexture(Level.sparkTex_bs);
+			m_carpetEmit.setTexture(MiscUtils.sparkTex_bs);
 			
 			m_hairEmit = new ParticleEmitter();
 			m_hairEmit.persistent = true;
 			m_hairEmit.lifespan = -1;
 			m_hairEmit.maxAngle = 180;
-			m_hairEmit.setTexture(Level.sparkTex_bs);
+			m_hairEmit.setTexture(MiscUtils.sparkTex_bs);
 			m_hairEmit.min_v = 10;
 			m_hairEmit.max_v = 40;
 			
@@ -190,7 +190,7 @@ package {
 			
 			m_hairEmit.lifespan = 4.0/25.0;
 			m_hairEmit.setTexture(chargePolarity == -1 ? 
-							Level.sparkTex_rs : Level.sparkTex_bs);
+							MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 			
 			var force:b2Vec2=m_level.getChargableManager().getChargeForce(this);
 			
@@ -429,7 +429,7 @@ package {
 				if (chargePolarity != carpetPolarity) {  // is shuffling over non-same carpet
 					m_carpetEmit.lifespan = 0.1;
 					m_carpetEmit.setTexture(carpetPolarity == -1 ? 
-						Level.sparkTex_rs : Level.sparkTex_bs);
+						MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
@@ -441,7 +441,7 @@ package {
 					if (Math.random()<.5) {
 						m_carpetEmit.lifespan = 1.0/25.0;
 						m_carpetEmit.setTexture(carpetPolarity == -1 ? 
-							Level.sparkTex_rs : Level.sparkTex_bs);
+							MiscUtils.sparkTex_rs : MiscUtils.sparkTex_bs);
 					}
 				}
 			}

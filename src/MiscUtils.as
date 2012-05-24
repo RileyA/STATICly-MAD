@@ -2,10 +2,27 @@ package {
 	import flash.utils.ByteArray;
 	import com.adobe.serialization.json.*;
 	import flash.utils.*;
+	import Particle.*;
+	import starling.textures.Texture;
 
 	/** A collection of random utilities */
 	public class MiscUtils {
 		
+		[Embed(source = "../media/images/bspark.png")]
+		private static const m_spark_b:Class;
+		public static const sparkTex_b:Texture=Texture.fromBitmap(new m_spark_b);
+		[Embed(source = "../media/images/rspark.png")]
+		private static const m_spark_r:Class;
+		public static const sparkTex_r:Texture=Texture.fromBitmap(new m_spark_r);
+		[Embed(source = "../media/images/bspark_small.png")]
+		private static const m_spark_bs:Class;
+		public static const sparkTex_bs:Texture=Texture.fromBitmap(new m_spark_bs);
+		[Embed(source = "../media/images/rspark_small.png")]
+		private static const m_spark_rs:Class;
+		public static const sparkTex_rs:Texture=Texture.fromBitmap(new m_spark_rs);
+		[Embed(source = "../media/images/longspark.png")]
+		private static const m_longspark:Class;
+		public static const longspark:Texture=Texture.fromBitmap(new m_longspark);
 		
 		public static function getDisplayName(levelName:String):String{
 			var l:LevelInfo=loadLevelInfo(levelName);
