@@ -17,21 +17,21 @@ package
 		
 		[Embed(source = "../media/images/MaddyNeutralFalling.png")]
 		private static const n_falling:Class;
-		private var n_falling_img:Image;
+		private static var n_falling_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralFloating.png")]
 		private static const n_floating:Class;
-		private var n_floating_img:Image;
+		private static var n_floating_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralJumping.png")]
 		private static const n_jumping:Class;
-		private var n_jumping_img:Image;
+		private static var n_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralRunning.png")]
 		private static const n_running:Class;
 		[Embed(source = "../media/images/MaddyNeutralRunning.xml", mimeType="application/octet-stream")]
 		private static const n_running_xml:Class;
-		private var n_running_clip:MovieClip;
+		private static var n_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyNeutralStanding.png")]
 		private static const n_standing:Class;
-		private var n_standing_img:Image;
+		private static var n_standing_img:Image;
 		[Embed(source = "../media/images/MaddyBlueFalling.png")]
 		private static const b_falling:Class;
 		private var b_falling_img:Image;
