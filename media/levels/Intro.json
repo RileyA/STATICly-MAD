@@ -512,7 +512,7 @@
 		"y_rel" : 0,
 		"x_rel" : 0
 	},
-	"targetTime" : 60,
+	"targetTime" : 20,
 	"gravity" : 
 	{
 		"y" : 9.8,
