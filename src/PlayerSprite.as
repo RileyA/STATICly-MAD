@@ -171,7 +171,7 @@ package
 					return STANDING;
 				}
 			} else {
-				if (p.getPhysics().GetLinearVelocity().y < 0)
+				if (p.getPhysics().GetLinearVelocity().y < -.1)
 					return JUMPING;
 				else
 					return FALLING;
