@@ -80,6 +80,19 @@ package {
 		public static function outputJSON(obj:Object):String {
 			return outputObject(obj);
 		}
+
+		/** Escape newlines 'n stuff */
+		public static function escapeString(str:String):String {
+			return str
+			  .replace(/[\"]/g, '\\"')
+			  .replace(/[\\]/g, '\\\\')
+			  .replace(/[\/]/g, '\\/')
+			  .replace(/[\b]/g, '\\b')
+			  .replace(/[\f]/g, '\\f')
+			  .replace(/[\n]/g, '\\n')
+			  .replace(/[\r]/g, '\\r')
+			  .replace(/[\t]/g, '\\t');
+		}
 	
 		/** This mess takes a simple object and dumps its fields into a JSON 
 			formatted string */
@@ -98,7 +111,7 @@ package {
 				if (obj[v.@name] is Number) {
 					out += obj[v.@name];
 				} else if (obj[v.@name] is String) {
-					out += "\"" + obj[v.@name] + "\"";
+					out += "\"" + escapeString(obj[v.@name]) + "\"";
 				} else if (obj[v.@name] is Boolean) {
 					out += obj[v.@name] ? "true" : "false";
 				} else if (obj[v.@name] is Vector.<*> || 
@@ -115,7 +128,7 @@ package {
 						if (obj[v.@name][i] is Number) {
 							out += obj[v.@name][i];
 						} else if (obj[v.@name][i] is String) {
-							out += "\"" + obj[v.@name][i] + "\"";
+							out += "\"" + escapeString(obj[v.@name][i]) + "\"";
 						} else if (obj[v.@name][i] is Boolean) {
 							out += obj[v.@name][i] ? "true" : "false";
 						} else if (obj[v.@name][i] is Vector.<*> || 

@@ -71,6 +71,14 @@ package {
 			scoreText.scaleY = scoreText.scaleX;
 			scoreText.x = 600;
 			scoreText.y = MENU_Y;
+
+			// hackity hack
+			exitText.autoScale = true;
+			resetText.autoScale = true;
+			titleText.autoScale = true;
+			timerText.autoScale = true;
+			parTimeText.autoScale = true;
+			scoreText.autoScale = true;
 		}
 
 		public function attachTo(parent:Sprite):void {
