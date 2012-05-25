@@ -36,7 +36,7 @@ package {
 			var fontStyle:String = "Sans"
 			
 			var hello_text:TextField = new TextField(800, 100, 
-				"Cleared!", fontStyle, fontSize*1.5, fontColor);
+				"Cleared!\n", fontStyle, fontSize*1.5, fontColor);
 			hello_text.x = 0;
 			hello_text.y = 100;
 			hello_text.hAlign = "center"
@@ -63,7 +63,7 @@ package {
 
 			
 			var editor_text:TextField = new TextField(600, 100, 
-				"(ENTER) to Continue!", fontStyle, fontSize, fontColor);
+				"(ENTER) to Continue!\n", fontStyle, fontSize, fontColor);
 			editor_text.x = 100;
 			editor_text.y = 450;
 			editor_text.hAlign = "center";
@@ -71,8 +71,9 @@ package {
 			m_textFields.push(editor_text);
 
 			// hackity hack..
-			for (var i:uint = 0; i < m_textFields.length; ++i)
-				m_textFields[i].autoScale = true;;
+			for (var i:uint = 0; i < m_textFields.length; ++i) {
+				m_textFields[i].autoScale = true;
+			}
 		}
 
 		override public function deinit():void {

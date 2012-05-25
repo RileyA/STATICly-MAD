@@ -80,7 +80,7 @@ package Actioners {
 		public function updateGfx(completedLevels:Vector.<String>):void{
 			canPlay=true;
 			if (completedLevels.indexOf(m_levelName)!=-1) {
-				textSprite.text = m_levelTitle;
+				textSprite.text = m_levelTitle + "\n";
 				replaceImage(doorFinished);
 			} else if (completedLevels.length>=count){
 				textSprite.text = m_levelTitle+"\n(Unlocked)";

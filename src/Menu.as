@@ -5,14 +5,14 @@ package {
 
 	public class Menu {
 		public static const MENU_Y:int=5;
-		public static const exitString:String="(Q)uit";
-		public static const resetString:String="(R)eset";
+		public static const exitString:String="(Q)uit\n";
+		public static const resetString:String="(R)eset\n";
 		public static const timerString:String="Time: ";
 		public static const parTimeString:String="Par Time: ";
 		public static const scoreString:String="Score: ";
 
 		public static const textScale:Number=1.1;
-		public static const textSize:Number=14.0;
+		public static const textSize:Number=14;
 		public static const verticalSpacing:Number=18.0;
 
 		private var exitText:TextField;
@@ -28,6 +28,7 @@ package {
 			var width:int = exitString.length*textSize;
 			exitText = new TextField(exitString.length*textSize, 2.5*textSize, exitString,"Sans",textSize,Colors.textColor);
 			exitText.hAlign = "left";
+			exitText.vAlign = "top";
 			exitText.scaleX = textScale;
 			exitText.scaleY = exitText.scaleX;
 			exitText.x = 30;
@@ -36,6 +37,7 @@ package {
 			width = resetString.length*textSize;
 			resetText = new TextField(resetString.length*textSize, 2.5*textSize, resetString,"Sans",textSize,Colors.textColor);
 			resetText.hAlign = "left";
+			resetText.vAlign = "top";
 			resetText.scaleX = textScale;
 			resetText.scaleY = resetText.scaleX;
 			resetText.x = 30;
@@ -43,6 +45,7 @@ package {
 
 			titleText = new TextField(200, 2.5*textSize*1.5, "","Sans",textSize*1.5,Colors.textColor);
 			titleText.hAlign = "center";
+			titleText.vAlign = "top";
 			titleText.scaleX = textScale;
 			titleText.scaleY = titleText.scaleX;
 			titleText.x = 300;
@@ -51,6 +54,7 @@ package {
 			width = (timerString.length+10)*textSize;
 			timerText = new TextField(width, 2.5*textSize, timerString+"0","Sans",textSize,Colors.textColor);
 			timerText.hAlign = "left";
+			timerText.vAlign = "top";
 			timerText.scaleX = textScale;
 			timerText.scaleY = timerText.scaleX;
 			timerText.x = 130;
@@ -59,14 +63,16 @@ package {
 			width = (parTimeString.length+10)*textSize;
 			parTimeText = new TextField(width, 2.5*textSize, parTimeString+"0","Sans",textSize,Colors.textColor);
 			parTimeText.hAlign = "left";
+			parTimeText.vAlign = "top";
 			parTimeText.scaleX = textScale;
 			parTimeText.scaleY = parTimeText.scaleX;
 			parTimeText.x = 130;
 			parTimeText.y = MENU_Y;
 
 			width = (scoreString.length+10)*textSize;
-			scoreText = new TextField(width, 2.5*textSize, scoreString+"0","Sans",textSize,Colors.textColor);
+			scoreText = new TextField(width, 2.5*textSize, scoreString+"0\n","Sans",textSize,Colors.textColor);
 			scoreText.hAlign = "left";
+			scoreText.vAlign = "top";
 			scoreText.scaleX = textScale;
 			scoreText.scaleY = scoreText.scaleX;
 			scoreText.x = 600;
@@ -79,6 +85,12 @@ package {
 			timerText.autoScale = true;
 			parTimeText.autoScale = true;
 			scoreText.autoScale = true;
+			/*`exitText.border = true;
+			resetText.border = true;
+			titleText.border = true;
+			timerText.border = true;
+			parTimeText.border = true;
+			scoreText.border = true;*/
 		}
 
 		public function attachTo(parent:Sprite):void {
@@ -118,18 +130,20 @@ package {
 		}
 
 		public function updateOverworldInfo(name:String, score:int):void {
-			titleText.text = name;
-			scoreText.text = scoreString + MiscUtils.setPrecision(score, 0);
+			titleText.text = name + "\n";
+			scoreText.text = scoreString + MiscUtils.setPrecision(score, 0) 
+				+ "\n";
 		}
 
 		public function updateLevelInfo(info:ScoreInfo):void {
 			timerText.text = timerString + MiscUtils.setPrecision(info.playerTime, 0);
-			titleText.text = info.title;
-			parTimeText.text = parTimeString + MiscUtils.setPrecision(info.targetTime, 0);
+			titleText.text = info.title + "\n";
+			parTimeText.text = parTimeString + MiscUtils.setPrecision(info.targetTime, 0) + "\n";
 		}
 
 		public function updateTime(time:Number):void {
-			timerText.text = timerString + MiscUtils.setPrecision(time, 0);
+			timerText.text = timerString + MiscUtils.setPrecision(time, 0) 
+				+ "\n";
 		}
 	}
 }
