@@ -18,9 +18,9 @@ package
 		[Embed(source = "../media/images/MaddyNeutralFalling.png")]
 		private static const n_falling:Class;
 		private static var n_falling_img:Image;
-		[Embed(source = "../media/images/MaddyNeutralFloating.png")]
-		private static const n_floating:Class;
-		private static var n_floating_img:Image;
+//		[Embed(source = "../media/images/MaddyNeutralFloating.png")]
+//		private static const n_floating:Class;
+//		private static var n_floating_img:Image;
 		[Embed(source = "../media/images/MaddyNeutralJumping.png")]
 		private static const n_jumping:Class;
 		private static var n_jumping_img:Image;
@@ -34,38 +34,38 @@ package
 		private static var n_standing_img:Image;
 		[Embed(source = "../media/images/MaddyBlueFalling.png")]
 		private static const b_falling:Class;
-		private var b_falling_img:Image;
-		[Embed(source = "../media/images/MaddyBlueFloating.png")]
-		private static const b_floating:Class;
-		private var b_floating_img:Image;
+		private static var b_falling_img:Image;
+//		[Embed(source = "../media/images/MaddyBlueFloating.png")]
+//		private static const b_floating:Class;
+//		private var b_floating_img:Image;
 		[Embed(source = "../media/images/MaddyBlueJumping.png")]
 		private static const b_jumping:Class;
-		private var b_jumping_img:Image;
+		private static var b_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyBlueRunning.png")]
 		private static const b_running:Class;
 		[Embed(source = "../media/images/MaddyBlueRunning.xml", mimeType="application/octet-stream")]
 		private static const b_running_xml:Class;
-		private var b_running_clip:MovieClip;
+		private static var b_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyBlueStanding.png")]
 		private static const b_standing:Class;
-		private var b_standing_img:Image;
+		private static var b_standing_img:Image;
 		[Embed(source = "../media/images/MaddyRedFalling.png")]
 		private static const r_falling:Class;
-		private var r_falling_img:Image;
-		[Embed(source = "../media/images/MaddyRedFloating.png")]
-		private static const r_floating:Class;
-		private var r_floating_img:Image;
+		private static var r_falling_img:Image;
+//		[Embed(source = "../media/images/MaddyRedFloating.png")]
+//		private static const r_floating:Class;
+//		private var r_floating_img:Image;
 		[Embed(source = "../media/images/MaddyRedJumping.png")]
 		private static const r_jumping:Class;
-		private var r_jumping_img:Image;
+		private static var r_jumping_img:Image;
 		[Embed(source = "../media/images/MaddyRedRunning.png")]
 		private static const r_running:Class;
 		[Embed(source = "../media/images/MaddyRedRunning.xml", mimeType="application/octet-stream")]
 		private static const r_running_xml:Class;
-		private var r_running_clip:MovieClip;
+		private static var r_running_clip:MovieClip;
 		[Embed(source = "../media/images/MaddyRedStanding.png")]
 		private static const r_standing:Class;
-		private var r_standing_img:Image;
+		private static var r_standing_img:Image;
 		
 		private var currentImg:Image;
 		private var currentFacing:Boolean;
@@ -74,25 +74,27 @@ package
 		private static var heightRatio:Number = 0;
 		private static var scale:Number = 1.2;
 		
-		public static const FALLING:int = 1;
-		public static const FLOATING:int = 2;
-		public static const JUMPING:int = 3;
-		public static const RUNNING:int = 4;
-		public static const STANDING:int = 5;
+		public static const FALLING:int = 0;
+//		public static const FLOATING:int = 4;
+		public static const JUMPING:int = 1;
+		public static const RUNNING:int = 2;
+		public static const STANDING:int = 3;
+		
+		private static const SOME_MAGIC_NUMBER:Number=0.07;
 		
 		public function PlayerSprite(p:Player):void {
 			super();
 			if (n_falling_img == null) {
 				n_falling_img = initImage(new n_falling);
-				n_floating_img = initImage(new n_floating);
+//				n_floating_img = initImage(new n_floating);
 				n_jumping_img = initImage(new n_jumping);
 				n_standing_img = initImage(new n_standing);
 				b_falling_img = initImage(new b_falling);
-				b_floating_img = initImage(new b_floating);
+//				b_floating_img = initImage(new b_floating);
 				b_jumping_img = initImage(new b_jumping);
 				b_standing_img = initImage(new b_standing);
 				r_falling_img = initImage(new r_falling);
-				r_floating_img = initImage(new r_floating);
+//				r_floating_img = initImage(new r_floating);
 				r_jumping_img = initImage(new r_jumping);
 				r_standing_img = initImage(new r_standing);
 				
@@ -112,7 +114,7 @@ package
 			result.smoothing = TextureSmoothing.TRILINEAR;
 			result.width = result.width / widthRatio * Player.WIDTH * scale;
 			result.height = result.height / heightRatio * Player.HEIGHT * scale;
-			result.x = -.07;
+			result.x = -SOME_MAGIC_NUMBER;
 			result.y = -result.height;
 			return result;
 		}
@@ -128,7 +130,7 @@ package
 			}
 			result.width = result.width / widthRatio * Player.WIDTH * scale;
 			result.height = result.height / heightRatio * Player.HEIGHT * scale;
-			result.x = -.07;
+			result.x = -SOME_MAGIC_NUMBER;
 			result.y = -result.height;
 			result.play();
 			return result;
@@ -143,67 +145,19 @@ package
 		
 		public function update(p:Player):void {
 			j.advanceTime(.1);
-			var v:b2Vec2 = p.getPhysics().GetLinearVelocity();
+			var index:int=chooseMove(p);
+			var imgs:Array;
 			switch (p.chargePolarity) {
 				case ChargableUtils.CHARGE_NONE:
-					switch(chooseMove(p)) {
-						case FALLING:
-							switchImage(n_falling_img, p.facingRight());
-							break;
-						case FLOATING:
-							switchImage(n_floating_img, p.facingRight());
-							break;
-						case JUMPING:
-							switchImage(n_jumping_img, p.facingRight());
-							break;
-						case RUNNING:
-							switchImage(n_running_clip, p.facingRight(), true);
-							break;
-						case STANDING:
-							switchImage(n_standing_img, p.facingRight());
-							break;
-					}
+					imgs=[n_falling_img,n_jumping_img,n_running_clip,n_standing_img];
 					break;
 				case ChargableUtils.CHARGE_BLUE:
-					switch(chooseMove(p)) {
-						case FALLING:
-							switchImage(b_falling_img, p.facingRight());
-							break;
-						case FLOATING:
-							switchImage(b_floating_img, p.facingRight());
-							break;
-						case JUMPING:
-							switchImage(b_jumping_img, p.facingRight());
-							break;
-						case RUNNING:
-							switchImage(b_running_clip, p.facingRight(), true);
-							break;
-						case STANDING:
-							switchImage(b_standing_img, p.facingRight());
-							break;
-					}
+					imgs=[b_falling_img,b_jumping_img,b_running_clip,b_standing_img];
 					break;
 				case ChargableUtils.CHARGE_RED:
-					switch(chooseMove(p)) {
-						case FALLING:
-							switchImage(r_falling_img, p.facingRight());
-							break;
-						case FLOATING:
-							switchImage(r_floating_img, p.facingRight());
-							break;
-						case JUMPING:
-							switchImage(r_jumping_img, p.facingRight());
-							break;
-						case RUNNING:
-							switchImage(r_running_clip, p.facingRight(), true);
-							break;
-						case STANDING:
-							switchImage(r_standing_img, p.facingRight());
-							break;
-					}
-					break;
+					imgs=[r_falling_img,r_jumping_img,r_running_clip,r_standing_img]
 			}
-				
+			switchImage(imgs[index],p.facingRight(),index==RUNNING);
 		}
 		
 		private function chooseMove(p:Player):int {
@@ -235,10 +189,10 @@ package
 				
 				if (!right) {
 					currentImg.width *= -1;
-					currentImg.x = currentImg.width - .07;
+					currentImg.x = currentImg.width - SOME_MAGIC_NUMBER;
 				} else {
 					currentImg.width = Math.abs(currentImg.width);
-					currentImg.x = -.07;
+					currentImg.x = -SOME_MAGIC_NUMBER;
 				}
 				addChild(currentImg);
 			}
