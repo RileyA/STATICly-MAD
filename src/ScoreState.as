@@ -69,12 +69,16 @@ package {
 			editor_text.hAlign = "center";
 			addChild(editor_text);
 			m_textFields.push(editor_text);
+
+			// hackity hack..
+			for (var i:uint = 0; i < m_textFields.length; ++i)
+				m_textFields[i].autoScale = true;;
 		}
 
 		override public function deinit():void {
 			m_game.getMenu().removeFrom(this);
 
-			for(var i:int=0; i<m_textFields.length; i++) {
+			for(var i:int = 0; i < m_textFields.length; i++) {
 				removeChild(m_textFields[i]);
 			}
 		}
