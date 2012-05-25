@@ -224,9 +224,14 @@ package {
 			if (force.LengthSquared()>1) {
 				force.Normalize();
 			}
+			
+			m_hairEmit.particlesPerSecond=80*force.Length();
+			
 			force.Multiply(pixelsPerMeter*5);
 			m_hairEmit.xv=force.x;
 			m_hairEmit.yv=force.y;
+			
+			
 			
 			var vel:b2Vec2 = m_physics.GetLinearVelocity().Copy();
 			vel.Normalize();
