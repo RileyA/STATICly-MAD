@@ -56,6 +56,7 @@ package Actioners {
 			var textSize:Number=16.0;
 			var textWidth:Number=12*textSize;
 			textSprite = new TextField(textWidth, 2.5*textSize, "0","Sans",textSize,Colors.textColor);
+			textSprite.autoScale = true;
 			textSprite.hAlign = "center";
 			
 			textSprite.x = -textWidth / 2 * textScale;
