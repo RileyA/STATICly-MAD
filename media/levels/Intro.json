@@ -27,7 +27,7 @@
 			"actions" : 
 			[
 			"up,exit,",
-			"up,info,Press Down\nto Enter Doors"
+			"up,info,(SPACE)\nto Enter"
 			],
 			"scale" : 
 			{

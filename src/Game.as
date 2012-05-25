@@ -100,7 +100,6 @@ package {
 				} else {
 					m_currentState.resume();
 				}
-				//m_parent.stage.focus = m_currentState;
 			}
 
 			if (!m_currentState.update(delta)) {
@@ -113,7 +112,7 @@ package {
 		/**
 		* Terminates the currently running state, removing it from the Game state machine
 		*/
-		private function terminate():void {
+		public function terminate():void {
 			this.removeChild(m_currentState);
 			m_currentState.deinit();
 			m_currentState = null;

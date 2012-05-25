@@ -376,7 +376,7 @@
 			},
 			"actions" : 
 			[
-			"up,info,Press Down\nto Discharge"
+			"up,info,(SPACE)\nto Discharge"
 			],
 			"chargePolarity" : 1,
 			"strong" : false,

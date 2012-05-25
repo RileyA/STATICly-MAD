@@ -53,10 +53,12 @@ package {
 			if (levelFinish) { finishLevel(); }
 			
 			if (Keys.resetLevel()) {
+				LoggerUtils.logResetLevel();
 				m_game.replaceState(new LevelState(m_game, m_levelName, m_overworldState));
 				
 			}else if (Keys.exitLevel()) {
-				isDone = true;
+				LoggerUtils.logQuitLevel();
+				m_game.terminate();
 			}
 			return !isDone;
 		}

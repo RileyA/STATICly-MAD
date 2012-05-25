@@ -1,7 +1,7 @@
 package {
 	public class Config {
 		public static const debug:Boolean=true;  // Enable debug mode
-		public static const logging:Boolean=false;  // Enable Logging for analytics
-		public static const CID:int=3;  // The release version for A/B testing
+		public static const logging:Boolean=true;  // Enable Logging for analytics
+		public static const CID:int=0;  // The release version for A/B testing
 	}
 }

@@ -5,8 +5,8 @@ package {
 
 	public class Menu {
 		public static const MENU_Y:int=5;
-		public static const exitString:String="(Q) to exit";
-		public static const resetString:String="(R) to reset";
+		public static const exitString:String="(Q)uit";
+		public static const resetString:String="(R)eset";
 		public static const timerString:String="Time: ";
 		public static const parTimeString:String="Par Time: ";
 		public static const scoreString:String="Score: ";
@@ -53,23 +53,23 @@ package {
 			timerText.hAlign = "left";
 			timerText.scaleX = textScale;
 			timerText.scaleY = timerText.scaleX;
-			timerText.x = 500;
-			timerText.y = MENU_Y;
+			timerText.x = 130;
+			timerText.y = MENU_Y+verticalSpacing;
 
 			width = (parTimeString.length+10)*textSize;
 			parTimeText = new TextField(width, 2.5*textSize, parTimeString+"0","Sans",textSize,Colors.textColor);
 			parTimeText.hAlign = "left";
 			parTimeText.scaleX = textScale;
 			parTimeText.scaleY = parTimeText.scaleX;
-			parTimeText.x = 500;
-			parTimeText.y = MENU_Y+verticalSpacing;
+			parTimeText.x = 130;
+			parTimeText.y = MENU_Y;
 
 			width = (scoreString.length+10)*textSize;
 			scoreText = new TextField(width, 2.5*textSize, scoreString+"0","Sans",textSize,Colors.textColor);
 			scoreText.hAlign = "left";
 			scoreText.scaleX = textScale;
 			scoreText.scaleY = scoreText.scaleX;
-			scoreText.x = 650;
+			scoreText.x = 600;
 			scoreText.y = MENU_Y;
 		}
 

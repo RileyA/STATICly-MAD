@@ -53,7 +53,7 @@ package Actioners {
 
 		override protected function getPolyShape():b2PolygonShape {
 			var ps:b2PolygonShape = new b2PolygonShape();
-			ps.SetAsBox(WIDTH/2, HEIGHT/2);
+			ps.SetAsBox(WIDTH/2, HEIGHT);
 			return ps;
 		}
 

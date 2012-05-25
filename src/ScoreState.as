@@ -63,7 +63,7 @@ package {
 
 			
 			var editor_text:TextField = new TextField(600, 100, 
-				"Press (ENTER) to Continue!", fontStyle, fontSize, fontColor);
+				"(ENTER) to Continue!", fontStyle, fontSize, fontColor);
 			editor_text.x = 100;
 			editor_text.y = 450;
 			editor_text.hAlign = "center";

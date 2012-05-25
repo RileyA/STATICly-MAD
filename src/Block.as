@@ -145,7 +145,6 @@ package {
 				function act(m_level:Level):void{
 					var player:Player= m_level.getPlayer();
 					if (strong) {
-						LoggerUtils.logChargeStrong(player.chargePolarity, chargePolarity);
 						if (chargePolarity==-player.chargePolarity) {
 							spark();
 							chargePolarity=ChargableUtils.CHARGE_NONE;
@@ -159,7 +158,6 @@ package {
 						}
 						
 					} else { // make weak block copy players state, even if no charge
-						LoggerUtils.logChargeWeak(player.chargePolarity, chargePolarity);
 						if (player.chargePolarity == 0) {
 							spark();
 							chargePolarity=player.chargePolarity;
@@ -168,6 +166,7 @@ package {
 							spark();
 						}
 					}
+					LoggerUtils.logChargeBlock(player.chargePolarity, chargePolarity, strong);
 				}
 				function ck(player:Player):Boolean{ return chargePolarity!=player.chargePolarity;}
 				fd.density=0;
