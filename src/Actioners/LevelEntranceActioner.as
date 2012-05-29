@@ -50,12 +50,12 @@ package Actioners {
 			
 			var center:b2Vec2 = new b2Vec2(offset.x, offset.y + HEIGHT / 2);
 			
-			//var format:TextFormat = new TextFormat("Sans", 1, Colors.textColor);
+			//var format:TextFormat = new TextFormat("akashi", 1, Colors.textColor);
 			//format.align = TextFormatAlign.CENTER;
 			var textScale:Number=.03;
 			var textSize:Number=16.0;
 			var textWidth:Number=12*textSize;
-			textSprite = new TextField(textWidth, 2.5*textSize, "0","Sans",textSize,Colors.textColor);
+			textSprite = new TextField(textWidth, 2.5*textSize, "0","akashi",textSize,Colors.textColor);
 			textSprite.autoScale = true;
 			textSprite.hAlign = "center";
 			

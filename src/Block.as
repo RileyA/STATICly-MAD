@@ -20,7 +20,6 @@ package {
 		private static const n_rivit:Class;
 		private static const rivitTex:Texture=Texture.fromBitmap(new n_rivit);
 		
-		
 		[Embed(source = "../media/images/Circuit.png")]
 		private static const n_circuits:Class;
 		private static const circuitsTex:Texture=Texture.fromBitmap(new n_circuits);

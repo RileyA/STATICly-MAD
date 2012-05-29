@@ -7,6 +7,10 @@ package {
 
 	/** A collection of random utilities */
 	public class MiscUtils {
+
+		// embed a spiffy font
+		[Embed(source="../media/fonts/akashi.ttf", embedAsCFF="false", fontFamily="akashi")]
+		public static const akashi:Class;
 		
 		[Embed(source = "../media/images/bspark.png")]
 		private static const m_spark_b:Class;

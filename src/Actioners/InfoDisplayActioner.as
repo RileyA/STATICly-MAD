@@ -25,7 +25,7 @@ package Actioners {
 			var textScale:Number=.04;
 			var textSize:Number=16.0;
 			var textWidth:Number=12*textSize;
-			textSprite = new TextField(textWidth, 4.5*textSize, "0","Sans",textSize,Colors.textColor);
+			textSprite = new TextField(textWidth, 4.5*textSize, "0","akashi",textSize,Colors.textColor);
 			textSprite.hAlign = "center";
 			
 			textSprite.x = -textWidth / 2 * textScale;

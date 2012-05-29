@@ -33,7 +33,7 @@ package {
 
 			var fontSize:int = 24;
 			var fontColor:uint = 0xBBBBBB;
-			var fontStyle:String = "Sans"
+			var fontStyle:String = "akashi"
 			
 			var hello_text:TextField = new TextField(800, 100, 
 				"Cleared!\n", fontStyle, fontSize*1.5, fontColor);
