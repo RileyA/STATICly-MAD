@@ -23,7 +23,7 @@ package Actioners {
 			var center:b2Vec2 = new b2Vec2(offset.x, offset.y - HEIGHT/2);
 
 			var textScale:Number=.04;
-			var textSize:Number=16.0;
+			var textSize:Number=14.0;
 			var textWidth:Number=12*textSize;
 			textSprite = new TextField(textWidth, 4.5*textSize, "0","akashi",textSize,Colors.textColor);
 			textSprite.hAlign = "center";

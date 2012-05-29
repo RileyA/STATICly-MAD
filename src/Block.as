@@ -325,7 +325,7 @@ package {
 			if (hinting){
 				hintPhase+=.5; // TODO make frame rate independant;
 			}
-			overlay.alpha=.5+.5*((Math.cos(hintPhase)+1)/2);
+			overlay.alpha=.2+.8*((Math.sin(hintPhase)+1)/2);
 			
 			super.updateTransform(pixelsPerMeter);
 			if (drawnChargePolarity!=chargePolarity) {
