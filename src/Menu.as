@@ -26,11 +26,11 @@ package {
 
 		public function Menu():void {
 
-			var bgGradient:Quad = new Quad(800, 35, 0x000000);
+			var bgGradient:Quad = new Quad(800, 25, 0x000000);
 			bgGradient.alpha = 0.75;
 			addChild(bgGradient);
-			bgGradient = new Quad(800, 65, 0x000000);
-			bgGradient.y = 35;
+			bgGradient = new Quad(800, 55, 0x000000);
+			bgGradient.y = 25;
 			bgGradient.setVertexAlpha(0, 0.75);
 			bgGradient.setVertexAlpha(1, 0.75);
 			bgGradient.setVertexAlpha(2, 0.0);

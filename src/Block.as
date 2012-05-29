@@ -33,6 +33,11 @@ package {
 		{
 			galvTex.repeat=true;
 		}
+
+		[Embed(source = "../media/images/cement1.png")]
+		private static const n_cement:Class;
+		private static const cementTex:Texture=Texture.fromBitmap(
+			new n_cement);{cementTex.repeat=true;}
 		
 		[Embed(source = "../media/images/pipe.png")]
 		private static const n_pipe:Class;
@@ -211,7 +216,10 @@ package {
 			
 			if (!insulated && isChargableBlock()){
 				overlay=image(x,y,scale.x,scale.y,circuitsTex);
+			} else if(insulated && chargePolarity == 0) {
+				overlay=image(x,y,scale.x,scale.y,cementTex);
 			} else {
+				scalar *= 2.0;
 				overlay=image(x,y,scale.x,scale.y,galvTex);
 			}
 
@@ -224,7 +232,7 @@ package {
 				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
 				s.x=x-scale.x / 2;
 				s.y=y-scale.y / 2;
-				if (!insulated){
+				if (!insulated || (insulated && chargePolarity == 0)){
 					s.alpha=Colors.edgeAlpha;
 				}
 				addChild(s);
@@ -241,7 +249,7 @@ package {
 				image(x,y,cornerSize,cornerSize,rivitTex);
 			}
 			const cornerSize:Number=.4;
-			if (movement == FIXED){
+			if (movement == FIXED && !(insulated && !chargePolarity)){
 				corner(0,0);
 				corner(scale.x-cornerSize,0);
 				corner(scale.x-cornerSize,scale.y-cornerSize);

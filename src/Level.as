@@ -216,7 +216,6 @@ package {
 				if (Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && !m_debugDrawKey) {
 					m_debugDrawKey = true;
 					m_debugDraw = !m_debugDraw;
-					m_debugSprite.visible = m_debugDraw;
 				} else if (!Keys.isKeyPressed(TOGGLE_DEBUG_DRAW_KEY) && m_debugDrawKey) {
 					m_debugDrawKey = false;
 				}
