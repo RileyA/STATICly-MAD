@@ -233,7 +233,8 @@ package {
 				s.x=x-scale.x / 2;
 				s.y=y-scale.y / 2;
 				if (!insulated || (insulated && chargePolarity == 0)){
-					s.alpha=Colors.edgeAlpha;
+					s.alpha= (insulated && chargePolarity == 0) ? 
+						Colors.cementAlpha : Colors.edgeAlpha;
 				}
 				addChild(s);
 			}
@@ -243,7 +244,6 @@ package {
 			side(scale.x-thick,0,thick,scale.y);
 			side(thick,0,scale.x-thick*2,thick);
 			side(thick,scale.y-thick,scale.x-thick*2,thick);
-			
 			
 			function corner(x:Number,y:Number):void{
 				image(x,y,cornerSize,cornerSize,rivitTex);
@@ -560,5 +560,9 @@ package {
 			return movement == FIXED ? b2Body.b2_staticBody 
 				: b2Body.b2_dynamicBody;
 		}
+
+		public function getLevel():Level {
+			return m_level;
+		}	
 	}
 }

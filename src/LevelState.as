@@ -13,7 +13,7 @@ package {
 		private var m_overworldState:OverworldState;
 
 		[Embed(source = "../media/images/TiledBackground.png")]
-		private static const Background:Class;
+		public static const Background:Class;
 		
 		public function LevelState(game:Game, levelName:String, overworldState:OverworldState):void {
 			super(game);

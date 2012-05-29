@@ -4,6 +4,7 @@ package {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.core.Starling;
 	import Game;
 
 	/** A game state, this encapsulates some chunk of the game (e.g. a
@@ -52,8 +53,11 @@ package {
 			var i:int = 0;
 			var j:int = 0;
 			
-			while (i < 800) {
-				while (j < 600) {
+			var w:uint = Starling.current.viewPort.width;
+			var h:uint = Starling.current.viewPort.height;
+
+			while (i < w) {
+				while (j < h) {
 					//trace(i, j);
 					bgImage = new Image(texture);
 					bgImage.x = i;

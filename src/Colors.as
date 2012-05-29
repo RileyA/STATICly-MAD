@@ -5,5 +5,6 @@ package {
 		public static const insulation:Number=0xBBBBBB;
 		public static const edges:Number=0x000000;
 		public static const edgeAlpha:Number=.3;
+		public static const cementAlpha:Number=.225;
 	}
 }

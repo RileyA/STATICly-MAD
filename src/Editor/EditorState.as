@@ -70,6 +70,8 @@ package Editor {
 			m_native = new flash.display.Sprite;
 			//m_native = Starling.current.nativeOverlay;
 
+			tileBG(LevelState.Background);
+
 			// add something clickable
 			var s:Shape = new Shape();
 			s.alpha = 0.0;
