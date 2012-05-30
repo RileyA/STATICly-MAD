@@ -1,5 +1,4 @@
 package {
-	import starling.text.TextField;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
 	import Colors;

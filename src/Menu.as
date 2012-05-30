@@ -50,10 +50,10 @@ package {
 			resetText.x = 30;
 			resetText.y = MENU_Y+verticalSpacing;
 
-			titleText = new TextField(200, 2.5*textSize*1.5, "","akashi",textSize*1.5,Colors.textColor);
+			titleText = new TextField(300, 2.5*textSize*1.5, "","akashi",textSize*1.5,Colors.textColor);
 			titleText.hAlign = "center";
 			titleText.vAlign = "top";
-			titleText.x = 300;
+			titleText.x = 250;
 			titleText.y = MENU_Y;
 
 			width = (timerString.length+10)*textSize;
