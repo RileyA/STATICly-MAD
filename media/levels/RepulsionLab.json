@@ -106,11 +106,11 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 14.749103942652331,
+				"y" : 14.7419,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 18.99910394265233
+				"x" : 18.9901
 			},
 			"strong" : false,
 			"scale" : 
@@ -146,7 +146,7 @@
 			"chargePolarity" : 0,
 			"actions" : 
 			[
-			"up,entrance,Escalator,1"
+			"up,entrance,Escalator,2"
 			]
 		},
 		{
@@ -156,21 +156,21 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 6.119175627240144,
+				"y" : 6.11195,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 7.624551971326166
+				"x" : 7.61735
 			},
 			"strong" : false,
 			"scale" : 
 			{
 				"y_px" : 0,
-				"y" : 0.7401433691756272,
+				"y" : 0.7401,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 3.7508960573476706
+				"x" : 3.7509
 			},
 			"bounds" : 
 			[
@@ -196,7 +196,7 @@
 			"chargePolarity" : 0,
 			"actions" : 
 			[
-			"up,entrance,DechargeRecharge,4"
+			"up,entrance,DechargeRecharge,5"
 			]
 		},
 		{
@@ -206,11 +206,11 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 10.123655913978494,
+				"y" : 9.874551971326166,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 13.873655913978492
+				"x" : 13.589605734767025
 			},
 			"strong" : false,
 			"scale" : 
@@ -220,7 +220,7 @@
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 4.245519713261649
+				"x" : 5.17921146953405
 			},
 			"bounds" : 
 			[
@@ -246,6 +246,7 @@
 			"chargePolarity" : 0,
 			"actions" : 
 			[
+			"up,entrance,Jumpy,1"
 			]
 		},
 		{
@@ -255,17 +256,17 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 6.123655913978495,
+				"y" : 6.11645,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 18.74910394265233
+				"x" : 18.7401
 			},
 			"strong" : false,
 			"scale" : 
 			{
 				"y_px" : 0,
-				"y" : 0.7491039426523297,
+				"y" : 0.7491,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
@@ -295,7 +296,7 @@
 			"chargePolarity" : 0,
 			"actions" : 
 			[
-			"up,entrance,LongJump,3"
+			"up,entrance,LongJump,4"
 			]
 		},
 		{
@@ -305,21 +306,21 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 9.372759856630823,
+				"y" : 9.36375,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 19.624551971326166
+				"x" : 19.62455
 			},
 			"strong" : false,
 			"scale" : 
 			{
 				"y_px" : 0,
-				"y" : 0.7491039426523297,
+				"y" : 0.7491,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 4.24910394265233
+				"x" : 4.2491
 			},
 			"bounds" : 
 			[
@@ -345,7 +346,7 @@
 			"chargePolarity" : 0,
 			"actions" : 
 			[
-			"up,entrance,Boost1,2"
+			"up,entrance,Boost1,3"
 			]
 		},
 		{
@@ -409,7 +410,7 @@
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
-				"x" : 14.122759856630823
+				"x" : 14.120967741935484
 			},
 			"strong" : false,
 			"scale" : 
@@ -553,7 +554,7 @@
 			"position" : 
 			{
 				"y_px" : 0,
-				"y" : 12.24641577060932,
+				"y" : 12.24462365591398,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
@@ -563,7 +564,7 @@
 			"scale" : 
 			{
 				"y_px" : 0,
-				"y" : 0.9910394265232976,
+				"y" : 0.9910394265232975,
 				"y_rel" : 0,
 				"x_rel" : 0,
 				"x_px" : 0,
@@ -1531,7 +1532,7 @@
 	"playerPosition" : 
 	{
 		"y_px" : 0,
-		"y" : 9.310035842293907,
+		"y" : 9.500000000000002,
 		"y_rel" : 0,
 		"x_rel" : 0,
 		"x_px" : 0,
