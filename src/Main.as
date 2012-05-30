@@ -19,6 +19,8 @@ package {
 			m_starling.start();			
 			addEventListener(flash.events.Event.ENTER_FRAME, update);
 			Keys.init(this);
+			
+			SoundManager.init();
 		}
 
 		public function update(event:flash.events.Event):void {
