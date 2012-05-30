@@ -14,10 +14,10 @@ package
 		private static var playing:Dictionary;
 		private static const soundPaths:Array = ["../media/sounds/jump1.mp3",
 												"../media/sounds/jump2.mp3",
-												"../media/sounds/zap1.wav",
-												"../media/sounds/zap2.wav",
-												"../media/sounds/zap3.wav",
-												"../media/sounds/zap4.wav",
+												"../media/sounds/zap1.mp3",
+												"../media/sounds/zap2.mp3",
+												"../media/sounds/zap3.mp3",
+												"../media/sounds/zap4.mp3",
 												];
 		
 		public static function init():void {

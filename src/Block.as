@@ -147,7 +147,7 @@ package {
 			// make block actionable
 			if (!insulated){
 				function act(m_level:Level):void{
-					SoundManager.play("jump2");
+					SoundManager.play("zap2");
 					var player:Player= m_level.getPlayer();
 					if (strong) {
 						if (chargePolarity==-player.chargePolarity) {

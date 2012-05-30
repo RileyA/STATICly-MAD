@@ -505,7 +505,7 @@ package {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
 				m_level.addSpark(m_physics.GetPosition().x, 
 				m_physics.GetPosition().y, 5.0, true, chargePolarity == 1);
-				SoundManager.play("jump2");
+				SoundManager.play("zap1");
 			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
