@@ -405,7 +405,8 @@ package {
 				if (DO_REACTION_FORCES){
 					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactLoc);
 				}
-				m_physics.ApplyImpulse(new b2Vec2(0, -fy),m_physics.GetWorldCenter());
+				m_physics.ApplyImpulse(new b2Vec2(0, -fy), m_physics.GetWorldCenter());
+				SoundManager.play("jump1");
 				// That should be the same as this:
 				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
 			}
