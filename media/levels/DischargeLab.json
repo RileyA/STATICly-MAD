@@ -1,316 +1,316 @@
 {
-	"title" : "DischargeLab",
-	"levelSize" : 
+	"gravity" : 
 	{
-		"y_rel" : 0,
-		"y" : 13.5,
 		"x_px" : 0,
-		"y_px" : 0,
+		"y" : 9.8,
 		"x_rel" : 0,
-		"x" : 18
+		"y_px" : 0,
+		"y_rel" : 0,
+		"x" : 0
+	},
+	"targetTime" : 60,
+	"playerPosition" : 
+	{
+		"x_px" : 0,
+		"y" : 2.608064516129032,
+		"x_rel" : 0,
+		"y_px" : 0,
+		"y_rel" : 0,
+		"x" : 2.3495967741935484
 	},
 	"blocks" : 
 	[
 		{
-			"actions" : 
-			[
-			"up,entrance,RepulsionLab,3"
-			],
-			"position" : 
-			{
-				"y_rel" : 0,
-				"y" : 9.49899193548387,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 16.374798387096774
-			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
-			"scale" : 
-			{
-				"y_rel" : 0,
-				"y" : 3.9979838709677415,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 3.2504032258064512
-			},
 			"insulated" : true,
+			"movement" : "fixed",
 			"bounds" : 
 			[
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : -1
 				},
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : 1
 				}
 			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 9.499,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 16.37479677419355
+			},
+			"actions" : 
+			[
+			"up,entrance,ElectrostaticsLab,3"
+			],
+			"scale" : 
+			{
+				"x_px" : 0,
+				"y" : 3.998,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 3.2504000000000004
+			},
+			"chargePolarity" : 0,
 			"surfaces" : 
 			[
-			]
+			],
+			"strong" : false
 		},
 		{
+			"insulated" : true,
+			"movement" : "fixed",
+			"bounds" : 
+			[
+						{
+					"x_px" : 0,
+					"y" : 0,
+					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x" : -1
+				},
+						{
+					"x_px" : 0,
+					"y" : 0,
+					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x" : 1
+				}
+			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 10.5,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 1.7497983870967742
+			},
 			"actions" : 
 			[
 			"up,entrance,Intro"
 			],
-			"position" : 
-			{
-				"y_rel" : 0,
-				"y" : 10.5,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 1.7497983870967742
-			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
 			"scale" : 
 			{
-				"y_rel" : 0,
-				"y" : 1.9983870967741932,
 				"x_px" : 0,
-				"y_px" : 0,
+				"y" : 1.9983870967741932,
 				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
 				"x" : 3.4995967741935483
 			},
+			"chargePolarity" : 0,
+			"surfaces" : 
+			[
+			],
+			"strong" : false
+		},
+		{
 			"insulated" : true,
+			"movement" : "fixed",
 			"bounds" : 
 			[
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : -1
 				},
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : 1
 				}
 			],
-			"surfaces" : 
-			[
-			]
-		},
-		{
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 10.498196774193548,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 5.248787096774193
+			},
 			"actions" : 
 			[
 			"up,entrance,Dischargables,1"
 			],
-			"position" : 
-			{
-				"y_rel" : 0,
-				"y" : 10.498199999999999,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 5.2488
-			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
 			"scale" : 
 			{
-				"y_rel" : 0,
-				"y" : 1.9972,
 				"x_px" : 0,
-				"y_px" : 0,
+				"y" : 1.9972000000000003,
 				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
 				"x" : 3.5008
 			},
-			"insulated" : true,
+			"chargePolarity" : 0,
+			"surfaces" : 
+			[
+			],
+			"strong" : false
+		},
+		{
+			"insulated" : false,
+			"movement" : "fixed",
 			"bounds" : 
 			[
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : -1
 				},
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : 1
 				}
 			],
-			"surfaces" : 
-			[
-			]
-		},
-		{
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 10.498185483870966,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 10.873185483870968
+			},
 			"actions" : 
 			[
 			],
-			"position" : 
-			{
-				"y_rel" : 0,
-				"y" : 10.498185483870966,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 10.874395161290323
-			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
 			"scale" : 
 			{
-				"y_rel" : 0,
-				"y" : 1.9971774193548384,
 				"x_px" : 0,
-				"y_px" : 0,
+				"y" : 1.9971774193548386,
 				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
 				"x" : 7.747983870967741
 			},
-			"insulated" : true,
-			"bounds" : 
-			[
-						{
-					"y_rel" : 0,
-					"y" : 0,
-					"x_px" : 0,
-					"y_px" : 0,
-					"x_rel" : 0,
-					"x" : -1
-				},
-						{
-					"y_rel" : 0,
-					"y" : 0,
-					"x_px" : 0,
-					"y_px" : 0,
-					"x_rel" : 0,
-					"x" : 1
-				}
-			],
+			"chargePolarity" : 1,
 			"surfaces" : 
 			[
-			]
+			],
+			"strong" : false
 		},
 		{
-			"actions" : 
+			"insulated" : true,
+			"movement" : "fixed",
+			"bounds" : 
 			[
 			],
 			"position" : 
 			{
-				"y_rel" : 0,
-				"y" : 12.49899193548387,
 				"x_px" : 0,
-				"y_px" : 0,
+				"y" : 12.49899193548387,
 				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
 				"x" : 9
 			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
-			"scale" : 
-			{
-				"y_rel" : 0,
-				"y" : 1.9995967741935483,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 18
-			},
-			"insulated" : true,
-			"bounds" : 
-			[
-			],
-			"surfaces" : 
-			[
-			]
-		},
-		{
 			"actions" : 
 			[
-			"up,entrance,Insulated,2"
 			],
-			"position" : 
-			{
-				"y_rel" : 0,
-				"y" : 9.124596774193549,
-				"x_px" : 0,
-				"y_px" : 0,
-				"x_rel" : 0,
-				"x" : 12
-			},
-			"chargePolarity" : 0,
-			"movement" : "fixed",
-			"strong" : false,
 			"scale" : 
 			{
-				"y_rel" : 0,
-				"y" : 0.75,
 				"x_px" : 0,
-				"y_px" : 0,
+				"y" : 1.9995967741935483,
 				"x_rel" : 0,
-				"x" : 5.499193548387097
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 18
 			},
+			"chargePolarity" : 0,
+			"surfaces" : 
+			[
+			],
+			"strong" : false
+		},
+		{
 			"insulated" : true,
+			"movement" : "fixed",
 			"bounds" : 
 			[
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : -1
 				},
 						{
-					"y_rel" : 0,
-					"y" : 0,
 					"x_px" : 0,
-					"y_px" : 0,
+					"y" : 0,
 					"x_rel" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
 					"x" : 1
 				}
 			],
+			"position" : 
+			{
+				"x_px" : 0,
+				"y" : 9.124596774193547,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 11.998793548387095
+			},
+			"actions" : 
+			[
+			"up,entrance,CeilingBreaker,2"
+			],
+			"scale" : 
+			{
+				"x_px" : 0,
+				"y" : 0.75,
+				"x_rel" : 0,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x" : 5.4992
+			},
+			"chargePolarity" : 0,
 			"surfaces" : 
 			[
-			]
+			],
+			"strong" : false
 		}
 	],
-	"playerPosition" : 
+	"title" : "DischargeLab",
+	"levelSize" : 
 	{
-		"y_rel" : 0,
-		"y" : 3.1499999999999995,
 		"x_px" : 0,
-		"y_px" : 0,
+		"y" : 13.5,
 		"x_rel" : 0,
-		"x" : 2.8491935483870967
-	},
-	"targetTime" : 60,
-	"gravity" : 
-	{
+		"y_px" : 0,
 		"y_rel" : 0,
-		"y" : 9.8,
-		"x_px" : 0,
-		"y_px" : 0,
-		"x_rel" : 0,
-		"x" : 0
+		"x" : 18
 	}
 }
