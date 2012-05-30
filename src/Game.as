@@ -2,6 +2,7 @@ package {
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import flash.utils.getTimer;
+	import flash.ui.Keyboard;
 	import cse481d.Logger;
 	import OverworldState;
 	import flash.utils.Dictionary;
@@ -14,6 +15,7 @@ package {
 		private var m_states:Vector.<GameState>;
 		private var m_newStateReady:Boolean;
 		private var m_menu:Menu;
+		private var m_toggle:Boolean;
 		
 		private var m_overworlds:Dictionary; // name -> overworld
 
@@ -27,6 +29,7 @@ package {
 			m_states = new Vector.<GameState>;
 			m_newStateReady = false;
 			m_menu = new Menu();
+			m_toggle = false;
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
 		}
@@ -106,6 +109,18 @@ package {
 				terminate();
 			}
 
+			if (Keys.isKeyPressed(Keyboard.M) && !m_toggle) {
+				if (SoundManager.toggle()) {
+					m_menu.unmute();
+				}else {
+					m_menu.mute();
+				}
+				m_toggle = true;
+			}
+			if (!Keys.isKeyPressed(Keyboard.M)) {
+				m_toggle = false;
+			}
+			
 			return true;
 		}
 

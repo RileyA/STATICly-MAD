@@ -22,7 +22,8 @@ package {
 		public static const resetString:String="(R)eset\n";
 		public static const timerString:String="Time: ";
 		public static const parTimeString:String="Par Time: ";
-		public static const scoreString:String="Score: ";
+		public static const scoreString:String = "Score: ";
+		public static const muteString:String="Un/(M)ute";
 
 		public static const textSize:Number=14;
 		public static const verticalSpacing:Number=18.0;
@@ -35,6 +36,7 @@ package {
 		private var scoreText:TextField;
 		private var soundImg:Image;
 		private var noSoundImg:Image;
+		private var muteText:TextField;
 
 		public function Menu():void {
 
@@ -89,6 +91,16 @@ package {
 			scoreText.x = 600;
 			scoreText.y = MENU_Y;
 
+			soundImg = initImage(sound);
+			//soundImg.addEventListener(Event., mute);
+			noSoundImg = initImage(no_sound);
+			width = (muteString.length+10)*textSize;
+			muteText = new TextField(width, 2.5*textSize, muteString,"akashi",textSize,Colors.textColor);
+			muteText.hAlign = "right";
+			muteText.vAlign = "top";
+			muteText.x = 800 - width;
+			muteText.y = MENU_Y+verticalSpacing;
+			
 			// hackity hack
 			exitText.autoScale = true;
 			resetText.autoScale = true;
@@ -96,11 +108,7 @@ package {
 			timerText.autoScale = true;
 			parTimeText.autoScale = true;
 			scoreText.autoScale = true;
-			
-			soundImg = initImage(sound);
-			soundImg.addEventListener(TouchEvent.TOUCH, mute);
-			noSoundImg = initImage(no_sound);
-			//soundImg.addEventListener(TouchEvent.TOUCH, unmute);
+			muteText.autoScale = true;
 			
 			addChild(bgGradient);
 			addChild(exitText);
@@ -110,27 +118,25 @@ package {
 			addChild(parTimeText);
 			addChild(scoreText);
 			addChild(soundImg);
+			addChild(muteText);
 		}
 
 		private function initImage(b:Class):Image {
 			var result:Image = new Image(Texture.fromBitmap(new b));
-			result.height = 16;
-			result.width = 16;
-			result.x = 780;
+			var width:Number = 16;
+			result.height = width;
+			result.width = width;
+			result.x = 800 - width - 30;
 			result.y = MENU_Y;
 			return result;
 		}
 		
-		private function mute(e:Event):void {
-			trace("mute");
-			SoundManager.mute();
+		public function mute():void {
 			removeChild(soundImg);
 			addChild(noSoundImg);
 		}
 		
-		private function unmute(e:Event):void {
-			trace("unmute");
-			SoundManager.unmute();
+		public function unmute():void {
 			removeChild(noSoundImg);
 			addChild(soundImg);
 		}
