@@ -51,6 +51,16 @@ package
 			}
 		}
 		
+		public static function toggle():Boolean {
+			if (muted) {
+				unmute();
+				return true;
+			} else {
+				mute();
+				return false;
+			}
+		}
+		
 		public static function mute():void {
 			for (var key:Object in  playing) {
 				SoundChannel(playing[key]).stop();
