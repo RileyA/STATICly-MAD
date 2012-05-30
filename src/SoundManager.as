@@ -3,6 +3,7 @@ package
 	
 	import flash.events.Event;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	import flash.utils.Dictionary;
 	import flash.net.URLRequest;
 	
@@ -10,6 +11,7 @@ package
 		
 		private static var muted:Boolean;
 		private static var allSounds:Dictionary;
+		private static var playing:Dictionary;
 		private static const soundPaths:Array = ["../media/sounds/jump1.mp3",
 												"../media/sounds/jump2.mp3",
 												"../media/sounds/zap1.wav",
@@ -20,6 +22,7 @@ package
 		
 		public static function init():void {
 			allSounds = new Dictionary();
+			playing = new Dictionary();
 			muted = false;
 			var s:Sound;
 			for (var index:String in soundPaths) {
@@ -43,17 +46,20 @@ package
 			if(!muted) {
 				var localSound:Sound = Sound(allSounds[name]);
 				if (localSound != null) {
-					//trace("found sound");
-					localSound.play(0, loops);
+					playing[localSound] = localSound.play(0, loops);
 				}
 			}
 		}
 		
 		public static function mute():void {
-			for (var key:Object in  allSounds) {
-				Sound(allSounds[key]);
+			for (var key:Object in  playing) {
+				SoundChannel(playing[key]).stop();
 			}
 			muted = true;
+		}
+		
+		public static function unmute():void {
+			muted = false;
 		}
 		
 	}

@@ -1,12 +1,22 @@
 package {
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.display.Quad;
 	import starling.display.DisplayObjectContainer;
+	import starling.events.Event;
+	import starling.events.TouchEvent;
 	import starling.text.TextField;
 	import Colors;
 	import MiscUtils;
+	import starling.textures.Texture;
 
 	public class Menu extends DisplayObjectContainer {
+		
+		[Embed(source = "../media/images/sound.png")]
+		private static const sound:Class;
+		[Embed(source = "../media/images/no_sound.png")]
+		private static const no_sound:Class;
+		
 		public static const MENU_Y:int=5;
 		public static const exitString:String="(Q)uit\n";
 		public static const resetString:String="(R)eset\n";
@@ -23,6 +33,8 @@ package {
 		private var timerText:TextField;
 		private var parTimeText:TextField;
 		private var scoreText:TextField;
+		private var soundImg:Image;
+		private var noSoundImg:Image;
 
 		public function Menu():void {
 
@@ -84,7 +96,12 @@ package {
 			timerText.autoScale = true;
 			parTimeText.autoScale = true;
 			scoreText.autoScale = true;
-
+			
+			soundImg = initImage(sound);
+			soundImg.addEventListener(TouchEvent.TOUCH, mute);
+			noSoundImg = initImage(no_sound);
+			//soundImg.addEventListener(TouchEvent.TOUCH, unmute);
+			
 			addChild(bgGradient);
 			addChild(exitText);
 			addChild(resetText);
@@ -92,8 +109,32 @@ package {
 			addChild(timerText);
 			addChild(parTimeText);
 			addChild(scoreText);
+			addChild(soundImg);
 		}
 
+		private function initImage(b:Class):Image {
+			var result:Image = new Image(Texture.fromBitmap(new b));
+			result.height = 16;
+			result.width = 16;
+			result.x = 780;
+			result.y = MENU_Y;
+			return result;
+		}
+		
+		private function mute(e:Event):void {
+			trace("mute");
+			SoundManager.mute();
+			removeChild(soundImg);
+			addChild(noSoundImg);
+		}
+		
+		private function unmute(e:Event):void {
+			trace("unmute");
+			SoundManager.unmute();
+			removeChild(noSoundImg);
+			addChild(soundImg);
+		}
+		
 		public function attachTo(parent_:Sprite):void {
 			parent_.addChild(this);
 			// make it always in same spot onscreen...
