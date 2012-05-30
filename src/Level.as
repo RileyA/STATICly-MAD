@@ -2,8 +2,6 @@ package {
 
 	import flash.display.Shape;
 	import starling.display.Sprite;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	import flash.utils.*;
 	import Box2D.Common.Math.*;
