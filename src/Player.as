@@ -406,13 +406,17 @@ package {
 					reactBody.ApplyImpulse(new b2Vec2(0, fy),reactLoc);
 				}
 				m_physics.ApplyImpulse(new b2Vec2(0, -fy), m_physics.GetWorldCenter());
-				SoundManager.play("jump1");
 				// That should be the same as this:
 				//m_physics.GetLinearVelocity().y=-JUMP_STRENGTH;
+				if (jumpCounter>5) {
+					SoundManager.play("jump1");
+					jumpCounter=0;
+				}
 			}
-			
+			jumpCounter++;
 			m_sprite.update(this);
 		}
+		private var jumpCounter:int=0;
 		
 		private function jumpFilter(a:*,b:*):Boolean{
 			return a==LevelContactListener.JUMPABLE_ID && b==LevelContactListener.FOOT_SENSOR_ID;
@@ -500,7 +504,8 @@ package {
 		public function groundPlayer():void {
 			if (chargePolarity!=ChargableUtils.CHARGE_NONE) {
 				m_level.addSpark(m_physics.GetPosition().x, 
-					m_physics.GetPosition().y, 5.0, true, chargePolarity == 1);
+				m_physics.GetPosition().y, 5.0, true, chargePolarity == 1);
+				SoundManager.play("jump2");
 			}
 			chargePolarity = ChargableUtils.CHARGE_NONE;
 			shuffleStrength = 0.0;
