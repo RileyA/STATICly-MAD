@@ -62,6 +62,7 @@ package {
 			m_blocks = new Vector.<Block>;
 
 			// make world
+
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
 			world.SetWarmStarting(true);
 
