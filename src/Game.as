@@ -51,6 +51,7 @@ package {
 				addState(new LevelState(this, "Intro", m_overworlds["DebugLab"]));
 			} else if(Config.storage) {
 				var so:SharedObject = SharedObject.getLocal("staticlyMad");
+				//so.clear();
 				if (so.size == 0) {
 					so.data.last = "DischargeLab";
 					so.data.completed = new Dictionary();
