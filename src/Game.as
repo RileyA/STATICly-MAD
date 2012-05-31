@@ -57,13 +57,13 @@ package {
 					addState(getOverworld("DischargeLab"));
 					addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
 				} else {
-					Config.logging = false;
+					//Config.logging = false;
 					for (var levelName:String in so.data.completed) {
 						var score:int = so.data.completed[levelName];
 						var split:Array = levelName.split(/_/);
 						getOverworld(split[0]).completed(split[1], score);
 					}
-					Config.logging = true;
+					//Config.logging = true;
 					addState(getOverworld(so.data.last));
 				}
 			} else {
