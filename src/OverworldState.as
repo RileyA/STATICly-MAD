@@ -78,7 +78,9 @@ package {
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
 			else if (isLab(name)) {
-				so.data.last = name;
+				if (Config.storage) {
+					so.data.last = name;
+				}
 				m_game.replaceState(m_game.getOverworld(name));
 				m_game.getMenu().setOverworldMenu();
 			} else {
@@ -114,7 +116,9 @@ package {
 				old = m_bestLevelScores[levelName];
 			}
 			m_bestLevelScores[levelName] = Math.max(old, score);
-			so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
+			if (Config.storage) {
+				so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
+			}
 		}
 
 		public function getTotalScore():int {

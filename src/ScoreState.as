@@ -1,7 +1,8 @@
 package {
 	import starling.text.TextField;
 	import flash.ui.Keyboard;
-	import Editor.*;
+	import Particle.*;
+	import starling.core.Starling;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class ScoreState extends GameState {
@@ -14,6 +15,9 @@ package {
 		private var under_par_time:Number;
 		private var score:int;
 		private var total:int;
+		public var m_particles:Vector.<ParticleSystem> 
+			= new Vector.<ParticleSystem>();
+		private var sparkTimer:Number;
 
 		public function ScoreState(game:Game, m_score:ScoreInfo):void {
 			super(game);
@@ -74,6 +78,11 @@ package {
 			for (var i:uint = 0; i < m_textFields.length; ++i) {
 				m_textFields[i].autoScale = true;
 			}
+
+			var numFx:uint = 5 + Math.round(Math.random() * 10);
+			for (i = 0; i < numFx; ++i) 
+				addSpark(4.0 + Math.random() * 4);
+			sparkTimer = 0.3;
 		}
 
 		override public function deinit():void {
@@ -85,7 +94,52 @@ package {
 		}
 
 		override public function update(delta:Number):Boolean {
+			for (var i:uint = 0; i < m_particles.length; ++i) {
+				if (!m_particles[i].update(delta)) {
+					removeChild(m_particles[i]);
+					if (i != m_particles.length - 1) {
+						var tmp:ParticleSystem = m_particles[
+							m_particles.length - 1];
+						m_particles[i] = tmp;
+					}
+					m_particles.pop();
+					--i;
+				}
+			}
+			sparkTimer -= delta;
+			if (sparkTimer < 0.0) {
+				addSpark();
+				sparkTimer = Math.random()*0.2 + 0.2;
+			}
 			return !Keys.isKeyPressed(Keyboard.ENTER);
+		}
+
+		public function addSpark(scaleFactor:Number = 1.0) :void {
+			var x:Number = (Math.random() * 0.8 + 0.1) 
+				* (Starling.current.viewPort.width);
+			var y:Number = (Math.random() * 0.8 + 0.1) 
+				* (Starling.current.viewPort.height);
+			var scale:Number = scaleFactor * (100 + Math.random() * 100);
+			var blue:Boolean = Math.random() > 0.5;
+			var particleSys:ParticleSystem = new ParticleSystem();
+			var emitter:ParticleEmitter = new ParticleEmitter();
+			emitter.setTexture(blue ? MiscUtils.sparkTex_bs : MiscUtils.sparkTex_rs);
+			particleSys.addEmitter(emitter);
+			particleSys.x = x;
+			particleSys.y = y;
+			scale = scale;
+
+			var mp:Particle = new Particle(blue ? MiscUtils.sparkTex_b	
+				: MiscUtils.sparkTex_r);
+			mp.width = scale;
+			mp.height = scale;
+			mp.x = -scale / 2;
+			mp.y = -scale / 2;
+			mp.lifespan = 0.3;
+			particleSys.addParticle(mp);
+
+			m_particles.push(particleSys);
+			addChild(particleSys);
 		}
 	}
 }
