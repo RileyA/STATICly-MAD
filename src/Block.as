@@ -119,8 +119,8 @@ package {
 			scale = m_info.scale.getCopy();
 			movement = m_info.movement;
 			insulated=m_info.insulated;
-			strong=m_info.strong;
 			chargePolarity=m_info.chargePolarity;
+			strong=m_info.strong&&(chargePolarity!=0||!insulated);
 			
 			var polyShape:b2PolygonShape = new b2PolygonShape();
 			polyShape.SetAsBox(scale.x / 2, scale.y / 2);
