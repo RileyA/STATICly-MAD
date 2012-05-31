@@ -9,9 +9,14 @@ package
 	
 	public class SoundManager {
 		
+		//[Embed(source = )] 
+        //private static const music:Class;
+		
 		private static var muted:Boolean;
 		private static var allSounds:Dictionary;
 		private static var playing:Dictionary;
+		private static var musicPlayback:SoundChannel;
+		private static var pausePoint:Number;
 		private static const soundPaths:Array = ["../media/sounds/jump1.mp3",
 												"../media/sounds/jump2.mp3",
 												"../media/sounds/zap1.mp3",
@@ -25,12 +30,17 @@ package
 			playing = new Dictionary();
 			muted = false;
 			var s:Sound;
+			var req:URLRequest;
 			for (var index:String in soundPaths) {
 				s = new Sound(); 
 				s.addEventListener(Event.COMPLETE, onSoundLoaded);
-				var req:URLRequest = new URLRequest(soundPaths[int(index)]);
+				req = new URLRequest(soundPaths[int(index)]);
 				s.load(req);
 			}
+			s = new Sound(); 
+			s.addEventListener(Event.COMPLETE, onMusicLoaded);
+			req = new URLRequest("../media/sounds/bgMusic.mp3");
+			s.load(req);
 		}
 		
 		private static function onSoundLoaded(e:Event):void {
@@ -39,7 +49,12 @@ package
 			name = name.replace(/.*\//, "");
 			name = name.replace(/\..*/, "");
 			allSounds[name] = localSound;
-			
+		}
+		
+		private static function onMusicLoaded(e:Event):void {
+			var localSound:Sound = Sound(e.target);
+			allSounds["bgMusic"] = localSound;
+			musicPlayback = localSound.play(0, int.MAX_VALUE);
 		}
 		
 		public static function play(name:String, loops:int = 0):void {
@@ -65,10 +80,13 @@ package
 			for (var key:Object in  playing) {
 				SoundChannel(playing[key]).stop();
 			}
+			pausePoint = musicPlayback.position;
+			musicPlayback.stop();
 			muted = true;
 		}
 		
 		public static function unmute():void {
+			musicPlayback = Sound(allSounds["bgMusic"]).play(pausePoint, int.MAX_VALUE);
 			muted = false;
 		}
 		

@@ -9,6 +9,7 @@ package {
 	import Box2D.Common.Math.*;
 	import Config;
 	import Actioners.LevelEntranceActioner;
+	import flash.net.SharedObject;
 
 	/** A basic level gameplay state */
 	public class OverworldState extends GameState {
@@ -17,6 +18,7 @@ package {
 		private var m_worldName:String;
 		private var completedLevels:Vector.<String>;
 		private var m_bestLevelScores:Object;
+		private static var so:SharedObject = SharedObject.getLocal("staticlyMad");
 		
 		[Embed(source = "../media/images/TiledBackground.png")]
 		private static const Background:Class;
@@ -76,6 +78,7 @@ package {
 		private function enterLevel(name:String):void {
 			if (name == null){ return; }
 			else if (isLab(name)) {
+				so.data.last = name;
 				m_game.replaceState(m_game.getOverworld(name));
 				m_game.getMenu().setOverworldMenu();
 			} else {
@@ -111,6 +114,7 @@ package {
 				old = m_bestLevelScores[levelName];
 			}
 			m_bestLevelScores[levelName] = Math.max(old, score);
+			so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
 		}
 
 		public function getTotalScore():int {

@@ -7,6 +7,7 @@ package {
 	import OverworldState;
 	import flash.utils.Dictionary;
 	import Config;
+	import flash.net.SharedObject;
 	
 	/** Manages a stack of game states */
 	public class Game extends Sprite {
@@ -48,7 +49,23 @@ package {
 			if (Config.debug) {
 				addState(getOverworld("DebugLab"));
 				addState(new LevelState(this, "Intro", m_overworlds["DebugLab"]));
+			} else if(Config.storage) {
+				var so:SharedObject = SharedObject.getLocal("staticlyMad");
+				if (so.size == 0) {
+					so.data.last = "DischargeLab";
+					so.data.completed = new Dictionary();
+					addState(getOverworld("DischargeLab"));
+					addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
+				} else {
+					for (var levelName:String in so.data.completed) {
+						var score:int = so.data.completed[levelName];
+						var split:Array = levelName.split(/_/);
+						getOverworld(split[0]).completed(split[1], score);
+					}
+					addState(getOverworld(so.data.last));
+				}
 			} else {
+				SharedObject.getLocal("staticlyMad").clear();
 				addState(getOverworld("DischargeLab"));
 				addState(new LevelState(this, "Intro", m_overworlds["DischargeLab"]));
 			}
