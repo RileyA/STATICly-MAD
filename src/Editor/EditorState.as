@@ -130,6 +130,8 @@ package Editor {
 
 		public function loadLevel(info:LevelInfo):void {
 			m_menu.levelName.text = info.title;
+			m_menu.levelW.text = info.levelSize.x.toString();
+			m_menu.levelH.text = info.levelSize.y.toString();
 			m_level = new Level(m_levelSprite, info);
 			m_native.x = m_levelSprite.x;
 			m_native.y = m_levelSprite.y;
@@ -333,9 +335,8 @@ package Editor {
 				m_levelInfo.blocks = new Vector.<BlockInfo>;
 				m_levelInfo.title = m_menu.levelName.text;
 				var blocks:Vector.<Block> = m_level.getBlocks();
-				//for (var i:uint = 0; i < blocks.length; ++i)
-				//	m_levelInfo.blocks.push(blocks[i].getInfo());
-
+				m_levelInfo.levelSize.x = parseFloat(m_menu.levelW.text);
+				m_levelInfo.levelSize.y = parseFloat(m_menu.levelH.text);
 				// add in the order of visual sorting, so it is consistent..
 				for (var i:uint = 0; i < m_levelSprite.numChildren; ++i) {
 					if (m_levelSprite.getChildAt(i) is Block) {
