@@ -363,5 +363,20 @@ package {
 			if (h.info.background) m_backgroundLayer.addChild(h);
 			else m_foregroundLayer.addChild(h);
 		}
+
+		public function removeHint(h:Hint):void {
+			for (var i:uint = 0; i < m_hints.length; ++i) {
+				if (m_hints[i] == h) {
+					if (m_hints[i].info.background)
+						m_backgroundLayer.removeChild(h);
+					else 
+						m_backgroundLayer.removeChild(h);
+					var tmp:Hint = m_hints[m_hints.length-1];
+					m_hints[i] = tmp;
+					m_hints.pop();
+					return;
+				}
+			}
+		}
 	}
 }

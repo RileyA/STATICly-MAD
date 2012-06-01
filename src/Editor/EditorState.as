@@ -227,6 +227,20 @@ package Editor {
 						m_focused = null;
 						refocus(null);
 						bp = null;
+					} else if (m_focused && m_focused is HintProxy) {
+						var hp:HintProxy = m_focused as HintProxy;
+						m_level.removeHint(hp.getHint());
+						for (i=0; i < m_hints.length; ++i) {
+							if (m_hints[i] == m_focused) {
+								m_hints[i] = m_hints[m_hints.length - 1];
+								m_hints.pop();
+								break;
+							}
+						}
+						m_native.removeChild(hp);
+						m_focused = null;
+						refocus(null);
+						hp = null;
 					}
 				}
 
