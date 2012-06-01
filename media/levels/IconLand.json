@@ -1,0 +1,134 @@
+{
+	"blocks" : 
+	[
+		{
+			"position" : 
+			{
+				"x_rel" : 0,
+				"y" : 3.2499,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x_px" : 0,
+				"x" : 3.00015
+			},
+			"strong" : false,
+			"movement" : "fixed",
+			"actions" : 
+			[
+			"up,computer,"
+			],
+			"scale" : 
+			{
+				"x_rel" : 0,
+				"y" : 1,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x_px" : 0,
+				"x" : 4.0563
+			},
+			"bounds" : 
+			[
+						{
+					"x_rel" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x_px" : 0,
+					"x" : -1
+				},
+						{
+					"x_rel" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x_px" : 0,
+					"x" : 1
+				}
+			],
+			"chargePolarity" : 0,
+			"surfaces" : 
+			[
+			"up,bcarpet"
+			],
+			"insulated" : true
+		},
+		{
+			"position" : 
+			{
+				"x_rel" : 0,
+				"y" : 1.8749292586304471,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x_px" : 0,
+				"x" : 0.375070741369553
+			},
+			"strong" : true,
+			"movement" : "fixed",
+			"actions" : 
+			[
+			],
+			"scale" : 
+			{
+				"x_rel" : 0,
+				"y" : 3.7498585172608943,
+				"y_px" : 0,
+				"y_rel" : 0,
+				"x_px" : 0,
+				"x" : 1.2498585172608945
+			},
+			"bounds" : 
+			[
+						{
+					"x_rel" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x_px" : 0,
+					"x" : -1
+				},
+						{
+					"x_rel" : 0,
+					"y" : 0,
+					"y_px" : 0,
+					"y_rel" : 0,
+					"x_px" : 0,
+					"x" : 1
+				}
+			],
+			"chargePolarity" : 1,
+			"surfaces" : 
+			[
+			],
+			"insulated" : false
+		}
+	],
+	"targetTime" : 60,
+	"levelSize" : 
+	{
+		"x_rel" : 0,
+		"y" : 5,
+		"y_px" : 0,
+		"y_rel" : 0,
+		"x_px" : 0,
+		"x" : 5
+	},
+	"playerPosition" : 
+	{
+		"x_rel" : 0,
+		"y" : 0.11063950198075836,
+		"y_px" : 0,
+		"y_rel" : 0,
+		"x_px" : 0,
+		"x" : 2.499971703452179
+	},
+	"title" : "IconLand",
+	"gravity" : 
+	{
+		"x_rel" : 0,
+		"y" : 9.8,
+		"y_px" : 0,
+		"y_rel" : 0,
+		"x_px" : 0,
+		"x" : 0
+	}
+}
