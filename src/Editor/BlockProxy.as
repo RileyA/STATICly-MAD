@@ -193,15 +193,15 @@ package Editor {
 
 			function assignSelections(input:Vector.<String>, types:Vector.<String>, out:Vector.<int>,
 				extras:Vector.<String>=null):void {
+				var j:uint = 0;
 				for (var i:uint = 0; i < input.length; ++i) {
-					var j:uint = 0;
 					var strs:Array = input[i].split(",");
 					var direct:String = strs[0];
 					var objType:String = strs[1];
-					if (direct == "up") j = 0;
+					/*if (direct == "up") j = 0;
 					else if (direct == "down") j = 1;
 					else if (direct == "left") j = 2;
-					else if (direct == "right") j = 3;
+					else if (direct == "right") j = 3;*/
 					for (var k:uint = 0; k < types.length; ++k) {
 						if (types[k] == objType) {
 							out[j] = k;
@@ -209,6 +209,7 @@ package Editor {
 							{
 								var extraStr:String = "";
 								for (var m:uint = 2; m < strs.length; ++m) {
+									strs[m] = strs[m].split("\n").join(",");
 									if(strs[m] == "") break;
 									extraStr += (m>2?",":"") + strs[m];
 								}
@@ -217,6 +218,7 @@ package Editor {
 							continue;
 						}
 					}
+					++j;
 				}
 			}
 
@@ -236,7 +238,7 @@ package Editor {
 			var aopts:Vector.<String> = new Vector.<String>();
 			var asels:Vector.<int> = new Vector.<int>();
 			var axtras:Vector.<String> = new Vector.<String>();
-			aopts.push("None", "exit", "entrance", "computer");
+			aopts.push("None", "exit", "entrance", "info");
 			axtras.push("", "", "", "");
 			asels.push(0,0,0,0);
 			assignSelections(m_child.getInfo().actions, aopts, asels, axtras);
@@ -294,8 +296,9 @@ package Editor {
 			reposition();
 			m_child.getInfo().scale.x = scaleVec.getValue().x;
 			m_child.getInfo().scale.y = scaleVec.getValue().y;
-			forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
-				m_child.getInfo().scale.y * m_child.scaleY);
+			if (e.target == scaleVec)
+				forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
+					m_child.getInfo().scale.y * m_child.scaleY);
 			//m_child.getInfo().position.x = posVec.getValue().x;
 			//	+ m_child.getInfo().scale.x/2;
 			//m_child.getInfo().position.y = posVec.getValue().y;
@@ -315,7 +318,7 @@ package Editor {
 			m_child.getInfo().surfaces = new Vector.<String>;
 
 			var temp:Vector.<String> = new Vector.<String>;
-			temp.push("up", "down", "left", "right");
+			temp.push("1", "2", "3", "4");
 			for (var i:uint = 0; i < 4; ++i) {
 				if (actionElems.options[actionElems.selections[i]] != "None") {
 					var extraInfo:String = "";
@@ -323,7 +326,7 @@ package Editor {
 						extraInfo += "," + actionElems.extras[i];
 					else if (actionElems.extras != null)
 						extraInfo = ",";
-					m_child.getInfo().actions.push(temp[i] + ","
+					m_child.getInfo().actions.push("up"+ ","
 						+ actionElems.options[actionElems.selections[i]] + extraInfo);
 				}
 			}
