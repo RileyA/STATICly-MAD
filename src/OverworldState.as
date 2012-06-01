@@ -99,26 +99,27 @@ package {
 				for (k=0;k<num;k++){
 					var s:DisplayObject=blocks[i].getChildAt(k);
 					if (s is LevelEntranceActioner) {
-						(s as LevelEntranceActioner).updateGfx(completedLevels);
+						(s as LevelEntranceActioner).updateGfx(completedLevels, m_bestLevelScores);
 					}
 				}
 			}
 		}
 		
 		// Called when a level has been beaten
-		public function completed(levelName:String, score:int):void{
-			if (completedLevels.indexOf(levelName)==-1) {
-				completedLevels.push(levelName);
-				updateDoors();
-			}
+		public function completed(levelName:String, score:int):int{
 			var old:int = 0;
 			if (levelName in m_bestLevelScores) {
 				old = m_bestLevelScores[levelName];
 			}
 			m_bestLevelScores[levelName] = Math.max(old, score);
+			if (completedLevels.indexOf(levelName)==-1) {
+				completedLevels.push(levelName);
+				updateDoors();
+			}
 			if (Config.storage) {
 				so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
 			}
+			return old;
 		}
 
 		public function getTotalScore():int {
