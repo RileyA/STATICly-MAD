@@ -35,6 +35,7 @@ package {
 		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
+		private var m_backgroundLayer:Sprite;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -52,6 +53,11 @@ package {
 		public function Level(parent:Sprite, info:LevelInfo):void {
 
 			m_parent_sprite = parent;
+			m_backgroundLayer = new Sprite();
+			m_parent_sprite.addChild(m_backgroundLayer);
+
+			//m_backgroundLayer.addChild(new Hint(100, 100, 500, 500, 20, 1));
+
 			m_info = info;
 			m_debugDraw = false;
 			m_updatePhysics = true;

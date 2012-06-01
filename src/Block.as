@@ -216,12 +216,12 @@ package {
 			var offy:Number=Math.random();
 			
 			if (!insulated && isChargableBlock()){
-				overlay=image(x,y,scale.x,scale.y,circuitsTex);
+				overlay=image(0,0,scale.x,scale.y,circuitsTex);
 			} else if(insulated && chargePolarity == 0) {
-				overlay=image(x,y,scale.x,scale.y,cementTex);
+				overlay=image(0,0,scale.x,scale.y,cementTex);
 			} else {
 				scalar *= 2.0;
-				overlay=image(x,y,scale.x,scale.y,galvTex);
+				overlay=image(0,0,scale.x,scale.y,galvTex);
 			}
 
 			overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
