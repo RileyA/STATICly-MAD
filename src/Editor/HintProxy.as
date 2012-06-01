@@ -17,6 +17,7 @@ package Editor {
 		private var m_child:Hint;
 		private var posX:TextField = new TextField();
 		private var posY:TextField = new TextField();
+		private var fontVal:TextField = new TextField();
 		private var posLabel:TextField = new TextField();
 		private var angLabel:TextField = new TextField();
 		private var angVal:TextField = new TextField();
@@ -110,13 +111,28 @@ package Editor {
 			posY.addEventListener(Event.CHANGE, handlePropChange);
 			form.addChild(posY);
 
+			fontVal = new TextField();
+			fontVal.defaultTextFormat = textFormat;
+			fontVal.text = m_child.info.textSize.toString();
+			fontVal.x = 100;
+			fontVal.y = 100;
+			fontVal.width = 45;
+			fontVal.height = 12;
+			fontVal.type = TextFieldType.INPUT;
+			fontVal.border = true;
+			fontVal.alpha = 1;
+			fontVal.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			fontVal.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			fontVal.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(fontVal);
+
 			hintText = new TextField();
 			hintText.defaultTextFormat = textFormat;
 			hintText.text = m_child.info.text;
 			hintText.x = 4;
 			hintText.y = 78;
-			hintText.width = 130;
-			hintText.height = 20;
+			hintText.width = 140;
+			hintText.height = 12;
 			hintText.type = TextFieldType.INPUT;
 			hintText.border = true;
 			hintText.alpha = 1;
@@ -130,6 +146,17 @@ package Editor {
 			posLabel.text = "Pos: ";
 			posLabel.x = 4;
 			posLabel.y = 4;
+			posLabel.width = 70;
+			posLabel.height = 12;
+			posLabel.border = false;
+			posLabel.alpha = 1;
+			form.addChild(posLabel);
+
+			posLabel = new TextField();
+			posLabel.defaultTextFormat = textFormat;
+			posLabel.text = "Font Size: ";
+			posLabel.x = 4;
+			posLabel.y = 100;
 			posLabel.width = 70;
 			posLabel.height = 12;
 			posLabel.border = false;
@@ -205,10 +232,9 @@ package Editor {
 					nm * 0.8, m_child.txt.width);
 				var newHeight:Number = Math.max(m_child.info.textSize * 1.75 *
 					strs.length, m_child.txt.height);
-				/*m_child.txt.x = -newWidth/2;
-				m_child.x -= (newWidth - m_child.txt.width)/2;
-				x = m_child.txt.x + m_child.x;
-				m_child.im.x = m_child.txt.x;*/
+
+				m_child.info.textSize = !isNaN(parseInt(fontVal.text)) ?
+					parseInt(fontVal.text) : m_child.info.textSize;
 				m_child.txt.fontSize = m_child.info.textSize;
 
 				m_child.txt.width = newWidth;
