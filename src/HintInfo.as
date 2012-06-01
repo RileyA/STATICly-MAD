@@ -8,5 +8,6 @@ package {
 		public var ang:Number = 0;
 		public var textHint:Boolean = false;
 		public var text:String = "";
+		public var background:Boolean = true;
 	}
 }

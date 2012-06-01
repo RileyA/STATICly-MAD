@@ -338,12 +338,20 @@ package Editor {
 				m_levelInfo.levelSize.x = parseFloat(m_menu.levelW.text);
 				m_levelInfo.levelSize.y = parseFloat(m_menu.levelH.text);
 				// add in the order of visual sorting, so it is consistent..
-				for (var i:uint = 0; i < m_levelSprite.numChildren; ++i) {
-					if (m_levelSprite.getChildAt(i) is Block) {
-						m_levelInfo.blocks.push((m_levelSprite.getChildAt(i) 
+				var levelSp:Sprite = m_level.getParent();
+				for (var i:uint = 0; i < levelSp.numChildren; ++i) {
+					if (levelSp.getChildAt(i) is Block) {
+						m_levelInfo.blocks.push((levelSp.getChildAt(i) 
 							as Block).getInfo());
 					}
 				}
+				var testHint:HintInfo = new HintInfo();
+				testHint.x = 100;
+				testHint.y = 100;
+				testHint.w = 100;
+				testHint.h = 100;
+				testHint.ang = 30;
+				m_levelInfo.hints.push(testHint);
 				m_levelInfo.playerPosition = m_player.getPos();
 				m_levelInfo.playerPosition.y += Player.HEIGHT;
 				var saver:FileReference = new FileReference();

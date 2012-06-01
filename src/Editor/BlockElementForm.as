@@ -35,10 +35,10 @@ package Editor {
 			selections = vals;
 			extras = extra;
 			var step:Number = extras?30:15;
-			makeDirection("1", 0, 0);
-			makeDirection("2", step, 1);
-			makeDirection("3", step*2, 2);
-			makeDirection("4", step*3, 3);
+			makeDirection("up", 0, 0);
+			makeDirection("down", step, 1);
+			makeDirection("left", step*2, 2);
+			makeDirection("right", step*3, 3);
 		}
 
 		private function makeDirection(dir:String, ypos:Number, i:int):void {
@@ -146,9 +146,9 @@ package Editor {
 		}
 
 		public function getSelection(dir:String):String {
-			if (dir == "1") return options[selections[0]];
-			else if (dir == "2") return options[selections[1]];
-			else if (dir == "3") return options[selections[2]];
+			if (dir == "up") return options[selections[0]];
+			else if (dir == "down") return options[selections[1]];
+			else if (dir == "left") return options[selections[2]];
 			else return options[selections[3]];
 		}
 	}

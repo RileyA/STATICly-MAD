@@ -198,10 +198,12 @@ package Editor {
 					var strs:Array = input[i].split(",");
 					var direct:String = strs[0];
 					var objType:String = strs[1];
-					/*if (direct == "up") j = 0;
-					else if (direct == "down") j = 1;
-					else if (direct == "left") j = 2;
-					else if (direct == "right") j = 3;*/
+					if (!extras) {
+						if (direct == "up") j = 0;
+						else if (direct == "down") j = 1;
+						else if (direct == "left") j = 2;
+						else if (direct == "right") j = 3;
+					}
 					for (var k:uint = 0; k < types.length; ++k) {
 						if (types[k] == objType) {
 							out[j] = k;
@@ -218,7 +220,7 @@ package Editor {
 							continue;
 						}
 					}
-					++j;
+					if (extras) ++j;
 				}
 			}
 
@@ -318,7 +320,7 @@ package Editor {
 			m_child.getInfo().surfaces = new Vector.<String>;
 
 			var temp:Vector.<String> = new Vector.<String>;
-			temp.push("1", "2", "3", "4");
+			temp.push("up", "down", "left", "right");
 			for (var i:uint = 0; i < 4; ++i) {
 				if (actionElems.options[actionElems.selections[i]] != "None") {
 					var extraInfo:String = "";

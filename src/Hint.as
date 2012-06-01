@@ -43,5 +43,10 @@ package {
 				addChild(im);
 			}
 		}
+
+		public static function make(info:HintInfo, px:Number = 1.0):Hint {
+			return new Hint(info.x, info.y, info.wm info.w, info.ang, px,
+				info.textHint ? info.text : null);
+		}
 	}
 }

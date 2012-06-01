@@ -35,7 +35,9 @@ package {
 		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
+		private var m_real_parent_sprite:Sprite;
 		private var m_backgroundLayer:Sprite;
+		private var m_foregroundLayer:Sprite;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -52,9 +54,17 @@ package {
 
 		public function Level(parent:Sprite, info:LevelInfo):void {
 
-			m_parent_sprite = parent;
+			m_real_parent_sprite = parent;
+			m_parent_sprite = new Sprite();
 			m_backgroundLayer = new Sprite();
-			m_parent_sprite.addChild(m_backgroundLayer);
+			m_foregroundLayer = new Sprite();
+
+			// parent_sprite has all the usual blocks and stuff, 
+			// background and foreground have hints, player is also 
+			// in foreground
+			m_real_parent_sprite.addChild(m_backgroundLayer);
+			m_real_parent_sprite.addChild(m_parent_sprite);
+			m_real_parent_sprite.addChild(m_foregroundLayer);
 
 			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
 
@@ -85,7 +95,7 @@ package {
 			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
 
 			// make the player
-			m_player = new Player(this, m_parent_sprite, m_info.playerPosition);
+			m_player = new Player(this, m_foregroundLayer, m_info.playerPosition);
 			m_chargableManager.addChargable(m_player);
 			m_gfxPhysObjects.push(m_player);
 
@@ -266,8 +276,8 @@ package {
 			pixelsPerMeter = Math.min(marginX * WIDTH_PIXELS / m_info.levelSize.x,
 					marginY * HEIGHT_PIXELS / m_info.levelSize.y);
 			
-			m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
-			m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
+			m_real_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
+			m_real_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
 
 			var desc:BlockInfo = new BlockInfo();
 			desc.scale.x = m_info.levelSize.x;
