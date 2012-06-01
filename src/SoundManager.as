@@ -37,10 +37,10 @@ package
 				req = new URLRequest(soundPaths[int(index)]);
 				s.load(req);
 			}
-			//s = new Sound(); 
-			//s.addEventListener(Event.COMPLETE, onMusicLoaded);
-			//req = new URLRequest("../media/sounds/bgMusic.mp3");
-			//s.load(req);
+			s = new Sound(); 
+			s.addEventListener(Event.COMPLETE, onMusicLoaded);
+			req = new URLRequest("../media/sounds/bgMusic.mp3");
+			s.load(req);
 		}
 		
 		private static function onSoundLoaded(e:Event):void {
