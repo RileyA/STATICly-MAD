@@ -51,7 +51,6 @@ package Editor {
 		private var m_native:flash.display.Sprite;
 
 		private var m_levelSprite:Sprite;
-		private var lolwut:Boolean = false;
 
 		public function EditorState(game:Game):void {
 			super(game);

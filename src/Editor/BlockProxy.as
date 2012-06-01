@@ -14,6 +14,7 @@ package Editor {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.TextEvent;
+	import flash.geom.Point;
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
@@ -36,7 +37,7 @@ package Editor {
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
-			var sc:UVec2 = b.getScale();
+			var sc:UVec2 = b.getInfo().scale;
 			super(b.x - sc.x * b.scaleX / 2, b.y -sc.y * b.scaleY / 2,
 				sc.x * b.scaleX, sc.y * b.scaleY);
 			super.setSnap(b.scaleX * snapTo);
@@ -51,19 +52,24 @@ package Editor {
 		override public function reposition():void {
 			super.reposition();
 
-			var sc:UVec2 = m_child.getScale();
+			var sc:UVec2 = m_child.getInfo().scale;
 
 			// x,y + m_children[0].x,y are coords
-			var pos:UVec2 = new UVec2(x + m_children[0].x,
-				y + m_children[0].y);
+			//var pos:UVec2 = new UVec2(x + m_children[0].x,
+			//	y + m_children[0].y);
+
+			/*var tmpPt:Point = new Point(m_children[0].x, m_children[0].y);
+			tmpPt = m_children[0].localToGlobal(tmpPt);
+			tmpPt = parent.parent.globalToLocal(tmpPt);
+			var pos:UVec2 = new UVec2(tmpPt.x, tmpPt.y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
-			if (posVec) posVec.setValue(pos);
+			//if (posVec) posVec.setValue(pos);
 			pos.x += sc.x/2;
 			pos.y += sc.y/2;
 			m_child.setPosition(pos);
-			m_child.clearVelocity();
-			if (scaleVec) scaleVec.setValue(sc);
+			m_child.clearVelocity();*/
+			//if (scaleVec) scaleVec.setValue(sc);
 		}
 
 		override public function beginDrag():void {
@@ -76,9 +82,11 @@ package Editor {
 
 		override public function endDrag():void {
 			var world:b2World = m_child.getPhysics().GetWorld();
-			var sc:UVec2 = m_child.getScale();
-			var pos:UVec2 = new UVec2(x + m_children[0].x,
-				y + m_children[0].y);
+			var sc:UVec2 = m_child.getInfo().scale;
+			var tmpPt:Point = new Point(m_children[0].x, m_children[0].y);
+			//tmpPt = m_children[0].localToGlobal(tmpPt);
+			//tmpPt = parent.globalToLocal(tmpPt);
+			var pos:UVec2 = new UVec2(tmpPt.x + x, tmpPt.y + y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
 			m_child.getPhysics().SetType(m_child.getBodyType());
@@ -86,6 +94,11 @@ package Editor {
 			m_child.getInfo().scale.y = m_scalepx_y / m_child.scaleY;
 			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
 			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
+			sc.x = m_scalepx_x / m_child.scaleX;
+			sc.y = m_scalepx_y / m_child.scaleY;
+			if (posVec) posVec.setValue(pos);
+			if (scaleVec) scaleVec.setValue(sc);
+			//reposition();
 			m_child.reinit();
 			//populateForm();
 		}
@@ -120,7 +133,7 @@ package Editor {
 			form.addChild(posVec);
 
 			scaleVec = new EditorVectorOption(
-				"Scale", m_child.getScale().x, m_child.getScale().y);
+				"Scale", m_child.getInfo().scale.x, m_child.getInfo().scale.y);
 			scaleVec.x = 4;
 			scaleVec.y = 19;
 			form.addChild(scaleVec);
@@ -273,6 +286,9 @@ package Editor {
 		}
 
 		public function handlePropChange(e:Event):void {
+			if (e.target != posVec && e.target != scaleVec) {
+				endDrag();
+			}
 			x = posVec.getValue().x * m_child.scaleX;
 			y = posVec.getValue().y * m_child.scaleY;
 			reposition();
@@ -280,10 +296,10 @@ package Editor {
 			m_child.getInfo().scale.y = scaleVec.getValue().y;
 			forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
 				m_child.getInfo().scale.y * m_child.scaleY);
-			m_child.getInfo().position.x = posVec.getValue().x 
-				+ m_child.getInfo().scale.x/2;
-			m_child.getInfo().position.y = posVec.getValue().y
-				+ m_child.getInfo().scale.y/2;
+			//m_child.getInfo().position.x = posVec.getValue().x;
+			//	+ m_child.getInfo().scale.x/2;
+			//m_child.getInfo().position.y = posVec.getValue().y;
+			//	+ m_child.getInfo().scale.y/2;
 			m_child.getInfo().movement = movementBox.getSelection();
 			m_child.getInfo().chargePolarity = parseInt(
 				polarityBox.getSelection());

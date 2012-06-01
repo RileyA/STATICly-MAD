@@ -16,7 +16,7 @@ package Editor {
 		public var m_scalepx_x:Number;
 		public var m_scalepx_y:Number;
 
-		private static const WIDGET_DIMENSIONS:Number = 7;
+		private static const WIDGET_DIMENSIONS:Number = 6;
 		
 		public function Scalable(pos_x:Number, pos_y:Number, 
 			scale_x:Number, scale_y:Number):void {
@@ -154,11 +154,25 @@ package Editor {
 			if (!isTarget(e.target as Sprite)) {
 				stage.removeEventListener(MouseEvent.MOUSE_UP, drop);
 				stage.removeEventListener(MouseEvent.MOUSE_MOVE, drag);
+
+				// fix offset between children and this before calling endDrag
+				/*x += m_children[0].x;
+				y += m_children[0].y;
+				m_children[0].x = 0;
+				m_children[0].y = 0;*/
+
 				endDrag();
 				if (m_dragging) {
 					m_dragging = false;
 				}
 			} else {
+
+				// fix offset between children and this before calling endDrag
+				/*x += m_children[0].x;
+				y += m_children[0].y;
+				m_children[0].x = 0;
+				m_children[0].y = 0;*/
+
 				super.drop(e);
 				reposition();
 			}
