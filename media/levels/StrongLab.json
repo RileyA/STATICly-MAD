@@ -5,7 +5,7 @@
 		{
 			"actions" : 
 			[
-			"up,entrance,RedLab"
+			"up,entrance,AttractionLab"
 			],
 			"insulated" : true,
 			"movement" : "fixed",
