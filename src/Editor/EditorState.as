@@ -322,6 +322,7 @@ package Editor {
 				for (var i:uint = 0; i < blocks.length; ++i)
 					m_levelInfo.blocks.push(blocks[i].getInfo());
 				m_levelInfo.playerPosition = m_player.getPos();
+				m_levelInfo.playerPosition.y += Player.HEIGHT;
 				var saver:FileReference = new FileReference();
 				saver.save(MiscUtils.outputJSON(m_levelInfo),
 					m_levelInfo.title + ".json");
