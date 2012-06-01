@@ -62,7 +62,7 @@ package
             else
             {
                 var percent:Number = (stage.loaderInfo.bytesLoaded / stage.loaderInfo.bytesTotal) * 100;
-                trace(percent);
+                //trace(percent);
                 
 				progressText.text=loadText+(int)(percent)+errorText;
 				
@@ -78,7 +78,7 @@ package
             {
             	var i:int;
             	for (i=0;i<1000000;i++){
-            		trace("x"+i);
+            		//trace("x"+i);
             	}
                 
                 var main:Object = new mainClass(stage);
