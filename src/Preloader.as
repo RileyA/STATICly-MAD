@@ -24,7 +24,7 @@ package
         	progressText=new TextField();
         	progressText.textColor=0xFF0000;
 			progressText.width=800;
-			progressText.height=600;
+			progressText.height=500;
 			progressText.x=0;
 			progressText.y=0;
 			
@@ -46,6 +46,23 @@ package
 			progressText.text=loadText+"1"+errorText;
 			addChild(progressText);
 			stage.addChild(this);
+			
+			
+			myFormat = new TextFormat();
+			myFormat.size = 28;
+			
+			
+			var creditText:TextField=new TextField();
+			creditText.defaultTextFormat = myFormat;
+			creditText.textColor=0xFF6666;
+			creditText.width=800;
+			creditText.height=100;
+			creditText.x=0;
+			creditText.y=500;
+			creditText.text="By:\nCraig Macomber, Riley Adams,\nMatt Hall and David Mailhot";
+			addChild(creditText);
+			stage.addChild(this);
+			
 			
             stop();
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
