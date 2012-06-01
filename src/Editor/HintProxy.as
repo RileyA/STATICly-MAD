@@ -15,9 +15,14 @@ package Editor {
 	public class HintProxy extends Draggable implements EditorProxy {
 		
 		private var m_child:Hint;
-		private static var posX:TextField = new TextField();
-		private static var posY:TextField = new TextField();
-		private static var posLabel:TextField = new TextField();
+		private var posX:TextField = new TextField();
+		private var posY:TextField = new TextField();
+		private var posLabel:TextField = new TextField();
+		private var angLabel:TextField = new TextField();
+		private var angVal:TextField = new TextField();
+		private var sizeField:EditorVectorOption = null;
+		private var isText:EditorOption = null;
+		private var hintText:TextField = new TextField();
 
 		public function HintProxy(h:Hint):void {
 			m_child = h;
@@ -48,7 +53,6 @@ package Editor {
 		}
 
 		override public function beginDrag():void { 
-			posLabel.text = "DRAGGED";
 		}
 
 		override public function endDrag():void {
@@ -106,6 +110,21 @@ package Editor {
 			posY.addEventListener(Event.CHANGE, handlePropChange);
 			form.addChild(posY);
 
+			hintText = new TextField();
+			hintText.defaultTextFormat = textFormat;
+			hintText.text = m_child.info.text;
+			hintText.x = 4;
+			hintText.y = 78;
+			hintText.width = 130;
+			hintText.height = 20;
+			hintText.type = TextFieldType.INPUT;
+			hintText.border = true;
+			hintText.alpha = 1;
+			hintText.addEventListener(KeyboardEvent.KEY_UP, EditorMenu.onKey);
+			hintText.addEventListener(KeyboardEvent.KEY_DOWN, EditorMenu.onKey);
+			hintText.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(hintText);
+
 			posLabel = new TextField();
 			posLabel.defaultTextFormat = textFormat;
 			posLabel.text = "Pos: ";
@@ -116,11 +135,113 @@ package Editor {
 			posLabel.border = false;
 			posLabel.alpha = 1;
 			form.addChild(posLabel);
+
+			var opts:Vector.<String> = new Vector.<String>();
+			opts.push("Text", "Arrow");
+			isText = new EditorOption(opts, "Hint Type", 
+				m_child.info.textHint ? 0 : 1);
+			isText.x = 4;
+			isText.y = 22;
+			form.addChild(isText);
+			isText.addEventListener(Event.CHANGE, handlePropChange);
+
+			angLabel = new TextField();
+			angLabel.defaultTextFormat = textFormat;
+			angLabel.text = "Angle (Deg):";
+			angLabel.x = 4;
+			angLabel.y = 40;
+			angLabel.width = 70;
+			angLabel.height = 12;
+			angLabel.border = false;
+			angLabel.alpha = 1;
+			form.addChild(angLabel);
+
+			angVal = new TextField();
+			angVal.defaultTextFormat = textFormat;
+			angVal.text = Number(m_child.rotation*180.0/Math.PI).toFixed(4);
+			angVal.x = 75;
+			angVal.y = 40;
+			angVal.width = 70;
+			angVal.height = 12;
+			angVal.type = TextFieldType.INPUT;
+			angVal.border = true;
+			angVal.alpha = 1;
+			angVal.addEventListener(KeyboardEvent.KEY_UP, 
+				EditorMenu.onKey);
+			angVal.addEventListener(KeyboardEvent.KEY_DOWN, 
+				EditorMenu.onKey);
+			angVal.addEventListener(Event.CHANGE, handlePropChange);
+			form.addChild(angVal);
+
+			sizeField = new EditorVectorOption(
+				"Size: ", m_child.im.width / m_child.ppm, 
+					m_child.im.height / m_child.ppm);
+			sizeField.x = 4;
+			sizeField.y = 60;
+			form.addChild(sizeField);
+
+			sizeField.addEventListener(Event.CHANGE, handlePropChange);
 		}
 
 		public function handlePropChange(e:Event):void {
+
+			m_child.isText = isText.getSelection() == "Text";
+			m_child.update();
 			x = parseFloat(posX.text) * m_child.ppm;
 			y = parseFloat(posY.text) * m_child.ppm;
+			m_child.rotation = parseFloat(angVal.text) * Math.PI/180.0;
+			m_child.im.width = sizeField.getValue().x * m_child.ppm;
+			m_child.im.height = sizeField.getValue().y * m_child.ppm;
+			m_child.info.text = hintText.text;
+
+			if (m_child.isText) {
+
+				var nm:Number = 0;
+				var strs:Array = m_child.info.text.split(',');
+				for (var k:uint=0; k < strs.length; ++k)
+					nm = Math.max(nm, strs[k].length);
+
+				var newWidth:Number = Math.max(m_child.info.textSize *
+					nm * 0.8, m_child.txt.width);
+				var newHeight:Number = Math.max(m_child.info.textSize * 1.75 *
+					strs.length, m_child.txt.height);
+				/*m_child.txt.x = -newWidth/2;
+				m_child.x -= (newWidth - m_child.txt.width)/2;
+				x = m_child.txt.x + m_child.x;
+				m_child.im.x = m_child.txt.x;*/
+				m_child.txt.fontSize = m_child.info.textSize;
+
+				m_child.txt.width = newWidth;
+				m_child.im.width = newWidth;
+				m_child.txt.height = newHeight;
+				m_child.im.height = newHeight;
+				m_child.update();
+				loseFocus();
+				gainFocus();
+			}
+
+			if (m_child.txt) {
+				//m_child.txt.width = sizeField.getValue().x * m_child.ppm;
+				//m_child.txt.height = sizeField.getValue().y * m_child.ppm;
+				m_child.txt.x = -m_child.im.width / 2;
+				m_child.txt.y = -m_child.im.height / 2;
+			}
+
+			m_child.im.x = -m_child.im.width / 2;
+			m_child.im.y = -m_child.im.height / 2;
+			m_child.x = x + m_child.im.width / 2;
+			m_child.y = y + m_child.im.height / 2;
+			//m_child.txt.text = hintText.text;
+
+			m_child.info.x = //parseFloat(posX.text);
+				m_child.x / m_child.ppm;
+			m_child.info.y = //parseFloat(posY.text);
+				m_child.y / m_child.ppm;
+			m_child.info.ang = parseFloat(angVal.text);
+			m_child.info.w = m_child.txt.width / m_child.ppm;
+			m_child.info.h = m_child.txt.height / m_child.ppm;
+			m_child.info.textHint = m_child.isText;
+
 			reposition();
 		}
 
@@ -131,6 +252,12 @@ package Editor {
 		public function updateForm():void {
 			posX.text = Number(x / m_child.ppm).toFixed(4);
 			posY.text = Number(y / m_child.ppm).toFixed(4);
+			angVal.text = Math.round(
+				Number(m_child.rotation * 180.0/Math.PI)).toString();
+			m_child.info.x = //parseFloat(posX.text);
+				m_child.x / m_child.ppm;
+			m_child.info.y = //parseFloat(posY.text);
+				m_child.y / m_child.ppm;
 		}
 
 		public function getHint():Hint {

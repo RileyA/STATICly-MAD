@@ -38,6 +38,7 @@ package {
 		private var m_parent_sprite:Sprite;
 		private var m_real_parent_sprite:Sprite;
 		private var m_backgroundLayer:Sprite;
+		private var m_borderLayer:Sprite;
 		private var m_foregroundLayer:Sprite;
 
 		// Debug controls:
@@ -58,6 +59,7 @@ package {
 			m_real_parent_sprite = parent;
 			m_parent_sprite = new Sprite();
 			m_backgroundLayer = new Sprite();
+			m_borderLayer = new Sprite();
 			m_foregroundLayer = new Sprite();
 
 			// parent_sprite has all the usual blocks and stuff, 
@@ -65,6 +67,7 @@ package {
 			// in foreground
 			m_real_parent_sprite.addChild(m_backgroundLayer);
 			m_real_parent_sprite.addChild(m_parent_sprite);
+			m_real_parent_sprite.addChild(m_borderLayer);
 			m_real_parent_sprite.addChild(m_foregroundLayer);
 
 			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
@@ -299,13 +302,13 @@ package {
 			
 			var wall:Block = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.position.y = m_info.levelSize.y + desc.scale.y / 2;
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.scale.x = BORDER_THICKNESS;
 			desc.scale.y = m_info.levelSize.y+BORDER_THICKNESS*2;
@@ -314,13 +317,13 @@ package {
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.position.x = m_info.levelSize.x + desc.scale.x / 2;
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 		}
 
 		public function getInfo():LevelInfo {

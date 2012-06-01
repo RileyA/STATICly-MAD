@@ -7,7 +7,8 @@ package {
 		public var h:Number = 10;
 		public var ang:Number = 0;
 		public var textHint:Boolean = false;
-		public var text:String = "";
+		public var text:String = "HINT";
+		public var textSize:Number = 18;
 		public var background:Boolean = true;
 	}
 }
