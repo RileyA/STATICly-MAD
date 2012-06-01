@@ -56,7 +56,7 @@ package {
 			m_backgroundLayer = new Sprite();
 			m_parent_sprite.addChild(m_backgroundLayer);
 
-			//m_backgroundLayer.addChild(new Hint(100, 100, 500, 500, 20, 1));
+			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
 
 			m_info = info;
 			m_debugDraw = false;

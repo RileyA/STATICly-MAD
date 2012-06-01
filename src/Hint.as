@@ -15,7 +15,7 @@ package {
 	import flash.geom.Point;
 	import starling.textures.Texture;
 	
-	public class Hint extends DisplayObjectContainer {
+	public class Hint extends Sprite {
 
 		[Embed(source = "../media/images/Rivet.png")]
 		private static const m_rivet:Class;
@@ -24,12 +24,12 @@ package {
 		public var isText:Boolean = false;
 		public var ppm:Number;
 
-		public function Hint(x:Number, y:Number, 
+		public function Hint(x_:Number, y_:Number, 
 			w:Number, h:Number, ang:Number, pxpm:Number,
 			text:String = null):void {
 			ppm = pxpm;
-			x = x * pxpm;
-			y = y * pxpm;
+			x = x_ * pxpm;
+			y = y_ * pxpm;
 			rotation = ang * Math.PI / 180.0;
 
 			if (text) {

@@ -28,6 +28,7 @@ package Editor {
 		private static const DELETE_KEY:Number = Keyboard.BACKSPACE;
 		private static const COPY_KEY:Number = Keyboard.C;
 		private static const PASTE_KEY:Number = Keyboard.V;
+		private static const SENDBACK_KEY:Number = Keyboard.K;
 
 		private var m_blocks:Vector.<BlockProxy>;
 		private var m_player:PlayerProxy;
@@ -38,6 +39,7 @@ package Editor {
 		private var m_resetKey:Boolean;
 		private var m_widgetKey:Boolean;
 		private var m_pasteKey:Boolean;
+		private var m_sendbackKey:Boolean;
 		private var m_widgetsHidden:Boolean;
 		private var m_paused:Boolean;
 
@@ -55,6 +57,8 @@ package Editor {
 		public function EditorState(game:Game):void {
 			super(game);
 			m_pauseKey = true;
+			m_pasteKey = true;
+			m_sendbackKey = true;
 			m_resetKey = true;
 			m_widgetKey = true;
 			m_widgetsHidden = false;
@@ -254,6 +258,17 @@ package Editor {
 					m_pasteKey = false;
 				}
 
+				if (Keys.isKeyPressed(SENDBACK_KEY) && !m_sendbackKey) {
+					m_sendbackKey = true;
+					if (m_focused && m_focused is BlockProxy) {
+						m_native.setChildIndex(m_focused as BlockProxy, 0);
+						var block:Block = (m_focused as BlockProxy).getBlock();
+						block.parent.setChildIndex(block,1);// 0 is background
+					}
+				} else if (!Keys.isKeyPressed(SENDBACK_KEY) && m_sendbackKey) {
+					m_sendbackKey = false;
+				}
+
 				if (!m_level.update(delta)) {
 					doReset();
 					m_level.resetLevel();
@@ -318,8 +333,16 @@ package Editor {
 				m_levelInfo.blocks = new Vector.<BlockInfo>;
 				m_levelInfo.title = m_menu.levelName.text;
 				var blocks:Vector.<Block> = m_level.getBlocks();
-				for (var i:uint = 0; i < blocks.length; ++i)
-					m_levelInfo.blocks.push(blocks[i].getInfo());
+				//for (var i:uint = 0; i < blocks.length; ++i)
+				//	m_levelInfo.blocks.push(blocks[i].getInfo());
+
+				// add in the order of visual sorting, so it is consistent..
+				for (var i:uint = 0; i < m_levelSprite.numChildren; ++i) {
+					if (m_levelSprite.getChildAt(i) is Block) {
+						m_levelInfo.blocks.push((m_levelSprite.getChildAt(i) 
+							as Block).getInfo());
+					}
+				}
 				m_levelInfo.playerPosition = m_player.getPos();
 				m_levelInfo.playerPosition.y += Player.HEIGHT;
 				var saver:FileReference = new FileReference();
