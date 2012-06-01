@@ -77,10 +77,11 @@ package Actioners {
 			super(rectDef, center, new ActionMarker(cb, tr, null, this, startHint, endHint), world);
 		}
 		
-		public function updateGfx(completedLevels:Vector.<String>):void{
+		public function updateGfx(completedLevels:Vector.<String>, bestLevelScores:Object):void{
 			canPlay=true;
 			if (completedLevels.indexOf(m_levelName)!=-1) {
-				textSprite.text = m_levelTitle + "\n";
+				//var score:String = bestLevelScores[m_levelName] != null ? bestLevelScores[m_levelName] : "";
+				textSprite.text = m_levelTitle + "\n(" + bestLevelScores[m_levelName] + ")";
 				replaceImage(doorFinished);
 			} else if (completedLevels.length>=count){
 				textSprite.text = m_levelTitle+"\n(Unlocked)";

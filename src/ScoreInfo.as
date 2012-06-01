@@ -5,6 +5,7 @@ package {
 		public var playerTime:Number;
 		public var targetTime:Number;
 		public var score:int;
+		public var prevScore:int;
 		public var playerComps:int;
 		public var targetComps:int;
 

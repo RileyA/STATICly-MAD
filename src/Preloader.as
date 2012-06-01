@@ -24,7 +24,7 @@ package
         	progressText=new TextField();
         	progressText.textColor=0xFF0000;
 			progressText.width=800;
-			progressText.height=600;
+			progressText.height=500;
 			progressText.x=0;
 			progressText.y=0;
 			
@@ -47,6 +47,23 @@ package
 			addChild(progressText);
 			stage.addChild(this);
 			
+			
+			myFormat = new TextFormat();
+			myFormat.size = 28;
+			
+			
+			var creditText:TextField=new TextField();
+			creditText.defaultTextFormat = myFormat;
+			creditText.textColor=0xFF6666;
+			creditText.width=800;
+			creditText.height=100;
+			creditText.x=0;
+			creditText.y=500;
+			creditText.text="By:\nCraig Macomber, Riley Adams,\nMatt Hall and David Mailhot";
+			addChild(creditText);
+			stage.addChild(this);
+			
+			
             stop();
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -62,7 +79,7 @@ package
             else
             {
                 var percent:Number = (stage.loaderInfo.bytesLoaded / stage.loaderInfo.bytesTotal) * 100;
-                trace(percent);
+                //trace(percent);
                 
 				progressText.text=loadText+(int)(percent)+errorText;
 				
@@ -78,7 +95,7 @@ package
             {
             	var i:int;
             	for (i=0;i<1000000;i++){
-            		trace("x"+i);
+            		//trace("x"+i);
             	}
                 
                 var main:Object = new mainClass(stage);

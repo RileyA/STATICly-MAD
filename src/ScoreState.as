@@ -48,7 +48,7 @@ package {
 			m_textFields.push(hello_text);
 			
 			var player_column_text:TextField = new TextField(400, 400, 
-				"Completion Bonus:\nYour Time:\nTime Under Par:\nTime Score:\n\nTotal Score:", 
+				"Completion Bonus:\nYour Time:\nTime Under Par:\nTime Score:\n\nTotal Score:\nPrevious Best:", 
 				fontStyle, fontSize, fontColor);
 			player_column_text.x = 150;
 			player_column_text.y = 150;
@@ -57,7 +57,7 @@ package {
 			m_textFields.push(player_column_text);
 			
 			var score_column_text:TextField = new TextField(200, 400,
-				COMPLETION_BONUS + "\n(" + player_time + ")s\n(" + under_par_time + ")s\n" + score + "\n\n" + total, 
+				COMPLETION_BONUS + "\n(" + player_time + ")s\n(" + under_par_time + ")s\n" + score + "\n\n" + total + "\n" + m_score.prevScore, 
 				fontStyle, fontSize, fontColor);
 			score_column_text.x = 400;
 			score_column_text.y = 150;

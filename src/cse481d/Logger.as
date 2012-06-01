@@ -57,10 +57,11 @@ package cse481d
 			
 			var logger:Logger = new Logger();
 
-			var DOLOG_URL:String = "http://games.cs.washington.edu/cgs/py/cse481d/dolog.py?gid=" + gid.toString() + "&code=304236658355552";
+			//var DOLOG_URL:String = "http://games.cs.washington.edu/cgs/py/cse481d/dolog2.py?gid=" + gid.toString() + "&code=345234853475285";
+			const URL:String = "http://students.ws.centerforgamescience.com/cgs/apps/games/ws/index.php/";
 			
 			logger.server = new CGSServer();
-			var props:CGSServerProps = new CGSServerProps(skey, 0, name, gid, 1, cid, CGSServerConstants.DEV_URL, false, null);
+			var props:CGSServerProps = new CGSServerProps(skey, 0, name, gid, 1, cid, URL, false, null);
 			logger.server.init(props,false);
 			
 			logger.server.requestUUID(function(uuid:String, failed:Boolean):void {
@@ -68,6 +69,7 @@ package cse481d
 				logger.server.logPageLoad(data);
 			}, true);
 			
+			/*
 			var request:URLRequest = new URLRequest(DOLOG_URL);
 			request.method = "GET";
 			loadUrl(request, function(result:String):void {
@@ -75,6 +77,7 @@ package cse481d
 					logger.server.disableLogging();
 				}
 			});
+			*/
 
 			return logger;
 		}
