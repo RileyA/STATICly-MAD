@@ -22,6 +22,7 @@ package {
 		private var m_starling:Starling;
 
 		public function EditorMain():void{
+			Main.stage=stage;
 			super();
 			m_starling = new Starling(EditorGame, stage);
 			m_starling.antiAliasing = 0; // 0 to 16. 0=fast, 2=pretty good looking
