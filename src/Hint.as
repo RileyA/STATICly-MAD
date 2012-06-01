@@ -17,12 +17,14 @@ package {
 	
 	public class Hint extends Sprite {
 
-		[Embed(source = "../media/images/Rivet.png")]
-		private static const m_rivet:Class;
-		private static const rivetTex:Texture=Texture.fromBitmap(new m_rivet);
+		[Embed(source = "../media/images/arrow.png")]
+		private static const m_arrow:Class;
+		private static const arrowTex:Texture=Texture.fromBitmap(new m_arrow);
 
 		public var isText:Boolean = false;
 		public var ppm:Number;
+		public var info:HintInfo = null;
+		public var im:Image;
 
 		public function Hint(x_:Number, y_:Number, 
 			w:Number, h:Number, ang:Number, pxpm:Number,
@@ -35,7 +37,7 @@ package {
 			if (text) {
 				isText = true;
 			} else {
-				var im:Image = new Image(rivetTex);
+				im = new Image(arrowTex);
 				im.width = w * pxpm;
 				im.height = h * pxpm;
 				im.x = -im.width/2;
@@ -45,8 +47,10 @@ package {
 		}
 
 		public static function make(info:HintInfo, px:Number = 1.0):Hint {
-			return new Hint(info.x, info.y, info.wm info.w, info.ang, px,
+			var h:Hint = new Hint(info.x, info.y, info.w, info.w, info.ang, px,
 				info.textHint ? info.text : null);
+			h.info = info;
+			return h;
 		}
 	}
 }

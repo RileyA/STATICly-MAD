@@ -24,6 +24,7 @@ package Editor {
 		private static const PAUSE_KEY:Number = Keyboard.P;
 		private static const RESET_KEY:Number = Keyboard.R;
 		private static const BLOCK_KEY:Number = Keyboard.SHIFT;
+		private static const HINT_KEY:Number = Keyboard.H;
 		private static const WIDGET_KEY:Number = Keyboard.W;
 		private static const DELETE_KEY:Number = Keyboard.BACKSPACE;
 		private static const COPY_KEY:Number = Keyboard.C;
@@ -31,6 +32,7 @@ package Editor {
 		private static const SENDBACK_KEY:Number = Keyboard.K;
 
 		private var m_blocks:Vector.<BlockProxy>;
+		private var m_hints:Vector.<HintProxy>;
 		private var m_player:PlayerProxy;
 		private var m_info:LevelInfo;
 		private var m_level:Level;
@@ -136,6 +138,7 @@ package Editor {
 			m_native.x = m_levelSprite.x;
 			m_native.y = m_levelSprite.y;
 			m_blocks = new Vector.<BlockProxy>;
+			m_hints = new Vector.<HintProxy>;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
 
@@ -147,13 +150,16 @@ package Editor {
 				//m_levelSprite.addChild(proxy);
 				m_native.addChild(proxy);
 				proxy.setParentContext(m_native);
-
-				// HACK, fixes editor reset, looks like this forces some state
-				// to get set that isn't otherwise, seems to fix it without
-				// too much issue, so I'm just gonna leave this ugliness...
-				//proxy.getBlock().reinit();
-				//refocus(proxy);
 			}
+
+			var hints:Vector.<Hint> = m_level.getHints();
+			for (i=0;i<hints.length;++i) {
+				var hproxy:HintProxy = new HintProxy(hints[i]);
+				m_hints.push(hproxy);
+				m_native.addChild(hproxy);
+				hproxy.setParentContext(m_native);
+			}
+
 			m_player = new PlayerProxy(m_level.getPlayer());
 			//m_levelSprite.addChild(m_player);
 			m_native.addChild(m_player);
@@ -278,7 +284,8 @@ package Editor {
 				}
 			}
 
-			return !Keys.isKeyPressed(Keyboard.ESCAPE);
+			//return !Keys.isKeyPressed(Keyboard.ESCAPE);
+			return true;
 		}
 
 		public function addBlock(e:flash.events.MouseEvent):void { 
@@ -312,6 +319,32 @@ package Editor {
 					refocus(null);
 				}
 				proxy.visible = !m_widgetsHidden;
+			} else if (e.target == m_native 
+				&& Keys.isKeyPressed(HINT_KEY)) {
+				var hinfo:HintInfo = new HintInfo();
+				hinfo.x = m_native.mouseX / m_level.pixelsPerMeter;
+				hinfo.y = m_native.mouseY / m_level.pixelsPerMeter;
+				hinfo.w = 1;
+				hinfo.h = 1;
+				hinfo.ang = 0;
+				hinfo.textHint = false;
+				hinfo.background = true;
+				var h:Hint = Hint.make(hinfo, m_level.pixelsPerMeter);
+				h.info = hinfo;
+				m_level.addHint(h);
+
+				var hproxy:HintProxy = new HintProxy(h);
+				m_hints.push(hproxy);
+				m_native.addChild(hproxy);
+				hproxy.setParentContext(m_native);
+
+				m_native.swapChildren(hproxy, m_player);
+				if (!m_widgetsHidden) {
+					refocus(hproxy);
+				} else {
+					refocus(null);
+				}
+
 			} else {
 				handleFocus(e);
 			}
@@ -333,6 +366,7 @@ package Editor {
 			e.stopPropagation();
 			if (m_levelLoaded) {
 				m_levelInfo.blocks = new Vector.<BlockInfo>;
+				m_levelInfo.hints = new Vector.<HintInfo>;
 				m_levelInfo.title = m_menu.levelName.text;
 				var blocks:Vector.<Block> = m_level.getBlocks();
 				m_levelInfo.levelSize.x = parseFloat(m_menu.levelW.text);
@@ -345,13 +379,19 @@ package Editor {
 							as Block).getInfo());
 					}
 				}
-				var testHint:HintInfo = new HintInfo();
+				/*var testHint:HintInfo = new HintInfo();
 				testHint.x = 100;
 				testHint.y = 100;
 				testHint.w = 100;
 				testHint.h = 100;
 				testHint.ang = 30;
-				m_levelInfo.hints.push(testHint);
+				m_levelInfo.hints.push(testHint);*/
+
+				var hints:Vector.<Hint> = m_level.getHints();
+				for (i = 0; i < hints.length; ++i) {
+					m_levelInfo.hints.push(hints[i].info);
+				}
+
 				m_levelInfo.playerPosition = m_player.getPos();
 				m_levelInfo.playerPosition.y += Player.HEIGHT;
 				var saver:FileReference = new FileReference();
@@ -397,6 +437,7 @@ package Editor {
 			m_native.addChild(m_player);
 			m_player.setParentContext(m_native);
 			m_blocks = new Vector.<BlockProxy>;
+			m_hints = new Vector.<HintProxy>;
 			m_levelLoaded = true;
 			if (!m_paused) togglePause();
 		}
@@ -450,6 +491,9 @@ package Editor {
 			m_widgetsHidden = !m_widgetsHidden;
 			for (var i:uint=0;i<m_blocks.length;++i) {
 				m_blocks[i].visible = !m_widgetsHidden;
+			}
+			for (i=0;i<m_hints.length;++i) {
+				m_hints[i].visible = !m_widgetsHidden;
 			}
 			m_player.visible = !m_widgetsHidden;
 		}

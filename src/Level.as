@@ -31,6 +31,7 @@ package {
 		private var m_player:Player;
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_blocks:Vector.<Block>;
+		private var m_hints:Vector.<Hint>;
 		private var m_info:LevelInfo;
 		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
@@ -76,6 +77,7 @@ package {
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
 			m_blocks = new Vector.<Block>;
+			m_hints = new Vector.<Hint>;
 
 			// make world
 
@@ -89,6 +91,14 @@ package {
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
 				var loadedBlock:Block = new Block(m_info.blocks[i], this);
 				addBlock(loadedBlock);
+			}
+
+			// add in all the hints
+			for (i = 0; i < m_info.hints.length; ++i) {
+				var h:Hint = Hint.make(m_info.hints[i], pixelsPerMeter);
+				m_hints.push(h);
+				if (m_info.hints[i].background) m_backgroundLayer.addChild(h);
+				else m_foregroundLayer.addChild(h);
 			}
 
 			// prep the score card
@@ -339,6 +349,16 @@ package {
 
 		public function getChargableManager():ChargableManager {
 			return m_chargableManager;
+		}
+
+		public function getHints():Vector.<Hint> {
+			return m_hints;
+		}
+
+		public function addHint(h:Hint):void {
+			m_hints.push(h);
+			if (h.info.background) m_backgroundLayer.addChild(h);
+			else m_foregroundLayer.addChild(h);
 		}
 	}
 }
