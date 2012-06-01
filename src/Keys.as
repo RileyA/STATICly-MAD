@@ -36,8 +36,8 @@ package {
 				}
 			}
 
-			main.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-			main.stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
+			Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+			Main.stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
 		}
 
  		public static function isKeyPressed(key:int):Boolean{

@@ -3,15 +3,18 @@ package {
 	import starling.core.Starling;
 	import flash.events.Event;
 	import Config;
-
+	
+	[Frame(factoryClass="Preloader")]
 	[SWF(backgroundColor='#050505', frameRate='30', width='800', height='600')]
 
 	public class Main extends Sprite {
 
 		private var m_game:Game;
 		private var m_starling:Starling;
-
-		public function Main():void {
+		public static var stage:flash.display.Stage;
+		
+		public function Main(stage:flash.display.Stage):void {
+			Main.stage=stage;
 			super();
 			m_starling = new Starling(Game, stage);
 			m_starling.antiAliasing = 4; // 0 to 16. 0=fast, 2=pretty good looking
