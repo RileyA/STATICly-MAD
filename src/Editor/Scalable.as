@@ -16,7 +16,7 @@ package Editor {
 		public var m_scalepx_x:Number;
 		public var m_scalepx_y:Number;
 
-		private static const WIDGET_DIMENSIONS:Number = 5;
+		private static const WIDGET_DIMENSIONS:Number = 7;
 		
 		public function Scalable(pos_x:Number, pos_y:Number, 
 			scale_x:Number, scale_y:Number):void {

@@ -137,10 +137,17 @@ package Editor {
 			var blocks:Vector.<Block> = m_level.getBlocks();
 			for (var i:uint=0;i<blocks.length;++i) {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
+				blocks[i].updateTransform(m_level.pixelsPerMeter);
 				m_blocks.push(proxy);
 				//m_levelSprite.addChild(proxy);
 				m_native.addChild(proxy);
 				proxy.setParentContext(m_native);
+
+				// HACK, fixes editor reset, looks like this forces some state
+				// to get set that isn't otherwise, seems to fix it without
+				// too much issue, so I'm just gonna leave this ugliness...
+				//proxy.getBlock().reinit();
+				//refocus(proxy);
 			}
 			m_player = new PlayerProxy(m_level.getPlayer());
 			//m_levelSprite.addChild(m_player);

@@ -21,18 +21,18 @@ package Editor {
 		
 		private var m_child:Block;
 
-		private var insulatedBox:EditorOption;
-		private var strongBox:EditorOption;
-		private var movementBox:EditorOption;
-		private var polarityBox:EditorOption;
-		private var posVec:EditorVectorOption;
-		private var scaleVec:EditorVectorOption;
-		private var trackPos1:EditorVectorOption;
-		private var trackPos2:EditorVectorOption;
-		private var surfaceLabel:TextField;
-		private var actionLabel:TextField;
-		private var surfaceElems:BlockElementForm;
-		private var actionElems:BlockElementForm;
+		private var insulatedBox:EditorOption = null;
+		private var strongBox:EditorOption = null;
+		private var movementBox:EditorOption = null;
+		private var polarityBox:EditorOption = null;
+		private var posVec:EditorVectorOption = null;
+		private var scaleVec:EditorVectorOption = null;
+		private var trackPos1:EditorVectorOption = null;
+		private var trackPos2:EditorVectorOption = null;
+		private var surfaceLabel:TextField = null;
+		private var actionLabel:TextField = null;
+		private var surfaceElems:BlockElementForm = null;
+		private var actionElems:BlockElementForm = null;
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
@@ -42,6 +42,10 @@ package Editor {
 			super.setSnap(b.scaleX * snapTo);
 			snapOffsetX = 0;
 			snapOffsetY = 0;
+
+			// don't ask... it fixes the reset bug
+			gainFocus();
+			loseFocus();
 		}
 
 		override public function reposition():void {
@@ -54,12 +58,12 @@ package Editor {
 				y + m_children[0].y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
-			posVec.setValue(pos);
+			if (posVec) posVec.setValue(pos);
 			pos.x += sc.x/2;
 			pos.y += sc.y/2;
 			m_child.setPosition(pos);
 			m_child.clearVelocity();
-			scaleVec.setValue(sc);
+			if (scaleVec) scaleVec.setValue(sc);
 		}
 
 		override public function beginDrag():void {
