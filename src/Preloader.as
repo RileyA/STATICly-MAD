@@ -20,9 +20,9 @@ package
     	private var errorText:String;
     	
     	private var die:Boolean;
-    	private const myDomain:String="craigm.wdfiles.com";
+    	private const myDomains:Array=["craigm.wdfiles.com",".ungrounded.net",".newgrounds.com"];
     	private const suggestDomain:String="http://www.craigm.info/staticly-mad";
-    	private const lock:Boolean=false;
+    	private const lock:Boolean=true;
     	
         public function Preloader()
         {
@@ -119,7 +119,14 @@ package
 		private function checkDomain():Boolean{
 			var current:String=this.loaderInfo.url;
 			var parts:Array=current.split("/",4);
-			return parts.length==4 && parts[2].length>=myDomain.length &&parts[2].substr(-myDomain.length)==myDomain;
+			var i:int;
+			for (i=0;i<myDomains.length;i++){
+				var myDomain:String=myDomains[i];
+				if (parts.length==4 && parts[2].length>=myDomain.length &&parts[2].substr(-myDomain.length)==myDomain) {
+					return true;
+				}
+			}
+			return false;
 		}
         
     }    
