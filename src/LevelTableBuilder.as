@@ -9,7 +9,7 @@ package {
 	import starling.display.DisplayObject;
 	import flash.events.Event
 	
-	[SWF(backgroundColor='#050505', frameRate='30', width='1200', height='800')]
+	[SWF(backgroundColor='#050505', frameRate='30', width='100', height='100')]
 
 	public class LevelTableBuilder extends Sprite {
 
@@ -19,7 +19,7 @@ package {
 		public function LevelTableBuilder():void {
 			super();
 			m_starling = new Starling(Game, stage);
-			m_starling.antiAliasing = 4; // 0 to 16. 0=fast, 2=pretty good looking
+			m_starling.antiAliasing = 0; // 0 to 16. 0=fast, 2=pretty good looking
 			m_starling.showStats=Config.debug;
 			m_starling.start();			
 			addEventListener(flash.events.Event.ENTER_FRAME, update);
