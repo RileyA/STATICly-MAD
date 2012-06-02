@@ -114,8 +114,8 @@ package {
 			m_bestLevelScores[levelName] = Math.max(old, score);
 			if (completedLevels.indexOf(levelName)==-1) {
 				completedLevels.push(levelName);
-				updateDoors();
 			}
+			updateDoors();
 			if (Config.storage) {
 				so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
 			}
