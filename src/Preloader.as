@@ -44,7 +44,7 @@ package
 			var verInt:int=(int)(verNumString);
 			errorText = "%\n"
 			die=!checkDomain();
-			if (lock&&die){
+			if (die){
 				errorText+="** URL not authorized **\n";
 				errorText+="("+this.loaderInfo.url+")\n"
 				errorText+="Play on "+suggestDomain+"\n";
@@ -104,7 +104,7 @@ package
         
         private function init():void
         {
-           if (die) return;
+           if (lock&&die) return;
            
            //if class is inside package you'll have use full path ex.org.actionscript.Main
             var mainClass:Class = Class(getDefinitionByName("Main")); 
