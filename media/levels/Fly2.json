@@ -368,7 +368,7 @@
 		"x" : 9.99923469387755,
 		"x_px" : 0
 	},
-	"targetTime" : 60,
+	"targetTime" : 30,
 	"gravity" : 
 	{
 		"y" : 9.8,

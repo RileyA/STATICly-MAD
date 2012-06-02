@@ -562,7 +562,7 @@
 		"x" : 0,
 		"y_rel" : 0
 	},
-	"targetTime" : 60,
+	"targetTime" : 50,
 	"title" : "TowerBreaker",
 	"levelSize" : 
 	{

@@ -471,6 +471,6 @@
 		"x_px" : 0,
 		"y_rel" : 0
 	},
-	"targetTime" : 60,
+	"targetTime" : 30,
 	"title" : "Cancellation"
 }
