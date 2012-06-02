@@ -17,6 +17,7 @@ package {
 		private var m_starling:Starling;
 
 		public function LevelTableBuilder():void {
+			Main.stage=stage;
 			super();
 			m_starling = new Starling(Game, stage);
 			m_starling.antiAliasing = 0; // 0 to 16. 0=fast, 2=pretty good looking
