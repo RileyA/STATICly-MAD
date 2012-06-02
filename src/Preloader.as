@@ -19,12 +19,17 @@ package
     	private const loadText:String="STATICly MAD\nLoading: ";
     	private var errorText:String;
     	
+    	private var die:Boolean;
+    	private const myDomain:String="craigm.wdfiles.com";
+    	private const suggestDomain:String="http://www.craigm.info/staticly-mad";
+    	private const lock:Boolean=false;
+    	
         public function Preloader()
         {
         	progressText=new TextField();
         	progressText.textColor=0xFF0000;
 			progressText.width=800;
-			progressText.height=500;
+			progressText.height=400;
 			progressText.x=0;
 			progressText.y=0;
 			
@@ -38,9 +43,17 @@ package
 			var verNumString:String = ver.slice(4, split);
 			var verInt:int=(int)(verNumString);
 			errorText = "%\n"
+			die=!checkDomain();
+			if (lock&&die){
+				errorText+="** URL not authorized **\n";
+				errorText+="("+this.loaderInfo.url+")\n"
+				errorText+="Play on "+suggestDomain+"\n";
+			}
+			
 			if (verInt<11) {
 				errorText+="UPGRADE YOUR FLASH PLAYER\nRequires: Flash Player 11\nRunning: Flash Player "+verNumString;
 			}
+			
 			
 			
 			progressText.text=loadText+"1"+errorText;
@@ -56,12 +69,14 @@ package
 			creditText.defaultTextFormat = myFormat;
 			creditText.textColor=0xFF6666;
 			creditText.width=800;
-			creditText.height=100;
+			creditText.height=200;
 			creditText.x=0;
-			creditText.y=500;
+			creditText.y=400;
 			creditText.text="By:\nCraig Macomber, Riley Adams,\nMatt Hall and David Mailhot";
 			addChild(creditText);
 			stage.addChild(this);
+			
+			
 			
 			
             stop();
@@ -89,19 +104,23 @@ package
         
         private function init():void
         {
-            //if class is inside package you'll have use full path ex.org.actionscript.Main
+           if (die) return;
+           
+           //if class is inside package you'll have use full path ex.org.actionscript.Main
             var mainClass:Class = Class(getDefinitionByName("Main")); 
-            if(mainClass)
-            {
-            	var i:int;
-            	for (i=0;i<1000000;i++){
-            		//trace("x"+i);
-            	}
-                
+            if(mainClass){
                 var main:Object = new mainClass(stage);
                 addChild(main as DisplayObject);
                 stage.removeChild(this);
             }
         }
-    }
+        
+        // http://www.actionscript.org/forums/showthread.php3?t=50214
+		private function checkDomain():Boolean{
+			var current:String=this.loaderInfo.url;
+			var parts:Array=current.split("/",4);
+			return parts.length==4 && parts[2].length>=myDomain.length &&parts[2].substr(-myDomain.length)==myDomain;
+		}
+        
+    }    
 }
