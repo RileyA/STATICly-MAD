@@ -264,8 +264,13 @@ package Editor {
 			m_child.info.y = //parseFloat(posY.text);
 				m_child.y / m_child.ppm;
 			m_child.info.ang = parseFloat(angVal.text);
-			m_child.info.w = m_child.txt.width / m_child.ppm;
-			m_child.info.h = m_child.txt.height / m_child.ppm;
+			if (m_child.txt) {
+				m_child.info.w = m_child.txt.width / m_child.ppm;
+				m_child.info.h = m_child.txt.height / m_child.ppm;
+			} else {
+				m_child.info.w = m_child.im.width / m_child.ppm;
+				m_child.info.h = m_child.im.height / m_child.ppm;
+			}
 			m_child.info.textHint = m_child.isText;
 
 			reposition();

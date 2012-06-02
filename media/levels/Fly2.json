@@ -1,43 +1,39 @@
 {
-	"hints" : 
-	[
-	],
-	"levelSize" : 
+	"targetTime" : 30,
+	"gravity" : 
 	{
-		"y" : 14,
+		"y" : 9.8,
 		"x_rel" : 0,
-		"y_px" : 0,
+		"x" : 0,
 		"y_rel" : 0,
-		"x" : 20,
+		"y_px" : 0,
 		"x_px" : 0
 	},
-	"targetTime" : 30,
 	"title" : "Fly2",
 	"blocks" : 
 	[
 		{
-			"position" : 
-			{
-				"y" : 10.50063775510204,
-				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
-				"x" : 1.25,
-				"x_px" : 0
-			},
-			"movement" : "fixed",
 			"actions" : 
 			[
 			"up,exit,"
 			],
-			"strong" : false,
 			"scale" : 
 			{
 				"y" : 6.998724489795919,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 2.5,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 0,
+			"position" : 
+			{
+				"y" : 10.50063775510204,
+				"x_rel" : 0,
+				"x" : 1.25,
+				"y_rel" : 0,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
@@ -45,148 +41,148 @@
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : -1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				},
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : 1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				}
 			],
-			"insulated" : true,
-			"chargePolarity" : 0,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "fixed",
+			"insulated" : true,
+			"strong" : false
 		},
 		{
-			"position" : 
-			{
-				"y" : 12.374999999999998,
-				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
-				"x" : 4.875,
-				"x_px" : 0
-			},
-			"movement" : "fixed",
 			"actions" : 
 			[
 			],
-			"strong" : false,
 			"scale" : 
 			{
 				"y" : 3.25,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 4.749999999999999,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 0,
+			"position" : 
+			{
+				"y" : 12.374999999999998,
+				"x_rel" : 0,
+				"x" : 4.875,
+				"y_rel" : 0,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
 			[
 			],
-			"insulated" : false,
-			"chargePolarity" : 0,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "fixed",
+			"insulated" : false,
+			"strong" : false
 		},
 		{
-			"position" : 
-			{
-				"y" : 12.374999999999998,
-				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
-				"x" : 9.25,
-				"x_px" : 0
-			},
-			"movement" : "fixed",
 			"actions" : 
 			[
 			],
-			"strong" : false,
 			"scale" : 
 			{
 				"y" : 3.25,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 4,
+				"y_rel" : 0,
+				"y_px" : 0,
 				"x_px" : 0
 			},
-			"bounds" : 
-			[
-			],
-			"insulated" : false,
 			"chargePolarity" : 0,
-			"surfaces" : 
-			[
-			]
-		},
-		{
 			"position" : 
 			{
 				"y" : 12.374999999999998,
 				"x_rel" : 0,
-				"y_px" : 0,
+				"x" : 9.25,
 				"y_rel" : 0,
-				"x" : 12.5,
-				"x_px" : 0
-			},
-			"movement" : "fixed",
-			"actions" : 
-			[
-			],
-			"strong" : false,
-			"scale" : 
-			{
-				"y" : 3.25,
-				"x_rel" : 0,
 				"y_px" : 0,
-				"y_rel" : 0,
-				"x" : 2.5,
 				"x_px" : 0
 			},
 			"bounds" : 
 			[
 			],
-			"insulated" : false,
-			"chargePolarity" : 0,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "fixed",
+			"insulated" : false,
+			"strong" : false
 		},
 		{
-			"position" : 
-			{
-				"y" : 12.375,
-				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
-				"x" : 16.875,
-				"x_px" : 0
-			},
-			"movement" : "fixed",
 			"actions" : 
 			[
-			"up,info,ElectroSTATIC\nShuffling Carpet\nof Science"
 			],
-			"strong" : false,
 			"scale" : 
 			{
 				"y" : 3.25,
 				"x_rel" : 0,
-				"y_px" : 0,
+				"x" : 2.5,
 				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 0,
+			"position" : 
+			{
+				"y" : 12.374999999999998,
+				"x_rel" : 0,
+				"x" : 12.5,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"bounds" : 
+			[
+			],
+			"surfaces" : 
+			[
+			],
+			"movement" : "fixed",
+			"insulated" : false,
+			"strong" : false
+		},
+		{
+			"actions" : 
+			[
+			"up,info,"
+			],
+			"scale" : 
+			{
+				"y" : 3.25,
+				"x_rel" : 0,
 				"x" : 6.25,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 0,
+			"position" : 
+			{
+				"y" : 12.374999999999998,
+				"x_rel" : 0,
+				"x" : 16.874999999999996,
+				"y_rel" : 0,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
@@ -194,49 +190,49 @@
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : -1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				},
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : 1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				}
 			],
-			"insulated" : true,
-			"chargePolarity" : 0,
 			"surfaces" : 
 			[
 			"up,bcarpet"
-			]
+			],
+			"movement" : "fixed",
+			"insulated" : true,
+			"strong" : false
 		},
 		{
+			"actions" : 
+			[
+			],
+			"scale" : 
+			{
+				"y" : 0.5,
+				"x_rel" : 0,
+				"x" : 0.5,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 1,
 			"position" : 
 			{
 				"y" : 8.499999999999998,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 12.749999999999998,
-				"x_px" : 0
-			},
-			"movement" : "free",
-			"actions" : 
-			[
-			],
-			"strong" : false,
-			"scale" : 
-			{
-				"y" : 0.5,
-				"x_rel" : 0,
-				"y_px" : 0,
 				"y_rel" : 0,
-				"x" : 0.5,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
@@ -244,48 +240,48 @@
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : -1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				},
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : 1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				}
 			],
-			"insulated" : true,
-			"chargePolarity" : 1,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "free",
+			"insulated" : true,
+			"strong" : false
 		},
 		{
+			"actions" : 
+			[
+			],
+			"scale" : 
+			{
+				"y" : 0.5,
+				"x_rel" : 0,
+				"x" : 0.5,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 1,
 			"position" : 
 			{
 				"y" : 9.749999999999998,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 7.499999999999999,
-				"x_px" : 0
-			},
-			"movement" : "free",
-			"actions" : 
-			[
-			],
-			"strong" : false,
-			"scale" : 
-			{
-				"y" : 0.5,
-				"x_rel" : 0,
-				"y_px" : 0,
 				"y_rel" : 0,
-				"x" : 0.5,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
@@ -293,48 +289,48 @@
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : -1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				},
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : 1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				}
 			],
-			"insulated" : true,
-			"chargePolarity" : 1,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "free",
+			"insulated" : true,
+			"strong" : false
 		},
 		{
+			"actions" : 
+			[
+			],
+			"scale" : 
+			{
+				"y" : 0.5,
+				"x_rel" : 0,
+				"x" : 0.5,
+				"y_rel" : 0,
+				"y_px" : 0,
+				"x_px" : 0
+			},
+			"chargePolarity" : 1,
 			"position" : 
 			{
 				"y" : 8.673469387755102,
 				"x_rel" : 0,
-				"y_px" : 0,
-				"y_rel" : 0,
 				"x" : 5.610969387755102,
-				"x_px" : 0
-			},
-			"movement" : "free",
-			"actions" : 
-			[
-			],
-			"strong" : false,
-			"scale" : 
-			{
-				"y" : 0.5,
-				"x_rel" : 0,
-				"y_px" : 0,
 				"y_rel" : 0,
-				"x" : 0.5,
+				"y_px" : 0,
 				"x_px" : 0
 			},
 			"bounds" : 
@@ -342,43 +338,80 @@
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : -1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				},
 						{
 					"y" : 0,
 					"x_rel" : 0,
-					"y_px" : 0,
-					"y_rel" : 0,
 					"x" : 1,
+					"y_rel" : 0,
+					"y_px" : 0,
 					"x_px" : 0
 				}
 			],
-			"insulated" : true,
-			"chargePolarity" : 1,
 			"surfaces" : 
 			[
-			]
+			],
+			"movement" : "free",
+			"insulated" : true,
+			"strong" : false
 		}
 	],
 	"playerPosition" : 
 	{
 		"y" : 5.799489795918367,
 		"x_rel" : 0,
-		"y_px" : 0,
-		"y_rel" : 0,
 		"x" : 9.99923469387755,
+		"y_rel" : 0,
+		"y_px" : 0,
 		"x_px" : 0
 	},
-	"gravity" : 
+	"hints" : 
+	[
+		{
+			"y" : 8.603316326530612,
+			"ang" : 0,
+			"x" : 16.948979591836732,
+			"textHint" : true,
+			"text" : "ElectroSTATIC,Shuffling Carpet,of Science",
+			"w" : 8.489795918367347,
+			"textSize" : 26,
+			"background" : true,
+			"h" : 3.4821428571428568
+		},
+		{
+			"y" : 10.137755102040815,
+			"ang" : 90,
+			"x" : 16.132653061224488,
+			"textHint" : false,
+			"text" : "HINT",
+			"w" : 1.5,
+			"textSize" : 30,
+			"background" : true,
+			"h" : 1.5
+		},
+		{
+			"y" : 10.137755102040815,
+			"ang" : 270,
+			"x" : 17.739795918367346,
+			"textHint" : false,
+			"text" : "HINT",
+			"w" : 1.5,
+			"textSize" : 30,
+			"background" : true,
+			"h" : 1.5
+		}
+	],
+	"levelSize" : 
 	{
-		"y" : 9.8,
+		"y" : 14,
 		"x_rel" : 0,
-		"y_px" : 0,
+		"x" : 20,
 		"y_rel" : 0,
-		"x" : 0,
+		"y_px" : 0,
 		"x_px" : 0
 	}
 }

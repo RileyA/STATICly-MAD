@@ -3,6 +3,7 @@ package {
 	import flash.ui.Keyboard;
 	import Particle.*;
 	import starling.core.Starling;
+	import starling.display.Quad;
 
 	/** Simple placeholder menu state with a button that starts another state */
 	public class ScoreState extends GameState {
@@ -33,11 +34,36 @@ package {
 		}
 
 		override public function init():void {
-			m_game.getMenu().attachTo(this);
+			tileBG(LevelState.Background);
+			//m_game.getMenu().attachTo(this);
 
 			var fontSize:int = 24;
 			var fontColor:uint = 0xBBBBBB;
 			var fontStyle:String = "akashi"
+
+			var q:Quad = new Quad(800, 400);
+			q.x = 0;
+			q.y = 120;
+			q.color = 0x000000;
+			q.alpha = 0.75;
+			addChild(q);
+			q = new Quad(800, 120);
+			q.color = 0x000000;
+			q.y = 0;
+			q.setVertexAlpha(0,0);
+			q.setVertexAlpha(1,0);
+			q.setVertexAlpha(2,0.75);
+			q.setVertexAlpha(3,0.75);
+			addChild(q);
+			q = new Quad(800, 100);
+			q.color = 0x000000;
+			q.y = 520;
+			q.setVertexAlpha(0,0.75);
+			q.setVertexAlpha(1,0.75);
+			q.setVertexAlpha(2,0);
+			q.setVertexAlpha(3,0);
+			addChild(q);
+
 			
 			var hello_text:TextField = new TextField(800, 100, 
 				"Cleared!\n", fontStyle, fontSize*1.5, fontColor);
@@ -50,16 +76,16 @@ package {
 			var player_column_text:TextField = new TextField(400, 400, 
 				"Completion Bonus:\nYour Time:\nTime Under Par:\nTime Score:\n\nTotal Score:\nPrevious Best:", 
 				fontStyle, fontSize, fontColor);
-			player_column_text.x = 150;
+			player_column_text.x = 200;
 			player_column_text.y = 150;
 			player_column_text.hAlign = "left";
 			addChild(player_column_text);
 			m_textFields.push(player_column_text);
 			
-			var score_column_text:TextField = new TextField(200, 400,
+			var score_column_text:TextField = new TextField(400, 400,
 				COMPLETION_BONUS + "\n(" + player_time + ")s\n(" + under_par_time + ")s\n" + score + "\n\n" + total + "\n" + m_score.prevScore, 
 				fontStyle, fontSize, fontColor);
-			score_column_text.x = 400;
+			score_column_text.x = 200;
 			score_column_text.y = 150;
 			score_column_text.hAlign = "right";
 			addChild(score_column_text);
@@ -86,7 +112,7 @@ package {
 		}
 
 		override public function deinit():void {
-			m_game.getMenu().removeFrom(this);
+			//m_game.getMenu().removeFrom(this);
 
 			for(var i:int = 0; i < m_textFields.length; i++) {
 				removeChild(m_textFields[i]);
