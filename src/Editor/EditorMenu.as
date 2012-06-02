@@ -101,7 +101,7 @@ package Editor {
 
 			levelW = new TextField();
 			levelW.defaultTextFormat = textFormat;
-			levelW.text = "26.666";
+			levelW.text = "25";
 			levelW.x = 4;
 			levelW.y = 35;
 			levelW.width = 45;

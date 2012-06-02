@@ -8,7 +8,7 @@ OUT_TABLE = table.swf
 OPTS = -static-link-runtime-shared-libraries=true -use-direct-blit=true
 CC = mxmlc
 
-all: main ed
+all: main ed table
 	
 main: levels
 	${CC} Main.as -o ${OUT} ${OPTS}

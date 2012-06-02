@@ -24,12 +24,15 @@ package Editor {
 		private static const PAUSE_KEY:Number = Keyboard.P;
 		private static const RESET_KEY:Number = Keyboard.R;
 		private static const BLOCK_KEY:Number = Keyboard.SHIFT;
+		private static const HINT_KEY:Number = Keyboard.H;
 		private static const WIDGET_KEY:Number = Keyboard.W;
 		private static const DELETE_KEY:Number = Keyboard.BACKSPACE;
 		private static const COPY_KEY:Number = Keyboard.C;
 		private static const PASTE_KEY:Number = Keyboard.V;
+		private static const SENDBACK_KEY:Number = Keyboard.K;
 
 		private var m_blocks:Vector.<BlockProxy>;
+		private var m_hints:Vector.<HintProxy>;
 		private var m_player:PlayerProxy;
 		private var m_info:LevelInfo;
 		private var m_level:Level;
@@ -38,6 +41,7 @@ package Editor {
 		private var m_resetKey:Boolean;
 		private var m_widgetKey:Boolean;
 		private var m_pasteKey:Boolean;
+		private var m_sendbackKey:Boolean;
 		private var m_widgetsHidden:Boolean;
 		private var m_paused:Boolean;
 
@@ -51,11 +55,12 @@ package Editor {
 		private var m_native:flash.display.Sprite;
 
 		private var m_levelSprite:Sprite;
-		private var lolwut:Boolean = false;
 
 		public function EditorState(game:Game):void {
 			super(game);
 			m_pauseKey = true;
+			m_pasteKey = true;
+			m_sendbackKey = true;
 			m_resetKey = true;
 			m_widgetKey = true;
 			m_widgetsHidden = false;
@@ -127,21 +132,34 @@ package Editor {
 
 		public function loadLevel(info:LevelInfo):void {
 			m_menu.levelName.text = info.title;
+			m_menu.levelW.text = info.levelSize.x.toString();
+			m_menu.levelH.text = info.levelSize.y.toString();
 			m_level = new Level(m_levelSprite, info);
 			m_native.x = m_levelSprite.x;
 			m_native.y = m_levelSprite.y;
 			m_blocks = new Vector.<BlockProxy>;
+			m_hints = new Vector.<HintProxy>;
 			m_level.setUpdatePhysics(!m_paused);
 			m_level.update(0);
 
 			var blocks:Vector.<Block> = m_level.getBlocks();
 			for (var i:uint=0;i<blocks.length;++i) {
 				var proxy:BlockProxy = new BlockProxy(blocks[i]);
+				blocks[i].updateTransform(m_level.pixelsPerMeter);
 				m_blocks.push(proxy);
 				//m_levelSprite.addChild(proxy);
 				m_native.addChild(proxy);
 				proxy.setParentContext(m_native);
 			}
+
+			var hints:Vector.<Hint> = m_level.getHints();
+			for (i=0;i<hints.length;++i) {
+				var hproxy:HintProxy = new HintProxy(hints[i]);
+				m_hints.push(hproxy);
+				m_native.addChild(hproxy);
+				hproxy.setParentContext(m_native);
+			}
+
 			m_player = new PlayerProxy(m_level.getPlayer());
 			//m_levelSprite.addChild(m_player);
 			m_native.addChild(m_player);
@@ -209,6 +227,20 @@ package Editor {
 						m_focused = null;
 						refocus(null);
 						bp = null;
+					} else if (m_focused && m_focused is HintProxy) {
+						var hp:HintProxy = m_focused as HintProxy;
+						m_level.removeHint(hp.getHint());
+						for (i=0; i < m_hints.length; ++i) {
+							if (m_hints[i] == m_focused) {
+								m_hints[i] = m_hints[m_hints.length - 1];
+								m_hints.pop();
+								break;
+							}
+						}
+						m_native.removeChild(hp);
+						m_focused = null;
+						refocus(null);
+						hp = null;
 					}
 				}
 
@@ -248,6 +280,17 @@ package Editor {
 					m_pasteKey = false;
 				}
 
+				if (Keys.isKeyPressed(SENDBACK_KEY) && !m_sendbackKey) {
+					m_sendbackKey = true;
+					if (m_focused && m_focused is BlockProxy) {
+						m_native.setChildIndex(m_focused as BlockProxy, 0);
+						var block:Block = (m_focused as BlockProxy).getBlock();
+						block.parent.setChildIndex(block,1);// 0 is background
+					}
+				} else if (!Keys.isKeyPressed(SENDBACK_KEY) && m_sendbackKey) {
+					m_sendbackKey = false;
+				}
+
 				if (!m_level.update(delta)) {
 					doReset();
 					m_level.resetLevel();
@@ -255,7 +298,8 @@ package Editor {
 				}
 			}
 
-			return !Keys.isKeyPressed(Keyboard.ESCAPE);
+			//return !Keys.isKeyPressed(Keyboard.ESCAPE);
+			return true;
 		}
 
 		public function addBlock(e:flash.events.MouseEvent):void { 
@@ -289,6 +333,32 @@ package Editor {
 					refocus(null);
 				}
 				proxy.visible = !m_widgetsHidden;
+			} else if (e.target == m_native 
+				&& Keys.isKeyPressed(HINT_KEY)) {
+				var hinfo:HintInfo = new HintInfo();
+				hinfo.x = m_native.mouseX / m_level.pixelsPerMeter;
+				hinfo.y = m_native.mouseY / m_level.pixelsPerMeter;
+				hinfo.w = 1;
+				hinfo.h = 1;
+				hinfo.ang = 0;
+				hinfo.textHint = false;
+				hinfo.background = true;
+				var h:Hint = Hint.make(hinfo, m_level.pixelsPerMeter);
+				h.info = hinfo;
+				m_level.addHint(h);
+
+				var hproxy:HintProxy = new HintProxy(h);
+				m_hints.push(hproxy);
+				m_native.addChild(hproxy);
+				hproxy.setParentContext(m_native);
+
+				m_native.swapChildren(hproxy, m_player);
+				if (!m_widgetsHidden) {
+					refocus(hproxy);
+				} else {
+					refocus(null);
+				}
+
 			} else {
 				handleFocus(e);
 			}
@@ -310,11 +380,34 @@ package Editor {
 			e.stopPropagation();
 			if (m_levelLoaded) {
 				m_levelInfo.blocks = new Vector.<BlockInfo>;
+				m_levelInfo.hints = new Vector.<HintInfo>;
 				m_levelInfo.title = m_menu.levelName.text;
 				var blocks:Vector.<Block> = m_level.getBlocks();
-				for (var i:uint = 0; i < blocks.length; ++i)
-					m_levelInfo.blocks.push(blocks[i].getInfo());
+				m_levelInfo.levelSize.x = parseFloat(m_menu.levelW.text);
+				m_levelInfo.levelSize.y = parseFloat(m_menu.levelH.text);
+				// add in the order of visual sorting, so it is consistent..
+				var levelSp:Sprite = m_level.getParent();
+				for (var i:uint = 0; i < levelSp.numChildren; ++i) {
+					if (levelSp.getChildAt(i) is Block) {
+						m_levelInfo.blocks.push((levelSp.getChildAt(i) 
+							as Block).getInfo());
+					}
+				}
+				/*var testHint:HintInfo = new HintInfo();
+				testHint.x = 100;
+				testHint.y = 100;
+				testHint.w = 100;
+				testHint.h = 100;
+				testHint.ang = 30;
+				m_levelInfo.hints.push(testHint);*/
+
+				var hints:Vector.<Hint> = m_level.getHints();
+				for (i = 0; i < hints.length; ++i) {
+					m_levelInfo.hints.push(hints[i].info);
+				}
+
 				m_levelInfo.playerPosition = m_player.getPos();
+				m_levelInfo.playerPosition.y += Player.HEIGHT;
 				var saver:FileReference = new FileReference();
 				saver.save(MiscUtils.outputJSON(m_levelInfo),
 					m_levelInfo.title + ".json");
@@ -358,6 +451,7 @@ package Editor {
 			m_native.addChild(m_player);
 			m_player.setParentContext(m_native);
 			m_blocks = new Vector.<BlockProxy>;
+			m_hints = new Vector.<HintProxy>;
 			m_levelLoaded = true;
 			if (!m_paused) togglePause();
 		}
@@ -411,6 +505,9 @@ package Editor {
 			m_widgetsHidden = !m_widgetsHidden;
 			for (var i:uint=0;i<m_blocks.length;++i) {
 				m_blocks[i].visible = !m_widgetsHidden;
+			}
+			for (i=0;i<m_hints.length;++i) {
+				m_hints[i].visible = !m_widgetsHidden;
 			}
 			m_player.visible = !m_widgetsHidden;
 		}

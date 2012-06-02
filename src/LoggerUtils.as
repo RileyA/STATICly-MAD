@@ -9,6 +9,7 @@ package {
 		public static const CHARGE_BLOCK_AID:uint = 1;
 		public static const RESET_AID:uint = 2;
 		public static const QUIT_AID:uint = 3;
+		public static const BEAT_LEVEL_AID:uint = 4;
 
 		public static var l:Logger;
 		private static var inLevel:Boolean;
@@ -26,19 +27,25 @@ package {
 
 		/** Log the charging of a block */
 		public static function logChargeBlock(playerC:Number, blockC:Number, isStrong:Boolean):void {
+			return; // Disable logging block charging
 			if (l == null || !inLevel) { return; }
 			var strong:int = (isStrong) ? 1 : 0;
 			l.logAction(CHARGE_BLOCK_AID, {"ch_p":playerC, "ch_b":blockC, "str_b":strong});
 		}
 
-		public static function logResetLevel():void {
+		public static function logBeatLevel(score:int, time:Number):void {
 			if (l == null || !inLevel) { return; }
-			l.logAction(RESET_AID, null);
+			l.logAction(BEAT_LEVEL_AID, {"time":time, "score":score});
 		}
 
-		public static function logQuitLevel():void {
+		public static function logResetLevel(time:Number):void {
 			if (l == null || !inLevel) { return; }
-			l.logAction(QUIT_AID, null);
+			l.logAction(RESET_AID, {"time":time});
+		}
+
+		public static function logQuitLevel(time:Number):void {
+			if (l == null || !inLevel) { return; }
+			l.logAction(QUIT_AID, {"time":time});
 		}
 
 		public static function logLevelStart(name:String, hash:Object):void {

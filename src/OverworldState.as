@@ -46,7 +46,7 @@ package {
 		override public function resume():void {
 			var menu:Menu = m_game.getMenu();
 			menu.setOverworldMenu();
-			menu.updateOverworldInfo(m_worldName, m_game.getTotalScore());
+			menu.updateOverworldInfo(m_level.getInfo().title, m_game.getTotalScore());
 			menu.attachTo(this);
 		}
 
@@ -114,8 +114,8 @@ package {
 			m_bestLevelScores[levelName] = Math.max(old, score);
 			if (completedLevels.indexOf(levelName)==-1) {
 				completedLevels.push(levelName);
-				updateDoors();
 			}
+			updateDoors();
 			if (Config.storage) {
 				so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
 			}

@@ -14,6 +14,7 @@ package Editor {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.TextEvent;
+	import flash.geom.Point;
 
 	/** A scalable containing a block, lets you take a block and scale
 		it and drag it around and such */
@@ -21,45 +22,54 @@ package Editor {
 		
 		private var m_child:Block;
 
-		private var insulatedBox:EditorOption;
-		private var strongBox:EditorOption;
-		private var movementBox:EditorOption;
-		private var polarityBox:EditorOption;
-		private var posVec:EditorVectorOption;
-		private var scaleVec:EditorVectorOption;
-		private var trackPos1:EditorVectorOption;
-		private var trackPos2:EditorVectorOption;
-		private var surfaceLabel:TextField;
-		private var actionLabel:TextField;
-		private var surfaceElems:BlockElementForm;
-		private var actionElems:BlockElementForm;
+		private var insulatedBox:EditorOption = null;
+		private var strongBox:EditorOption = null;
+		private var movementBox:EditorOption = null;
+		private var polarityBox:EditorOption = null;
+		private var posVec:EditorVectorOption = null;
+		private var scaleVec:EditorVectorOption = null;
+		private var trackPos1:EditorVectorOption = null;
+		private var trackPos2:EditorVectorOption = null;
+		private var surfaceLabel:TextField = null;
+		private var actionLabel:TextField = null;
+		private var surfaceElems:BlockElementForm = null;
+		private var actionElems:BlockElementForm = null;
 
 		public function BlockProxy(b:Block):void {
 			m_child = b;
-			var sc:UVec2 = b.getScale();
+			var sc:UVec2 = b.getInfo().scale;
 			super(b.x - sc.x * b.scaleX / 2, b.y -sc.y * b.scaleY / 2,
 				sc.x * b.scaleX, sc.y * b.scaleY);
 			super.setSnap(b.scaleX * snapTo);
 			snapOffsetX = 0;
 			snapOffsetY = 0;
+
+			// don't ask... it fixes the reset bug
+			gainFocus();
+			loseFocus();
 		}
 
 		override public function reposition():void {
 			super.reposition();
 
-			var sc:UVec2 = m_child.getScale();
+			var sc:UVec2 = m_child.getInfo().scale;
 
 			// x,y + m_children[0].x,y are coords
-			var pos:UVec2 = new UVec2(x + m_children[0].x,
-				y + m_children[0].y);
+			//var pos:UVec2 = new UVec2(x + m_children[0].x,
+			//	y + m_children[0].y);
+
+			/*var tmpPt:Point = new Point(m_children[0].x, m_children[0].y);
+			tmpPt = m_children[0].localToGlobal(tmpPt);
+			tmpPt = parent.parent.globalToLocal(tmpPt);
+			var pos:UVec2 = new UVec2(tmpPt.x, tmpPt.y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
-			posVec.setValue(pos);
+			//if (posVec) posVec.setValue(pos);
 			pos.x += sc.x/2;
 			pos.y += sc.y/2;
 			m_child.setPosition(pos);
-			m_child.clearVelocity();
-			scaleVec.setValue(sc);
+			m_child.clearVelocity();*/
+			//if (scaleVec) scaleVec.setValue(sc);
 		}
 
 		override public function beginDrag():void {
@@ -72,9 +82,11 @@ package Editor {
 
 		override public function endDrag():void {
 			var world:b2World = m_child.getPhysics().GetWorld();
-			var sc:UVec2 = m_child.getScale();
-			var pos:UVec2 = new UVec2(x + m_children[0].x,
-				y + m_children[0].y);
+			var sc:UVec2 = m_child.getInfo().scale;
+			var tmpPt:Point = new Point(m_children[0].x, m_children[0].y);
+			//tmpPt = m_children[0].localToGlobal(tmpPt);
+			//tmpPt = parent.globalToLocal(tmpPt);
+			var pos:UVec2 = new UVec2(tmpPt.x + x, tmpPt.y + y);
 			pos.x /= m_child.scaleX;
 			pos.y /= m_child.scaleY;
 			m_child.getPhysics().SetType(m_child.getBodyType());
@@ -82,6 +94,11 @@ package Editor {
 			m_child.getInfo().scale.y = m_scalepx_y / m_child.scaleY;
 			m_child.getInfo().position.x = pos.x + m_child.getInfo().scale.x / 2;
 			m_child.getInfo().position.y = pos.y + m_child.getInfo().scale.y / 2;
+			sc.x = m_scalepx_x / m_child.scaleX;
+			sc.y = m_scalepx_y / m_child.scaleY;
+			if (posVec) posVec.setValue(pos);
+			if (scaleVec) scaleVec.setValue(sc);
+			//reposition();
 			m_child.reinit();
 			//populateForm();
 		}
@@ -116,7 +133,7 @@ package Editor {
 			form.addChild(posVec);
 
 			scaleVec = new EditorVectorOption(
-				"Scale", m_child.getScale().x, m_child.getScale().y);
+				"Scale", m_child.getInfo().scale.x, m_child.getInfo().scale.y);
 			scaleVec.x = 4;
 			scaleVec.y = 19;
 			form.addChild(scaleVec);
@@ -176,15 +193,17 @@ package Editor {
 
 			function assignSelections(input:Vector.<String>, types:Vector.<String>, out:Vector.<int>,
 				extras:Vector.<String>=null):void {
+				var j:uint = 0;
 				for (var i:uint = 0; i < input.length; ++i) {
-					var j:uint = 0;
 					var strs:Array = input[i].split(",");
 					var direct:String = strs[0];
 					var objType:String = strs[1];
-					if (direct == "up") j = 0;
-					else if (direct == "down") j = 1;
-					else if (direct == "left") j = 2;
-					else if (direct == "right") j = 3;
+					if (!extras) {
+						if (direct == "up") j = 0;
+						else if (direct == "down") j = 1;
+						else if (direct == "left") j = 2;
+						else if (direct == "right") j = 3;
+					}
 					for (var k:uint = 0; k < types.length; ++k) {
 						if (types[k] == objType) {
 							out[j] = k;
@@ -192,6 +211,7 @@ package Editor {
 							{
 								var extraStr:String = "";
 								for (var m:uint = 2; m < strs.length; ++m) {
+									strs[m] = strs[m].split("\n").join(",");
 									if(strs[m] == "") break;
 									extraStr += (m>2?",":"") + strs[m];
 								}
@@ -200,6 +220,7 @@ package Editor {
 							continue;
 						}
 					}
+					if (extras) ++j;
 				}
 			}
 
@@ -219,7 +240,7 @@ package Editor {
 			var aopts:Vector.<String> = new Vector.<String>();
 			var asels:Vector.<int> = new Vector.<int>();
 			var axtras:Vector.<String> = new Vector.<String>();
-			aopts.push("None", "exit", "entrance", "computer");
+			aopts.push("None", "exit", "entrance", "info");
 			axtras.push("", "", "", "");
 			asels.push(0,0,0,0);
 			assignSelections(m_child.getInfo().actions, aopts, asels, axtras);
@@ -269,17 +290,21 @@ package Editor {
 		}
 
 		public function handlePropChange(e:Event):void {
+			if (e.target != posVec && e.target != scaleVec) {
+				endDrag();
+			}
 			x = posVec.getValue().x * m_child.scaleX;
 			y = posVec.getValue().y * m_child.scaleY;
 			reposition();
 			m_child.getInfo().scale.x = scaleVec.getValue().x;
 			m_child.getInfo().scale.y = scaleVec.getValue().y;
-			forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
-				m_child.getInfo().scale.y * m_child.scaleY);
-			m_child.getInfo().position.x = posVec.getValue().x 
-				+ m_child.getInfo().scale.x/2;
-			m_child.getInfo().position.y = posVec.getValue().y
-				+ m_child.getInfo().scale.y/2;
+			if (e.target == scaleVec)
+				forceScale(m_child.getInfo().scale.x * m_child.scaleX, 
+					m_child.getInfo().scale.y * m_child.scaleY);
+			//m_child.getInfo().position.x = posVec.getValue().x;
+			//	+ m_child.getInfo().scale.x/2;
+			//m_child.getInfo().position.y = posVec.getValue().y;
+			//	+ m_child.getInfo().scale.y/2;
 			m_child.getInfo().movement = movementBox.getSelection();
 			m_child.getInfo().chargePolarity = parseInt(
 				polarityBox.getSelection());
@@ -303,7 +328,7 @@ package Editor {
 						extraInfo += "," + actionElems.extras[i];
 					else if (actionElems.extras != null)
 						extraInfo = ",";
-					m_child.getInfo().actions.push(temp[i] + ","
+					m_child.getInfo().actions.push("up"+ ","
 						+ actionElems.options[actionElems.selections[i]] + extraInfo);
 				}
 			}

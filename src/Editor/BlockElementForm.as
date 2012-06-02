@@ -35,10 +35,10 @@ package Editor {
 			selections = vals;
 			extras = extra;
 			var step:Number = extras?30:15;
-			makeDirection("UP", 0, 0);
-			makeDirection("DOWN", step, 1);
-			makeDirection("LEFT", step*2, 2);
-			makeDirection("RIGHT", step*3, 3);
+			makeDirection("up", 0, 0);
+			makeDirection("down", step, 1);
+			makeDirection("left", step*2, 2);
+			makeDirection("right", step*3, 3);
 		}
 
 		private function makeDirection(dir:String, ypos:Number, i:int):void {

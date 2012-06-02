@@ -10,6 +10,7 @@ package {
 
 path="../media/levels/"
 names=[file[:-5] for file in os.listdir(path) if file.endswith(".json")]
+names.sort();
 for name in names:
     f.write(
 """		[Embed(source="../media/levels/{name}.json",  mimeType=

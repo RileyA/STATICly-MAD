@@ -31,10 +31,15 @@ package {
 		private var m_player:Player;
 		private var m_gfxPhysObjects:Vector.<GfxPhysObject>;
 		private var m_blocks:Vector.<Block>;
+		private var m_hints:Vector.<Hint>;
 		private var m_info:LevelInfo;
 		private var m_score:ScoreInfo;
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
+		private var m_real_parent_sprite:Sprite;
+		private var m_backgroundLayer:Sprite;
+		private var m_borderLayer:Sprite;
+		private var m_foregroundLayer:Sprite;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
@@ -51,7 +56,22 @@ package {
 
 		public function Level(parent:Sprite, info:LevelInfo):void {
 
-			m_parent_sprite = parent;
+			m_real_parent_sprite = parent;
+			m_parent_sprite = new Sprite();
+			m_backgroundLayer = new Sprite();
+			m_borderLayer = new Sprite();
+			m_foregroundLayer = new Sprite();
+
+			// parent_sprite has all the usual blocks and stuff, 
+			// background and foreground have hints, player is also 
+			// in foreground
+			m_real_parent_sprite.addChild(m_backgroundLayer);
+			m_real_parent_sprite.addChild(m_parent_sprite);
+			m_real_parent_sprite.addChild(m_borderLayer);
+			m_real_parent_sprite.addChild(m_foregroundLayer);
+
+			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
+
 			m_info = info;
 			m_debugDraw = false;
 			m_updatePhysics = true;
@@ -60,6 +80,7 @@ package {
 			m_chargableManager= new ChargableManager();
 			m_gfxPhysObjects = new Vector.<GfxPhysObject>;
 			m_blocks = new Vector.<Block>;
+			m_hints = new Vector.<Hint>;
 
 			// make world
 
@@ -75,11 +96,19 @@ package {
 				addBlock(loadedBlock);
 			}
 
+			// add in all the hints
+			for (i = 0; i < m_info.hints.length; ++i) {
+				var h:Hint = Hint.make(m_info.hints[i], pixelsPerMeter);
+				m_hints.push(h);
+				if (m_info.hints[i].background) m_backgroundLayer.addChild(h);
+				else m_foregroundLayer.addChild(h);
+			}
+
 			// prep the score card
 			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
 
 			// make the player
-			m_player = new Player(this, m_parent_sprite, m_info.playerPosition);
+			m_player = new Player(this, m_foregroundLayer, m_info.playerPosition);
 			m_chargableManager.addChargable(m_player);
 			m_gfxPhysObjects.push(m_player);
 
@@ -260,8 +289,8 @@ package {
 			pixelsPerMeter = Math.min(marginX * WIDTH_PIXELS / m_info.levelSize.x,
 					marginY * HEIGHT_PIXELS / m_info.levelSize.y);
 			
-			m_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
-			m_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
+			m_real_parent_sprite.x = (WIDTH_PIXELS - m_info.levelSize.x * pixelsPerMeter) / 2.0;
+			m_real_parent_sprite.y = (HEIGHT_PIXELS - m_info.levelSize.y * pixelsPerMeter) / 2.0;
 
 			var desc:BlockInfo = new BlockInfo();
 			desc.scale.x = m_info.levelSize.x;
@@ -273,13 +302,13 @@ package {
 			
 			var wall:Block = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.position.y = m_info.levelSize.y + desc.scale.y / 2;
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.scale.x = BORDER_THICKNESS;
 			desc.scale.y = m_info.levelSize.y+BORDER_THICKNESS*2;
@@ -288,13 +317,13 @@ package {
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 
 			desc.position.x = m_info.levelSize.x + desc.scale.x / 2;
 
 			wall = new Block(desc, this);
 			m_gfxPhysObjects.push(wall);
-			m_parent_sprite.addChild(wall);
+			m_borderLayer.addChild(wall);
 		}
 
 		public function getInfo():LevelInfo {
@@ -323,6 +352,31 @@ package {
 
 		public function getChargableManager():ChargableManager {
 			return m_chargableManager;
+		}
+
+		public function getHints():Vector.<Hint> {
+			return m_hints;
+		}
+
+		public function addHint(h:Hint):void {
+			m_hints.push(h);
+			if (h.info.background) m_backgroundLayer.addChild(h);
+			else m_foregroundLayer.addChild(h);
+		}
+
+		public function removeHint(h:Hint):void {
+			for (var i:uint = 0; i < m_hints.length; ++i) {
+				if (m_hints[i] == h) {
+					if (m_hints[i].info.background)
+						m_backgroundLayer.removeChild(h);
+					else 
+						m_backgroundLayer.removeChild(h);
+					var tmp:Hint = m_hints[m_hints.length-1];
+					m_hints[i] = tmp;
+					m_hints.pop();
+					return;
+				}
+			}
 		}
 	}
 }
