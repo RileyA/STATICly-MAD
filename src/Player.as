@@ -486,6 +486,7 @@ package {
 					if ((shuffleStrength * carpetPolarity) >= 1.0) {
 						// We have reached full shuffle strength matching the current carpet. We are charged!
 						chargePolarity = carpetPolarity;
+						SoundManager.play("zap1");
 					} else {
 						// increment shuffle strength in direction of current carpet polarity
 						shuffleStrength += SHUFFLE_INCREMENT_FACTOR * carpetPolarity;
