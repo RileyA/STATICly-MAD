@@ -37,7 +37,9 @@ package {
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
 		private var m_real_parent_sprite:Sprite;
-		private var m_backgroundLayer:Sprite;
+		public var m_backgroundLayer:Sprite;
+		public var m_staticChargeLayer:Sprite;
+		public var m_dynamicChargeLayer:Sprite;
 		private var m_borderLayer:Sprite;
 		private var m_foregroundLayer:Sprite;
 
@@ -59,12 +61,16 @@ package {
 			m_real_parent_sprite = parent;
 			m_parent_sprite = new Sprite();
 			m_backgroundLayer = new Sprite();
+			m_staticChargeLayer = new Sprite();
+			m_dynamicChargeLayer = new Sprite();
 			m_borderLayer = new Sprite();
 			m_foregroundLayer = new Sprite();
 
 			// parent_sprite has all the usual blocks and stuff, 
 			// background and foreground have hints, player is also 
 			// in foreground
+			m_real_parent_sprite.addChild(m_staticChargeLayer);
+			m_real_parent_sprite.addChild(m_dynamicChargeLayer);
 			m_real_parent_sprite.addChild(m_backgroundLayer);
 			m_real_parent_sprite.addChild(m_parent_sprite);
 			m_real_parent_sprite.addChild(m_borderLayer);
@@ -87,13 +93,21 @@ package {
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
 			world.SetWarmStarting(true);
 
+			// make the player
+			m_player = new Player(this, m_foregroundLayer, 
+				m_info.playerPosition);
+			m_chargableManager.addChargable(m_player);
+			m_gfxPhysObjects.push(m_player);
+
 			// compute level scale and add walls
 			buildBounds();
 
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
-				var loadedBlock:Block = new Block(m_info.blocks[i], this);
+				var loadedBlock:Block = new Block(m_info.blocks[i], 
+					this, pixelsPerMeter);
 				addBlock(loadedBlock);
+				loadedBlock.updateTransform(pixelsPerMeter);
 			}
 
 			// add in all the hints
@@ -106,16 +120,11 @@ package {
 
 			// prep the score card
 			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
-
-			// make the player
-			m_player = new Player(this, m_foregroundLayer, m_info.playerPosition);
-			m_chargableManager.addChargable(m_player);
-			m_gfxPhysObjects.push(m_player);
-
 			// prep debug stuff
 			if (Config.debug) {
 				prepareDebugVisualization();
 			}
+			//update(0);
 		}
 
 		public function addBlock(b:Block):void {

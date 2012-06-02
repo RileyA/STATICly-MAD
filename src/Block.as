@@ -66,6 +66,10 @@ package {
 		private var hinting:Boolean=false;
 		private var hintPhase:Number=0;
 		private var chargeStrength:Number;
+
+		private var eField:QuadBatch = null;
+		private var eFieldScaleX:Number = 0;
+		private var eFieldScaleY:Number = 0;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -89,12 +93,15 @@ package {
 		// will only ever belong to a single level at once...
 		private var m_level:Level = null;
 		private var m_info:BlockInfo;
+		private var ppm:Number;
 		
 		/**
 		 * @param	blockInfo Info struct containing various block properties
 		 * @param	level The level this block lives in
 		 */
-		public function Block(blockInfo:BlockInfo, level:Level):void {
+		public function Block(blockInfo:BlockInfo, level:Level, ppm:Number=1)
+			:void {
+			this.ppm = ppm;
 			m_level= level;
 			m_info = blockInfo;
 			init();
@@ -196,6 +203,73 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
+			if (!insulated || chargePolarity != 0) {
+			//if (false) {
+				eField = new QuadBatch();
+
+				var tmpCp:int = chargePolarity;
+				chargePolarity = 1;
+				var playerCharge:Charge = new Charge(m_level.getPlayer()
+					.getCharges()[0].strength, new b2Vec2(0,0));
+
+				var scaleFactX:Number = scale.x + chargeStrength 
+					* playerCharge.strength * 4.5;
+				var scaleFactY:Number = scale.y + chargeStrength
+					* playerCharge.strength * 4.5;
+
+				// resolution x resolution grid of quads
+				var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 45),3);
+				var grid:uint = resolution + 1;
+				var gridStep:Number = 1.0/resolution;
+				var fVals:Vector.<uint> = new Vector.<uint>();
+
+				for (var iy:uint = 0; iy < grid; ++iy) {
+					for (var ix:uint = 0; ix < grid; ++ix) {
+						// get charge strength at this point, as if it 
+						// were appplied to player
+						playerCharge.loc.x = ix*gridStep * scaleFactX
+							- scaleFactX/2;
+						playerCharge.loc.y = iy*gridStep * scaleFactY
+							- scaleFactY/2;
+						//[ix + iy*grid]
+						fVals.push(Math.min(1.0,Math.abs(ChargableManager
+							.getForceAt(this,playerCharge) / 300.0)) * 50);
+					}
+				}
+
+				chargePolarity = tmpCp;
+
+				// make ALL the quads
+				for (iy = 0; iy < resolution; ++iy) {
+					for (ix = 0; ix < resolution; ++ix) {
+						var quad:Quad = new Quad(scaleFactX*gridStep,
+							scaleFactY * gridStep);
+						quad.x = ix * gridStep * scaleFactX;
+						quad.y = iy * gridStep * scaleFactY;
+						
+						var shiftAmt:uint = chargePolarity == -1 ? 16 : 0;
+
+						quad.setVertexColor(0,fVals[ix+iy*grid]<<shiftAmt);
+						quad.setVertexColor(1,fVals[ix+iy*grid+1]<<shiftAmt);
+						quad.setVertexColor(2,fVals[ix+(iy+1)*grid]<<shiftAmt);
+						quad.setVertexColor(3,fVals[ix+(iy+1)*grid+1]<<shiftAmt);
+						quad.blendMode = BlendMode.ADD;
+						eField.addQuad(quad);
+					}
+				}
+
+				eField.x = -scaleFactX/2;
+				eField.y = -scaleFactY/2;
+				eFieldScaleX = scaleFactX;
+				eFieldScaleY = scaleFactY;
+				eField.visible = chargePolarity != 0;
+				if (movement == FIXED) {
+					m_level.m_staticChargeLayer.addChild(eField);
+				}
+				else 
+					m_level.m_dynamicChargeLayer.addChild(eField);
+			}
+
 			sprite = new Quad(scale.x, scale.y);
 			sprite.x = -scale.x / 2;
 			sprite.y = -scale.y / 2;
@@ -274,13 +348,21 @@ package {
 			anchor = null;
 			if (movement == TRACKED) {
 				makeTracked(m_info.bounds);
-				m_level.getParent().addChild(anchor);
+				m_level.m_backgroundLayer.addChild(anchor);
 				//m_level.m_gfxPhysObjects.push(anchor);
 			}
 		}
 
 		// helper that cleans up a block
 		public function deinit():void {
+			
+			if (movement == FIXED) {
+				m_level.m_staticChargeLayer.removeChild(eField);
+			}
+			else 
+				m_level.m_dynamicChargeLayer.removeChild(eField);
+			eField = null;
+			
 			for (var i:uint = 0; i < surfaces.length; ++i)
 				surfaces[i].cleanup();
 			for (i = 0; i < actioners.length; ++i)
@@ -296,7 +378,8 @@ package {
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
 			if(anchor != null){
-				m_level.getParent().removeChild(anchor);
+				m_level.m_backgroundLayer.removeChild(anchor);
+				anchor = null;
 			}
 		}
 
@@ -355,6 +438,13 @@ package {
 				}
 				
 			}
+			if (eField != null /*&& movement != FIXED*/ && chargePolarity != 0) {
+				eField.scaleX = pixelsPerMeter;
+				eField.scaleY = pixelsPerMeter;
+				//eField.rotation = rotation;
+				eField.x = x-(eFieldScaleX/2)*pixelsPerMeter;
+				eField.y = y-(eFieldScaleY/2)*pixelsPerMeter;
+			}
 		}
 
 		public function setPosition(pos:UVec2):void {
@@ -405,6 +495,14 @@ package {
 				break;
 			}
 			drawnChargePolarity=chargePolarity;
+			
+			if (eField) {
+				eField.visible = chargePolarity != 0;
+				//if (chargePolarity != 0) {
+				//	for ()
+				//}
+			}
+				
 		}
 		
 		public function getCharge():Number{
