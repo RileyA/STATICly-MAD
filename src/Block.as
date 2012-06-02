@@ -274,7 +274,7 @@ package {
 			anchor = null;
 			if (movement == TRACKED) {
 				makeTracked(m_info.bounds);
-				m_level.getParent().addChild(anchor);
+				m_level.m_backgroundLayer.addChild(anchor);
 				//m_level.m_gfxPhysObjects.push(anchor);
 			}
 		}
@@ -296,7 +296,7 @@ package {
 			surfaces = new Vector.<SurfaceElement>();
 			actioners = new Vector.<ActionerElement>();
 			if(anchor != null){
-				m_level.getParent().removeChild(anchor);
+				m_level.m_backgroundLayer.removeChild(anchor);
 			}
 		}
 

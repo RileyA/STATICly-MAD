@@ -37,7 +37,7 @@ package {
 		private var m_chargableManager:ChargableManager;
 		private var m_parent_sprite:Sprite;
 		private var m_real_parent_sprite:Sprite;
-		private var m_backgroundLayer:Sprite;
+		public var m_backgroundLayer:Sprite;
 		private var m_borderLayer:Sprite;
 		private var m_foregroundLayer:Sprite;
 

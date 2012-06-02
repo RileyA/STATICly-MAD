@@ -43,7 +43,7 @@ package {
 			var bgGradient:Quad = new Quad(800, 25, 0x000000);
 			bgGradient.alpha = 0.75;
 			addChild(bgGradient);
-			bgGradient = new Quad(800, 55, 0x000000);
+			bgGradient = new Quad(800, 25, 0x000000);
 			bgGradient.y = 25;
 			bgGradient.setVertexAlpha(0, 0.75);
 			bgGradient.setVertexAlpha(1, 0.75);
