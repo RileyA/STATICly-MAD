@@ -7,6 +7,7 @@ package {
 		public var levelSize:UVec2 = new UVec2(27, 20);
 		public var gravity:UVec2 = new UVec2(0, 9.8);
 		public var blocks:Vector.<BlockInfo> = new Vector.<BlockInfo>();
+		public var hints:Vector.<HintInfo> = new Vector.<HintInfo>();
 	}
 }
 
