@@ -52,11 +52,11 @@ package {
 			if (levelFinish) { finishLevel(); }
 			
 			if (Keys.resetLevel()) {
-				LoggerUtils.logResetLevel();
+				LoggerUtils.logResetLevel(m_level.getScore().playerTime);
 				m_game.replaceState(new LevelState(m_game, m_levelName, m_overworldState));
 				
 			}else if (Keys.exitLevel()) {
-				LoggerUtils.logQuitLevel();
+				LoggerUtils.logQuitLevel(m_level.getScore().playerTime);
 				m_game.terminate();
 			}
 			return !isDone;
@@ -67,6 +67,7 @@ package {
 			var scoreState:ScoreState = new ScoreState(m_game, m_level.getScore());
 			var oldScore:int = m_overworldState.completed(m_levelName, m_level.getScore().score);
 			m_level.getScore().prevScore = oldScore;
+			LoggerUtils.logBeatLevel(m_level.getScore().score, m_level.getScore().playerTime);
 			
 			m_game.replaceState(scoreState);
 		}
