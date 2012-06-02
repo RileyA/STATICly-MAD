@@ -46,7 +46,7 @@ package {
 		override public function resume():void {
 			var menu:Menu = m_game.getMenu();
 			menu.setOverworldMenu();
-			menu.updateOverworldInfo(m_worldName, m_game.getTotalScore());
+			menu.updateOverworldInfo(m_level.getInfo().title, m_game.getTotalScore());
 			menu.attachTo(this);
 		}
 
