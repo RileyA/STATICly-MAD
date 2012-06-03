@@ -27,6 +27,13 @@ package {
 			circuitsTex.repeat=true;
 		}
 
+		/*[Embed(source = "../media/images/Circuit2.png")]
+		private static const n_circuits2:Class;
+		private static const circuitsTex2:Texture=Texture.fromBitmap(new n_circuits2);
+		{
+			circuitsTex2.repeat=true;
+		}*/
+
 		[Embed(source = "../media/images/galvanized.png")]
 		private static const n_galv:Class;
 		private static const galvTex:Texture=Texture.fromBitmap(new n_galv);
@@ -196,7 +203,13 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
-			sprite = new Quad(scale.x, scale.y);
+			if (insulated && chargePolarity != 0 && false) {
+				sprite = new Image(galvTex); 
+				sprite.width = scale.x;
+				sprite.height = scale.y;
+			} else {
+				sprite = new Quad(scale.x, scale.y); 
+			}
 			sprite.x = -scale.x / 2;
 			sprite.y = -scale.y / 2;
 			addChild(sprite);
@@ -211,9 +224,16 @@ package {
 				return s;
 			}
 			
-			var scalar:Number=strong?.18:0.3;
+			var scalar:Number=strong?.8:0.3;
 			var offx:Number=Math.random();
 			var offy:Number=Math.random();
+
+			if (insulated && chargePolarity == 0) {
+				scalar = 0.8;
+				offx = 0;
+				offy = 0;
+			}
+			const thick:Number=0.1;
 			
 			if (!insulated && isChargableBlock()){
 				overlay=image(0,0,scale.x,scale.y,circuitsTex);
@@ -221,13 +241,27 @@ package {
 				overlay=image(0,0,scale.x,scale.y,cementTex);
 			} else {
 				scalar *= 2.0;
-				overlay=image(0,0,scale.x,scale.y,galvTex);
+				overlay=image(thick,thick,scale.x - thick*2,scale.y - thick*2,galvTex);
 			}
 
-			overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
-			overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
-			overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
-			overlay.setTexCoords(0,new Point(0+offx,0+offy));
+			if ((insulated && chargePolarity != 0)) {
+				scalar = insulated ? 1 : 0.75;
+				overlay.setTexCoords(3,new Point(Math.max(1, Math.round(scale.x*scalar)),Math.max(1, Math.round(scale.y*scalar))));
+				overlay.setTexCoords(1,new Point(Math.max(1, Math.round(scale.x*scalar)),0));
+				overlay.setTexCoords(2,new Point(0,Math.max(1, Math.round(scale.y*scalar))));
+				overlay.setTexCoords(0,new Point(0,0));
+			} else if ((chargePolarity != 0 || !insulated)) {
+				scalar = 0.75;
+				overlay.setTexCoords(3,new Point(Math.max(1, Math.round(scale.x*scalar)),scale.y*scalar));
+				overlay.setTexCoords(1,new Point(Math.max(1, Math.round(scale.x*scalar)),0));
+				overlay.setTexCoords(2,new Point(0, scale.y*scalar));
+				overlay.setTexCoords(0,new Point(0,0));
+			} else {
+				overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
+				overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(0,new Point(0+offx,0+offy));
+			}
 			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
 				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
@@ -239,7 +273,6 @@ package {
 				}
 				addChild(s);
 			}
-			const thick:Number=.1;
 
 			side(0,0,thick,scale.y);
 			side(scale.x-thick,0,thick,scale.y);
@@ -387,7 +420,7 @@ package {
 			const red:uint =  Color.rgb(main,off,off);
 			
 			const overlayblue:uint = Color.rgb(overlayoff,overlayoff,main);
-			const overlaynone:uint = strong?0xD98719:0xEDC393;
+			const overlaynone:uint = strong?0xD98719:0xEDC3B3;
 			const overlayred:uint =  Color.rgb(main,overlayoff,overlayoff);
 
 			switch (chargePolarity) {
