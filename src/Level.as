@@ -72,8 +72,8 @@ package {
 			m_real_parent_sprite.addChild(m_staticChargeLayer);
 			m_real_parent_sprite.addChild(m_dynamicChargeLayer);
 			m_real_parent_sprite.addChild(m_backgroundLayer);
-			m_real_parent_sprite.addChild(m_parent_sprite);
 			m_real_parent_sprite.addChild(m_borderLayer);
+			m_real_parent_sprite.addChild(m_parent_sprite);
 			m_real_parent_sprite.addChild(m_foregroundLayer);
 
 			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
