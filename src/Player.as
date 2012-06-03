@@ -41,6 +41,10 @@ package {
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
 		private var charges:Vector.<Charge>;
+		private var drawnField:int = 0;
+		private var eField:QuadBatch;
+		private var eFieldScaleX:Number = 0;
+		private var eFieldScaleY:Number = 0;
 		
 		private var bestAction:ActionMarker;
 		private static const markSize:Number=.3;
@@ -49,6 +53,7 @@ package {
 		private var actionHit:Quad; // at player hit action target
 		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
+
 		
 		private var faceRight:Boolean=true;
 		
@@ -287,6 +292,15 @@ package {
 					actionMid.visible=false;
 					actionHit.visible = false;
 				}
+			}
+
+			makeField(chargePolarity, pixelsPerMeter);
+			if (eField != null /*&& movement != FIXED*/ && chargePolarity != 0) {
+				eField.scaleX = pixelsPerMeter;
+				eField.scaleY = pixelsPerMeter;
+				//eField.rotation = rotation;
+				eField.x = x-(eFieldScaleX/2)*pixelsPerMeter;
+				eField.y = y-(eFieldScaleY/2)*pixelsPerMeter;
 			}
 			
 			this.currentlyHinting=marker;
@@ -545,6 +559,82 @@ package {
 
 		public function resetCharge():void {
 			chargePolarity = 0;
+		}
+
+		private function makeField(field:int, ppm:Number):void {
+			// ugly copypasta from block
+			if (drawnField == field) return;
+			drawnField = field;
+
+			if (eField) {
+				m_level.m_dynamicChargeLayer.removeChild(eField);
+				eField = null;
+			}
+
+			if (field == 0)
+				return;
+
+			eField = new QuadBatch();
+
+			var tmpCp:int = chargePolarity;
+			chargePolarity = 1;
+			var playerCharge:Charge = new Charge(getCharges()[0].strength, 
+				new b2Vec2(0,0));
+
+			var chargeStrength:Number= getCharge()*1.5;
+
+			var scaleFactX:Number = WIDTH + chargeStrength 
+				* playerCharge.strength * 4.5;
+			var scaleFactY:Number = HEIGHT + chargeStrength
+				* playerCharge.strength * 4.5;
+
+			// resolution x resolution grid of quads
+			var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 45),3);
+			var grid:uint = resolution + 1;
+			var gridStep:Number = 1.0/resolution;
+			var fVals:Vector.<uint> = new Vector.<uint>();
+
+			for (var iy:uint = 0; iy < grid; ++iy) {
+				for (var ix:uint = 0; ix < grid; ++ix) {
+					// get charge strength at this point, as if it 
+					// were appplied to player
+					playerCharge.loc.x = ix*gridStep * scaleFactX
+						- scaleFactX/2;
+					playerCharge.loc.y = iy*gridStep * scaleFactY
+						- scaleFactY/2;
+					//[ix + iy*grid]
+					fVals.push(Math.min(1.0,Math.abs(ChargableManager
+						.getForceAt(this,playerCharge) / 300.0)) * 100);
+				}
+			}
+
+			chargePolarity = tmpCp;
+
+			// make ALL the quads
+			for (iy = 0; iy < resolution; ++iy) {
+				for (ix = 0; ix < resolution; ++ix) {
+					var quad:Quad = new Quad(scaleFactX*gridStep,
+						scaleFactY * gridStep);
+					quad.x = ix * gridStep * scaleFactX;
+					quad.y = iy * gridStep * scaleFactY;
+					
+					var shiftAmt:uint = chargePolarity == -1 ? 16 : 0;
+
+					quad.setVertexColor(0,fVals[ix+iy*grid]<<shiftAmt);
+					quad.setVertexColor(1,fVals[ix+iy*grid+1]<<shiftAmt);
+					quad.setVertexColor(2,fVals[ix+(iy+1)*grid]<<shiftAmt);
+					quad.setVertexColor(3,fVals[ix+(iy+1)*grid+1]<<shiftAmt);
+					quad.blendMode = BlendMode.ADD;
+					eField.addQuad(quad);
+				}
+			}
+
+			eField.x = -scaleFactX/2;
+			eField.y = -scaleFactY/2;
+			eFieldScaleX = scaleFactX;
+			eFieldScaleY = scaleFactY;
+			eField.visible = chargePolarity != 0;
+			m_level.m_dynamicChargeLayer.addChild(eField);
 		}
 	}
 }
