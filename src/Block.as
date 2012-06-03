@@ -649,12 +649,19 @@ package {
 				.getCharges()[0].strength, new b2Vec2(0,0));
 
 			var scaleFactX:Number = scale.x + chargeStrength 
-				* playerCharge.strength * 4.5;
+				* playerCharge.strength * 1.75;
 			var scaleFactY:Number = scale.y + chargeStrength
-				* playerCharge.strength * 4.5;
+				* playerCharge.strength * 1.75;
+
+			var reallyStrong:Boolean = false;
+			if (chargeStrength > 10.0) {
+				scaleFactX *= 1.5;
+				scaleFactY *= 1.5;
+				reallyStrong = true;
+			}
 
 			// resolution x resolution grid of quads
-			var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 45),3);
+			var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 35),3);
 			var grid:uint = resolution + 1;
 			var gridStep:Number = 1.0/resolution;
 			var fVals:Vector.<uint> = new Vector.<uint>();
@@ -668,8 +675,13 @@ package {
 					playerCharge.loc.y = iy*gridStep * scaleFactY
 						- scaleFactY/2;
 					//[ix + iy*grid]
-					fVals.push(Math.min(1.0,Math.abs(ChargableManager
-						.getForceAt(this,playerCharge) / 800.0)) * 100);
+					if (reallyStrong) {
+						fVals.push(Math.min(1.0,Math.abs(ChargableManager
+							.getForceAt(this,playerCharge) / 5000.0)) * 120);
+					} else {
+						fVals.push(Math.min(1.0,Math.abs(ChargableManager
+							.getForceAt(this,playerCharge) / 2000.0)) * 80);
+					}
 				}
 			}
 
@@ -699,6 +711,7 @@ package {
 			eFieldScaleX = scaleFactX;
 			eFieldScaleY = scaleFactY;
 			eField.visible = chargePolarity != 0;
+			eField.alpha = 0.8;
 			if (movement == FIXED) {
 				m_level.m_staticChargeLayer.addChild(eField);
 			}
