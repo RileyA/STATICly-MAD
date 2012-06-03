@@ -65,6 +65,8 @@ package {
 		private var m_hintEmit:ParticleEmitter;
 		private var m_psys:ParticleSystem;
 		
+		private var chargeStrength:Number;
+		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
 			var world:b2World=level.world;
 			this.m_level=level;
@@ -96,7 +98,7 @@ package {
 			m_physics.SetLinearDamping(.5);
 			
 			var area:Number=m_physics.GetMass()/fd.density;
-			var chargeStrength:Number=area*CHARGE_DENSITY;
+			chargeStrength=area*CHARGE_DENSITY;
 			this.charges=new Vector.<Charge>();
 			this.charges.push(new Charge(chargeStrength,new b2Vec2(
 								0,
@@ -571,69 +573,10 @@ package {
 				eField = null;
 			}
 
-			if (field == 0)
-				return;
+			if (field == 0) return;
 
-			eField = new QuadBatch();
-
-			var tmpCp:int = chargePolarity;
-			chargePolarity = 1;
-			var playerCharge:Charge = new Charge(getCharges()[0].strength, 
-				new b2Vec2(0,0));
-
-			var chargeStrength:Number= getCharge()*1.5;
-
-			var scaleFactX:Number = WIDTH + chargeStrength 
-				* playerCharge.strength * 4.5;
-			var scaleFactY:Number = HEIGHT + chargeStrength
-				* playerCharge.strength * 4.5;
-
-			// resolution x resolution grid of quads
-			var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 45),3);
-			var grid:uint = resolution + 1;
-			var gridStep:Number = 1.0/resolution;
-			var fVals:Vector.<uint> = new Vector.<uint>();
-
-			for (var iy:uint = 0; iy < grid; ++iy) {
-				for (var ix:uint = 0; ix < grid; ++ix) {
-					// get charge strength at this point, as if it 
-					// were appplied to player
-					playerCharge.loc.x = ix*gridStep * scaleFactX
-						- scaleFactX/2;
-					playerCharge.loc.y = iy*gridStep * scaleFactY
-						- scaleFactY/2;
-					//[ix + iy*grid]
-					fVals.push(Math.min(1.0,Math.abs(ChargableManager
-						.getForceAt(this,playerCharge) / 300.0)) * 100);
-				}
-			}
-
-			chargePolarity = tmpCp;
-
-			// make ALL the quads
-			for (iy = 0; iy < resolution; ++iy) {
-				for (ix = 0; ix < resolution; ++ix) {
-					var quad:Quad = new Quad(scaleFactX*gridStep,
-						scaleFactY * gridStep);
-					quad.x = ix * gridStep * scaleFactX;
-					quad.y = iy * gridStep * scaleFactY;
-					
-					var shiftAmt:uint = chargePolarity == -1 ? 16 : 0;
-
-					quad.setVertexColor(0,fVals[ix+iy*grid]<<shiftAmt);
-					quad.setVertexColor(1,fVals[ix+iy*grid+1]<<shiftAmt);
-					quad.setVertexColor(2,fVals[ix+(iy+1)*grid]<<shiftAmt);
-					quad.setVertexColor(3,fVals[ix+(iy+1)*grid+1]<<shiftAmt);
-					quad.blendMode = BlendMode.ADD;
-					eField.addQuad(quad);
-				}
-			}
-
-			eField.x = -scaleFactX/2;
-			eField.y = -scaleFactY/2;
-			eFieldScaleX = scaleFactX;
-			eFieldScaleY = scaleFactY;
-			eField.visible = chargePolarity != 0;
+			eField=Block.makeFieldQuads(this, m_level, chargeStrength, new UVec2(0,-HEIGHT_CHARGE*1.5), 7, 1.5);
+			
 			m_level.m_dynamicChargeLayer.addChild(eField);
 		}
 	}

@@ -76,8 +76,6 @@ package {
 		private var chargeStrength:Number;
 
 		private var eField:QuadBatch = null;
-		private var eFieldScaleX:Number = 0;
-		private var eFieldScaleY:Number = 0;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -409,9 +407,9 @@ package {
 			if (eField != null /*&& movement != FIXED*/ && chargePolarity != 0) {
 				eField.scaleX = pixelsPerMeter;
 				eField.scaleY = pixelsPerMeter;
-				//eField.rotation = rotation;
-				eField.x = x-(eFieldScaleX/2)*pixelsPerMeter;
-				eField.y = y-(eFieldScaleY/2)*pixelsPerMeter;
+				eField.rotation = rotation;
+				eField.x = x;
+				eField.y = y;
 			}
 		}
 
@@ -641,24 +639,21 @@ package {
 		public function getLevel():Level {
 			return m_level;
 		}	
+		
+		
+		public static function makeFieldQuads(chargable:Chargable, m_level:Level, chargeStrength:Number, scale:UVec2, resolution:uint = 6, chargeScalar:Number=1):QuadBatch{
+			var eField:QuadBatch = new QuadBatch();
 
-		private function makeField():void {
-			eField = new QuadBatch();
-
-			var tmpCp:int = chargePolarity;
-			chargePolarity = 1;
 			var playerCharge:Charge = new Charge(m_level.getPlayer()
 				.getCharges()[0].strength, new b2Vec2(0,0));
 
 			var scaleFactX:Number = scale.x + Math.sqrt(chargeStrength 
-				* playerCharge.strength) * 2;
+				* playerCharge.strength)* chargeScalar * 2;
 			var scaleFactY:Number = scale.y + Math.sqrt(chargeStrength
 				* playerCharge.strength) * 2;
 
-			var reallyStrong:Boolean = true;
 
 			// resolution x resolution grid of quads
-			var resolution:uint = 6;//Math.max(Math.min(8, (scaleFactX * ppm) / 35),3);
 			var grid:uint = resolution + 1;
 			var gridStep:Number = 1.0/resolution;
 			var fVals:Vector.<uint> = new Vector.<uint>();
@@ -677,17 +672,12 @@ package {
 					playerCharge.loc.y = iy*gridStep * scaleFactY
 						- scaleFactY/2;
 					//[ix + iy*grid]
-					if (reallyStrong) {
-						fVals.push(Math.min(1.0,Math.abs(ChargableManager
-							.getForceAt(this,playerCharge) / 1000.0)) * 120);
-					} else {
-						fVals.push(Math.min(1.0,Math.abs(ChargableManager
-							.getForceAt(this,playerCharge) / 400.0)) * 80);
-					}
+
+					fVals.push(Math.min(1.0,Math.abs(ChargableManager
+							.getForceAt(chargable,playerCharge)*chargeScalar*chargable.getCharge() / 1000.0)) * 120);
+
 				}
 			}
-
-			chargePolarity = tmpCp;
 
 			// make ALL the quads
 			for (iy = 0; iy < resolution; ++iy) {
@@ -697,7 +687,7 @@ package {
 					quad.x = ix * gridStep * scaleFactX;
 					quad.y = iy * gridStep * scaleFactY;
 					
-					var shiftAmt:uint = chargePolarity == -1 ? 16 : 0;
+					var shiftAmt:uint = chargable.getCharge() == -1 ? 16 : 0;
 
 					quad.setVertexColor(0,fVals[ix+iy*grid]<<shiftAmt);
 					quad.setVertexColor(1,fVals[ix+iy*grid+1]<<shiftAmt);
@@ -710,15 +700,20 @@ package {
 
 			eField.x = -scaleFactX/2;
 			eField.y = -scaleFactY/2;
-			eFieldScaleX = scaleFactX;
-			eFieldScaleY = scaleFactY;
-			eField.visible = chargePolarity != 0;
-			//eField.alpha = 0.8;
+			eField.pivotX=scaleFactX/2;
+			eField.pivotY=scaleFactY/2;
+			eField.visible = chargable.getCharge() != 0;
+			return eField;
+		
+		}
+		
+		private function makeField():void {
+			eField=makeFieldQuads(this, m_level, chargeStrength, scale);
 			if (movement == FIXED) {
 				m_level.m_staticChargeLayer.addChild(eField);
-			}
-			else 
+			} else {
 				m_level.m_dynamicChargeLayer.addChild(eField);
+			}
 		}
 	}
 }
