@@ -13,6 +13,7 @@ package {
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	import starling.textures.Texture;
+	import starling.textures.TextureSmoothing;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -250,6 +251,7 @@ package {
 			
 			if (!insulated && isChargableBlock()){
 				overlay=image(0,0,scale.x,scale.y,circuitsTex);
+				overlay.smoothing = TextureSmoothing.TRILINEAR;
 			} else if(insulated && chargePolarity == 0) {
 				overlay=image(0,0,scale.x,scale.y,cementTex);
 			} else {
@@ -648,26 +650,26 @@ package {
 			var playerCharge:Charge = new Charge(m_level.getPlayer()
 				.getCharges()[0].strength, new b2Vec2(0,0));
 
-			var scaleFactX:Number = scale.x + chargeStrength 
-				* playerCharge.strength * 1.75;
-			var scaleFactY:Number = scale.y + chargeStrength
-				* playerCharge.strength * 1.75;
+			var scaleFactX:Number = scale.x + Math.sqrt(chargeStrength 
+				* playerCharge.strength) * 2;
+			var scaleFactY:Number = scale.y + Math.sqrt(chargeStrength
+				* playerCharge.strength) * 2;
 
-			var reallyStrong:Boolean = false;
-			if (chargeStrength > 10.0) {
-				scaleFactX *= 1.5;
-				scaleFactY *= 1.5;
-				reallyStrong = true;
-			}
+			var reallyStrong:Boolean = true;
 
 			// resolution x resolution grid of quads
-			var resolution:uint = Math.max(Math.min(8, (scaleFactX * ppm) / 35),3);
+			var resolution:uint = 6;//Math.max(Math.min(8, (scaleFactX * ppm) / 35),3);
 			var grid:uint = resolution + 1;
 			var gridStep:Number = 1.0/resolution;
 			var fVals:Vector.<uint> = new Vector.<uint>();
 
 			for (var iy:uint = 0; iy < grid; ++iy) {
 				for (var ix:uint = 0; ix < grid; ++ix) {
+					if (iy==0||ix==0||iy == grid-1||ix == grid-1) {
+						fVals.push(0);
+						continue;
+					}
+					
 					// get charge strength at this point, as if it 
 					// were appplied to player
 					playerCharge.loc.x = ix*gridStep * scaleFactX
@@ -677,10 +679,10 @@ package {
 					//[ix + iy*grid]
 					if (reallyStrong) {
 						fVals.push(Math.min(1.0,Math.abs(ChargableManager
-							.getForceAt(this,playerCharge) / 5000.0)) * 120);
+							.getForceAt(this,playerCharge) / 1000.0)) * 120);
 					} else {
 						fVals.push(Math.min(1.0,Math.abs(ChargableManager
-							.getForceAt(this,playerCharge) / 2000.0)) * 80);
+							.getForceAt(this,playerCharge) / 400.0)) * 80);
 					}
 				}
 			}
@@ -711,7 +713,7 @@ package {
 			eFieldScaleX = scaleFactX;
 			eFieldScaleY = scaleFactY;
 			eField.visible = chargePolarity != 0;
-			eField.alpha = 0.8;
+			//eField.alpha = 0.8;
 			if (movement == FIXED) {
 				m_level.m_staticChargeLayer.addChild(eField);
 			}
