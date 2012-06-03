@@ -301,8 +301,8 @@ package {
 				eField.scaleX = pixelsPerMeter;
 				eField.scaleY = pixelsPerMeter;
 				//eField.rotation = rotation;
-				eField.x = x-(eFieldScaleX/2)*pixelsPerMeter;
-				eField.y = y-(eFieldScaleY/2)*pixelsPerMeter;
+				eField.x = x;
+				eField.y = y-.2*pixelsPerMeter;
 			}
 			
 			this.currentlyHinting=marker;
@@ -575,7 +575,7 @@ package {
 
 			if (field == 0) return;
 
-			eField=Block.makeFieldQuads(this, m_level, chargeStrength, new UVec2(0,-HEIGHT_CHARGE*1.5), 7, 1.5);
+			eField=Block.makeFieldQuads(this, m_level, chargeStrength, new UVec2(0,HEIGHT), 7, 1.5);
 			
 			m_level.m_dynamicChargeLayer.addChild(eField);
 		}
