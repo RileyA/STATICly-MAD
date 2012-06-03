@@ -65,6 +65,41 @@ package Chargable {
 			}
 		}
 
+		// for e field viz, get force from a chargeable to a single charge
+		public static function getForceAt(from:Chargable, onto:Charge)
+			:Number{
+			//return 1.0;
+			var stength:Number=from.getCharge()*onto.strength*200.0;
+			if (stength==0) return 0.0;
+
+			var fc:Vector.<Charge>=from.getCharges();
+			
+			var ontoLoc:b2Vec2=onto.loc;
+			var ontoStr:Number=onto.strength*stength;
+			//var force:b2Vec2=new b2Vec2(0,0);
+			var frc:Number = 0;
+
+			for (var fi:uint=0;fi<fc.length;fi++){
+
+				var vec:b2Vec2 = fc[fi].loc.Copy();
+				var totalStr:Number = fc[fi].strength*ontoStr;
+
+				vec.Subtract(ontoLoc);
+
+				var lensq:Number = vec.LengthSquared();
+				//var len:Number = Math.max(vec.Length(), 0.1);
+
+				var s:Number=totalStr/lensq;
+				//vec.Multiply(s/len);
+				frc += s;
+				//force.Subtract(vec);
+			}
+
+			return frc;//force.Length();
+				//ontoBody.ApplyForce(force,ontoLoc);
+			//}
+		}
+
 		/**
 		* Applies the electrostatic force of the specified from Chargable
 		* to the specified onto Chargable.
