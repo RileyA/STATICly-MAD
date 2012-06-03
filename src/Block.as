@@ -669,7 +669,7 @@ package {
 						- scaleFactY/2;
 					//[ix + iy*grid]
 					fVals.push(Math.min(1.0,Math.abs(ChargableManager
-						.getForceAt(this,playerCharge) / 300.0)) * 50);
+						.getForceAt(this,playerCharge) / 800.0)) * 100);
 				}
 			}
 
