@@ -14,7 +14,7 @@ package Actioners {
 	
 	public class LevelEntranceActioner extends ActionerElement {
 
-		public static const HEIGHT:Number = -1.4;
+		public static const HEIGHT:Number = -1.5;
 
 		[Embed(source = "../../media/images/DoorActive2.png")]
 		private static const DoorActive:Class;
@@ -52,8 +52,8 @@ package Actioners {
 			
 			//var format:TextFormat = new TextFormat("akashi", 1, Colors.textColor);
 			//format.align = TextFormatAlign.CENTER;
-			var textScale:Number=.03;
-			var textSize:Number=16.0;
+			var textScale:Number=.01;
+			var textSize:Number=16.0*3;
 			var textWidth:Number=12*textSize;
 			textSprite = new TextField(textWidth, 2.5*textSize, "0","akashi",textSize,Colors.textColor);
 			textSprite.autoScale = true;
@@ -102,13 +102,17 @@ package Actioners {
 		override protected function getSprite(x:Number, y:Number):DisplayObjectContainer {
 			if(spriteContainer == null){
 				spriteContainer = new Sprite();
-				currImage.height=-HEIGHT;
+				
+				currImage.height=-HEIGHT*currImage.texture.height/150.0;
 				m_x=x;
+				
+				
+				currImage.y=y;
+				
+				
+				textSprite.y = HEIGHT / 2 + y - textSprite.height;
+				
 				replaceImage(doorActive);
-				
-				currImage.y=y+HEIGHT/2;
-				textSprite.y = HEIGHT / 2 + y - .1 - textSprite.height;
-				
 				
 				spriteContainer.addChild(textSprite);
 				spriteContainer.addChild(currImage);
@@ -118,7 +122,9 @@ package Actioners {
 
 		private function replaceImage(asset:Texture):void {
 			currImage.texture=asset;
-			currImage.width=-HEIGHT*asset.width*1.0/asset.height
+			currImage.height=-HEIGHT*currImage.texture.height/150.0;
+			currImage.pivotY=asset.height/2.0;
+			currImage.width=currImage.height*asset.width*1.0/asset.height
 			currImage.x=m_x-currImage.width/2;
 		}
 	}
