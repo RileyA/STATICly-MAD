@@ -45,7 +45,9 @@ package {
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
-		private static const TIMESTEP:Number = 0.033333;
+		
+		private static var TIMESTEP:Number = 0.033333;
+		
 		private static const POSITION_ITERATIONS:uint = 4;
 		private static const VELOCITY_ITERATIONS:uint = 6;
 		private static const DO_SLEEP:Boolean = true;
@@ -224,7 +226,9 @@ package {
 		* Returns false if the level is marked as finished.
 		*/
 		public function update(delta:Number):Boolean {
-
+			TIMESTEP=Math.min(delta,1.0/12);
+			
+			
 			for (var i:uint = 0; i < m_particles.length; ++i) {
 				if (!m_particles[i].update(delta)) {
 					m_parent_sprite.removeChild(m_particles[i]);
