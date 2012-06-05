@@ -14,6 +14,8 @@ package {
 		public static var stage:flash.display.Stage;
 		
 		public function Main(stage:flash.display.Stage):void {
+			Kong.init(stage);
+			
 			Main.stage=stage;
 			super();
 			m_starling = new Starling(Game, stage);
@@ -26,7 +28,7 @@ package {
 			SoundManager.init();
 		}
 
-		public function update(event:flash.events.Event):void {
+		public function update(event:Event):void {
 			if (m_game == null) {
 				m_game = Game(m_starling.stage.getChildAt(0));
 			}

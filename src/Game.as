@@ -163,5 +163,13 @@ package {
 			}
 			return total;
 		}
+		
+		public function getTotalLevels():int {
+			var total:int = 0;
+			for(var name:String in m_overworlds){
+				total += m_overworlds[name].getTotalLevels();
+			}
+			return total;
+		}
 	}
 }

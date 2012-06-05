@@ -119,6 +119,8 @@ package {
 			if (Config.storage) {
 				so.data.completed[m_worldName + "_" + levelName] = m_bestLevelScores[levelName];
 			}
+			Kong.submit("levels", m_game.getTotalLevels());
+			Kong.submit("score", m_game.getTotalScore());
 			return old;
 		}
 
@@ -128,6 +130,10 @@ package {
 				total += m_bestLevelScores[name];
 			}
 			return total;
+		}
+		
+		public function getTotalLevels():int {
+			return completedLevels.length;
 		}
 	}
 }
