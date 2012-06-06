@@ -41,6 +41,10 @@ package {
 		private var shuffleStrength:Number;
 		private var didAction:Boolean; // true when already did action for this action button press
 		private var charges:Vector.<Charge>;
+		private var drawnField:int = 0;
+		private var eField:QuadBatch;
+		private var eFieldScaleX:Number = 0;
+		private var eFieldScaleY:Number = 0;
 		
 		private var bestAction:ActionMarker;
 		private static const markSize:Number=.3;
@@ -49,6 +53,7 @@ package {
 		private var actionHit:Quad; // at player hit action target
 		private var currentlyHinting:ActionMarker; // ActionMarker that needs endHint called
 		private var actionShape:b2PolygonShape;
+
 		
 		private var faceRight:Boolean=true;
 		
@@ -59,6 +64,8 @@ package {
 		private var m_hairEmit:ParticleEmitter;
 		private var m_hintEmit:ParticleEmitter;
 		private var m_psys:ParticleSystem;
+		
+		private var chargeStrength:Number;
 		
 		public function Player(level:Level, parentSprite:Sprite, position:UVec2):void {
 			var world:b2World=level.world;
@@ -91,7 +98,7 @@ package {
 			m_physics.SetLinearDamping(.5);
 			
 			var area:Number=m_physics.GetMass()/fd.density;
-			var chargeStrength:Number=area*CHARGE_DENSITY;
+			chargeStrength=area*CHARGE_DENSITY;
 			this.charges=new Vector.<Charge>();
 			this.charges.push(new Charge(chargeStrength,new b2Vec2(
 								0,
@@ -287,6 +294,15 @@ package {
 					actionMid.visible=false;
 					actionHit.visible = false;
 				}
+			}
+
+			makeField(chargePolarity, pixelsPerMeter);
+			if (eField != null /*&& movement != FIXED*/ && chargePolarity != 0) {
+				eField.scaleX = pixelsPerMeter;
+				eField.scaleY = pixelsPerMeter;
+				//eField.rotation = rotation;
+				eField.x = x;
+				eField.y = y-.2*pixelsPerMeter;
 			}
 			
 			this.currentlyHinting=marker;
@@ -545,6 +561,23 @@ package {
 
 		public function resetCharge():void {
 			chargePolarity = 0;
+		}
+
+		private function makeField(field:int, ppm:Number):void {
+			// ugly copypasta from block
+			if (drawnField == field) return;
+			drawnField = field;
+
+			if (eField) {
+				m_level.m_dynamicChargeLayer.removeChild(eField);
+				eField = null;
+			}
+
+			if (field == 0) return;
+
+			eField=Block.makeFieldQuads(this, m_level, chargeStrength, new UVec2(0,HEIGHT), 7, 1.5);
+			
+			m_level.m_dynamicChargeLayer.addChild(eField);
 		}
 	}
 }

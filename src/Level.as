@@ -38,12 +38,16 @@ package {
 		private var m_parent_sprite:Sprite;
 		private var m_real_parent_sprite:Sprite;
 		public var m_backgroundLayer:Sprite;
+		public var m_staticChargeLayer:Sprite;
+		public var m_dynamicChargeLayer:Sprite;
 		private var m_borderLayer:Sprite;
 		private var m_foregroundLayer:Sprite;
 
 		// Debug controls:
 		private static const TOGGLE_DEBUG_DRAW_KEY:Number = Keyboard.D;
-		private static const TIMESTEP:Number = 0.033333;
+		
+		private static var TIMESTEP:Number = 0.033333;
+		
 		private static const POSITION_ITERATIONS:uint = 4;
 		private static const VELOCITY_ITERATIONS:uint = 6;
 		private static const DO_SLEEP:Boolean = true;
@@ -59,15 +63,19 @@ package {
 			m_real_parent_sprite = parent;
 			m_parent_sprite = new Sprite();
 			m_backgroundLayer = new Sprite();
+			m_staticChargeLayer = new Sprite();
+			m_dynamicChargeLayer = new Sprite();
 			m_borderLayer = new Sprite();
 			m_foregroundLayer = new Sprite();
 
 			// parent_sprite has all the usual blocks and stuff, 
 			// background and foreground have hints, player is also 
 			// in foreground
+			m_real_parent_sprite.addChild(m_staticChargeLayer);
+			m_real_parent_sprite.addChild(m_dynamicChargeLayer);
 			m_real_parent_sprite.addChild(m_backgroundLayer);
-			m_real_parent_sprite.addChild(m_parent_sprite);
 			m_real_parent_sprite.addChild(m_borderLayer);
+			m_real_parent_sprite.addChild(m_parent_sprite);
 			m_real_parent_sprite.addChild(m_foregroundLayer);
 
 			//m_backgroundLayer.addChild(new Hint(500, 500, 500, 500, 20, 1));
@@ -87,13 +95,21 @@ package {
 			world = new b2World(m_info.gravity.toB2Vec2(), DO_SLEEP);
 			world.SetWarmStarting(true);
 
+			// make the player
+			m_player = new Player(this, m_foregroundLayer, 
+				m_info.playerPosition);
+			m_chargableManager.addChargable(m_player);
+			m_gfxPhysObjects.push(m_player);
+
 			// compute level scale and add walls
 			buildBounds();
 
 			// add in all the blocks
 			for (var i:uint = 0; i < m_info.blocks.length; ++i) {
-				var loadedBlock:Block = new Block(m_info.blocks[i], this);
+				var loadedBlock:Block = new Block(m_info.blocks[i], 
+					this, pixelsPerMeter);
 				addBlock(loadedBlock);
+				loadedBlock.updateTransform(pixelsPerMeter);
 			}
 
 			// add in all the hints
@@ -106,16 +122,11 @@ package {
 
 			// prep the score card
 			m_score = new ScoreInfo(m_info.title, Number(m_info.targetTime), 0);
-
-			// make the player
-			m_player = new Player(this, m_foregroundLayer, m_info.playerPosition);
-			m_chargableManager.addChargable(m_player);
-			m_gfxPhysObjects.push(m_player);
-
 			// prep debug stuff
 			if (Config.debug) {
 				prepareDebugVisualization();
 			}
+			//update(0);
 		}
 
 		public function addBlock(b:Block):void {
@@ -215,7 +226,9 @@ package {
 		* Returns false if the level is marked as finished.
 		*/
 		public function update(delta:Number):Boolean {
-
+			TIMESTEP=Math.min(delta,1.0/12);
+			
+			
 			for (var i:uint = 0; i < m_particles.length; ++i) {
 				if (!m_particles[i].update(delta)) {
 					m_parent_sprite.removeChild(m_particles[i]);

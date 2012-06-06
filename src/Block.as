@@ -13,6 +13,7 @@ package {
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	import starling.textures.Texture;
+	import starling.textures.TextureSmoothing;
 
 	public class Block extends GfxPhysObject implements Chargable {
 		
@@ -26,6 +27,13 @@ package {
 		{
 			circuitsTex.repeat=true;
 		}
+
+		/*[Embed(source = "../media/images/Circuit2.png")]
+		private static const n_circuits2:Class;
+		private static const circuitsTex2:Texture=Texture.fromBitmap(new n_circuits2);
+		{
+			circuitsTex2.repeat=true;
+		}*/
 
 		[Embed(source = "../media/images/galvanized.png")]
 		private static const n_galv:Class;
@@ -66,6 +74,8 @@ package {
 		private var hinting:Boolean=false;
 		private var hintPhase:Number=0;
 		private var chargeStrength:Number;
+
+		private var eField:QuadBatch = null;
 		
 		// for charge
 		public static const strongChargeDensity:Number = 2.0; // charge per square m
@@ -89,12 +99,15 @@ package {
 		// will only ever belong to a single level at once...
 		private var m_level:Level = null;
 		private var m_info:BlockInfo;
+		private var ppm:Number;
 		
 		/**
 		 * @param	blockInfo Info struct containing various block properties
 		 * @param	level The level this block lives in
 		 */
-		public function Block(blockInfo:BlockInfo, level:Level):void {
+		public function Block(blockInfo:BlockInfo, level:Level, ppm:Number=1)
+			:void {
+			this.ppm = ppm;
 			m_level= level;
 			m_info = blockInfo;
 			init();
@@ -196,6 +209,18 @@ package {
 			m_physics.SetLinearDamping(1.0);
 			m_physics.SetAngularDamping(1.0);
 
+			if (!insulated || chargePolarity != 0) {
+				makeField();
+			}
+
+			if (insulated && chargePolarity != 0 && false) {
+				sprite = new Image(galvTex); 
+				sprite.width = scale.x;
+				sprite.height = scale.y;
+			} else {
+				sprite = new Quad(scale.x, scale.y); 
+			}
+
 			sprite = new Quad(scale.x, scale.y);
 			sprite.x = -scale.x / 2;
 			sprite.y = -scale.y / 2;
@@ -211,23 +236,39 @@ package {
 				return s;
 			}
 			
-			var scalar:Number=strong?.18:0.3;
+			var scalar:Number=strong?.5:0.8;
 			var offx:Number=Math.random();
 			var offy:Number=Math.random();
+
+			if (insulated && chargePolarity == 0) {
+				scalar = 0.8;
+				offx = 0;
+				offy = 0;
+			}
+			const thick:Number=0.1;
 			
 			if (!insulated && isChargableBlock()){
 				overlay=image(0,0,scale.x,scale.y,circuitsTex);
+				overlay.smoothing = TextureSmoothing.TRILINEAR;
 			} else if(insulated && chargePolarity == 0) {
 				overlay=image(0,0,scale.x,scale.y,cementTex);
 			} else {
 				scalar *= 2.0;
-				overlay=image(0,0,scale.x,scale.y,galvTex);
+				overlay=image(thick,thick,scale.x - thick*2,scale.y - thick*2,galvTex);
 			}
 
-			overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
-			overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
-			overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
-			overlay.setTexCoords(0,new Point(0+offx,0+offy));
+			if ((insulated && chargePolarity != 0)) {
+				scalar = insulated ? 1 : 0.75;
+				overlay.setTexCoords(3,new Point(Math.max(1, Math.round(scale.x*scalar)),Math.max(1, Math.round(scale.y*scalar))));
+				overlay.setTexCoords(1,new Point(Math.max(1, Math.round(scale.x*scalar)),0));
+				overlay.setTexCoords(2,new Point(0,Math.max(1, Math.round(scale.y*scalar))));
+				overlay.setTexCoords(0,new Point(0,0));
+			} else {
+				overlay.setTexCoords(3,new Point(scale.x*scalar+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(1,new Point(scale.x*scalar+offx,0+offy));
+				overlay.setTexCoords(2,new Point(0+offx,scale.y*scalar+offy));
+				overlay.setTexCoords(0,new Point(0+offx,0+offy));
+			}
 			
 			function side(x:Number,y:Number,w:Number,h:Number):void{
 				var s:Quad=new Quad(w, h, insulated?Colors.insulation:Colors.edges);
@@ -239,7 +280,6 @@ package {
 				}
 				addChild(s);
 			}
-			const thick:Number=.1;
 
 			side(0,0,thick,scale.y);
 			side(scale.x-thick,0,thick,scale.y);
@@ -281,6 +321,14 @@ package {
 
 		// helper that cleans up a block
 		public function deinit():void {
+			
+			if (movement == FIXED) {
+				m_level.m_staticChargeLayer.removeChild(eField);
+			}
+			else 
+				m_level.m_dynamicChargeLayer.removeChild(eField);
+			eField = null;
+			
 			for (var i:uint = 0; i < surfaces.length; ++i)
 				surfaces[i].cleanup();
 			for (i = 0; i < actioners.length; ++i)
@@ -297,6 +345,7 @@ package {
 			actioners = new Vector.<ActionerElement>();
 			if(anchor != null){
 				m_level.m_backgroundLayer.removeChild(anchor);
+				anchor = null;
 			}
 		}
 
@@ -355,6 +404,13 @@ package {
 				}
 				
 			}
+			if (eField != null /*&& movement != FIXED*/ && chargePolarity != 0) {
+				eField.scaleX = pixelsPerMeter;
+				eField.scaleY = pixelsPerMeter;
+				eField.rotation = rotation;
+				eField.x = x;
+				eField.y = y;
+			}
 		}
 
 		public function setPosition(pos:UVec2):void {
@@ -387,7 +443,7 @@ package {
 			const red:uint =  Color.rgb(main,off,off);
 			
 			const overlayblue:uint = Color.rgb(overlayoff,overlayoff,main);
-			const overlaynone:uint = strong?0xD98719:0xEDC393;
+			const overlaynone:uint = strong?0xD98719:0xEDC3B3;
 			const overlayred:uint =  Color.rgb(main,overlayoff,overlayoff);
 
 			switch (chargePolarity) {
@@ -405,6 +461,23 @@ package {
 				break;
 			}
 			drawnChargePolarity=chargePolarity;
+
+			if (eField) {
+				if (movement == FIXED)
+					m_level.m_staticChargeLayer.removeChild(eField);
+				else
+					m_level.m_dynamicChargeLayer.removeChild(eField);
+				eField = null;
+			}
+
+			if (chargePolarity != 0)
+				makeField();
+			//m_level.m_staticChargeLayer.flatten();
+			
+			/*if (eField) {
+				eField.visible = chargePolarity != 0;
+			}*/
+				
 		}
 		
 		public function getCharge():Number{
@@ -566,5 +639,81 @@ package {
 		public function getLevel():Level {
 			return m_level;
 		}	
+		
+		
+		public static function makeFieldQuads(chargable:Chargable, m_level:Level, chargeStrength:Number, scale:UVec2, resolution:uint = 6, chargeScalar:Number=1):QuadBatch{
+			var eField:QuadBatch = new QuadBatch();
+
+			var playerCharge:Charge = new Charge(m_level.getPlayer()
+				.getCharges()[0].strength, new b2Vec2(0,0));
+
+			var scaleFactX:Number = scale.x + Math.sqrt(chargeStrength 
+				* playerCharge.strength)* chargeScalar * 2;
+			var scaleFactY:Number = scale.y + Math.sqrt(chargeStrength
+				* playerCharge.strength) * 2;
+
+
+			// resolution x resolution grid of quads
+			var grid:uint = resolution + 1;
+			var gridStep:Number = 1.0/resolution;
+			var fVals:Vector.<uint> = new Vector.<uint>();
+
+			for (var iy:uint = 0; iy < grid; ++iy) {
+				for (var ix:uint = 0; ix < grid; ++ix) {
+					if (iy==0||ix==0||iy == grid-1||ix == grid-1) {
+						fVals.push(0);
+						continue;
+					}
+					
+					// get charge strength at this point, as if it 
+					// were appplied to player
+					playerCharge.loc.x = ix*gridStep * scaleFactX
+						- scaleFactX/2;
+					playerCharge.loc.y = iy*gridStep * scaleFactY
+						- scaleFactY/2;
+					//[ix + iy*grid]
+
+					fVals.push(Math.min(1.0,Math.abs(ChargableManager
+							.getForceAt(chargable,playerCharge)*chargeScalar*chargable.getCharge() / 1000.0)) * 120);
+
+				}
+			}
+
+			// make ALL the quads
+			for (iy = 0; iy < resolution; ++iy) {
+				for (ix = 0; ix < resolution; ++ix) {
+					var quad:Quad = new Quad(scaleFactX*gridStep,
+						scaleFactY * gridStep);
+					quad.x = ix * gridStep * scaleFactX;
+					quad.y = iy * gridStep * scaleFactY;
+					
+					var shiftAmt:uint = chargable.getCharge() == -1 ? 16 : 0;
+
+					quad.setVertexColor(0,fVals[ix+iy*grid]<<shiftAmt);
+					quad.setVertexColor(1,fVals[ix+iy*grid+1]<<shiftAmt);
+					quad.setVertexColor(2,fVals[ix+(iy+1)*grid]<<shiftAmt);
+					quad.setVertexColor(3,fVals[ix+(iy+1)*grid+1]<<shiftAmt);
+					quad.blendMode = BlendMode.ADD;
+					eField.addQuad(quad);
+				}
+			}
+
+			eField.x = -scaleFactX/2;
+			eField.y = -scaleFactY/2;
+			eField.pivotX=scaleFactX/2;
+			eField.pivotY=scaleFactY/2;
+			eField.visible = chargable.getCharge() != 0;
+			return eField;
+		
+		}
+		
+		private function makeField():void {
+			eField=makeFieldQuads(this, m_level, chargeStrength, scale);
+			if (movement == FIXED) {
+				m_level.m_staticChargeLayer.addChild(eField);
+			} else {
+				m_level.m_dynamicChargeLayer.addChild(eField);
+			}
+		}
 	}
 }
